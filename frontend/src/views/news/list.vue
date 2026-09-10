@@ -1,0 +1,299 @@
+<template>
+  <div class="flex h-full bg-mainBg overflow-hidden">
+    <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto">
+      <main class="flex-1 min-w-0 flex flex-col h-screen">
+ <section class="flex-1 overflow-auto p-6">
+  <div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+   <div class="px-6 py-4 border-b border-gray-100">
+    <div class="text-base font-bold text-gray-900">
+     搜索与筛选
+    </div>
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-7 gap-3">
+     <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+      标题：请输入标题
+     </div>
+     <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+      语言：全部
+     </div>
+     <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+      投放站点：全部
+     </div>
+     <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+      发布时间：开始日期
+     </div>
+     <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+      至 结束日期
+     </div>
+     <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+      操作人：请输入操作人
+     </div>
+     <div class="flex items-center gap-2">
+      <button class="px-4 py-3 rounded-xl bg-brand text-white text-sm w-full">
+       搜索
+      </button>
+      <button class="px-4 py-3 rounded-xl border border-gray-300 text-sm text-gray-700 w-full bg-white">
+       重置
+      </button>
+     </div>
+    </div>
+   </div>
+   <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+    <div class="text-sm text-gray-500">
+     当前共 10 条动态，支持查看、预览、复制、编辑和站点维度管理。
+    </div>
+    <div class="flex items-center gap-2">
+     <span class="px-3 py-1 rounded-full bg-brandSoft border border-[#eadcc4] text-xs font-semibold text-[#8c6b45]">
+      支持一键复制
+     </span>
+     <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-semibold text-blue-700">
+      HK / Group
+     </span>
+    </div>
+   </div>
+   <div class="overflow-x-auto">
+    <table class="min-w-full text-sm text-left">
+     <thead class="bg-gray-50 text-gray-600 border-b border-gray-200">
+      <tr>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        类型
+       </th>
+       <th class="px-4 py-3 font-medium min-w-[320px]">
+        标题
+       </th>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        语言
+       </th>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        投放站点
+       </th>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        官网排序
+       </th>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        显示日期
+       </th>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        首次发布时间
+       </th>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        操作人
+       </th>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        发布状态
+       </th>
+       <th class="px-4 py-3 font-medium whitespace-nowrap">
+        操作
+       </th>
+      </tr>
+     </thead>
+     <tbody class="divide-y divide-gray-100">
+      <tr class="hover:bg-gray-50">
+       <td class="px-4 py-4 text-gray-700">
+        集团动态
+       </td>
+       <td class="px-4 py-4 font-medium text-gray-800">
+        光明同行，守护未来丨 HATC 华安泰昌走进辽宁省光明学校开展公益助学行动
+       </td>
+       <td class="px-4 py-4">
+        简体中文
+       </td>
+       <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 text-xs">
+         Group
+        </span>
+       </td>
+       <td class="px-4 py-4">
+        10
+       </td>
+       <td class="px-4 py-4">
+        2026-07-10
+       </td>
+       <td class="px-4 py-4">
+        2026-07-20 17:59:38
+       </td>
+       <td class="px-4 py-4">
+        史宏丽
+       </td>
+       <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full bg-gray-100 text-gray-600 border border-gray-200 text-xs">
+         已下架
+        </span>
+       </td>
+       <td class="px-4 py-4">
+        <div class="flex flex-wrap gap-2">
+         <button class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-100 text-xs">
+          预览
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 border border-purple-100 text-xs">
+          复制
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200 text-xs">
+          编辑
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200 text-xs">
+          删除
+         </button>
+        </div>
+       </td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+       <td class="px-4 py-4 text-gray-700">
+        集团动态
+       </td>
+       <td class="px-4 py-4 font-medium text-gray-800">
+        光明同行，守护未来丨 HATC 华安泰昌走进辽宁省光明学校开展公益助学行动
+       </td>
+       <td class="px-4 py-4">
+        简体中文
+       </td>
+       <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full bg-pink-50 text-pink-700 border border-pink-100 text-xs">
+         HK
+        </span>
+       </td>
+       <td class="px-4 py-4">
+        10
+       </td>
+       <td class="px-4 py-4">
+        2026-07-10
+       </td>
+       <td class="px-4 py-4">
+        2026-07-20 17:59:41
+       </td>
+       <td class="px-4 py-4">
+        史宏丽
+       </td>
+       <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs">
+         已发布
+        </span>
+       </td>
+       <td class="px-4 py-4">
+        <div class="flex flex-wrap gap-2">
+         <button class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-100 text-xs">
+          预览
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 border border-purple-100 text-xs">
+          复制
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200 text-xs">
+          编辑
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200 text-xs">
+          下架
+         </button>
+        </div>
+       </td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+       <td class="px-4 py-4 text-gray-700">
+        集团动态
+       </td>
+       <td class="px-4 py-4 font-medium text-gray-800">
+        Lighting the Way, Guarding the Future...
+       </td>
+       <td class="px-4 py-4">
+        English
+       </td>
+       <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-100 text-xs">
+         HK + Group
+        </span>
+       </td>
+       <td class="px-4 py-4">
+        9
+       </td>
+       <td class="px-4 py-4">
+        2026-07-10
+       </td>
+       <td class="px-4 py-4">
+        2026-07-20 17:59:39
+       </td>
+       <td class="px-4 py-4">
+        史宏丽
+       </td>
+       <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs">
+         已发布
+        </span>
+       </td>
+       <td class="px-4 py-4">
+        <div class="flex flex-wrap gap-2">
+         <button class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-100 text-xs">
+          预览
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 border border-purple-100 text-xs">
+          复制
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200 text-xs">
+          编辑
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200 text-xs">
+          下架
+         </button>
+        </div>
+       </td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+       <td class="px-4 py-4 text-gray-700">
+        集团动态
+       </td>
+       <td class="px-4 py-4 font-medium text-gray-800">
+        HATC 慈善公益专题页内容同步稿...
+       </td>
+       <td class="px-4 py-4">
+        简体中文
+       </td>
+       <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 text-xs">
+         Group
+        </span>
+       </td>
+       <td class="px-4 py-4">
+        7
+       </td>
+       <td class="px-4 py-4">
+        2026-06-04
+       </td>
+       <td class="px-4 py-4">
+        2026-06-04 17:31:17
+       </td>
+       <td class="px-4 py-4">
+        winnie tang
+       </td>
+       <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 text-xs">
+         草稿
+        </span>
+       </td>
+       <td class="px-4 py-4">
+        <div class="flex flex-wrap gap-2">
+         <button class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-100 text-xs">
+          预览
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 border border-purple-100 text-xs">
+          复制
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200 text-xs">
+          编辑
+         </button>
+         <button class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs">
+          发布
+         </button>
+        </div>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+  </div>
+ </section>
+</main>
+
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+</script>
