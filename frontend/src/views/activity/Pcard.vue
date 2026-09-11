@@ -275,15 +275,9 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import DataTable from '@/components/DataTable.vue'
-import { openPrd } from '@/store/prd'
 
 // Tab 状态
 const activeTab = ref('customer')
-
-// PRD 方法
-const handleOpenPrd = () => {
-  openPrd('prd-pcard-detail.html', 'Pcard 详情与数据 - PRD')
-}
 
 // ----------------- 客户列表数据 -----------------
 const customerSearch = reactive({

@@ -7,23 +7,42 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f3f4f6; color: #1f2937; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f3f4f6; color: #111827; }
     .golden-accent { color: #C19B5E; }
-    .bg-golden { background-color: #C19B5E; }
     .border-golden { border-color: #C19B5E; }
-    .card { background-color: #ffffff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .prd-card { background-color: #ffffff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 1.25rem 1.25rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; }
+    .prd-card--danger { border-left: 4px solid #ef4444; background: #fef2f2; border-top: 1px solid #fecaca; border-right: 1px solid #fecaca; border-bottom: 1px solid #fecaca; }
+    .prd-card--accent { border-top: 4px solid #C19B5E; }
+    .prd-h1 { font-size: 1.5rem; line-height: 2rem; font-weight: 800; color: #111827; }
+    .prd-h2 { font-size: 1.125rem; line-height: 1.75rem; font-weight: 800; color: #111827; }
+    .prd-subtitle { color: #6b7280; font-size: 0.875rem; line-height: 1.25rem; }
+    .prd-kv { display: grid; grid-template-columns: 110px 1fr; gap: 0.75rem; align-items: start; }
+    .prd-k { color: #6b7280; font-size: 0.75rem; line-height: 1rem; }
+    .prd-v { color: #374151; font-size: 0.875rem; line-height: 1.5rem; }
+    .prd-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .prd-tag { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.125rem 0.5rem; border-radius: 999px; font-size: 0.75rem; line-height: 1rem; border: 1px solid transparent; background: #f3f4f6; color: #374151; }
+    .prd-tag--rule { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .prd-tag--demo { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+    .prd-tag--dev { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+    .prd-tag--danger { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+    .prd-list { margin-top: 0.5rem; display: grid; gap: 0.5rem; }
+    .prd-li { display: flex; gap: 0.5rem; align-items: flex-start; }
+    .prd-bullet { width: 0.375rem; height: 0.375rem; border-radius: 999px; background: #d1d5db; margin-top: 0.5rem; flex: 0 0 auto; }
+    .prd-bullet--danger { background: #ef4444; }
+    .prd-bullet--accent { background: #C19B5E; }
+    .prd-mini { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 0.875rem; }
     code { background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem; }
   </style>
 </head>
 <body class="p-4 md:p-8">
   <div class="max-w-5xl mx-auto">
-    <div class="mb-8 flex items-start justify-between gap-6">
+    <div class="mb-5 flex items-start justify-between gap-6">
       <div class="min-w-0">
-        <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+        <h1 class="prd-h1 flex items-center gap-3">
           <i class="fa-solid fa-star golden-accent"></i>
           首页 - PCard 活动参与弹窗 PRD
         </h1>
-        <p class="text-gray-500 mt-2">定义首页活动进度卡片的“立即参与”弹窗行为，以及新用户/老用户的参与差异与文案规范。</p>
+        <p class="prd-subtitle mt-2">定义首页活动进度卡片的“立即参与”弹窗行为，以及新用户/老用户的参与差异与文案规范。</p>
       </div>
       <div class="shrink-0 bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium">
         <i class="fa-solid fa-house text-gray-500"></i>
@@ -31,76 +50,116 @@
       </div>
     </div>
 
-    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-lg">
-      <div class="flex items-start gap-3">
-        <i class="fa-solid fa-triangle-exclamation text-red-500 mt-0.5"></i>
+    <div class="prd-card prd-card--danger">
+      <div class="flex items-start justify-between gap-4">
         <div class="min-w-0">
-          <h3 class="text-sm font-bold text-red-800">核心研发红线 (必读)</h3>
-          <div class="mt-1 text-sm text-red-700 space-y-1">
-            <p>1. <strong>新老用户权益区分</strong>：新用户展示并享受 100USD 赠金权益；老用户不展示且不享受该权益。</p>
-            <p>2. <strong>参与起算时间</strong>：活动进度必须从“申请成功时间”开始统计，申请前产生的净入金与交易手数不计入。</p>
-            <p>3. <strong>参与去重规则</strong>：同一 MT 账号同一活动只能参加一次（规则写入 PRD；Demo 不做真实校验或持久化）。</p>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
+            <h2 class="prd-h2 text-red-800">核心规则（红线）</h2>
+          </div>
+          <div class="prd-list mt-3">
+            <div class="prd-li">
+              <span class="prd-bullet prd-bullet--danger"></span>
+              <div class="prd-v text-red-800"><strong>新老用户权益区分</strong>：新用户展示并享受 100USD 赠金权益；老用户不展示且不享受该权益。</div>
+            </div>
+            <div class="prd-li">
+              <span class="prd-bullet prd-bullet--danger"></span>
+              <div class="prd-v text-red-800"><strong>参与起算时间</strong>：活动进度必须从“申请成功时间”开始统计，申请前产生的净入金与交易手数不计入。</div>
+            </div>
+            <div class="prd-li">
+              <span class="prd-bullet prd-bullet--danger"></span>
+              <div class="prd-v text-red-800"><strong>参与去重规则</strong>：同一 MT 账号同一活动只能参加一次（规则写入 PRD；Demo 不做真实校验或持久化）。</div>
+            </div>
+          </div>
+        </div>
+        <div class="prd-tags shrink-0">
+          <span class="prd-tag prd-tag--danger"><i class="fa-solid fa-ban"></i>核心红线</span>
+          <span class="prd-tag prd-tag--dev"><i class="fa-solid fa-code"></i>研发实现</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-file-circle-check golden-accent"></i>
+          需求说明
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-book"></i>需求说明</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">目标</div>
+          <div class="prd-list">
+            <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v">让用户在首页完成 PCard 活动的申请参与。</div></div>
+            <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v">清晰展示新用户与老用户参与权益差异与参与账号。</div></div>
+            <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v">确保参与后状态、参与账号、参与时间与进度起算点一致。</div></div>
+          </div>
+        </div>
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">不在范围</div>
+          <div class="prd-list">
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">不实现真实活动排重、风控、持久化存储、后端接口联调（Demo 可仅本地状态）。</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">不改变左侧菜单、顶部导航、路由及其他页面。</div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card border-t-4 border-golden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-bullseye golden-accent"></i>
-        目标与范围
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
-        <div class="space-y-2">
-          <div class="font-bold text-gray-900">目标</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>让用户在首页完成 PCard 活动的申请参与。</li>
-            <li>清晰展示新用户与老用户参与权益差异与参与账号。</li>
-            <li>确保参与后状态、参与账号、参与时间与进度起算点一致。</li>
-          </ul>
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-scale-balanced golden-accent"></i>
+          业务规则
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-scale-balanced"></i>业务规则</span>
         </div>
-        <div class="space-y-2">
-          <div class="font-bold text-gray-900">不在范围</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>不实现真实活动排重、风控、持久化存储、后端接口联调（Demo 可仅本地状态）。</li>
-            <li>不改变左侧菜单、顶部导航、路由及其他页面。</li>
-          </ul>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">新用户</div>
+          <div class="prd-list">
+            <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v">参与活动可展示并享受：<strong>100USD 赠金</strong> + 免费办理星际信用卡。</div></div>
+            <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v">参与 MT 账号：默认绑定“本次享受赠金的 MT 账号”，无需用户选择。</div></div>
+          </div>
+        </div>
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">老用户</div>
+          <div class="prd-list">
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">参与活动可享受：免费办理星际信用卡（不展示/不享受 100USD 赠金权益）。</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">参与 MT 账号：需要从可用账号中单选一个账号参与。</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="prd-mini mt-4">
+        <div class="text-sm font-bold text-gray-900">进度起算规则</div>
+        <div class="prd-list">
+          <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">起算点：参与时间（申请成功时间）</div></div>
+          <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">统计范围：只统计参与时间之后的净入金与交易手数</div></div>
+          <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">展示：进度条上限 100%；超过目标显示满格</div></div>
         </div>
       </div>
     </div>
 
-    <div class="card border-t-4 border-golden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-users golden-accent"></i>
-        角色与定义
-      </h2>
-      <div class="space-y-4 text-sm text-gray-700">
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">新用户</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>参与活动可展示并享受：<strong>100USD 赠金</strong> + 免费办理星际信用卡。</li>
-            <li>参与 MT 账号：默认绑定“本次享受赠金的 MT 账号”，无需用户选择。</li>
-          </ul>
-        </div>
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">老用户</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>参与活动可享受：免费办理星际信用卡（不展示/不享受 100USD 赠金权益）。</li>
-            <li>参与 MT 账号：需要从可用账号中单选一个账号参与。</li>
-          </ul>
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-route golden-accent"></i>
+          页面状态 / 交互
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-arrow-pointer"></i>交互</span>
+          <span class="prd-tag prd-tag--dev"><i class="fa-solid fa-layer-group"></i>页面状态</span>
         </div>
       </div>
-    </div>
 
-    <div class="card border-t-4 border-golden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-route golden-accent"></i>
-        用户流程
-      </h2>
-      <div class="space-y-4 text-sm text-gray-700">
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">流程 A：新用户参与</div>
-          <ol class="list-decimal pl-5 space-y-1 text-gray-600">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">流程 A：新用户参与</div>
+          <ol class="list-decimal pl-5 mt-2 text-sm text-gray-700 space-y-1">
             <li>首页活动进度卡片显示状态为“未参加活动”。</li>
             <li>用户点击“立即参与”进入弹窗。</li>
             <li>弹窗展示活动信息与默认参与 MT 账号（本次享受赠金的 MT 账号）。</li>
@@ -108,9 +167,9 @@
             <li>首页卡片状态变为“已参与”，展示参与 MT 账号与参与时间，进度从参与时间开始统计。</li>
           </ol>
         </div>
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">流程 B：老用户参与</div>
-          <ol class="list-decimal pl-5 space-y-1 text-gray-600">
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">流程 B：老用户参与</div>
+          <ol class="list-decimal pl-5 mt-2 text-sm text-gray-700 space-y-1">
             <li>用户点击“立即参与”进入弹窗。</li>
             <li>弹窗展示活动信息与账号选择区（最多 5 个 MT 账号，卡片单选）。</li>
             <li>未选账号时，“确认参与”按钮禁用。</li>
@@ -119,138 +178,146 @@
           </ol>
         </div>
       </div>
-    </div>
 
-    <div class="card border-t-4 border-golden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-window-restore golden-accent"></i>
-        首页卡片（入口）规格
-      </h2>
-      <div class="space-y-4 text-sm text-gray-700">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="border border-gray-200 rounded-lg p-4">
-            <div class="font-bold text-gray-900 mb-2">活动名称与副标题</div>
-            <ul class="list-disc pl-5 space-y-1 text-gray-600">
-              <li>活动名称：星际起航免费开卡</li>
-              <li>副标题：新用户开户即送100USD赠金</li>
-            </ul>
-          </div>
-          <div class="border border-gray-200 rounded-lg p-4">
-            <div class="font-bold text-gray-900 mb-2">状态与按钮</div>
-            <ul class="list-disc pl-5 space-y-1 text-gray-600">
-              <li>状态为“文字 + 左侧小圆点”，不同状态不同颜色。</li>
-              <li>“立即参与”按钮紧贴状态旁边；已参与后按钮置灰禁用。</li>
-            </ul>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">首页卡片（入口）规格</div>
+          <div class="prd-list">
+            <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v">活动名称：星际起航免费开卡；副标题：新用户开户即送100USD赠金</div></div>
+            <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v">状态为“文字 + 左侧小圆点”，不同状态不同颜色。</div></div>
+            <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v">“立即参与”按钮紧贴状态旁边；已参与后按钮置灰禁用。</div></div>
           </div>
         </div>
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">已参与信息区</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>展示字段：参与 MT 账号、参与时间。</li>
-            <li>展示条件：仅当用户已参与时显示。</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="card border-t-4 border-golden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-rectangle-list golden-accent"></i>
-        弹窗规格（申请参与 PCard 活动）
-      </h2>
-      <div class="space-y-4 text-sm text-gray-700">
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">标题</div>
-          <div class="text-gray-600">申请参与 PCard 活动</div>
-        </div>
-
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">通用内容（新老用户一致）</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>活动名称：星际起航免费开卡</li>
-            <li>活动条件：
-              <ul class="list-disc pl-5 mt-1 space-y-1">
-                <li>净入金达到 <code>$1,000</code></li>
-                <li>累计交易达到 <code>10 Lot</code></li>
-                <li>双条件达标即可免费办理 <code>PCard</code></li>
-              </ul>
-            </li>
-            <li>按钮：取消 / 确认参与</li>
-          </ul>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="border border-amber-200 bg-amber-50 rounded-lg p-4">
-            <div class="font-bold text-amber-800 mb-2">新用户弹窗差异</div>
-            <ul class="list-disc pl-5 space-y-1 text-amber-900/90">
-              <li>活动说明：新用户开户即送100USD赠金，免费办理星际信用卡</li>
-              <li>参与 MT 账号：展示“本次享受赠金的 MT 账号”，不可选择</li>
-              <li>提示文案：将使用本次享受赠金的 MT 账号参与活动，进度从申请成功时间开始统计。</li>
-              <li>账号展示需要显著强调：更大字号、更粗字重、主色/深色，允许浅色背景/描边卡片。</li>
-            </ul>
-          </div>
-          <div class="border border-gray-200 bg-gray-50 rounded-lg p-4">
-            <div class="font-bold text-gray-900 mb-2">老用户弹窗差异</div>
-            <ul class="list-disc pl-5 space-y-1 text-gray-700">
-              <li>活动说明：参与活动可免费办理星际信用卡</li>
-              <li>不展示 100USD 赠金相关权益</li>
-              <li>参与 MT 账号：最多展示 5 个账号，卡片单选</li>
-              <li>未选择账号时“确认参与”按钮禁用</li>
-              <li>提示文案：老用户参与活动不享受开户赠金，请选择一个 MT 账号参加活动。</li>
-            </ul>
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">参与后首页变化</div>
+          <div class="prd-list">
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">状态：未参加活动 → 已参与</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">展示参与信息：参与 MT 账号、参与时间</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">按钮：立即参与 → 已参与（禁用）</div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card border-t-4 border-golden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-signal golden-accent"></i>
-        参与后状态与进度计算
-      </h2>
-      <div class="space-y-4 text-sm text-gray-700">
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">参与成功后的首页变化</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>状态：未参加活动 → 已参与</li>
-            <li>展示参与信息：参与 MT 账号、参与时间</li>
-            <li>按钮：立即参与 → 已参与（禁用）</li>
-          </ul>
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-window-restore golden-accent"></i>
+          弹窗规格（申请参与 PCard 活动）
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-window-restore"></i>交互</span>
+          <span class="prd-tag prd-tag--dev"><i class="fa-solid fa-code"></i>研发实现</span>
         </div>
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">进度起算规则</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>起算点：参与时间（申请成功时间）</li>
-            <li>统计范围：只统计参与时间之后的净入金与交易手数</li>
-            <li>展示：进度条上限 100%；超过目标显示满格</li>
-          </ul>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="prd-mini">
+          <div class="prd-kv">
+            <div class="prd-k">标题</div>
+            <div class="prd-v">申请参与 PCard 活动</div>
+          </div>
+          <div class="prd-kv mt-3">
+            <div class="prd-k">活动名称</div>
+            <div class="prd-v">星际起航免费开卡</div>
+          </div>
+          <div class="prd-kv mt-3">
+            <div class="prd-k">活动条件</div>
+            <div class="prd-v">
+              <div class="prd-list">
+                <div class="prd-li"><span class="prd-bullet"></span><div>净入金达到 <code>$1,000</code></div></div>
+                <div class="prd-li"><span class="prd-bullet"></span><div>累计交易达到 <code>10 Lot</code></div></div>
+                <div class="prd-li"><span class="prd-bullet"></span><div>双条件达标即可免费办理 <code>PCard</code></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="prd-kv mt-3">
+            <div class="prd-k">按钮</div>
+            <div class="prd-v">取消 / 确认参与</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+          <div class="prd-mini border border-amber-200 bg-amber-50">
+            <div class="flex items-center justify-between gap-3">
+              <div class="text-sm font-bold text-amber-900">新用户弹窗差异</div>
+              <div class="prd-tags">
+                <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-scale-balanced"></i>业务规则</span>
+                <span class="prd-tag prd-tag--dev"><i class="fa-solid fa-code"></i>研发实现</span>
+              </div>
+            </div>
+            <div class="prd-list mt-2 text-amber-950/90">
+              <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v text-amber-950/90">活动说明：新用户开户即送100USD赠金，免费办理星际信用卡</div></div>
+              <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v text-amber-950/90">参与 MT 账号：展示“本次享受赠金的 MT 账号”，不可选择</div></div>
+              <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v text-amber-950/90">提示文案：将使用本次享受赠金的 MT 账号参与活动，进度从申请成功时间开始统计。</div></div>
+              <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v text-amber-950/90">账号展示需要显著强调：更大字号、更粗字重、主色/深色，允许浅色背景/描边卡片。</div></div>
+            </div>
+          </div>
+
+          <div class="prd-mini">
+            <div class="flex items-center justify-between gap-3">
+              <div class="text-sm font-bold text-gray-900">老用户弹窗差异</div>
+              <div class="prd-tags">
+                <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-scale-balanced"></i>业务规则</span>
+                <span class="prd-tag prd-tag--dev"><i class="fa-solid fa-code"></i>研发实现</span>
+              </div>
+            </div>
+            <div class="prd-list mt-2">
+              <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">活动说明：参与活动可免费办理星际信用卡</div></div>
+              <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">不展示 100USD 赠金相关权益</div></div>
+              <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">参与 MT 账号：最多展示 5 个账号，卡片单选</div></div>
+              <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">未选择账号时“确认参与”按钮禁用</div></div>
+              <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">提示文案：老用户参与活动不享受开户赠金，请选择一个 MT 账号参加活动。</div></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="card border-t-4 border-golden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-clipboard-check golden-accent"></i>
-        验收标准
-      </h2>
-      <div class="space-y-3 text-sm text-gray-700">
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">功能验收</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>点击“立即参与”弹出弹窗，内容与文案符合新/老用户差异规则。</li>
-            <li>新用户：默认参与账号直接展示且突出，确认参与无需选择。</li>
-            <li>老用户：展示最多 5 个账号卡片，未选账号确认按钮禁用，选中后可确认。</li>
-            <li>确认参与后：弹窗关闭、状态变更、显示参与 MT 账号与参与时间。</li>
-            <li>进度从参与时间开始统计（参与前数值不计入）。</li>
-          </ul>
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-flask golden-accent"></i>
+          Demo 实现说明
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--demo"><i class="fa-solid fa-vial"></i>Demo</span>
         </div>
-        <div class="border border-gray-200 rounded-lg p-4">
-          <div class="font-bold text-gray-900 mb-2">视觉验收</div>
-          <ul class="list-disc pl-5 space-y-1 text-gray-600">
-            <li>状态样式为“文字 + 左侧小圆点”，不同状态点颜色不同。</li>
-            <li>弹窗中的“参与 MT 账号”标签为普通标签样式，账号本体强调突出。</li>
-            <li>不影响首页其他模块与右侧内容展示。</li>
-          </ul>
+      </div>
+      <div class="prd-list mt-4">
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">不实现真实活动排重、风控、持久化存储、后端接口联调（Demo 可仅本地状态）。</div></div>
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">同一 MT 账号同一活动只能参加一次：规则写入 PRD；Demo 不做真实校验或持久化。</div></div>
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-clipboard-check golden-accent"></i>
+          验收标准
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--dev"><i class="fa-solid fa-list-check"></i>验收</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">功能验收</div>
+          <div class="prd-list">
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">点击“立即参与”弹出弹窗，内容与文案符合新/老用户差异规则。</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">新用户：默认参与账号直接展示且突出，确认参与无需选择。</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">老用户：展示最多 5 个账号卡片，未选账号确认按钮禁用，选中后可确认。</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">确认参与后：弹窗关闭、状态变更、显示参与 MT 账号与参与时间。</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">进度从参与时间开始统计（参与前数值不计入）。</div></div>
+          </div>
+        </div>
+        <div class="prd-mini">
+          <div class="text-sm font-bold text-gray-900">视觉验收</div>
+          <div class="prd-list">
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">状态样式为“文字 + 左侧小圆点”，不同状态点颜色不同。</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">弹窗中的“参与 MT 账号”标签为普通标签样式，账号本体强调突出。</div></div>
+            <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">不影响首页其他模块与右侧内容展示。</div></div>
+          </div>
         </div>
       </div>
     </div>

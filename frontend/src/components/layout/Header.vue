@@ -20,15 +20,10 @@
         <router-link to="/kanban" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-xs font-medium transition-colors flex items-center">
           <i class="fa-solid fa-layer-group mr-1.5"></i> 需求看板
         </router-link>
-
-        <!-- 历史需求记录入口 -->
-        <router-link to="/history-kanban" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-xs font-medium transition-colors flex items-center">
-          <i class="fa-solid fa-clock-rotate-left mr-1.5"></i> 历史需求记录
-        </router-link>
         
         <!-- 全局 PRD 按钮 (仅在配置了 prdUrl 时显示) -->
         <button v-if="route.meta.prdUrl" @click="handleOpenPrd" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded text-xs font-medium transition-colors flex items-center gap-1.5 border border-amber-200">
-          <i class="fa-solid fa-file-lines"></i> 详情页 PRD
+          <i class="fa-solid fa-file-lines"></i> PRD
         </button>
       </div>
     </div>

@@ -9,6 +9,9 @@
 <p class="text-xs text-gray-500">唯一事实来源 (SSOT) - 按需求层级化管理</p>
 </div>
 <div class="flex items-center gap-3">
+<router-link to="/history-kanban" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-xs font-medium transition-colors flex items-center">
+<i class="fa-solid fa-clock-rotate-left mr-1.5"></i> 历史需求记录
+</router-link>
 <div class="text-xs text-gray-500 bg-white px-3 py-1.5 rounded shadow-sm border border-gray-200">
 <i class="fas fa-layer-group text-[#55B9B9] mr-2"></i>包含系统：CRM-HK、Crm-Group、HK官网、Group官网
                 </div>
@@ -88,7 +91,7 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/crm/change-detail" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/crm/change-detail" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
 </div>
@@ -108,7 +111,7 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/activity/pcard" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/activity/pcard" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
 </div>
@@ -160,7 +163,7 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/commission-stats" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/commission-stats" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
 </div>
@@ -180,7 +183,7 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/trading" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/trading" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
 </div>
@@ -200,10 +203,10 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/position" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/position" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
-<a class="text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-report-position" target="_blank">
+<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-report-position" target="_blank">
 <i class="fas fa-file-alt"></i> PRD
                                                 </a>
 </div>
@@ -223,10 +226,10 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/close-position" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/close-position" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
-<a class="text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-report-close-position" target="_blank">
+<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-report-close-position" target="_blank">
 <i class="fas fa-file-alt"></i> PRD
                                                 </a>
 </div>
@@ -246,10 +249,10 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/finance-cent-account" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/finance-cent-account" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
-<a class="text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-finance-report" target="_blank">
+<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-finance-report" target="_blank">
 <i class="fas fa-file-alt"></i> PRD
                                                 </a>
 </div>
@@ -269,10 +272,10 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/commission-cent-account" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/commission-cent-account" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
-<a class="text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-commission-report" target="_blank">
+<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-commission-report" target="_blank">
 <i class="fas fa-file-alt"></i> PRD
                                                 </a>
 </div>
@@ -292,7 +295,7 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/position-stats" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/position-stats" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
 </div>
@@ -312,10 +315,10 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2">
-<a class="text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/trade-record-cent-account" target="_blank">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/trade-record-cent-account" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
-<a class="text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-trade-record" target="_blank">
+<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-trade-record" target="_blank">
 <i class="fas fa-file-alt"></i> PRD
                                                 </a>
 </div>
@@ -433,9 +436,6 @@
 <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/home" target="_blank">
                                                     原型
                                                 </a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openHomeProgressPrd">
-  PRD
-</button>
 <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPcardJoinPrd">
   参与PRD
 </button>
@@ -484,11 +484,11 @@
 </td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/activity/bonus-list" target="_blank">
+<a class="kb-btn kb-btn-proto inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/activity/bonus-list" target="_blank">
 <i class="fas fa-desktop text-gray-400"></i> 原型
                                                 </a>
-<a class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-bonus-activity" target="_blank">
-                                                    PRD
+<a class="kb-btn kb-btn-prd inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-bonus-activity" target="_blank">
+<i class="fas fa-file-alt"></i> PRD
                                                 </a>
 </div>
 </td>
@@ -499,51 +499,17 @@
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/activity/bonus-detail" target="_blank">
+<a class="kb-btn kb-btn-proto inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/activity/bonus-detail" target="_blank">
 <i class="fas fa-desktop text-gray-400"></i> 原型
                                                 </a>
-<a class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-bonus-detail" target="_blank">
-                                                    PRD
+<a class="kb-btn kb-btn-prd inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-bonus-detail" target="_blank">
+<i class="fas fa-file-alt"></i> PRD
                                                 </a>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
-<!-- 零散需求 (空状态父级) -->
-<div class="bg-white rounded-lg shadow-sm border border-orange-200 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">其他需求</span>
-<h3 class="text-base font-bold text-gray-800">零散需求</h3>
-</div>
-<p class="text-xs text-gray-500 mt-1">用于承接研发中的零散任务与临时需求，当前作为独立同级菜单保留。</p>
-</div>
-<div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个任务</span>
-<i class="fas fa-chevron-down accordion-icon"></i>
-</div>
-</div>
-<div class="accordion-content border-t border-orange-100">
-<div class="overflow-x-auto no-scrollbar">
-<table class="min-w-full text-xs text-left">
-<thead>
-<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
-<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-gray-100">
-</tbody>
-</table>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -823,7 +789,7 @@
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-product-list" target="_blank">列表 PRD</a>
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-product-list" target="_blank"><i class="fas fa-file-alt"></i> 列表 PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/client-product-list" target="_blank"><i class="fas fa-desktop"></i> 列表原型</a>
 </div>
 </td>
@@ -834,7 +800,7 @@
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium rounded transition-colors flex items-center gap-1 border border-gray-200 text-white bg-blue-500 hover:bg-blue-600 border-blue-500" href="#/other/prd-product-detail" target="_blank">详情 PRD</a>
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium rounded transition-colors flex items-center gap-1 border border-gray-200 text-white bg-blue-500 hover:bg-blue-600 border-blue-500" href="#/other/prd-product-detail" target="_blank"><i class="fas fa-file-alt"></i> 详情 PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border text-blue-500 hover:text-blue-700" href="#/product/detail" target="_blank"><i class="fas fa-desktop"></i> 详情原型</a>
 </div>
 </td>
@@ -845,7 +811,7 @@
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-management" target="_blank">PRD</a>
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-management" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/management" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
 </div>
 </td>
@@ -856,7 +822,7 @@
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-edit" target="_blank">PRD</a>
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-edit" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/edit" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
 </div>
 </td>
@@ -867,7 +833,7 @@
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-client-my-orders" target="_blank">PRD</a>
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-client-my-orders" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/client-my-orders" target="_blank"><i class="fas fa-desktop"></i> 客户端订单原型</a>
 </div>
 </td>
@@ -878,7 +844,7 @@
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-orders" target="_blank">PRD</a>
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-orders" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/orders" target="_blank"><i class="fas fa-desktop"></i> 后台订单原型</a>
 </div>
 </td>
@@ -977,12 +943,12 @@
   </div>
 </div>
 </div>
+</div>
+  </div>
 </template>
 
 <script setup>
 import { openPrd } from '@/store/prd'
-
-const openHomeProgressPrd = () => openPrd('prd-home.html', 'Pcard 首页进度 - PRD')
 
 const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
 

@@ -92,7 +92,6 @@
 import { ref, reactive, computed } from 'vue'
 import RelationTree from '@/components/RelationTree.vue'
 import DataTable from '@/components/DataTable.vue'
-import { openPrd } from '@/store/prd'
 
 // 搜索表单
 const searchForm = reactive({
@@ -146,10 +145,5 @@ const handleNodeClick = (data) => {
 
 const fetchData = () => {
   console.log('触发翻页或查询', page.value, limit.value)
-}
-
-const handleOpenPrd = () => {
-  // 假设我们将 PRD 文档放到静态资源或保留在旧地址
-  openPrd('https://example.com/prd-customer-change-detail.html', '客户变动详情 - PRD')
 }
 </script>

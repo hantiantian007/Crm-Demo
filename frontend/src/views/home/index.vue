@@ -29,13 +29,6 @@
                   >
                     {{ activityJoined ? '已参与' : '立即参与' }}
                   </button>
-    <button
-      type="button"
-      class="h-8 px-3 rounded-md bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium transition-colors border border-amber-200 flex items-center gap-1.5"
-      @click="openPcardJoinPrd"
-    >
-      <i class="fa-solid fa-file-lines"></i> PRD
-    </button>
                 </div>
               </div>
 
@@ -323,7 +316,6 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue'
-import { openPrd } from '@/store/prd'
 
 const homeScrollRef = ref(null)
 
@@ -365,8 +357,6 @@ const tradeLotsProgress = computed(() => {
   const target = tradeLotsTarget.value || 1
   return Math.max(0, Math.min(100, (effectiveTradeLots.value / target) * 100))
 })
-
-const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
 
 const pad2 = (n) => String(n).padStart(2, '0')
 
