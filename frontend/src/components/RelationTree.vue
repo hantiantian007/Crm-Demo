@@ -1,5 +1,5 @@
 <template>
-  <div class="w-64 bg-white border-r border-gray-200 flex flex-col h-full flex-shrink-0">
+  <div :class="[widthClass, 'bg-white border border-gray-200 rounded shadow-sm flex flex-col shrink-0 overflow-hidden h-full']">
     <!-- 顶部操作区 -->
     <div class="p-3 border-b border-gray-100 flex gap-2 items-center bg-gray-50/50">
       <div class="flex-1 flex bg-white border border-gray-200 rounded overflow-hidden">
@@ -50,49 +50,21 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { CaretRight } from '@element-plus/icons-vue'
+import { relationTreeDemoData } from '@/mocks/relation-tree-demo'
+
+const props = defineProps({
+  data: { type: Array, default: null },
+  widthClass: { type: String, default: 'w-64' }
+})
 
 const filterText = ref('')
 const treeRef = ref(null)
 
-// 模拟的高保真关系树数据，后续可通过 axios 从 Python 后端拉取
-const treeData = ref([
-  {
-    id: 285,
-    label: '285-华安',
-    type: 'ib',
-    children: [
-      { 
-        id: 29, 
-        label: '29-Luke', 
-        type: 'ib', 
-        children: [
-          { 
-            id: 42, 
-            label: '42-jack', 
-            type: 'ib', 
-            children: [
-              { id: 70, label: '70-张生龙', type: 'client', mtAccount: '888001' },
-              { id: 319, label: '319-黎富英', type: 'client', mtAccount: '888002' },
-              { id: 329, label: '329-魏正博', type: 'client', mtAccount: '888003' },
-              { id: 468, label: '468-孙敏宏', type: 'ib' },
-              { id: 528, label: '528-谢兰香', type: 'ib' }
-            ] 
-          },
-          { id: 43, label: '43-汪晋霖', type: 'ib' },
-          { id: 161, label: '161-Mikey', type: 'ib' }
-        ] 
-      }
-    ]
-  },
-  {
-    id: 999,
-    label: '88-独立直客示例',
-    type: 'client',
-    mtAccount: '999001'
-  }
-])
+const fallbackData = ref(relationTreeDemoData)
+
+const treeData = computed(() => props.data || fallbackData.value)
 
 const defaultProps = {
   children: 'children',

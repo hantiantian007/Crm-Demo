@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>报表中心 PRD - 活动参与报表（星际起航免费开卡）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#C19B5E', secondary: '#A07D45' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        .table-cell-nowrap { white-space: nowrap; }
+        .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-8">
+        <div class="bg-white rounded-lg shadow-sm p-6 border-t-4 border-primary">
+            <h1 class="text-2xl font-bold text-gray-900 mb-4">报表中心 PRD（活动参与报表 - 星际起航免费开卡）</h1>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div><span class="text-gray-500">目标用户：</span><span class="font-medium">市场、运营、代理管理</span></div>
+                <div><span class="text-gray-500">数据来源：</span><span class="font-medium">Mock（本期 Demo 不接真实 API）</span></div>
+                <div><span class="text-gray-500">更新日期：</span><span class="font-medium">2026-09-11</span></div>
+                <div><span class="text-gray-500">状态：</span><span class="font-medium text-amber-600">草稿</span></div>
+            </div>
+            <div class="mt-4 p-4 bg-yellow-50 text-yellow-800 rounded-md text-sm border border-yellow-200">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <strong>说明：</strong>本期目标为 Demo，可用 Mock 数据体现“直属 / 团队”差异、代理汇总与客户明细下钻；复杂业务校验与真实计算仅写入本 PRD，不在 Demo 强实现。
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-bullseye text-primary mr-2"></i>1. 业务目标</h2>
+            <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+                <li>统计每个代理旗下客户参与活动情况，支持<strong>代理汇总</strong>与<strong>客户下钻明细</strong>。</li>
+                <li>支持按活动、活动时间、代理、客户/MT、参与状态与统计范围筛选。</li>
+                <li>KPI 快速呈现：参与客户数/参与率、达标客户数/达标率、活动净入金、活动交易量；并可补充接近达标客户数、待发/已发奖励。</li>
+            </ul>
+            <div class="mt-4 text-sm text-gray-600">
+                <div class="font-medium text-gray-800 mb-2">Demo 地址</div>
+                <div class="mono bg-gray-50 border border-gray-200 rounded px-3 py-2">/#/report/activity-join</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-sitemap text-primary mr-2"></i>2. 页面结构</h2>
+            <div class="space-y-6 text-sm text-gray-700">
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">2.0 左侧代理关系树（入口）</div>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>搜索：支持按代理/客户关键字搜索，并支持 MT 账号命中。</li>
+                        <li>展开：支持展开下级代理节点；展示直属客户节点。</li>
+                        <li>高亮：当前选中节点高亮。</li>
+                        <li>选中代理：右侧数据按“该代理范围”刷新；并继续结合统计范围（直属/团队）。</li>
+                        <li>选中客户：右侧直接筛选到该客户/MT 相关活动数据。</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">2.1 顶部筛选</div>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>一行核心筛选</strong>：活动 / 时间 / 参与状态 / 统计范围 / 查询。</li>
+                        <li><strong>更多筛选（展开）</strong>：代理账号/名称、客户/MT账号；重置放在更多筛选中。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">2.2 KPI</div>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>核心 KPI（卡片）</strong>：参与客户数、参与率、达标客户数、达标率、活动净入金、活动交易量。</li>
+                        <li><strong>辅助指标（轻量文字）</strong>：接近达标、待发奖励、已发奖励。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">2.3 代理汇总表</div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left border border-gray-200">
+                            <thead class="bg-gray-100 text-gray-600">
+                                <tr>
+                                    <th class="border-b py-2 px-3 table-cell-nowrap">字段</th>
+                                    <th class="border-b py-2 px-3">说明</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 divide-y divide-gray-100">
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">代理账号</td><td class="py-2 px-3">代理唯一标识（如 IB1001）。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">代理名称</td><td class="py-2 px-3">代理展示名称。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">客户数</td><td class="py-2 px-3">当前统计范围下的客户总数（直属/团队）。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">参与客户数</td><td class="py-2 px-3">成功参与活动的去重客户数。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">参与率</td><td class="py-2 px-3">参与客户数 / 客户数。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">已达标</td><td class="py-2 px-3">满足全部达标条件的去重客户数（含待发放/已发放）。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">达标率</td><td class="py-2 px-3">达标客户数 / 参与客户数。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">活动净入金</td><td class="py-2 px-3">活动参与成功后有效入金 - 有效出金。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">交易手数</td><td class="py-2 px-3">活动参与成功后累计有效交易 Lot。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">查看明细</td><td class="py-2 px-3">打开右侧 Drawer，展示该代理下客户活动明细。</td></tr>
+                                <tr><td class="py-2 px-3 font-medium table-cell-nowrap">明细补充信息</td><td class="py-2 px-3">参与MT数、进行中、接近达标、待发奖励、已发奖励等从主表移入明细 Drawer 顶部信息区。</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">2.4 客户活动明细（右侧 Drawer）</div>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>客户ID、客户姓名、MT账号</li>
+                        <li>活动名称、参与时间</li>
+                        <li>净入金及进度（进度条最高 100%，数值显示真实）</li>
+                        <li>交易手数及进度（同上）</li>
+                        <li>平仓盈亏（含 Swap / 利息，仅已平仓，不含浮动盈亏）</li>
+                        <li>返佣金额（参与成功时间后产生）</li>
+                        <li>状态：进行中 / 已达标 / 待发放 / 已发放</li>
+                        <li>奖励金额、奖励状态、奖励时间</li>
+                        <li>“接近达标”：任一核心指标达到 80% 以上但尚未全部达标（可标签）</li>
+                        <li><strong>仅展示参与客户</strong>：明细只展示“已成功参加当前所选活动”的客户；未参加不进入明细列表。</li>
+                        <li><strong>关系树展示全部关系</strong>：左侧关系树仍展示该代理下全部代理/客户，用于关系定位与筛选。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-calculator text-primary mr-2"></i>3. 关键统计口径</h2>
+            <div class="space-y-4 text-sm text-gray-700">
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">3.1 基本口径</div>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>参与客户数</strong>：成功参与活动的去重客户数。</li>
+                        <li><strong>参与率</strong>：参与客户数 / 当前统计范围客户数。</li>
+                        <li><strong>达标客户数</strong>：满足活动全部条件的去重客户数。</li>
+                        <li><strong>达标率</strong>：达标客户数 / 参与客户数。</li>
+                        <li><strong>活动净入金</strong>：活动参与成功后有效入金 - 有效出金。</li>
+                        <li><strong>活动交易量</strong>：活动参与成功后累计有效交易 Lot。</li>
+                        <li><strong>接近达标客户数</strong>：任一核心指标达到 80% 以上但尚未全部达标的去重客户数。</li>
+                        <li>同一客户可有多个 MT，因此参与客户数与参与MT账号数分开统计。</li>
+                        <li><strong>关系树选中节点与统计范围</strong>：若关系树选中代理，则统计范围以该代理为根；直属=仅该代理直属客户，团队=该代理及其下级代理客户。</li>
+                        <li><strong>关系树选中客户</strong>：右侧等价于自动填充“客户/MT账号”筛选条件，仅展示该客户相关记录。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">3.2 统一时间口径（本需求修正点）</div>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>统一规则</strong>：所有活动相关数据，均从“客户主动申请并成功参与活动的时间”开始计算。</li>
+                        <li><strong>统计区间</strong>：开始时间 = 客户活动参与成功时间；结束时间 = 活动结束时间或当前时间，取较早者。</li>
+                        <li><strong>统一应用</strong>：活动净入金、活动交易量、平仓盈亏（含 Swap/利息）、返佣金额、达标进度、奖励相关统计，全部使用上述同一统计区间。</li>
+                        <li><strong>示例</strong>：活动时间 2026-09-01 ~ 2026-09-28，客户参与成功 2026-09-10 14:30，则 2026-09-10 14:30 之前的入金/出金/交易量/平仓盈亏/Swap/返佣全部不计入。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">3.3 平仓盈亏口径</div>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>只统计已平仓交易。</li>
+                        <li>包含 Swap / 利息。</li>
+                        <li>不包含浮动盈亏。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+                    <div class="font-bold text-gray-800 mb-2">3.4 返佣口径</div>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>只统计参与成功时间之后产生的返佣。</li>
+                        <li>按该活动参与客户及对应代理归属汇总。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-rocket text-primary mr-2"></i>4. 星际起航免费开卡口径（默认示例）</h2>
+            <div class="space-y-3 text-sm text-gray-700">
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>净入金目标：<span class="mono">$1,000</span></li>
+                    <li>交易目标：<span class="mono">10 Lot</span></li>
+                    <li>两项都完成才达标</li>
+                    <li>统计起点为活动参与成功时间</li>
+                    <li>参与前产生的入金、出金、交易量不计入</li>
+                    <li>新用户默认使用赠金 MT 账号；老用户使用参与时选择的 MT 账号</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-shield-halved text-primary mr-2"></i>5. 仅写入 PRD（Demo 暂不实现）</h2>
+            <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+                <li>同一 MT 账号同一活动只能参加一次</li>
+                <li>正式代理树递归（团队口径）</li>
+                <li>历史代理归属快照</li>
+                <li>客户活动资格校验</li>
+                <li>真实净入金/交易量计算（含剔除、时区、订单修正等）</li>
+                <li>奖励真实发放与状态同步</li>
+                <li>数据库存储与审计</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -59,6 +59,7 @@ const routes = [
   { path: '/report/trade-record', component: () => import('@/views/report/trade-record.vue'), meta: { title: '交易记录', breadcrumb: ['报表中心', '交易记录'] } },
   { path: '/report/sales-trading', component: () => import('@/views/report/sales-trading.vue'), meta: { title: '销售交易奖励报表', breadcrumb: ['报表中心', '销售交易奖励报表'] } },
   { path: '/report/sales-deposit', component: () => import('@/views/report/sales-deposit.vue'), meta: { title: '销售入金奖励统计', breadcrumb: ['报表中心', '销售入金奖励统计'] } },
+  { path: '/report/activity-join', component: () => import('@/views/report/activity-join.vue'), meta: { title: '活动参与报表', breadcrumb: ['报表中心', '活动参与报表'], prdUrl: 'prd-report-activity-join.html', prdTitle: '报表中心 - 活动参与报表 - PRD' } },
   { path: '/report/equity', component: () => import('@/views/report/equity.vue'), meta: { title: '盈亏报表', breadcrumb: ['报表中心', '盈亏报表'] } },
   { path: '/trust/phase1', component: () => import('@/views/trust/phase1.vue'), meta: { title: '委托交易一期', breadcrumb: ['委托交易', '委托交易一期'] } },
   { path: '/trust/account', component: () => import('@/views/trust/account.vue'), meta: { title: '委托交易账户管理', breadcrumb: ['委托交易', '委托交易账户管理'] } },

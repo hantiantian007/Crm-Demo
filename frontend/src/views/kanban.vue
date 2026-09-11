@@ -133,7 +133,7 @@
 <p class="text-xs text-gray-500 mt-1">系统各类报表与数据统计相关需求。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 8 个页面</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 9 个页面</span>
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
@@ -166,6 +166,29 @@
 <a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/commission-stats" target="_blank">
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3">
+<div class="flex items-center gap-2">
+<span class="font-medium text-gray-800">活动参与报表</span>
+</div>
+</td>
+<td class="px-4 py-3 text-gray-500">
+                                            统计代理旗下客户参与活动情况，支持代理汇总与客户明细下钻（Mock）。
+                                        </td>
+<td class="px-4 py-3">
+<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
+</td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/activity-join" target="_blank">
+<i class="fas fa-desktop"></i> 查看原型
+                                                </a>
+<button type="button" class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" @click="openReportActivityJoinPrd">
+<i class="fas fa-file-alt"></i> PRD
+                                                </button>
 </div>
 </td>
 </tr>
@@ -407,7 +430,7 @@
 <p class="text-xs text-gray-500 mt-1">Pcard 银行卡免费办理活动相关需求。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个任务</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个任务</span>
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
@@ -439,6 +462,25 @@
 <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPcardJoinPrd">
   参与PRD
 </button>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">Pcard活动 - 活动参与报表</td>
+<td class="px-4 py-3 text-gray-500">
+                                            统计代理旗下客户参与活动情况，支持代理汇总与客户明细下钻（Mock）。
+                                        </td>
+<td class="px-4 py-3">
+<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
+</td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/activity-join" target="_blank">
+<i class="fas fa-desktop"></i> 查看原型
+                                                </a>
+<button type="button" class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" @click="openReportActivityJoinPrd">
+<i class="fas fa-file-alt"></i> PRD
+                                                </button>
 </div>
 </td>
 </tr>
@@ -951,6 +993,7 @@
 import { openPrd } from '@/store/prd'
 
 const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
+const openReportActivityJoinPrd = () => openPrd('prd-report-activity-join.html', '活动参与报表 - PRD')
 
 const toggleElement = (e) => {
   const button = e.currentTarget;

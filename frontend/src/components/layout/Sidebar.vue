@@ -101,6 +101,7 @@
         <el-menu-item index="/report/trade-record">交易记录</el-menu-item>
         <el-menu-item index="/report/sales-trading">销售交易奖励报表</el-menu-item>
         <el-menu-item index="/report/sales-deposit">销售入金奖励统计</el-menu-item>
+        <el-menu-item index="/report/activity-join">活动参与报表</el-menu-item>
         <el-menu-item index="/report/equity">盈亏报表</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="trust">
