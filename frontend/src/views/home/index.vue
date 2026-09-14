@@ -1,6 +1,16 @@
 <template>
-  <div ref="homeScrollRef" class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6 custom-scrollbar">
-    <div class="w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px] gap-6">
+  <div
+    ref="homeScrollRef"
+    :class="[
+      'flex flex-col flex-1 min-h-0 custom-scrollbar',
+      isAgentRole ? 'bg-mainBg overflow-hidden' : 'overflow-y-auto bg-gray-50 p-4 md:p-6'
+    ]"
+  >
+    <div v-if="isAgentRole" class="flex-1 min-h-0">
+      <AgentHome :demo-role="agentHomeRole" />
+    </div>
+
+    <div v-else class="w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px] gap-6">
       <div class="min-w-0 flex flex-col gap-6">
         <div class="flex flex-col gap-6">
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -77,7 +87,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex justify-between items-start">
             <div>
               <p class="text-sm text-gray-500 font-medium mb-2">MT余额 $</p>
@@ -99,16 +109,23 @@
               <i class="fa-solid fa-file-invoice-dollar"></i>
             </div>
           </div>
+        </div>
 
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex justify-between items-start sm:col-span-2 xl:col-span-1">
-            <div>
-              <p class="text-sm text-gray-500 font-medium mb-2">返佣金额 / 交易奖励 $</p>
-              <p class="text-xl font-bold text-gray-800 mb-2">121.80 / <span class="text-gray-400">0.00</span></p>
-              <p class="text-xs text-gray-400">未提现金额 <span class="font-medium text-orange-400">$ 0.00</span></p>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500">
-              <i class="fa-solid fa-coins"></i>
-            </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <p class="text-sm text-gray-500 font-medium mb-4">快捷入口</p>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <router-link to="/fund/deposit" class="h-10 rounded-md border border-gray-200 bg-white text-xs text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-down text-[13px] text-gray-500"></i>
+              <span>入金</span>
+            </router-link>
+            <router-link to="/fund/withdraw" class="h-10 rounded-md border border-gray-200 bg-white text-xs text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-up text-[13px] text-gray-500"></i>
+              <span>出金</span>
+            </router-link>
+            <router-link to="/report/trade-record" class="h-10 rounded-md border border-gray-200 bg-white text-xs text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+              <i class="fa-solid fa-list text-[13px] text-gray-500"></i>
+              <span>交易记录</span>
+            </router-link>
           </div>
         </div>
 
@@ -176,29 +193,6 @@
               <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors">感恩节假期交易时间调整</p>
             </div>
             <span class="text-xs text-gray-400">10-28</span>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <p class="text-sm text-gray-500 font-medium mb-3">推荐码</p>
-          <div class="bg-gray-50 p-3 rounded flex justify-between items-center border border-gray-100">
-            <span class="font-medium text-gray-800 tracking-wider">HAINJ8YG</span>
-            <button class="text-gray-400 hover:text-gray-600 text-xs flex items-center gap-1"><i class="fa-regular fa-copy"></i> 复制</button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <p class="text-sm text-gray-500 font-medium mb-4">推广开户</p>
-          <div class="border-b border-gray-100 flex gap-6 mb-4">
-            <button class="text-sm text-[#41B8AF] border-b-2 border-[#41B8AF] pb-2 font-medium">代理分享</button>
-            <button class="text-sm text-gray-400 hover:text-gray-600 pb-2">直客分享</button>
-          </div>
-          <div>
-            <p class="text-xs text-gray-500 mb-2">代理客户推广链接</p>
-            <div class="bg-gray-50 p-3 rounded flex justify-between items-center border border-gray-100 group">
-              <span class="text-xs text-gray-600 truncate flex-1 mr-2">http://crmuat.pcard.hk/admin/reg.php?invent_code=H...</span>
-              <button class="text-gray-400 hover:text-gray-600 text-xs flex items-center gap-1 shrink-0"><i class="fa-regular fa-copy"></i> 复制</button>
-            </div>
           </div>
         </div>
       </div>
@@ -316,8 +310,13 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue'
+import AgentHome from '@/views/agent-home.vue'
+import { demoRoleState } from '@/store/demoRole'
 
 const homeScrollRef = ref(null)
+
+const isAgentRole = computed(() => demoRoleState.role !== 'CLIENT')
+const agentHomeRole = computed(() => (demoRoleState.role === 'MIB' ? 'MIB' : 'IB'))
 
 const activityJoined = ref(false)
 const netDeposit = ref(0)

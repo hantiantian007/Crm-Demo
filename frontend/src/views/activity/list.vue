@@ -108,9 +108,9 @@
        </td>
        <td class="py-3.5 px-5">
         <div class="flex items-center gap-2">
-         <a class="px-3 py-1 rounded-md text-xs transition-colors inline-block text-white border bg-blue-500 hover:bg-blue-600 border-blue-500" href="#">
+         <router-link to="/activity/pcard" class="px-3 py-1 rounded-md text-xs transition-colors inline-block text-white border bg-blue-500 hover:bg-blue-600 border-blue-500">
           查看详情
-         </a>
+         </router-link>
          <button class="px-3 py-1 rounded-md text-xs border transition-colors text-white bg-red-500 hover:bg-red-600 border-red-500">
           结束活动
          </button>

@@ -111,6 +111,27 @@
     <div class="prd-card prd-card--accent">
       <div class="flex items-center justify-between gap-4">
         <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-user-shield golden-accent"></i>
+          角色展示规则（首页）
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-shield-halved"></i>权限与隔离</span>
+          <span class="prd-tag prd-tag--demo"><i class="fa-solid fa-flask"></i>演示切换</span>
+        </div>
+      </div>
+      <div class="prd-list mt-4">
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>统一首页组件</strong>：尽量复用同一个首页页面，通过登录角色控制模块显示，不复制两套完整首页。</div></div>
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>代理 / IB / MIB</strong>：可展示代理经营相关内容（客户经营数据、推广中心、返佣相关模块、MIB 团队概览、客户运营提醒等）。</div></div>
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>直客</strong>：隐藏所有代理专属内容；直客首页主要展示自己的 MT 账户相关数据（MT余额、入金/出金、交易量/平仓盈亏、持仓量/浮动盈亏）、活动、通知公告。</div></div>
+        <div class="prd-li"><span class="prd-bullet prd-bullet--danger"></span><div class="prd-v text-red-700"><strong>文案红线（直客可见区域）</strong>：任何可见文案里不得出现 <code>返佣</code> / <code>佣金</code> / <code>代理收益</code> 等代理体系概念。</div></div>
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">Demo 阶段提供“演示角色”下拉入口：位于顶部导航栏右侧，靠近用户头像；仅用于 Demo 验证，不属于正式业务功能。</div></div>
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v"><strong>直客快捷入口（首页）</strong>：仅保留 <code>入金</code> / <code>出金</code> / <code>交易记录</code>；首页不展示 <code>内部转账</code> 快捷入口（左侧菜单功能可保留）。</div></div>
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
           <i class="fa-solid fa-scale-balanced golden-accent"></i>
           业务规则
         </h2>

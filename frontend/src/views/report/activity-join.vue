@@ -56,13 +56,13 @@
             <div v-if="moreOpen" class="mt-3 pt-3 border-t border-gray-100">
               <div class="grid grid-cols-1 xl:grid-cols-12 gap-3 text-xs">
                 <div class="flex items-center gap-2 xl:col-span-4">
-                  <div class="text-gray-600 w-[84px] shrink-0 text-right">代理账号/名称：</div>
-                  <input v-model="form.agentKeyword" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1" placeholder="账号或名称" type="text" />
+                  <div class="text-gray-600 w-[84px] shrink-0 text-right">代理名称：</div>
+                  <input v-model="form.agentKeyword" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1" placeholder="名称" type="text" />
                 </div>
 
                 <div class="flex items-center gap-2 xl:col-span-5">
                   <div class="text-gray-600 w-[84px] shrink-0 text-right">客户/MT账号：</div>
-                  <input v-model="form.customerKeyword" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1" placeholder="客户ID/姓名/MT" type="text" />
+                  <input v-model="form.customerKeyword" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1" placeholder="姓名/邮箱/MT" type="text" />
                 </div>
 
                 <div class="flex items-center justify-end xl:col-span-3">
@@ -95,8 +95,7 @@
 
           <div class="text-xs text-gray-500 bg-white border border-gray-100 rounded-lg px-4 py-2 flex items-center justify-between">
             <div class="flex items-center gap-4 flex-wrap">
-              <div>接近达标 <span class="font-mono text-gray-700 font-medium">{{ formatInt(kpi.nearGoalCustomers) }}</span></div>
-              <div>平仓盈亏(含Swap) $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(kpi.closedPnl) }}</span></div>
+              <div>平仓盈亏 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(kpi.closedPnl) }}</span></div>
               <div>返佣金额 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(kpi.commission) }}</span></div>
               <div>待发奖励 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(kpi.rewardPending) }}</span></div>
               <div>已发奖励 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(kpi.rewardIssued) }}</span></div>
@@ -113,7 +112,6 @@
               <table class="w-full text-xs min-w-[1220px]">
                 <thead class="bg-gray-50 text-gray-600 border-b border-gray-100 sticky top-0 z-10">
                   <tr>
-                    <th class="text-left font-medium px-4 py-3 whitespace-nowrap w-[110px]">代理账号</th>
                     <th class="text-left font-medium px-4 py-3 whitespace-nowrap w-[110px]">代理名称</th>
                     <th class="text-right font-medium px-4 py-3 whitespace-nowrap w-[80px]">客户数</th>
                     <th class="text-right font-medium px-4 py-3 whitespace-nowrap w-[100px]">参与客户</th>
@@ -129,12 +127,11 @@
                 </thead>
                 <tbody class="divide-y divide-gray-50 text-gray-700">
                   <tr v-for="row in agentRows" :key="row.agentId" class="hover:bg-gray-50/60 transition-colors">
-                    <td class="px-4 py-3 font-mono text-gray-800">
+                    <td class="px-4 py-3 text-gray-800 font-medium">
                       <button class="text-blue-600 hover:text-blue-800 hover:underline" type="button" @click="openDetail(row.agentId)">
-                        {{ row.agentId }}
+                        {{ row.agentName }}
                       </button>
                     </td>
-                    <td class="px-4 py-3 text-gray-800 font-medium">{{ row.agentName }}</td>
                     <td class="px-4 py-3 text-right font-mono">{{ formatInt(row.customersTotal) }}</td>
                     <td class="px-4 py-3 text-right font-mono">{{ formatInt(row.participantCustomers) }}</td>
                     <td class="px-4 py-3 text-right font-mono">{{ formatPercent(row.participantRate) }}</td>
@@ -152,7 +149,7 @@
                   </tr>
 
                   <tr v-if="agentRows.length === 0">
-                    <td class="px-4 py-12 text-center text-gray-400" colspan="12">无匹配数据</td>
+                    <td class="px-4 py-12 text-center text-gray-400" colspan="11">无匹配数据</td>
                   </tr>
                 </tbody>
               </table>
@@ -167,11 +164,9 @@
                   <div class="text-xs text-gray-400">目标：净入金 ${{ formatMoney(TARGET_NET_DEPOSIT) }} / 交易 {{ formatLots(TARGET_LOTS) }} Lot</div>
                 </div>
                 <div class="mt-2 text-xs text-gray-500 flex flex-wrap gap-x-5 gap-y-1">
-                  <div>口径：从客户参与成功时间起算，截止 min(活动结束, 当前)</div>
                   <div>参与MT数 <span class="font-mono text-gray-700 font-medium">{{ formatInt(selectedAgentSummary.participantMtAccounts) }}</span></div>
                   <div>进行中 <span class="font-mono text-gray-700 font-medium">{{ formatInt(selectedAgentSummary.inProgressCustomers) }}</span></div>
-                  <div>接近达标 <span class="font-mono text-gray-700 font-medium">{{ formatInt(selectedAgentSummary.nearGoalCustomers) }}</span></div>
-                  <div>平仓盈亏(含Swap) $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(selectedAgentSummary.closedPnl) }}</span></div>
+                  <div>平仓盈亏 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(selectedAgentSummary.closedPnl) }}</span></div>
                   <div>返佣 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(selectedAgentSummary.commission) }}</span></div>
                   <div>待发奖励 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(selectedAgentSummary.rewardPending) }}</span></div>
                   <div>已发奖励 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(selectedAgentSummary.rewardIssued) }}</span></div>
@@ -206,7 +201,6 @@
                   <table class="w-full text-xs min-w-[1350px]">
                     <thead class="bg-gray-50 text-gray-600 border-b border-gray-100 sticky top-0 z-10">
                       <tr>
-                        <th class="text-left font-medium px-4 py-3">客户ID</th>
                         <th class="text-left font-medium px-4 py-3">客户姓名</th>
                         <th class="text-left font-medium px-4 py-3">MT账号</th>
                         <th class="text-left font-medium px-4 py-3">活动名称</th>
@@ -223,11 +217,10 @@
                     </thead>
                     <tbody class="divide-y divide-gray-50 text-gray-700">
                       <tr v-for="d in detailRows" :key="d.mtAccount + '-' + d.joinedAt" class="hover:bg-gray-50/60 transition-colors">
-                        <td class="px-4 py-3 font-mono text-gray-800">{{ d.customerId }}</td>
                         <td class="px-4 py-3 text-gray-800 font-medium">
                           <div class="flex items-center gap-2">
                             <span>{{ d.customerName }}</span>
-                            <span v-if="d.nearGoal" class="text-[11px] px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">接近达标</span>
+                            <span class="text-[11px] text-gray-400">{{ d.customerEmail || '-' }}</span>
                           </div>
                         </td>
                         <td class="px-4 py-3 font-mono">{{ d.mtAccount }}</td>
@@ -265,7 +258,7 @@
                       </tr>
 
                       <tr v-if="detailRows.length === 0">
-                        <td class="px-4 py-12 text-center text-gray-400" colspan="13">无明细数据</td>
+                        <td class="px-4 py-12 text-center text-gray-400" colspan="12">无明细数据</td>
                       </tr>
                     </tbody>
                   </table>
@@ -382,10 +375,10 @@ const mockScopes = {
       agentName: '华安',
       customersTotal: 120,
       entries: [
-        { customerId: 'C10001', customerName: '张三', mtAccount: '8100458', activityName: '星际起航免费开卡', joinedAt: '2026-09-06 10:12:00', netDeposit: 820.5, lots: 7.6, closedPnl: 128.35, commission: 12.5, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
-        { customerId: 'C10002', customerName: '李四', mtAccount: '8100477', activityName: '星际起航免费开卡', joinedAt: '2026-09-05 18:42:11', netDeposit: 1240.0, lots: 12.2, closedPnl: -45.12, commission: 22.8, rewardAmount: 50.0, rewardStatus: '待发放', rewardTime: '-' },
-        { customerId: 'C10003', customerName: '王五', mtAccount: '8100520', activityName: '星际起航免费开卡', joinedAt: '2026-09-03 09:05:32', netDeposit: 300.0, lots: 1.45, closedPnl: 10.02, commission: 3.2, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
-        { customerId: 'C10004', customerName: '赵六', mtAccount: '8100601', activityName: '星际起航免费开卡', joinedAt: '2026-09-02 12:00:00', netDeposit: 1000.0, lots: 10.0, closedPnl: 210.0, commission: 18.0, rewardAmount: 30.0, rewardStatus: '已发放', rewardTime: '2026-09-04 14:20:00' }
+        { customerId: 'C10001', customerName: '张三', customerEmail: 'zhangsan@demo.com', mtAccount: '8100458', activityName: '星际起航免费开卡', joinedAt: '2026-09-06 10:12:00', netDeposit: 820.5, lots: 7.6, closedPnl: 128.35, commission: 12.5, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
+        { customerId: 'C10002', customerName: '李四', customerEmail: 'lisi@demo.com', mtAccount: '8100477', activityName: '星际起航免费开卡', joinedAt: '2026-09-05 18:42:11', netDeposit: 1240.0, lots: 12.2, closedPnl: -45.12, commission: 22.8, rewardAmount: 50.0, rewardStatus: '待发放', rewardTime: '-' },
+        { customerId: 'C10003', customerName: '王五', customerEmail: 'wangwu@demo.com', mtAccount: '8100520', activityName: '星际起航免费开卡', joinedAt: '2026-09-03 09:05:32', netDeposit: 300.0, lots: 1.45, closedPnl: 10.02, commission: 3.2, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
+        { customerId: 'C10004', customerName: '赵六', customerEmail: 'zhaoliu@demo.com', mtAccount: '8100601', activityName: '星际起航免费开卡', joinedAt: '2026-09-02 12:00:00', netDeposit: 1000.0, lots: 10.0, closedPnl: 210.0, commission: 18.0, rewardAmount: 30.0, rewardStatus: '已发放', rewardTime: '2026-09-04 14:20:00' }
       ]
     },
     {
@@ -393,10 +386,10 @@ const mockScopes = {
       agentName: 'jack',
       customersTotal: 55,
       entries: [
-        { customerId: 'C20011', customerName: '陈一', mtAccount: '8300248', activityName: '星际起航免费开卡', joinedAt: '2026-09-07 11:10:00', netDeposit: 980.0, lots: 9.95, closedPnl: 80.55, commission: 16.4, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
-        { customerId: 'C20012', customerName: '周二', mtAccount: '8300255', activityName: '星际起航免费开卡', joinedAt: '2026-09-01 08:03:22', netDeposit: 1500.0, lots: 10.0, closedPnl: 300.1, commission: 35.0, rewardAmount: 50.0, rewardStatus: '已发放', rewardTime: '2026-09-08 09:10:11' },
-        { customerId: 'C20013', customerName: '吴三', mtAccount: '8300319', activityName: '星际起航免费开卡', joinedAt: '2026-09-08 15:26:10', netDeposit: 600.0, lots: 3.2, closedPnl: -12.3, commission: 6.7, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
-        { customerId: 'C20012', customerName: '周二', mtAccount: '8300266', activityName: '星际起航免费开卡', joinedAt: '2026-09-01 08:03:22', netDeposit: 200.0, lots: 0.2, closedPnl: 2.01, commission: 0.3, rewardAmount: null, rewardStatus: '-', rewardTime: '-' }
+        { customerId: 'C20011', customerName: '陈一', customerEmail: 'chenyi@demo.com', mtAccount: '8300248', activityName: '星际起航免费开卡', joinedAt: '2026-09-07 11:10:00', netDeposit: 980.0, lots: 9.95, closedPnl: 80.55, commission: 16.4, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
+        { customerId: 'C20012', customerName: '周二', customerEmail: 'zhouer@demo.com', mtAccount: '8300255', activityName: '星际起航免费开卡', joinedAt: '2026-09-01 08:03:22', netDeposit: 1500.0, lots: 10.0, closedPnl: 300.1, commission: 35.0, rewardAmount: 50.0, rewardStatus: '已发放', rewardTime: '2026-09-08 09:10:11' },
+        { customerId: 'C20013', customerName: '吴三', customerEmail: 'wusan@demo.com', mtAccount: '8300319', activityName: '星际起航免费开卡', joinedAt: '2026-09-08 15:26:10', netDeposit: 600.0, lots: 3.2, closedPnl: -12.3, commission: 6.7, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
+        { customerId: 'C20012', customerName: '周二', customerEmail: 'zhouer@demo.com', mtAccount: '8300266', activityName: '星际起航免费开卡', joinedAt: '2026-09-01 08:03:22', netDeposit: 200.0, lots: 0.2, closedPnl: 2.01, commission: 0.3, rewardAmount: null, rewardStatus: '-', rewardTime: '-' }
       ]
     }
   ],
@@ -406,9 +399,9 @@ const mockScopes = {
       agentName: '华安',
       customersTotal: 180,
       entries: [
-        { customerId: 'C10001', customerName: '张三', mtAccount: '8100458', activityName: '星际起航免费开卡', joinedAt: '2026-09-06 10:12:00', netDeposit: 820.5, lots: 7.6, closedPnl: 128.35, commission: 12.5, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
-        { customerId: 'C10002', customerName: '李四', mtAccount: '8100477', activityName: '星际起航免费开卡', joinedAt: '2026-09-05 18:42:11', netDeposit: 1240.0, lots: 12.2, closedPnl: -45.12, commission: 22.8, rewardAmount: 50.0, rewardStatus: '待发放', rewardTime: '-' },
-        { customerId: 'C10005', customerName: '孙七', mtAccount: '8100702', activityName: '星际起航免费开卡', joinedAt: '2026-09-04 19:00:00', netDeposit: 1050.0, lots: 10.4, closedPnl: 90.0, commission: 19.0, rewardAmount: 50.0, rewardStatus: '已发放', rewardTime: '2026-09-10 10:00:00' }
+        { customerId: 'C10001', customerName: '张三', customerEmail: 'zhangsan@demo.com', mtAccount: '8100458', activityName: '星际起航免费开卡', joinedAt: '2026-09-06 10:12:00', netDeposit: 820.5, lots: 7.6, closedPnl: 128.35, commission: 12.5, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
+        { customerId: 'C10002', customerName: '李四', customerEmail: 'lisi@demo.com', mtAccount: '8100477', activityName: '星际起航免费开卡', joinedAt: '2026-09-05 18:42:11', netDeposit: 1240.0, lots: 12.2, closedPnl: -45.12, commission: 22.8, rewardAmount: 50.0, rewardStatus: '待发放', rewardTime: '-' },
+        { customerId: 'C10005', customerName: '孙七', customerEmail: 'sunqi@demo.com', mtAccount: '8100702', activityName: '星际起航免费开卡', joinedAt: '2026-09-04 19:00:00', netDeposit: 1050.0, lots: 10.4, closedPnl: 90.0, commission: 19.0, rewardAmount: 50.0, rewardStatus: '已发放', rewardTime: '2026-09-10 10:00:00' }
       ]
     },
     {
@@ -416,8 +409,8 @@ const mockScopes = {
       agentName: 'jack',
       customersTotal: 88,
       entries: [
-        { customerId: 'C20011', customerName: '陈一', mtAccount: '8300248', activityName: '星际起航免费开卡', joinedAt: '2026-09-07 11:10:00', netDeposit: 980.0, lots: 9.95, closedPnl: 80.55, commission: 16.4, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
-        { customerId: 'C20012', customerName: '周二', mtAccount: '8300255', activityName: '星际起航免费开卡', joinedAt: '2026-09-01 08:03:22', netDeposit: 1500.0, lots: 10.0, closedPnl: 300.1, commission: 35.0, rewardAmount: 50.0, rewardStatus: '已发放', rewardTime: '2026-09-08 09:10:11' }
+        { customerId: 'C20011', customerName: '陈一', customerEmail: 'chenyi@demo.com', mtAccount: '8300248', activityName: '星际起航免费开卡', joinedAt: '2026-09-07 11:10:00', netDeposit: 980.0, lots: 9.95, closedPnl: 80.55, commission: 16.4, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
+        { customerId: 'C20012', customerName: '周二', customerEmail: 'zhouer@demo.com', mtAccount: '8300255', activityName: '星际起航免费开卡', joinedAt: '2026-09-01 08:03:22', netDeposit: 1500.0, lots: 10.0, closedPnl: 300.1, commission: 35.0, rewardAmount: 50.0, rewardStatus: '已发放', rewardTime: '2026-09-08 09:10:11' }
       ]
     },
     {
@@ -425,8 +418,8 @@ const mockScopes = {
       agentName: 'Mikey',
       customersTotal: 66,
       entries: [
-        { customerId: 'C30021', customerName: '郑八', mtAccount: '8400101', activityName: '星际起航免费开卡', joinedAt: '2026-09-02 16:21:00', netDeposit: 400.0, lots: 8.4, closedPnl: 15.2, commission: 7.1, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
-        { customerId: 'C30022', customerName: '钱九', mtAccount: '8400120', activityName: '星际起航免费开卡', joinedAt: '2026-09-02 16:21:00', netDeposit: 1000.0, lots: 10.0, closedPnl: 55.0, commission: 12.0, rewardAmount: 50.0, rewardStatus: '待发放', rewardTime: '-' }
+        { customerId: 'C30021', customerName: '郑八', customerEmail: 'zhengba@demo.com', mtAccount: '8400101', activityName: '星际起航免费开卡', joinedAt: '2026-09-02 16:21:00', netDeposit: 400.0, lots: 8.4, closedPnl: 15.2, commission: 7.1, rewardAmount: null, rewardStatus: '-', rewardTime: '-' },
+        { customerId: 'C30022', customerName: '钱九', customerEmail: 'qianjiu@demo.com', mtAccount: '8400120', activityName: '星际起航免费开卡', joinedAt: '2026-09-02 16:21:00', netDeposit: 1000.0, lots: 10.0, closedPnl: 55.0, commission: 12.0, rewardAmount: 50.0, rewardStatus: '待发放', rewardTime: '-' }
       ]
     }
   ]
@@ -494,8 +487,9 @@ const filteredAgents = computed(() => {
         })
         .filter((d) => {
           if (!customerKw) return true
-          return normalize(d.customerId).includes(customerKw) || normalize(d.customerName).includes(customerKw) || normalize(d.mtAccount).includes(customerKw)
+          return normalize(d.customerId).includes(customerKw) || normalize(d.customerName).includes(customerKw) || normalize(d.customerEmail).includes(customerKw) || normalize(d.mtAccount).includes(customerKw)
         })
+      return { ...a, agentMatched, details }
       return { ...a, agentMatched, details }
     })
     .filter((a) => a.agentMatched)
@@ -622,7 +616,7 @@ const selectedAgent = computed(() => filteredAgents.value.find((a) => a.agentId 
 
 const detailTitle = computed(() => {
   if (!selectedAgent.value) return '客户活动明细'
-  return `客户活动明细 - ${selectedAgent.value.agentId}-${selectedAgent.value.agentName}`
+  return `客户活动明细 - ${selectedAgent.value.agentName}`
 })
 
 const detailRows = computed(() => {
