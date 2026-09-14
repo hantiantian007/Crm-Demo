@@ -176,7 +176,7 @@
 </div>
 </td>
 <td class="px-4 py-3 text-gray-500">
-                                            统计代理旗下客户参与活动情况，支持代理汇总与客户明细下钻（Mock）。
+                                            统计代理旗下客户参与活动情况，支持代理汇总与客户明细下钻（Demo）。
                                         </td>
 <td class="px-4 py-3">
 <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
@@ -187,6 +187,29 @@
 <i class="fas fa-desktop"></i> 查看原型
                                                 </a>
 <button type="button" class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" @click="openReportActivityJoinPrd">
+<i class="fas fa-file-alt"></i> PRD
+                                                </button>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3">
+<div class="flex items-center gap-2">
+<span class="font-medium text-gray-800">代理首页</span>
+</div>
+</td>
+<td class="px-4 py-3 text-gray-500">
+                                            面向 IB/MIB 的经营数据首页（Demo），聚焦旗下客户经营数据、返佣、活动与推广。
+                                        </td>
+<td class="px-4 py-3">
+<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
+</td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2">
+<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/agent-home" target="_blank">
+<i class="fas fa-desktop"></i> 查看原型
+                                                </a>
+<button type="button" class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" @click="openAgentHomePrd">
 <i class="fas fa-file-alt"></i> PRD
                                                 </button>
 </div>
@@ -468,7 +491,7 @@
 <tr class="table-row-hover">
 <td class="px-4 py-3 font-bold text-gray-800">Pcard活动 - 活动参与报表</td>
 <td class="px-4 py-3 text-gray-500">
-                                            统计代理旗下客户参与活动情况，支持代理汇总与客户明细下钻（Mock）。
+                                            统计代理旗下客户参与活动情况，支持代理汇总与客户明细下钻（Demo）。
                                         </td>
 <td class="px-4 py-3">
 <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
@@ -994,6 +1017,7 @@ import { openPrd } from '@/store/prd'
 
 const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
 const openReportActivityJoinPrd = () => openPrd('prd-report-activity-join.html', '活动参与报表 - PRD')
+const openAgentHomePrd = () => openPrd('prd-agent-home.html', '代理首页 - PRD')
 
 const toggleElement = (e) => {
   const button = e.currentTarget;

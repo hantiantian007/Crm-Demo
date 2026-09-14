@@ -101,7 +101,6 @@
               <div>待发奖励 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(kpi.rewardPending) }}</span></div>
               <div>已发奖励 $<span class="font-mono text-gray-700 font-medium">{{ formatMoney(kpi.rewardIssued) }}</span></div>
             </div>
-            <span class="text-[11px] text-gray-500 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">Mock</span>
           </div>
 
           <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex-1 flex flex-col">

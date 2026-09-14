@@ -5,6 +5,7 @@ const routes = [
   { path: '/register', component: () => import('@/views/register.vue'), meta: { layout: 'empty', title: '注册' } },
   { path: '/', redirect: '/home' },
   { path: '/home', name: 'Home', component: () => import('@/views/home/index.vue'), meta: { title: '首页', breadcrumb: ['首页'], prdUrl: 'prd-home-pcard-activity-join.html', prdTitle: '首页 - PCard 活动参与弹窗 - PRD' } },
+  { path: '/agent-home', name: 'AgentHome', component: () => import('@/views/agent-home.vue'), meta: { title: '代理首页', breadcrumb: ['代理首页'], prdUrl: 'prd-agent-home.html', prdTitle: '代理首页 - PRD' } },
   { path: '/kanban', component: () => import('../views/kanban.vue'), meta: { title: '需求看板', breadcrumb: ['需求看板'] } },
   { path: '/history-kanban', component: () => import('../views/history-kanban.vue'), meta: { title: '历史需求记录', breadcrumb: ['历史需求记录'] } },
   

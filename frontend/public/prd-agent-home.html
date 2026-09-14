@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>代理首页 - PRD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+      html, body { height: 100%; }
+      body { background: #f6f7fb; }
+      .table-cell-nowrap { white-space: nowrap; }
+    </style>
+  </head>
+  <body class="min-h-full">
+    <div class="max-w-6xl mx-auto px-6 py-8">
+      <div class="flex items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="text-2xl font-black text-gray-900">代理首页（Agent Home）</div>
+          <div class="mt-1 text-sm text-gray-500">Demo 阶段：使用静态演示数据，不接真实 API；用于代理/IB/MIB以经营数据为主的快速总览。</div>
+        </div>
+        <span class="text-xs text-gray-500 bg-gray-100 border border-gray-200 px-2 py-1 rounded">PRD</span>
+      </div>
+
+      <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+        <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-bullseye text-[#d1a84f] mr-2"></i>1. 页面目标</h2>
+        <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+          <li>为代理/IB/MIB提供以“旗下客户经营数据”为核心的首页，便于进入系统后快速扫描关键经营状态。</li>
+          <li>展示客户情况、资金情况、交易情况、返佣情况、活动提醒、推广链接、站内消息。</li>
+          <li>坚持轻量、紧凑、易扫描：数据优先，工具其次；避免堆叠过多大卡片与无关装饰。</li>
+          <li><strong>硬约束</strong>：不修改现有首页（/home）任何逻辑与布局；仅新增页面与路由。</li>
+        </ul>
+      </div>
+
+      <div class="mt-6 bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+        <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-layer-group text-[#d1a84f] mr-2"></i>2. 页面结构</h2>
+        <div class="space-y-5 text-sm text-gray-700">
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.1 布局</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>左右布局：左侧约 70%（KPI / <strong>活动模块（复用首页活动卡样式）</strong> / 趋势 / 运营提醒 / 返佣概览），右侧约 30%（推广中心 / 站内信 / 通知公告）。</li>
+              <li>风格沿用现有 CRM：白底卡片、细边框、阴影弱化、字体紧凑。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.2 核心经营数据（KPI）</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>核心 KPI（6项）</strong>：客户总数、活跃客户数、本月新增客户、客户净入金、客户交易量、本月返佣。</li>
+              <li>可轻量补充（非核心）：首次入金客户、本月出金。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.3 经营趋势</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>轻量趋势图，支持切换：净入金 / 交易量 / 新增客户 / 返佣。</li>
+              <li>默认展示最近 30 天。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.4 客户运营提醒</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>新注册未入金、已入金未交易、7天未交易、30天未活跃、大额出金客户。</li>
+              <li>轻量可点击样式，用于进入对应客户列表或 Demo 明细（Demo 可仅做跳转/占位）。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.5 返佣概览</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>今日返佣、本周返佣、本月返佣、上月返佣。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.6 推广中心</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>推荐码、标准开户链接、活动开户链接。</li>
+              <li>复制链接、生成/查看二维码（Demo 可用占位二维码框）。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.7 活动模块（代理视角）</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>视觉风格</strong>：复用现有首页活动卡片风格（活动标题、左侧图标、活动说明、净入金进度、交易手数进度、底部状态提示条、金色强调色与现有进度条样式）。</li>
+              <li><strong>活动名称</strong>：统一使用“星际起航免费开卡”。</li>
+              <li><strong>核心利益点</strong>：活动标题下方展示“新用户开户即送100USD赠金”，字号小于标题，可使用橙色强调，不做独立大标签。</li>
+              <li><strong>活动条件</strong>：净入金 $1,000 + 交易 10 Lot，双条件达标。</li>
+              <li><strong>代理视角数据</strong>：旗下参与人数、已达标人数、接近达标人数。</li>
+              <li><strong>展示口径提示</strong>：代理汇总值（净入金/交易量）与单客户达标条件分开展示，避免使用 “/” 连接造成误解。</li>
+              <li><strong>参与入口</strong>：活动标题区域右侧提供“立即参与”按钮；未参与时显示“未参加活动”状态；已参与后显示“已参与”状态且不重复展示按钮。</li>
+              <li><strong>参与逻辑（Demo）</strong>：新用户默认使用赠金 MT 账号参与；老用户需选择参与 MT 账号后才可确认；最多展示 5 个 MT 账号，卡片单选，不使用下拉。</li>
+              <li><strong>业务规则（仅写入 PRD）</strong>：同一 MT 账号同一活动只能参加一次；Demo 不做真实重复校验与持久化。</li>
+              <li><strong>统计起点</strong>：成功参与后，所有活动统计从“参与成功时间”开始计算（净入金、交易量、平仓盈亏、返佣等）。</li>
+              <li><strong>展示规则</strong>：活动进行中展示活动卡；活动结束后整块隐藏，页面下方“经营趋势”自动上移，不保留空白占位。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.8 站内信 / 消息中心</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>展示最近 3~5 条消息，支持未读红点与“查看全部”。</li>
+              <li>返佣为实时结算：不出现“佣金已结算/待结算/结算周期”等文案；消息示例为“返佣到账/今日返佣更新/客户交易产生返佣”。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.9 通知公告（平台级）</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>定位</strong>：平台级通知公告，与“站内信/消息中心”分开。</li>
+              <li><strong>内容示例</strong>：节假日交易时间调整、产品/交易规则更新、系统维护、重要业务通知。</li>
+              <li><strong>展示形式</strong>：标题“通知公告”，右上“查看更多 &gt;”；列表展示公告标题与日期；最新可标注“最新”。</li>
+              <li><strong>数量</strong>：默认展示最近 3~5 条。</li>
+              <li><strong>交互</strong>：点击公告可查看详情；“查看更多”进入公告列表页。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.10 MIB 团队概览（仅 MIB 展示）</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>直属代理数、团队代理数、直属客户数、团队客户数、Top 下级代理。</li>
+              <li>普通 IB 不展示该模块。</li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+            <div class="font-bold text-gray-800 mb-2">2.11 不作为核心展示的数据（约束）</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>不直接搬运现有首页的：MT余额、持仓量、浮动盈亏、胜率分析、交易盈亏分析等“代理自身账户”维度内容。</li>
+              <li>代理首页聚焦“旗下客户经营数据”。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+        <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-database text-[#d1a84f] mr-2"></i>3. 字段说明（Demo）</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left border border-gray-200">
+            <thead class="bg-gray-100 text-gray-600">
+              <tr>
+                <th class="py-2 px-3 table-cell-nowrap">字段</th>
+                <th class="py-2 px-3">含义</th>
+                <th class="py-2 px-3 table-cell-nowrap">单位/格式</th>
+                <th class="py-2 px-3">备注</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700 divide-y divide-gray-100">
+              <tr><td class="py-2 px-3 font-medium table-cell-nowrap">客户总数</td><td class="py-2 px-3">代理范围内客户总量</td><td class="py-2 px-3 table-cell-nowrap">整数</td><td class="py-2 px-3">Demo 固定演示数据</td></tr>
+              <tr><td class="py-2 px-3 font-medium table-cell-nowrap">活跃客户数</td><td class="py-2 px-3">近N天有交易或入金的客户</td><td class="py-2 px-3 table-cell-nowrap">整数</td><td class="py-2 px-3">Demo 口径写入 PRD，页面不做复杂判断</td></tr>
+              <tr><td class="py-2 px-3 font-medium table-cell-nowrap">本月新增客户</td><td class="py-2 px-3">本月注册并归属该代理的客户</td><td class="py-2 px-3 table-cell-nowrap">整数</td><td class="py-2 px-3">Demo 固定演示数据</td></tr>
+              <tr><td class="py-2 px-3 font-medium table-cell-nowrap">客户净入金</td><td class="py-2 px-3">有效入金 - 有效出金</td><td class="py-2 px-3 table-cell-nowrap">$，2位小数</td><td class="py-2 px-3">千位符，保留2位</td></tr>
+              <tr><td class="py-2 px-3 font-medium table-cell-nowrap">客户交易量</td><td class="py-2 px-3">客户累计有效交易量</td><td class="py-2 px-3 table-cell-nowrap">Lot，2位小数</td><td class="py-2 px-3">千位符，保留2位</td></tr>
+              <tr><td class="py-2 px-3 font-medium table-cell-nowrap">本月返佣</td><td class="py-2 px-3">当月产生的返佣金额</td><td class="py-2 px-3 table-cell-nowrap">$，2位小数</td><td class="py-2 px-3">Demo 固定演示数据</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="mt-6 bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+        <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-ruler-combined text-[#d1a84f] mr-2"></i>4. 统计口径（Demo 说明）</h2>
+        <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+          <li>本页面为 Demo：不接真实 API，不做真实代理树递归与归属快照。</li>
+          <li>金额显示：千位符，默认 2 位小数。</li>
+          <li>趋势图：仅用于“趋势感知”，不要求与 KPI 完全一致。</li>
+          <li>MIB 团队概览：仅在角色为 MIB 时展示。</li>
+          <li>返佣为实时结算：不展示“待结算返佣”。</li>
+        </ul>
+      </div>
+
+      <div class="mt-6 bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+        <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-screwdriver-wrench text-[#d1a84f] mr-2"></i>5. Demo 实现说明</h2>
+        <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+          <li>新增页面：<span class="font-mono text-gray-800">#/agent-home</span>。</li>
+          <li>新增 PRD：<span class="font-mono text-gray-800">prd-agent-home.html</span>。</li>
+          <li>不修改现有首页：<span class="font-mono text-gray-800">#/home</span> 的任何实现。</li>
+        </ul>
+      </div>
+
+      <div class="mt-6 bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+        <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-check text-[#d1a84f] mr-2"></i>6. 验收标准</h2>
+        <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+          <li>路由可访问：<span class="font-mono text-gray-800">#/agent-home</span>。</li>
+          <li>现有首页不受影响：<span class="font-mono text-gray-800">#/home</span> 仍保持原样。</li>
+          <li>页面结构包含：KPI、趋势、活动模块、运营提醒、返佣概览、推广中心、站内信、通知公告；MIB 模块仅 MIB 展示。</li>
+          <li>整体风格轻量紧凑，无大面积装饰与堆叠大卡片。</li>
+          <li>PRD 可通过页面顶部 PRD 按钮以 Drawer 形式打开预览。</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
