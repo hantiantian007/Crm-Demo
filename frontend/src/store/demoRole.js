@@ -1,10 +1,9 @@
 import { reactive } from 'vue'
 
 export const demoRoleState = reactive({
-  role: 'CLIENT'
+  role: 'customer'
 })
 
 export const setDemoRole = (role) => {
   demoRoleState.role = role
 }
-

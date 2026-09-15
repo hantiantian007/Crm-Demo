@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>活动管理 - 活动审核（含先锋一号 50,000 USD 体验金活动）- PRD</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; margin: 0; background: #f9fafb; color: #111827; }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 24px 20px 60px; }
+      h1 { font-size: 20px; margin: 0 0 8px; }
+      h2 { font-size: 14px; margin: 18px 0 8px; color: #374151; }
+      p { margin: 0 0 10px; color: #4b5563; line-height: 1.6; }
+      ul { margin: 8px 0 0 18px; color: #4b5563; line-height: 1.7; }
+      .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 16px; }
+      .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; margin-right: 6px; }
+      .muted { color: #6b7280; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="muted">
+          <span class="tag">活动管理</span>
+          <span class="tag">研发中</span>
+        </div>
+        <h1>活动审核（新增：先锋一号 50,000 USD 体验金活动）</h1>
+        <p>目标：在现有“活动管理 &gt; 活动审核”页面中，新增支持“先锋一号 50,000 USD 体验金活动”的报名审核能力。审核页仅负责参加资格审核，不在此计算档位、发放赠金或录入盈利释放金额。</p>
+
+        <h2>业务流程</h2>
+        <ul>
+          <li>客户首页点击【立即参加】</li>
+          <li>选择 HATC MT账号，填写模拟账户账号，上传模拟账户截图，提交申请</li>
+          <li>后台进入【活动管理 &gt; 活动审核】查看申请并处理【通过/拒绝】</li>
+          <li>审核通过后记录审核人、审核通过时间；从审核通过时间开始累计本活动净入金（通过前入金不计入）</li>
+        </ul>
+
+        <h2>筛选区（复用现有结构）</h2>
+        <ul>
+          <li>客户姓名</li>
+          <li>客户邮箱</li>
+          <li>申请活动（需包含：先锋一号 50,000 USD 体验金活动）</li>
+          <li>审核状态（待审核 / 已通过 / 已拒绝）</li>
+        </ul>
+
+        <h2>审核列表（复用现有表格风格）</h2>
+        <ul>
+          <li>客户姓名、客户邮箱、上级信息、注册时间、申请活动、申请时间、审核状态、拒绝原因、操作</li>
+          <li>操作策略：待审核显示【查看】【审核】；已通过/已拒绝仅显示【查看】</li>
+        </ul>
+
+        <h2>查看详情</h2>
+        <p class="muted">复用现有“查看详情”弹窗交互，展示报名与审核信息。</p>
+        <ul>
+          <li>客户姓名、客户邮箱、上级信息、注册时间</li>
+          <li>报名时间、HATC MT账号、模拟账户账号、模拟账户截图（可点击预览大图）</li>
+          <li>审核状态、审核人、审核时间、拒绝原因（如有）</li>
+        </ul>
+
+        <h2>审核弹窗（居中 Modal，复用样式）</h2>
+        <ul>
+          <li>标题：审核</li>
+          <li>顶部两列只读信息：客户姓名/邮箱、上级信息、报名时间、注册时间、申请活动、HATC MT账号、模拟账户账号、模拟账户截图（可预览）</li>
+          <li>底部审核表单：审核结果（必填：通过/拒绝），审核备注（可选）</li>
+          <li>当选择【拒绝】时额外展示：拒绝原因（必填），补充说明（当拒绝原因=其他时必填）</li>
+        </ul>
+
+        <h2>拒绝原因示例</h2>
+        <p class="muted">模拟账户信息不符 / 截图无法确认 / 资料不完整 / HATC MT账户不符合要求 / 重复申请 / 其他</p>
+
+        <h2>状态定义</h2>
+        <ul>
+          <li>审核状态：待审核、已通过、已拒绝</li>
+          <li>审核通过后进入活动正式阶段，净入金档位触发与 Lot 进度展示在后续活动详情页中</li>
+        </ul>
+
+        <h2>Demo 约束</h2>
+        <ul>
+          <li>使用演示数据，不接 Star API，不接真实 MT5</li>
+          <li>不做真实文件存储；模拟账户截图仅做上传/预览演示</li>
+          <li>审核通过/拒绝后仅前端更新状态，不做真实持久化</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
+

@@ -19,6 +19,12 @@ const routes = [
     path: '/activity/pcard', name: 'Pcard', component: () => import('@/views/activity/Pcard.vue'),
     meta: { title: 'Pcard 银行卡活动详情', breadcrumb: ['活动管理', 'Pcard活动'], prdUrl: 'prd-pcard-detail.html', prdTitle: 'Pcard 详情与数据 - PRD' }
   },
+  {
+    path: '/activity/pioneer-one-50000-detail',
+    name: 'PioneerOne50000Detail',
+    component: () => import('@/views/activity/pioneer-one-50000-detail.vue'),
+    meta: { title: '先锋一号 50,000 USD 体验金活动详情', breadcrumb: ['活动管理', '活动列表', '先锋一号 50,000 USD 体验金活动'], prdUrl: 'prd-activity-pioneer-one-50000-release.html', prdTitle: '先锋一号 50,000 USD 体验金活动详情与盈利释放 - PRD' }
+  },
 
   // 自动迁移页面
   { path: '/fund/deposit', component: () => import('@/views/fund/deposit.vue'), meta: { title: '入金', breadcrumb: ['出入金', '入金'] } },
@@ -43,7 +49,7 @@ const routes = [
   { path: '/activity/list', component: () => import('@/views/activity/list.vue'), meta: { title: '活动列表', breadcrumb: ['活动管理', '活动列表'] } },
   { path: '/activity/growth', component: () => import('@/views/activity/growth.vue'), meta: { title: '成长计划', breadcrumb: ['活动管理', '成长计划'] } },
   { path: '/activity/ib', component: () => import('@/views/activity/ib.vue'), meta: { title: 'IB 计划', breadcrumb: ['活动管理', 'IB 计划'] } },
-  { path: '/activity/audit', component: () => import('@/views/activity/audit.vue'), meta: { title: '活动审核', breadcrumb: ['活动管理', '活动审核'] } },
+  { path: '/activity/audit', component: () => import('@/views/activity/audit.vue'), meta: { title: '活动审核', breadcrumb: ['活动管理', '活动审核'], prdUrl: 'prd-activity-audit.html', prdTitle: '活动管理 - 活动审核（含先锋一号 50,000 USD 体验金活动）- PRD' } },
   { path: '/news/group', component: () => import('@/views/news/group.vue'), meta: { title: '集团动态', breadcrumb: ['动态公告', '集团动态'] } },
   { path: '/news/latest', component: () => import('@/views/news/latest.vue'), meta: { title: '最新公告', breadcrumb: ['动态公告', '最新公告'] } },
   { path: '/news/push', component: () => import('@/views/news/push.vue'), meta: { title: '推送消息', breadcrumb: ['动态公告', '推送消息'] } },
@@ -78,8 +84,8 @@ const routes = [
   { path: '/system/logs', component: () => import('@/views/system/logs.vue'), meta: { title: '日志管理', breadcrumb: ['系统管理', '日志管理'] } },
   { path: '/system/params', component: () => import('@/views/system/params.vue'), meta: { title: '配置参数', breadcrumb: ['系统管理', '配置参数'] } },
   { path: '/system/currency', component: () => import('@/views/system/currency.vue'), meta: { title: '支付币种', breadcrumb: ['系统管理', '支付币种'] } },
-  { path: '/system/payment', component: () => import('@/views/system/payment.vue'), meta: { title: '支付管理', breadcrumb: ['系统管理', '支付管理'] } },
-  { path: '/system/withdraw-settings', component: () => import('@/views/system/withdraw-settings.vue'), meta: { title: '提现设置', breadcrumb: ['系统管理', '提现设置'] } },
+  { path: '/system/payment', component: () => import('@/views/fund/payment-management.vue'), meta: { title: '支付设置', breadcrumb: ['系统管理', '支付设置'], prdUrl: 'prd-payment-management.html', prdTitle: '支付管理 - PRD' } },
+  { path: '/system/withdraw-settings', component: () => import('@/views/system/withdraw-settings.vue'), meta: { title: '提现设置', breadcrumb: ['系统管理', '提现设置'], prdUrl: 'prd-withdraw-settings.html', prdTitle: '提现设置 - PRD' } },
   { path: '/system/commission-settings', component: () => import('@/views/system/commission-settings.vue'), meta: { title: '返佣设置', breadcrumb: ['系统管理', '返佣设置'] } },
   { path: '/system/sms-logs', component: () => import('@/views/system/sms-logs.vue'), meta: { title: '验证码记录', breadcrumb: ['系统管理', '验证码记录'] } },
   { path: '/system/tags', component: () => import('@/views/system/tags.vue'), meta: { title: '标签管理', breadcrumb: ['系统管理', '标签管理'] } },
@@ -130,6 +136,8 @@ const routes = [
   { path: '/other/batch-mt-password-reset', component: () => import('@/views/other/batch-mt-password-reset.vue'), meta: { title: 'HATC CRM - 批量修改MT密码', breadcrumb: ['HATC CRM - 批量修改MT密码'] } },
   { path: '/product/management', component: () => import('@/views/product/management.vue'), meta: { title: '商品管理列表', breadcrumb: ['商品管理'], prdUrl: 'prd-admin-product-management.html', prdTitle: '智能交易系统 - 后台商品管理列表 - PRD' } },
   { path: '/fund/payment-management', component: () => import('@/views/fund/payment-management.vue'), meta: { title: 'HATC CRM - 支付管理', breadcrumb: ['HATC CRM - 支付管理'] } },
+  { path: '/fund/payment-config-records', component: () => import('@/views/fund/payment-config-records.vue'), meta: { title: '支付配置记录', breadcrumb: ['系统管理', '支付设置', '支付配置记录'], prdUrl: 'prd-payment-management.html', prdTitle: '支付管理 - PRD' } },
+  { path: '/fund/withdraw-config-records', component: () => import('@/views/fund/withdraw-config-records.vue'), meta: { title: '提现配置记录', breadcrumb: ['系统管理', '提现设置', '提现配置记录'], prdUrl: 'prd-withdraw-settings.html', prdTitle: '提现设置 - PRD' } },
   { path: '/fund/internal-transfer-record', component: () => import('@/views/fund/internal-transfer-record.vue'), meta: { title: '内部转账记录', breadcrumb: ['出入金', '内部转账记录'], prdUrl: 'prd-internal-transfer-record.html', prdTitle: '内部转账记录 - PRD' } },
   { path: '/crm/sales-edit', component: () => import('@/views/crm/sales-edit.vue'), meta: { title: '编辑销售', breadcrumb: ['客户管理', '销售列表', '编辑销售'], prdUrl: 'prd-sales-add.html', prdTitle: '新增/编辑销售 - PRD' } },
   { path: '/crm/client-withdraw-apply-commission', component: () => import('@/views/crm/client-withdraw-apply-commission.vue'), meta: { title: '出金', breadcrumb: ['出金'] } },

@@ -7,7 +7,7 @@
     ]"
   >
     <div v-if="isAgentRole" class="flex-1 min-h-0">
-      <AgentHome :demo-role="agentHomeRole" />
+      <AgentHome />
     </div>
 
     <div v-else class="w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px] gap-6">
@@ -315,8 +315,7 @@ import { demoRoleState } from '@/store/demoRole'
 
 const homeScrollRef = ref(null)
 
-const isAgentRole = computed(() => demoRoleState.role !== 'CLIENT')
-const agentHomeRole = computed(() => (demoRoleState.role === 'MIB' ? 'MIB' : 'IB'))
+const isAgentRole = computed(() => demoRoleState.role === 'agent')
 
 const activityJoined = ref(false)
 const netDeposit = ref(0)

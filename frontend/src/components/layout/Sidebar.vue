@@ -176,7 +176,7 @@ import { demoRoleState } from '@/store/demoRole'
 const route = useRoute()
 const isCollapse = ref(false)
 
-const isClientRole = computed(() => demoRoleState.role === 'CLIENT')
+const isClientRole = computed(() => demoRoleState.role === 'customer')
 const defaultOpeneds = computed(() => {
   if (isCollapse.value) return []
   return isClientRole.value ? ['fund', 'report'] : ['crm', 'fund']

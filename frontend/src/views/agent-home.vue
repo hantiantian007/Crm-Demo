@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 h-full overflow-y-auto custom-scrollbar">
+  <div class="w-full min-w-0">
     <div class="flex flex-col gap-4 min-w-0">
       <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
         <div
@@ -542,20 +542,14 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { demoRoleState } from '@/store/demoRole'
 
 const router = useRouter()
 
-const props = defineProps({
-  demoRole: { type: String, default: '' }
-})
-
 const showMessageCenter = ref(false)
 
-const role = computed(() => (props.demoRole ? props.demoRole : (demoRoleState.role === 'MIB' ? 'MIB' : 'IB')))
-const isMib = computed(() => role.value === 'MIB')
+const isMib = computed(() => false)
 
 const mtScopeTabs = [
   { key: 'self', label: '本人' },

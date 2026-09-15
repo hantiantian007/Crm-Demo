@@ -33,7 +33,12 @@
     </div>
    </div>
    <div class="flex items-center gap-2 flex-shrink-0">
-    <button class="inline-flex items-center gap-2 px-5 py-2 bg-primaryBtn hover:bg-primaryBtnHover text-white rounded-lg text-sm font-medium transition-colors shadow-sm">
+    <button class="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg text-sm font-medium transition-colors border border-gray-200" type="button" @click="goConfigRecords">
+     <i class="fa-solid fa-clock-rotate-left text-xs">
+     </i>
+     配置记录
+    </button>
+    <button class="inline-flex items-center gap-2 px-5 py-2 bg-primaryBtn hover:bg-primaryBtnHover text-white rounded-lg text-sm font-medium transition-colors shadow-sm" type="button" @click="openAddPayment">
      <i class="fa-solid fa-plus text-xs">
      </i>
      添加支付方式
@@ -1396,8 +1401,17 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const filterStatus = ref('')
 
 const handleFilterPaymentList = () => {}
+
+const router = useRouter()
+
+const goConfigRecords = () => {
+  router.push('/fund/payment-config-records')
+}
+
+const openAddPayment = () => {}
 </script>

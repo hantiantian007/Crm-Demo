@@ -149,10 +149,10 @@
        </td>
        <td class="py-3.5 px-5">
         <div class="flex items-center gap-2">
-         <a class="px-3 py-1 rounded-md text-xs transition-colors inline-block text-white border bg-blue-500 hover:bg-blue-600 border-blue-500" href="#">
+         <button class="px-3 py-1 rounded-md text-xs transition-colors text-white border bg-blue-500 hover:bg-blue-600 border-blue-500" type="button">
           查看详情
-         </a>
-         <button class="px-3 py-1 rounded-md text-xs border transition-colors text-white bg-red-500 hover:bg-red-600 border-red-500">
+         </button>
+         <button class="px-3 py-1 rounded-md text-xs border transition-colors text-white bg-red-500 hover:bg-red-600 border-red-500" type="button">
           结束活动
          </button>
         </div>
@@ -231,10 +231,51 @@
        </td>
        <td class="py-3.5 px-5">
         <div class="flex items-center gap-2">
-         <button class="px-3 py-1 rounded-md text-xs transition-colors text-white border bg-blue-500 hover:bg-blue-600 border-blue-500">
+         <button class="px-3 py-1 rounded-md text-xs transition-colors text-white border bg-blue-500 hover:bg-blue-600 border-blue-500" type="button">
           查看详情
          </button>
-         <button class="px-3 py-1 rounded-md text-xs border transition-colors text-white bg-red-500 hover:bg-red-600 border-red-500">
+         <button class="px-3 py-1 rounded-md text-xs border transition-colors text-white bg-red-500 hover:bg-red-600 border-red-500" type="button">
+          结束活动
+         </button>
+        </div>
+       </td>
+      </tr>
+      <tr class="table-row border-b border-gray-100">
+       <td class="py-3.5 px-5 text-gray-700">
+        先锋一号 50,000 USD 体验金活动
+       </td>
+       <td class="py-3.5 px-4 text-gray-500">
+        2026-09-01 00:00:00
+       </td>
+       <td class="py-3.5 px-4 text-gray-500">
+        2026-12-31 23:59:59
+       </td>
+       <td class="py-3.5 px-4">
+        <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium status-running">
+         进行中
+        </span>
+       </td>
+       <td class="py-3.5 px-4 text-gray-700">
+        128
+       </td>
+       <td class="py-3.5 px-4 text-gray-700">
+        86
+       </td>
+       <td class="py-3.5 px-4 text-gray-700">
+        6,200.00
+       </td>
+       <td class="py-3.5 px-4 text-gray-500">
+        系统管理员
+       </td>
+       <td class="py-3.5 px-4 text-gray-500">
+        2026-08-28 16:20:00
+       </td>
+       <td class="py-3.5 px-5">
+        <div class="flex items-center gap-2">
+         <router-link class="px-3 py-1 rounded-md text-xs transition-colors inline-flex items-center text-white border bg-blue-500 hover:bg-blue-600 border-blue-500" to="/activity/pioneer-one-50000-detail">
+          查看详情
+         </router-link>
+         <button class="px-3 py-1 rounded-md text-xs border transition-colors text-white bg-red-500 hover:bg-red-600 border-red-500" type="button">
           结束活动
          </button>
         </div>
@@ -327,7 +368,7 @@
    </div>
    <div class="flex items-center justify-between px-5 py-3.5 border-t border-gray-100 text-sm text-gray-500">
     <div>
-     15条 / 页，共5条记录，第1/1页
+     15条 / 页，共6条记录，第1/1页
     </div>
     <div class="flex items-center gap-3">
      <button class="w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100">

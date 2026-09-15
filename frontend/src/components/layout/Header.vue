@@ -69,10 +69,8 @@ import { demoRoleState, setDemoRole } from '@/store/demoRole'
 const route = useRoute()
 
 const roleOptions = [
-  { key: 'CLIENT', label: '直客' },
-  { key: 'AGENT', label: '代理' },
-  { key: 'IB', label: 'IB' },
-  { key: 'MIB', label: 'MIB' }
+  { key: 'customer', label: '直客' },
+  { key: 'agent', label: '代理' }
 ]
 
 const demoRoleLabel = computed(() => roleOptions.find((x) => x.key === demoRoleState.role)?.label || demoRoleState.role)

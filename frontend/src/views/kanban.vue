@@ -21,362 +21,22 @@
 </div>
 </div>
 <!-- 研发中需求 -->
-<div class="mb-6 bg-orange-50/30 rounded-lg shadow-sm border border-orange-200 overflow-hidden">
-<div class="px-4 py-3 border-b border-orange-200 bg-orange-50/50 flex items-center justify-between">
+<div class="mb-6 bg-orange-50/20 rounded-lg border border-orange-100 overflow-hidden">
+<div class="px-4 py-3 border-b border-orange-100 bg-orange-50/40 flex items-center justify-between">
 <div class="flex items-center gap-2">
 <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
 <i class="fa-solid fa-fire text-orange-500"></i> 研发中需求
                     </h2>
-<span class="text-[10px] font-medium text-gray-500 bg-orange-100 text-orange-700 px-2 py-0.5 rounded border border-orange-200">优先处理</span>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-medium text-orange-700 bg-orange-100 px-2 py-0.5 rounded border border-orange-200/60">研发中</span>
+<span class="text-[10px] font-medium text-orange-700 bg-orange-100/60 px-2 py-0.5 rounded border border-orange-200/40">优先处理</span>
+</div>
 </div>
 </div>
 <!-- 需求列表容器 -->
-<div class="p-4 flex flex-col gap-3 bg-gray-50/50">
-<!-- 需求集（一） -->
-<div class="bg-white rounded-lg shadow-sm border border-orange-200 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-2">
-<span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-[10px] font-bold">需求合集</span>
-<h3 class="text-base font-bold text-gray-800">需求集（一）</h3>
-</div>
-<p class="text-xs text-gray-500 mt-1">需求集（一）相关页面与任务。</p>
-</div>
-<div class="flex items-center gap-3 text-gray-400">
-<span class="text-[10px] bg-gray-100 px-2 py-1 rounded">包含 3 个页面</span>
-<i class="fas fa-chevron-down accordion-icon text-xs"></i>
-</div>
-</div>
-<div class="accordion-content border-t border-orange-100">
-<div class="overflow-x-auto no-scrollbar">
-<table class="min-w-full text-xs text-left">
-<thead>
-<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[200px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[240px]">概述</th>
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[130px]">所属客户端</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">交付物导航 (直达链接)</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-gray-100">
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">关系树优化</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            关系树增加MT账号查询条件
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<span class="text-gray-400 text-xs italic">待补充原型</span>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800 text-blue-500 hover:text-blue-700">客户变动详情</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            客户变动详情增加筛选条件，时间筛选、操作筛选，关系树查询
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/crm/change-detail" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover" v-show="false">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800 text-blue-500 hover:text-blue-700">Pcard 活动详情</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加达标列表，记录客户达标时间和赠金转真实资金的时间
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/activity/pcard" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<!-- 报表统计（新增父级菜单） -->
-<div class="bg-white rounded-lg shadow-sm border border-orange-200 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">数据报表</span>
-<h3 class="text-base font-bold text-gray-800">报表统计</h3>
-</div>
-<p class="text-xs text-gray-500 mt-1">系统各类报表与数据统计相关需求。</p>
-</div>
-<div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 9 个页面</span>
-<i class="fas fa-chevron-down accordion-icon"></i>
-</div>
-</div>
-<div class="accordion-content border-t border-orange-100">
-<div class="overflow-x-auto no-scrollbar">
-<table class="min-w-full text-xs text-left">
-<thead>
-<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
-<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-gray-100">
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">佣金统计</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加关系树查询方式
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/commission-stats" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">活动参与报表</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            统计代理旗下客户参与活动情况，支持代理汇总与客户明细下钻（Demo）。
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/activity-join" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<button type="button" class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" @click="openReportActivityJoinPrd">
-<i class="fas fa-file-alt"></i> PRD
-                                                </button>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">代理首页</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            面向 IB/MIB 的经营数据首页（Demo），聚焦旗下客户经营数据、返佣、活动与推广。
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/agent-home" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<button type="button" class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" @click="openAgentHomePrd">
-<i class="fas fa-file-alt"></i> PRD
-                                                </button>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">交易报表</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加关系树查询方式
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/trading" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">持仓报表</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加关系树查询方式
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/position" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-report-position" target="_blank">
-<i class="fas fa-file-alt"></i> PRD
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">平仓交易记录</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加关系树查询方式
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/close-position" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-report-close-position" target="_blank">
-<i class="fas fa-file-alt"></i> PRD
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">财务报表</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加关系树查询方式
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/finance-cent-account" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-finance-report" target="_blank">
-<i class="fas fa-file-alt"></i> PRD
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">佣金报表</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加关系树查询方式
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/commission-cent-account" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-commission-report" target="_blank">
-<i class="fas fa-file-alt"></i> PRD
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">持仓统计</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加关系树查询方式
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/position-stats" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3">
-<div class="flex items-center gap-2">
-<span class="font-medium text-gray-800">交易记录</span>
-</div>
-</td>
-<td class="px-4 py-3 text-gray-500">
-                                            增加关系树查询方式
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/trade-record-cent-account" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<a class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" href="#/other/prd-cent-account-page-trade-record" target="_blank">
-<i class="fas fa-file-alt"></i> PRD
-                                                </a>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
+<div class="p-4 flex flex-col gap-3 bg-orange-50/10">
 <!-- 对账（新增父级菜单） -->
-<div class="bg-white rounded-lg shadow-sm border border-orange-200 overflow-hidden accordion-item">
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
@@ -390,7 +50,7 @@
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
-<div class="accordion-content border-t border-orange-100">
+<div class="accordion-content border-t border-gray-100">
 <div class="overflow-x-auto no-scrollbar">
 <table class="min-w-full text-xs text-left">
 <thead>
@@ -442,22 +102,22 @@
 </div>
 </div>
 </div>
-<!-- Pcard活动（新增父级菜单） -->
-<div class="bg-white rounded-lg shadow-sm border border-orange-200 overflow-hidden accordion-item">
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
-<div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">营销活动</span>
-<h3 class="text-base font-bold text-gray-800">Pcard活动</h3>
+<div class="flex items-center gap-3 flex-wrap">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">活动管理</span>
+<h3 class="text-base font-bold text-gray-800">先锋一号 50,000 USD 体验金盈利释放管理</h3>
 </div>
-<p class="text-xs text-gray-500 mt-1">Pcard 银行卡免费办理活动相关需求。</p>
+<p class="text-xs text-gray-500 mt-1">复用现有活动参加与活动审核流程：客户提交参加申请（模拟账户账号+截图），后台资格审核通过后从通过时间开始累计净入金，逐档触发盈利释放；Lot 按累计目标计算不清零。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个任务</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 3 个任务</span>
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
-<div class="accordion-content border-t border-orange-100">
+<div class="accordion-content border-t border-gray-100">
 <div class="overflow-x-auto no-scrollbar">
 <table class="min-w-full text-xs text-left">
 <thead>
@@ -470,40 +130,41 @@
 </thead>
 <tbody class="divide-y divide-gray-100">
 <tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">Pcard活动 - 首页进度</td>
-<td class="px-4 py-3 text-gray-500">
-                                            右侧边栏新增进度卡，双进度条展示净入金与手数完成度。
-                                        </td>
-<td class="px-4 py-3">
-<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span>
-</td>
+<td class="px-4 py-3 font-bold text-gray-800">客户参加弹窗（沿用现有参加方式）</td>
+<td class="px-4 py-3 text-gray-500">字段：HATC参与MT账号、模拟账户账号、模拟账户截图、活动条款确认；提交参加活动申请。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/activity/pcard" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<button type="button" class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" @click="openPcardJoinPrd">
+<button type="button" class="text-gray-400 text-xs font-medium transition-colors cursor-not-allowed" disabled>原型</button>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPioneerOnePrd">
 <i class="fas fa-file-alt"></i> PRD
-                                                </button>
+</button>
 </div>
 </td>
 </tr>
 <tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">Pcard活动 - 活动参与报表</td>
-<td class="px-4 py-3 text-gray-500">
-                                            统计代理旗下客户参与活动情况，支持代理汇总与客户明细下钻（Demo）。
-                                        </td>
-<td class="px-4 py-3">
-<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">CRM 业务端</span>
-</td>
+<td class="px-4 py-3 font-bold text-gray-800">先锋一号 50,000 USD 活动详情</td>
+<td class="px-4 py-3 text-gray-500">活动详情页原型入口（复用现有“先锋体验活动详情”结构）。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="kb-btn kb-btn-proto text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded transition-colors text-xs border border-orange-100 flex items-center gap-1.5" href="#/report/activity-join" target="_blank">
-<i class="fas fa-desktop"></i> 查看原型
-                                                </a>
-<button type="button" class="kb-btn kb-btn-prd text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded transition-colors text-xs border border-indigo-100 flex items-center gap-1.5" @click="openReportActivityJoinPrd">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/activity/pioneer-one-50000-detail" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPioneerOnePrd">
 <i class="fas fa-file-alt"></i> PRD
-                                                </button>
+</button>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">先锋一号 50,000 USD 活动审核</td>
+<td class="px-4 py-3 text-gray-500">活动管理 &gt; 活动审核：支持筛选申请活动=先锋一号 50,000 USD 体验金活动。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/activity/audit" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPioneerOneAuditPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
 </div>
 </td>
 </tr>
@@ -512,8 +173,127 @@
 </div>
 </div>
 </div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3 flex-wrap">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">系统管理</span>
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">支付配置</span>
+<h3 class="text-base font-bold text-gray-800">支付设置 - 配置记录</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">包含配置日志与业务汇率记录；仅当真实入金业务实际使用了汇率时才生成汇率记录（查询接口/页面展示/人工查看均不记录）。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个模块</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">配置日志</td>
+<td class="px-4 py-3 text-gray-500">记录操作人、时间与配置项修改前后对比，单次多字段变更合并展示。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/payment-config-records" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPaymentConfigRecordsPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">业务汇率记录</td>
+<td class="px-4 py-3 text-gray-500">只有真实入金业务实际使用了汇率才留痕；查询、展示、人工查看不记录。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/payment-config-records" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPaymentConfigRecordsPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3 flex-wrap">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">系统管理</span>
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">提现配置</span>
+<h3 class="text-base font-bold text-gray-800">提现设置 - 配置记录</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">包含配置日志与业务汇率记录；仅当真实出金业务实际使用了汇率时才生成汇率记录（查询接口/页面展示/人工查看均不记录）。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个模块</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">配置日志</td>
+<td class="px-4 py-3 text-gray-500">记录操作人、时间与配置项修改前后对比，单次多字段变更合并展示。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/withdraw-config-records" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openWithdrawConfigRecordsPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">业务汇率记录</td>
+<td class="px-4 py-3 text-gray-500">只有真实出金业务实际使用了汇率才留痕；查询、展示、人工查看不记录。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/withdraw-config-records" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openWithdrawConfigRecordsPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
 <!-- 活动管理（新增父级菜单） 暂时隐藏 -->
-<div class="bg-white rounded-lg shadow-sm border border-orange-200 overflow-hidden accordion-item" style="display: none;">
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item" style="display: none;">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
@@ -527,7 +307,7 @@
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
-<div class="accordion-content border-t border-orange-100">
+<div class="accordion-content border-t border-gray-100">
 <div class="overflow-x-auto no-scrollbar">
 <table class="min-w-full text-xs text-left">
 <thead>
@@ -578,21 +358,26 @@
 </div>
 </div>
 </div>
+</div>
+</div>
 <!-- 规划中需求 -->
-<div class="mb-6 bg-purple-50/30 rounded-lg shadow-sm border border-purple-200 overflow-hidden">
-<div class="px-4 py-3 border-b border-purple-200 bg-purple-50/50 flex items-center justify-between">
+<div class="mb-6 bg-purple-50/20 rounded-lg border border-purple-100 overflow-hidden">
+<div class="px-4 py-3 border-b border-purple-100 bg-purple-50/40 flex items-center justify-between">
 <div class="flex items-center gap-2">
 <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
 <i class="fa-solid fa-inbox text-[#8B5CF6]"></i> 规划中需求
                     </h2>
-<span class="text-xs font-medium text-gray-500 bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full border border-purple-200">排期中</span>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded border border-purple-200/60">规划中</span>
+<span class="text-[10px] font-medium text-purple-700 bg-purple-100/60 px-2 py-0.5 rounded border border-purple-200/40">排期中</span>
+</div>
 </div>
 </div>
 <!-- 需求列表容器 -->
-<div class="p-4 flex flex-col gap-3 bg-gray-50/50">
+<div class="p-4 flex flex-col gap-3 bg-purple-50/10">
 <!-- 活动管理 (父级需求) -->
-<div class="bg-white rounded-lg shadow-sm border border-purple-200 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/50 transition-colors flex justify-between items-center">
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
 <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">活动管理</span>
@@ -664,8 +449,8 @@
 </div>
 </div>
 </div>
-<div class="bg-white rounded-lg shadow-sm border border-purple-200 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/50 transition-colors flex justify-between items-center">
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
 <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">客户留资</span>
@@ -709,8 +494,8 @@
 </div>
 </div>
 </div>
-<div class="bg-white rounded-lg shadow-sm border border-purple-200 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/50 transition-colors flex justify-between items-center">
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
 <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">基础逻辑</span>
@@ -806,8 +591,8 @@
 </div>
 </div>
 <!-- 规划需求卡片 1 -->
-<div class="bg-white rounded-lg shadow-sm border border-purple-200 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/50 transition-colors flex justify-between items-center">
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
 <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">智能交易系统</span>
@@ -920,8 +705,8 @@
 </div>
 </div>
 <!-- 集团动态二期 -->
-<div class="bg-white rounded-lg shadow-sm border border-purple-200 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/50 transition-colors flex justify-between items-center">
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
 <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">官网内容管理</span>
@@ -1007,10 +792,9 @@
 <!-- 折叠面板交互脚本 -->
   </div>
 </div>
-</div>
-</div>
   </div>
 </template>
+
 
 <script setup>
 import { openPrd } from '@/store/prd'
@@ -1018,6 +802,10 @@ import { openPrd } from '@/store/prd'
 const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
 const openReportActivityJoinPrd = () => openPrd('prd-report-activity-join.html', '活动参与报表 - PRD')
 const openAgentHomePrd = () => openPrd('prd-agent-home.html', '代理首页 - PRD')
+const openPioneerOnePrd = () => openPrd('prd-activity-pioneer-one-50000-release.html', '先锋一号 50,000 USD 体验金活动详情与盈利释放 - PRD')
+const openPioneerOneAuditPrd = () => openPrd('prd-activity-audit.html', '活动管理 - 活动审核（含先锋一号 50,000 USD 体验金活动）- PRD')
+const openPaymentConfigRecordsPrd = () => openPrd('prd-payment-management.html', '支付设置 - 配置记录 - PRD')
+const openWithdrawConfigRecordsPrd = () => openPrd('prd-withdraw-settings.html', '提现设置 - 配置记录 - PRD')
 
 const toggleElement = (e) => {
   const button = e.currentTarget;
