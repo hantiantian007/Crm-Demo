@@ -489,6 +489,48 @@
 </div>
 <!-- 需求列表容器 -->
 <div class="p-4 flex flex-col gap-3 bg-purple-50/10">
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">出入金</span>
+<h3 class="text-base font-bold text-gray-800">管理员入金</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">增加手动入金类型区分。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个任务</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[200px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[200px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">管理员入金</td>
+<td class="px-4 py-3 text-gray-500">增加手动入金类型区分。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-deposit" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/fund/deposit-pending-review" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 <!-- 活动管理 (父级需求) -->
 <div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理员入金 - PRD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+    th, td { border: 1px solid #e5e7eb; padding: 12px 16px; text-align: left; font-size: 14px; vertical-align: top; }
+    th { background: #f9fafb; color: #374151; font-weight: 600; }
+    td { color: #4b5563; line-height: 1.75; }
+    .highlight { color: #C19B5E; font-weight: 600; }
+    .module-title { border-left: 4px solid #C19B5E; padding-left: 12px; margin: 28px 0 16px; font-size: 18px; font-weight: 700; color: #1f2937; }
+  </style>
+</head>
+<body class="bg-gray-50 p-8 font-sans">
+  <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-8">
+    <div class="flex justify-between items-center border-b pb-4 mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">【新需求 PRD】管理员入金</h1>
+      <div class="flex gap-3">
+        <a href="#/fund/deposit-pending-review" class="px-4 py-2 rounded bg-[#C19B5E] text-white text-sm">查看原型</a>
+      </div>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 text-sm text-blue-800">
+      本文档描述 <span class="highlight">管理员手动入金</span> 场景新增的 <span class="highlight">入金类型</span> 字段与提示规则。Demo 仅做演示交互。
+    </div>
+
+    <div class="module-title">1. 需求说明</div>
+    <table>
+      <tbody>
+        <tr>
+          <td width="22%" class="font-medium">目标</td>
+          <td>管理员手动入金时新增 <span class="highlight">入金类型</span>，用于区分入金业务性质，并统一展示“是否计入真实入金”的提示。</td>
+        </tr>
+        <tr>
+          <td class="font-medium">入口</td>
+          <td>【出入金】&gt;【待审核入金】页面，列表区左上角按钮 <span class="highlight">管理员入金</span>。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">2. 操作流程</div>
+    <table>
+      <tbody>
+        <tr><td>1）管理员进入【待审核入金】页面。</td></tr>
+        <tr><td>2）点击列表区左上角【管理员入金】打开弹窗。</td></tr>
+        <tr><td>3）在弹窗中选择 <span class="highlight">入金类型</span>，并填写现有字段（入金金额、MT账号、确认账号、MT Comment、备注）。</td></tr>
+        <tr><td>4）点击【确认】提交（Demo 中仅做页面演示与轻量必填校验）。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">3. 字段说明</div>
+    <table>
+      <thead>
+        <tr>
+          <th width="20%">字段</th>
+          <th width="18%">类型</th>
+          <th width="14%">必填</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-medium">入金类型</td>
+          <td>下拉选择</td>
+          <td>是</td>
+          <td>用于区分管理员手动入金的业务性质。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">4. 入金类型选项</div>
+    <table>
+      <tbody>
+        <tr><td width="22%" class="font-medium">选项</td><td>真实入金补录 / 差额补入 / 活动奖励 / 账户补偿 / 账务调整 / 演示数据</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">5. 业务规则</div>
+    <table>
+      <thead>
+        <tr><th width="24%">入金类型</th><th>是否计入真实入金</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="font-medium">真实入金补录</td><td>计入真实入金</td></tr>
+        <tr><td class="font-medium">差额补入</td><td>计入真实入金</td></tr>
+        <tr><td class="font-medium">活动奖励</td><td>不计入真实入金</td></tr>
+        <tr><td class="font-medium">账户补偿</td><td>不计入真实入金，单独统计</td></tr>
+        <tr><td class="font-medium">账务调整</td><td>不计入真实入金</td></tr>
+        <tr><td class="font-medium">演示数据</td><td>不计入真实入金</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">6. 交互说明</div>
+    <table>
+      <tbody>
+        <tr>
+          <td>入金类型下拉框下方展示提示：<span class="highlight">是否计入真实入金：xxx</span>，并随当前选择实时联动更新。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">7. Demo说明</div>
+    <table>
+      <tbody>
+        <tr><td>1）Demo 仅做页面演示与交互展示，不实现真实持久化。</td></tr>
+        <tr><td>2）不实现复杂权限与接口安全、幂等、风控校验等逻辑，真实规则仅在本文档描述。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
