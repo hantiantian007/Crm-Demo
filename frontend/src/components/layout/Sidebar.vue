@@ -32,13 +32,13 @@
         <el-menu-item index="/fund/withdraw">出金</el-menu-item>
         <el-menu-item index="/fund/internal-transfer">内部转账</el-menu-item>
         <el-menu-item index="/fund/internal-transfer-record">内部转账记录</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/fund/commission-withdraw">返佣提现</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/fund/my-bonus">我的赠金</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/fund/deposit-pending-review">待审核入金</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/fund/audit-withdraw">待审核出金</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/fund/audit-bonus">赠金审核</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/fund/audit-bankcard">待审核银行卡</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/fund/audit-transfer">转账审核</el-menu-item>
+        <el-menu-item v-if="isAgentRole" index="/fund/commission-withdraw">返佣提现</el-menu-item>
+        <el-menu-item v-if="isAgentRole" index="/fund/my-bonus">我的赠金</el-menu-item>
+        <el-menu-item index="/fund/deposit-pending-review">待审核入金</el-menu-item>
+        <el-menu-item index="/fund/audit-withdraw">待审核出金</el-menu-item>
+        <el-menu-item index="/fund/audit-bonus">赠金审核</el-menu-item>
+        <el-menu-item index="/fund/audit-bankcard">待审核银行卡</el-menu-item>
+        <el-menu-item index="/fund/audit-transfer">转账审核</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="reconciliation">
         <template #title>
@@ -48,7 +48,7 @@
         <el-menu-item index="/reconciliation/daily-record">每日对账日志</el-menu-item>
         <el-menu-item index="/reconciliation/internal">对账异常看板</el-menu-item>
       </el-sub-menu>
-      <el-sub-menu v-if="!isClientRole" index="commission">
+      <el-sub-menu v-if="isAgentRole" index="commission">
         <template #title>
           <i class="fa-solid fa-hand-holding-dollar w-6 text-center text-lg mr-2"></i>
           <span>佣金管理</span>
@@ -78,7 +78,7 @@
         <el-menu-item index="/news/latest">最新公告</el-menu-item>
         <el-menu-item index="/news/push">推送消息</el-menu-item>
       </el-sub-menu>
-      <el-sub-menu v-if="!isClientRole" index="crm">
+      <el-sub-menu index="crm">
         <template #title>
           <i class="fa-solid fa-user-group w-6 text-center text-lg mr-2"></i>
           <span>客户管理</span>
@@ -97,19 +97,19 @@
           <i class="fa-solid fa-chart-pie w-6 text-center text-lg mr-2"></i>
           <span>报表中心</span>
         </template>
-        <el-menu-item v-if="!isClientRole" index="/report/commission-stats">佣金统计</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/trading">交易报表</el-menu-item>
+        <el-menu-item v-if="isAgentRole" index="/report/commission-stats">佣金统计</el-menu-item>
+        <el-menu-item index="/report/trading">交易报表</el-menu-item>
         <el-menu-item index="/report/trade-record">交易记录</el-menu-item>
         <el-menu-item index="/report/close-trade">平仓交易记录</el-menu-item>
         <el-menu-item index="/report/position">持仓报表</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/finance">财务报表</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/commission-report">佣金报表</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/position-stats">持仓统计</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/sales-trading">销售交易奖励报表</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/sales-deposit">销售入金奖励统计</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/activity-join">活动参与报表</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/company-pnl">公司盈亏报表</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/report/equity">盈亏报表</el-menu-item>
+        <el-menu-item index="/report/finance">财务报表</el-menu-item>
+        <el-menu-item v-if="isAgentRole" index="/report/commission-report">佣金报表</el-menu-item>
+        <el-menu-item index="/report/position-stats">持仓统计</el-menu-item>
+        <el-menu-item index="/report/sales-trading">销售交易奖励报表</el-menu-item>
+        <el-menu-item index="/report/sales-deposit">销售入金奖励统计</el-menu-item>
+        <el-menu-item index="/report/activity-join">活动参与报表</el-menu-item>
+        <el-menu-item index="/report/company-pnl">公司盈亏报表</el-menu-item>
+        <el-menu-item index="/report/equity">盈亏报表</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="trust">
         <template #title>
@@ -177,9 +177,10 @@ const route = useRoute()
 const isCollapse = ref(false)
 
 const isClientRole = computed(() => demoRoleState.role === 'customer')
+const isAgentRole = computed(() => demoRoleState.role === 'agent')
 const defaultOpeneds = computed(() => {
   if (isCollapse.value) return []
-  return isClientRole.value ? ['fund', 'report'] : ['crm', 'fund']
+  return ['crm', 'fund', 'report', 'activity', 'system', 'risk']
 })
 
 const toggleCollapse = () => {

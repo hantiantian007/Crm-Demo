@@ -30,21 +30,6 @@
     
     <!-- 右侧个人中心 -->
     <div class="flex items-center gap-3">
-      <el-dropdown trigger="click" placement="bottom-end">
-        <button type="button" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-xs font-medium transition-colors flex items-center gap-2 border border-gray-200">
-          <span class="text-gray-500">演示角色：</span>
-          <span class="text-gray-700">{{ demoRoleLabel }}</span>
-          <i class="fa-solid fa-caret-down text-gray-400"></i>
-        </button>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item v-for="o in roleOptions" :key="o.key" @click="setDemoRole(o.key)">
-              {{ o.label }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-
       <div class="relative group cursor-pointer">
       <div class="w-8 h-8 rounded-full bg-gray-200 text-white flex items-center justify-center overflow-hidden border border-gray-200 shadow-sm">
         <span class="text-sm font-bold text-gray-600">SM</span>
@@ -61,19 +46,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { openPrd } from '@/store/prd'
-import { demoRoleState, setDemoRole } from '@/store/demoRole'
 
 const route = useRoute()
-
-const roleOptions = [
-  { key: 'customer', label: '直客' },
-  { key: 'agent', label: '代理' }
-]
-
-const demoRoleLabel = computed(() => roleOptions.find((x) => x.key === demoRoleState.role)?.label || demoRoleState.role)
 
 const handleOpenPrd = () => {
   if (route.meta.prdUrl) {
