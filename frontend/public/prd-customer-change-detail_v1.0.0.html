@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户变动详情 - PRD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #e5e7eb; padding: 12px 16px; text-align: left; font-size: 14px; vertical-align: top; }
+        th { background: #f9fafb; color: #374151; font-weight: 600; }
+        td { color: #4b5563; line-height: 1.75; }
+        .highlight { color: #C19B5E; font-weight: 600; }
+        .module-title { border-left: 4px solid #C19B5E; padding-left: 12px; margin: 28px 0 16px; font-size: 18px; font-weight: 700; color: #1f2937; }
+    </style>
+</head>
+<body class="bg-gray-50 p-8 font-sans">
+    <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-8">
+        <div class="flex justify-between items-center border-b pb-4 mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">【页面 PRD】客户变动明细</h1>
+            <div class="flex gap-3">
+                <a href="/#/crm/change-detail" class="px-4 py-2 rounded bg-[#C19B5E] text-white text-sm">查看原型</a>
+            </div>
+        </div>
+
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 text-sm text-blue-800">
+            本文档记录了<span class="highlight">客户变动明细页面</span>增加关系树查询、筛选条件扩充以及列表新增字段的业务需求。
+        </div>
+
+        <div class="module-title">1. 页面目标</div>
+        <table>
+            <tbody>
+                <tr><td width="22%" class="font-medium">目标</td><td>在原有明细页的基础上，方便管理员和业务员通过代理线向下穿透，精准追溯和排查客户信息或底层配置的变更记录。</td></tr>
+                <tr style="display: none;"><td class="font-medium">涉及页面</td><td><span class="highlight">/crm/change-detail</span></td></tr>
+            </tbody>
+        </table>
+
+        <div class="module-title">2. 新增/调整需求</div>
+        <table>
+            <thead>
+                <tr><th width="24%">需求项</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="font-medium">左侧增加关系树查询</td><td>页面左侧接入标准 CRM 代理关系树组件。点击树状节点，右侧列表自动加载对应节点及其伞下成员的变动记录。</td></tr>
+                <tr><td class="font-medium">新增 MT 账号查询</td><td>搜索区域新增 <span class="highlight">MT账号</span> 筛选条件，支持按 MT 账号精准查询变动记录。</td></tr>
+                <tr><td class="font-medium">操作者筛选</td><td>新增 <span class="highlight">操作者</span> 输入框，支持输入操作者邮箱进行查询，快速追溯某个后台管理员或业务员账号的所有修改动作。</td></tr>
+                <tr><td class="font-medium">新增处理时间筛选</td><td>新增 <span class="highlight">处理时间</span> 筛选条件，支持起止时间段过滤。<strong>需明确：1、时间格式为“年月日至年月日”；2、统一采用“北京时间”。</strong>精确追溯变更发生的具体时间。</td></tr>
+                <tr><td class="font-medium">列表新增“变更类型”字段</td><td>数据列表中，紧跟“客户信息”列之后新增此列。对底层的变更操作进行更高维度的宏观分类（如：基础资料变更、佣金变更、敏感数据变更）。</td></tr>
+            </tbody>
+        </table>
+
+        <div class="module-title">3. 数据口径</div>
+        <table>
+            <tbody>
+                <tr><td width="22%" class="font-medium">基础资料变更</td><td>针对客户基本信息的调整，如真实姓名、邮箱、联系方式修改等。</td></tr>
+                <tr><td class="font-medium">佣金变更</td><td>针对客户交易成本相关的调整，如返佣配置、点差加点、代理分组变更等。</td></tr>
+                <tr><td class="font-medium">敏感数据变更</td><td>涉及高权限或资金安全的底层配置调整，如信用额度调整、特殊风控参数修改等。</td></tr>
+            </tbody>
+        </table>
+
+        <div class="module-title">4. 测试重点</div>
+        <table>
+            <tbody>
+                <tr><td>1. 左侧点击关系树节点，右侧列表及分页是否能正确联动过滤。</td></tr>
+                <tr><td>2. 搜索栏输入 MT 账号、操作者等条件，是否能精准过滤出对应的变更流水。</td></tr>
+                <tr><td>3. 列表是否正确展示“变更类型”列，枚举值归类是否准确。</td></tr>
+                <tr><td>4. 表单内的“处理时间”样式是否显示正常且不会超出或挤压其他搜索条件。</td></tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

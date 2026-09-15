@@ -1723,11 +1723,40 @@
 </template>
 
 <script setup>
+import { onMounted, onUnmounted } from 'vue'
 import { openPrd } from '@/store/prd'
 
 const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
 const openReportActivityJoinPrd = () => openPrd('prd-report-activity-join.html', '活动参与报表 - PRD')
 const openAgentHomePrd = () => openPrd('prd-agent-home.html', '代理首页 - PRD')
+
+const handlePrdAnchors = (e) => {
+  const el = e.target?.closest?.('a')
+  if (!el) return
+
+  const href = el.getAttribute('href') || ''
+  if (!href) return
+
+  if (href.startsWith('#/other/prd-')) {
+    const slug = href.replace('#/other/', '')
+    openPrd(`${slug}.html`, 'PRD 文档')
+    e.preventDefault()
+    return
+  }
+
+  if (/^prd-[^?#]+\.html$/i.test(href)) {
+    openPrd(href, 'PRD 文档')
+    e.preventDefault()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handlePrdAnchors, true)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handlePrdAnchors, true)
+})
 
 const toggleElement = (event) => {
   const header = event.currentTarget;

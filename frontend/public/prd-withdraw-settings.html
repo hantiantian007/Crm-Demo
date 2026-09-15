@@ -1,98 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>提现设置 - PRD</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#C19B5E',
-            secondary: '#8c6b45',
-            bgLight: '#Fdf8f2',
-            borderLight: '#ebd9c1'
-          }
-        }
-      }
-    }
-  </script>
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; background: #ffffff; }
+    #prdFrame { width: 100%; height: 100%; border: 0; display: block; }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
-  <div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border-l-4 border-primary">
-      <div class="flex justify-between items-start">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900 mb-2">后台系统：提现设置页面 PRD</h1>
-          <div class="flex gap-4 text-sm text-gray-500 mb-4">
-            <span><i class="fas fa-clock mr-1"></i> 最后更新: 2026-09-15</span>
-            <span><i class="fas fa-tag mr-1"></i> 状态: <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200 font-medium">演示</span></span>
-            <span><i class="fas fa-sitemap mr-1"></i> 所属模块: 系统管理 → 提现设置</span>
-          </div>
-          <div class="flex flex-wrap gap-3 text-sm">
-            <span class="inline-flex items-center gap-1 bg-teal-50 text-teal-700 px-3 py-1.5 rounded transition-colors border border-teal-200">
-              <i class="fas fa-laptop-code"></i> 原型参考：以截图为字段/视觉基线（不复制旧导航）
-            </span>
-          </div>
-        </div>
-        <a href="../index.html" class="text-primary hover:text-secondary text-sm font-medium">
-          <i class="fas fa-arrow-left mr-1"></i> 返回看板
-        </a>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border-t-4 border-primary">
-      <h2 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2"><i class="fas fa-list-check text-primary mr-2"></i>0. 本次新增能力概览</h2>
-      <div class="space-y-4 text-gray-600 text-sm leading-relaxed">
-        <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
-          <div class="font-bold text-gray-800 mb-2">0.1 提现设置主页面</div>
-          <ul class="list-disc pl-5 space-y-1">
-            <li><strong>顶部：</strong>状态筛选（启用）/ 添加信息 / 配置记录 / 当前命中通道提示。</li>
-            <li><strong>列表字段：</strong>编号、简称、支付编号、名称、商户号、AppId、币种、提示语、汇率、汇率来源、状态、操作（修改、启用/禁用）。</li>
-          </ul>
-        </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
-          <div class="font-bold text-gray-800 mb-2">0.2 配置记录入口</div>
-          <ul class="list-disc pl-5 space-y-1">
-            <li><strong>入口：</strong>系统管理 → 提现设置页顶部按钮「配置记录」。</li>
-            <li><strong>跳转：</strong>/fund/withdraw-config-records（提现配置记录）。</li>
-            <li><strong>结构：</strong>页面内 Tab：配置日志 / 每日通道汇率。</li>
-          </ul>
-        </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
-          <div class="font-bold text-gray-800 mb-2">0.3 配置日志（审计）</div>
-          <ul class="list-disc pl-5 space-y-1">
-            <li><strong>字段：</strong>操作时间、操作人、提现通道、操作类型、变更内容、备注。</li>
-            <li><strong>操作类型：</strong>新增提现方式 / 修改配置 / 启用 / 禁用。</li>
-            <li><strong>变更展示：</strong>同一次修改只生成 1 条日志，详情中展示多个字段的「修改前 → 修改后」。</li>
-            <li><strong>筛选：</strong>提现通道 / 操作类型 / 时间范围；默认按操作时间倒序。</li>
-            <li><strong>只读：</strong>不可编辑、不可删除。</li>
-          </ul>
-        </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-md p-4">
-          <div class="font-bold text-gray-800 mb-2">0.4 业务汇率记录</div>
-          <ul class="list-disc pl-5 space-y-1">
-            <li><strong>核心规则：</strong>只有真实发生“出金”业务，并且该笔业务真正使用了汇率时，才生成业务汇率记录。</li>
-            <li><strong>不记录：</strong>仅调用接口查询汇率、页面打开时展示汇率、后台人工查看汇率、查询后业务未继续完成。</li>
-            <li><strong>字段：</strong>业务时间 / 通道 / 简称 / 汇率来源 / 接口返回汇率 / 实际使用汇率 / 获取时间。</li>
-            <li><strong>筛选：</strong>日期范围 / 通道 / 汇率来源；默认按业务时间倒序。</li>
-            <li><strong>接口查询：</strong>只保留“接口获取成功”的业务汇率记录；业务汇率记录页中接口数据默认都是成功记录，不展示获取失败/接口异常/备用汇率记录。</li>
-            <li><strong>页面配置：</strong>接口返回汇率显示“-”；实际使用汇率显示页面配置实际采用值；获取时间显示生效/取值时间。</li>
-            <li><strong>只读：</strong>历史记录不可编辑、不可删除。</li>
-          </ul>
-        </div>
-        <div class="bg-amber-50/70 border border-amber-200 rounded-md p-4">
-          <div class="font-bold text-amber-800 mb-2">0.5 Demo 与正式系统差异</div>
-          <ul class="list-disc pl-5 space-y-1">
-            <li><strong>Demo：</strong>使用演示数据；不接真实提现接口/汇率接口；不做真实持久化；业务汇率记录仅展示接口成功与页面配置两种来源。</li>
-            <li><strong>正式：</strong>需要真实审计字段（操作人、时间、前后值、类型等）；每日通道汇率需按通道/币种/获取状态/失败原因/备用来源等留存，支持财务对账与争议核查。</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+<body>
+  <iframe id="prdFrame" title="PRD"></iframe>
+  <script>
+    window.__PRD_VERSION_CONFIGS__ = [{"version":"V1.0.1","file":"prd-withdraw-settings_v1.0.1.html","isCurrent":true},{"version":"V1.0.0","file":"prd-withdraw-settings_v1.0.0.html","isCurrent":false}]
+  </script>
+  <script src="prd-version-tabs.js"></script>
 </body>
 </html>

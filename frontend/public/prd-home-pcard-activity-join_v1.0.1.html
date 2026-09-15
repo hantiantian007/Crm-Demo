@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>首页 - 先锋一号 50,000 USD 体验金活动参与弹窗 - PRD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f3f4f6; color: #111827; }
+    .golden-accent { color: #C19B5E; }
+    .border-golden { border-color: #C19B5E; }
+    .prd-card { background-color: #ffffff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 1.25rem 1.25rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; }
+    .prd-card--danger { border-left: 4px solid #ef4444; background: #fef2f2; border-top: 1px solid #fecaca; border-right: 1px solid #fecaca; border-bottom: 1px solid #fecaca; }
+    .prd-card--accent { border-top: 4px solid #C19B5E; }
+    .prd-h1 { font-size: 1.5rem; line-height: 2rem; font-weight: 800; color: #111827; }
+    .prd-h2 { font-size: 1.125rem; line-height: 1.75rem; font-weight: 800; color: #111827; }
+    .prd-subtitle { color: #6b7280; font-size: 0.875rem; line-height: 1.25rem; }
+    .prd-kv { display: grid; grid-template-columns: 110px 1fr; gap: 0.75rem; align-items: start; }
+    .prd-k { color: #6b7280; font-size: 0.75rem; line-height: 1rem; }
+    .prd-v { color: #374151; font-size: 0.875rem; line-height: 1.5rem; }
+    .prd-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .prd-tag { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.125rem 0.5rem; border-radius: 999px; font-size: 0.75rem; line-height: 1rem; border: 1px solid transparent; background: #f3f4f6; color: #374151; }
+    .prd-tag--rule { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .prd-tag--demo { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+    .prd-tag--dev { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+    .prd-tag--danger { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+    .prd-list { margin-top: 0.5rem; display: grid; gap: 0.5rem; }
+    .prd-li { display: flex; gap: 0.5rem; align-items: flex-start; }
+    .prd-bullet { width: 0.375rem; height: 0.375rem; border-radius: 999px; background: #d1d5db; margin-top: 0.5rem; flex: 0 0 auto; }
+    .prd-bullet--danger { background: #ef4444; }
+    .prd-bullet--accent { background: #C19B5E; }
+    .prd-mini { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 0.875rem; }
+    code { background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem; }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-5 flex items-start justify-between gap-6">
+      <div class="min-w-0">
+        <h1 class="prd-h1 flex items-center gap-3">
+          <i class="fa-solid fa-star golden-accent"></i>
+          首页 - 先锋一号 50,000 USD 体验金活动参与弹窗 - PRD
+        </h1>
+        <p class="prd-subtitle mt-2">定义首页右侧活动卡片“立即参与”弹窗的字段、流程、提示语与审核衔接规则。</p>
+      </div>
+      <div class="shrink-0 bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium">
+        <i class="fa-solid fa-house text-gray-500"></i>
+        Home
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--danger">
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
+            <h2 class="prd-h2 text-red-800">核心规则（红线）</h2>
+          </div>
+          <div class="prd-list mt-3">
+            <div class="prd-li">
+              <span class="prd-bullet prd-bullet--danger"></span>
+              <div class="prd-v text-red-800"><strong>Star Activation APP 为外部系统</strong>：HATC 不接 Star API，不读取 Star 实时状态、盈利、交易。</div>
+            </div>
+            <div class="prd-li">
+              <span class="prd-bullet prd-bullet--danger"></span>
+              <div class="prd-v text-red-800"><strong>仅提交参加活动申请</strong>：首页弹窗只负责提交申请并提示“等待审核”，不在前台计算盈利释放或档位。</div>
+            </div>
+            <div class="prd-li">
+              <span class="prd-bullet prd-bullet--danger"></span>
+              <div class="prd-v text-red-800"><strong>审核复用</strong>：后台审核复用“活动管理 &gt; 活动审核”。</div>
+            </div>
+          </div>
+        </div>
+        <div class="prd-tags shrink-0">
+          <span class="prd-tag prd-tag--danger"><i class="fa-solid fa-ban"></i>核心红线</span>
+          <span class="prd-tag prd-tag--dev"><i class="fa-solid fa-code"></i>演示实现</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-file-circle-check golden-accent"></i>
+          需求说明
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-book"></i>需求说明</span>
+        </div>
+      </div>
+      <div class="prd-list mt-4">
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>活动名称</strong>：先锋一号 50,000 USD 体验金活动。</div></div>
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>入口</strong>：首页右侧活动卡片【立即参与】。</div></div>
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">不做真实排重、持久化存储、后端接口联调；Demo 只做演示交互与链路闭环。</div></div>
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-route golden-accent"></i>
+          参与流程
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-shoe-prints"></i>流程</span>
+        </div>
+      </div>
+      <ol class="list-decimal pl-5 mt-4 text-sm text-gray-700 space-y-1">
+        <li>用户在首页活动卡片点击【立即参与】打开报名弹窗。</li>
+        <li>填写/选择报名字段并提交。</li>
+        <li>提交后提示：<strong>申请已提交，等待审核</strong>。</li>
+        <li>后台在“活动管理 &gt; 活动审核”中进行通过/拒绝处理。</li>
+      </ol>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-file-lines golden-accent"></i>
+          报名弹窗字段
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-table"></i>字段</span>
+        </div>
+      </div>
+      <div class="prd-list mt-4">
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>HATC 参与 MT 账号</strong>：必填（选择/回填）。</div></div>
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>模拟账户账号</strong>：必填（输入）。</div></div>
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>模拟账户截图</strong>：必填（上传 + 预览）。</div></div>
+        <div class="prd-li"><span class="prd-bullet prd-bullet--accent"></span><div class="prd-v"><strong>我已阅读并同意活动条款</strong>：必勾选。</div></div>
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-circle-info golden-accent"></i>
+          提交后提示
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--rule"><i class="fa-solid fa-bell"></i>提示</span>
+        </div>
+      </div>
+      <div class="prd-list mt-4">
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">提交后提示语：<strong>申请已提交，等待审核</strong>。</div></div>
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-flask golden-accent"></i>
+          Demo 说明
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--demo"><i class="fa-solid fa-flask"></i>演示数据</span>
+        </div>
+      </div>
+      <div class="prd-list mt-4">
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">使用演示数据，不接 Star API，不接真实 MT5。</div></div>
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">上传截图仅用于演示（不做真实文件存储）。</div></div>
+      </div>
+    </div>
+
+    <div class="prd-card prd-card--accent">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="prd-h2 flex items-center gap-2">
+          <i class="fa-solid fa-check-double golden-accent"></i>
+          验收标准
+        </h2>
+        <div class="prd-tags">
+          <span class="prd-tag prd-tag--dev"><i class="fa-solid fa-list-check"></i>验收</span>
+        </div>
+      </div>
+      <div class="prd-list mt-4">
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">首页活动卡片展示“先锋一号 50,000 USD 体验金活动”，点击【立即参与】可打开报名弹窗。</div></div>
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">报名字段全部必填/必勾选时才可提交。</div></div>
+        <div class="prd-li"><span class="prd-bullet"></span><div class="prd-v">提交后提示“申请已提交，等待审核”。</div></div>
+      </div>
+    </div>
+
+    <div class="text-center text-xs text-gray-400 py-6">
+      文档：首页 - 先锋一号 50,000 USD 体验金活动参与弹窗 - PRD
+    </div>
+  </div>
+</body>
+</html>

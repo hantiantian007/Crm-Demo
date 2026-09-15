@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pcard 首页进度 - PRD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f3f4f6; color: #1f2937; }
+        .golden-accent { color: #C19B5E; }
+        .bg-golden { background-color: #C19B5E; }
+        .border-golden { border-color: #C19B5E; }
+        .card { background-color: #ffffff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                    <i class="fa-solid fa-star golden-accent"></i> 
+                    Pcard 首页进度 - PRD
+                </h1>
+                <p class="text-gray-500 mt-2">首页 Pcard 专属进度卡片展示说明。</p>
+            </div>
+            <div class="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium">
+                <i class="fa-solid fa-file-lines text-gray-500"></i> Home
+            </div>
+        </div>
+
+        <!-- 研发红线警告 -->
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-lg">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation text-red-500 mt-0.5"></i>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-bold text-red-800">核心研发红线 (必读)</h3>
+                    <div class="mt-1 text-sm text-red-700 space-y-1">
+                        <p>1. <strong>专属展示</strong>：首页仅展示 Pcard 活动相关内容，不得展示其他无关统计图表。</p>
+                        <p>2. <strong>金额格式化</strong>：所有金额展示必须统一使用千位符格式化（例如 $1,000.00）。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 业务规则 -->
+        <div class="card border-t-4 border-golden">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-list-check golden-accent"></i> 业务规则与UI逻辑
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-2">1. 模块位置与视觉展示</h3>
+                    <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                        <li><strong>页面位置</strong>：需居中放置在首页主内容区，隐藏其他所有无关模块。</li>
+                        <li><strong>视觉规范</strong>：整体采用金棕色（#C19B5E）作为强调色。必须移除页面内原有的冗余图表及不相关的侧边栏模块，且不使用任何装饰性的银行卡图标。</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-2">2. 数据统计与双进度条规则</h3>
+                    <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                        <li><strong>净入金进度</strong>：实时计算客户当前累计净入金（公式：总入金 - 总出金）。达标红线为 $1,000。</li>
+                        <li><strong>交易手数进度</strong>：实时计算客户当前累计完成的交易手数。达标红线为 5 Lot (手)。</li>
+                        <li><strong>进度展示</strong>：进度条的最大值为 100%，如超出达标要求，则进度条直接显示满格，并高亮标识“已达标”。</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-2">3. 底部提示文案状态 (含新老用户差异)</h3>
+                    <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                        <li><strong>已达标时</strong>：显示绿色提示横幅“恭喜！您已满足活动奖励条件。新用户已解锁 $100 赠金为可提现真金，老用户联系客服可免费办理 Pcard 信用卡。”</li>
+                        <li><strong>未达标时</strong>：显示灰色/常规提示横幅“净入金和手数或未达标”</li>
+                        <li><strong>新用户参与账号</strong>：新用户默认绑定“本次享受赠金”的 MT 账号参与活动（无需二次选择）。</li>
+                        <li><strong>老用户权益</strong>：老用户参与活动不享受 100USD 开户赠金权益。</li>
+                        <li><strong>重复参与限制</strong>：同一 MT 账号同一活动只能参加一次（仅规则描述，Demo 不做真实校验或持久化）。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
