@@ -97,7 +97,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/news-add" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/news/create-optimized" target="_blank">
 <i class="fas fa-desktop text-gray-400"></i> 原型
                                         </a>
 </div>
@@ -169,8 +169,8 @@
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/activity/pcard" target="_blank">
 <i class="fas fa-laptop-code text-gray-400"></i> 详情与数据
                                         </a>
-<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/prd-pcard-list" target="_blank">PRD-列表</a>
-<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/prd-pcard-detail" target="_blank">PRD-详情</a>
+<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="prd-pcard-list.html" target="_blank">PRD-列表</a>
+<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="prd-pcard-detail.html" target="_blank">PRD-详情</a>
 </div>
 </div>
 </td>
@@ -226,7 +226,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-equity" target="_blank">PRD</a>
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-equity.html" target="_blank">PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/equity" target="_blank">原型</a>
 </div>
 </div>
@@ -247,7 +247,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-real-position" target="_blank">PRD</a>
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-real-position.html" target="_blank">PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/real-position" target="_blank">原型</a>
 </div>
 </div>
@@ -268,7 +268,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/close-position" target="_blank">原型</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/close-trade" target="_blank">原型</a>
 </div>
 </div>
 </td>
@@ -308,8 +308,8 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-leads-list" target="_blank">PRD</a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/leads-list" target="_blank">原型</a>
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-leads-list.html" target="_blank">PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/leads" target="_blank">原型</a>
 <a class="inline-flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded text-xs transition-colors" href="#/other/manual-customer-leads" target="_blank"><i class="fa-solid fa-book"></i> 操作手册</a>
 </div>
 </div>
@@ -369,7 +369,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-pnl-1" target="_blank">PRD</a>
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-pnl-1.html" target="_blank">PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/pnl-1" target="_blank">原型</a>
 </div>
 </div>
@@ -390,7 +390,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-pnl-2" target="_blank">PRD</a>
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-pnl-2.html" target="_blank">PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/pnl-2" target="_blank">原型</a>
 </div>
 </div>
@@ -411,7 +411,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-equity" target="_blank">PRD</a>
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-equity.html" target="_blank">PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/equity" target="_blank">原型</a>
 </div>
 </div>
@@ -432,7 +432,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-position" target="_blank">PRD</a>
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-position.html" target="_blank">PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/position" target="_blank">原型</a>
 </div>
 </div>
@@ -491,7 +491,7 @@
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/fund/payment-management" target="_blank">
 <i class="fas fa-laptop-code text-gray-400"></i> 支付管理原型
                                     </a>
-<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/prd-payment-management" target="_blank">
+<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="prd-payment-management.html" target="_blank">
                                         页面PRD
                                     </a>
 </div>
@@ -545,13 +545,13 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-1.5">
 <div class="flex flex-wrap gap-1.5 items-center">
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="#/other/register" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="#/register" target="_blank">
 <i class="fas fa-laptop-code text-gray-400"></i> 注册页原型
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="#/crm/client-deposit-cent-account" target="_blank">
 <i class="fas fa-object-group text-gray-400"></i> 入金原型
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="Crm-Group/client-withdraw-apply-cent-account.html?account=9900456" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="#/crm/client-withdraw-apply-cent-account?account=9900456" target="_blank">
 <i class="fas fa-object-group text-gray-400"></i> 出金申请
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="#/fund/deposit-pending-review" target="_blank">
@@ -560,18 +560,18 @@
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="#/crm/audit" target="_blank">
 <i class="fas fa-laptop-code text-gray-400"></i> 开户审核
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="Crm-Group/admin-withdraw-audit-detail.html?account=9900456" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-2.5 py-1 rounded text-[11px] transition-colors theme-border border" href="#/crm/withdraw-audit-detail?account=9900456" target="_blank">
 <i class="fas fa-laptop-code text-gray-400"></i> 出金审核
                                         </a>
 </div>
 <div class="flex flex-wrap gap-1.5 items-center">
-<a class="px-2.5 py-1 text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/prd-cent-account-page-register" target="_blank">
+<a class="px-2.5 py-1 text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="prd-cent-account-page-register.html" target="_blank">
                                             注册页 PRD
                                         </a>
-<a class="px-2.5 py-1 text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/prd-cent-account-page-deposit" target="_blank">
+<a class="px-2.5 py-1 text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="prd-cent-account-page-deposit.html" target="_blank">
                                             入金 PRD
                                         </a>
-<a class="px-2.5 py-1 text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/prd-cent-account-page-withdraw-apply" target="_blank">
+<a class="px-2.5 py-1 text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="prd-cent-account-page-withdraw-apply.html" target="_blank">
                                             出金申请 PRD
                                         </a>
 <span class="px-2 py-0.5 text-[10px] rounded-full bg-gray-100 text-gray-500 border border-gray-200">共 20 个任务</span>
@@ -645,7 +645,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-risk-login-alert" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-risk-login-alert.html" target="_blank">
                                             PRD
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/risk-login-alert" target="_blank">
@@ -672,7 +672,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-approval-reminder" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-approval-reminder.html" target="_blank">
                                             PRD
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/audit-list" target="_blank">
@@ -696,7 +696,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-home" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-home.html" target="_blank">
                                             PRD
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/home" target="_blank">
@@ -737,7 +737,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-register" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-register.html" target="_blank">
                                             PRD
                                         </a>
 </div>
@@ -758,10 +758,10 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-overseas-id-check" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-overseas-id-check.html" target="_blank">
                                             PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/profile-fill" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/profile-fill" target="_blank">
 <i class="fas fa-laptop-code"></i> 资料填写原型
                                         </a>
 </div>
@@ -782,16 +782,16 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-leads-list" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-leads-list.html" target="_blank">
                                             留资列表PRD
                                         </a>
-<a class="inline-flex items-center gap-1 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200 text-white bg-blue-500 hover:bg-blue-600 border-blue-500" href="#/other/prd-leads-detail" target="_blank">
+<a class="inline-flex items-center gap-1 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200 text-white bg-blue-500 hover:bg-blue-600 border-blue-500" href="prd-leads-detail.html" target="_blank">
                                             留资详情PRD
                                         </a>
-<a class="inline-flex items-center gap-1 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200 text-white bg-blue-500 hover:bg-blue-600 border-blue-500" href="#/other/prd-client-detail" target="_blank">
+<a class="inline-flex items-center gap-1 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200 text-white bg-blue-500 hover:bg-blue-600 border-blue-500" href="prd-client-detail.html" target="_blank">
                                             客户详情PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/leads-list" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/leads" target="_blank">
 <i class="fas fa-laptop-code"></i> 列表原型
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border text-blue-500 hover:text-blue-700" href="#/crm/leads-detail" target="_blank">
@@ -800,7 +800,7 @@
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border text-blue-500 hover:text-blue-700" href="#/crm/client-detail" target="_blank">
 <i class="fas fa-laptop-code"></i> 客户详情原型
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/tag-management" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/system/tags" target="_blank">
 <i class="fas fa-laptop-code"></i> 标签原型
                                         </a>
 </div>
@@ -821,7 +821,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-timezone-standard" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-timezone-standard.html" target="_blank">
                                             PRD
                                         </a>
 </div>
@@ -842,7 +842,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-commission-calculation" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-commission-calculation.html" target="_blank">
                                             PRD
                                         </a>
 </div>
@@ -905,10 +905,10 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-register" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-register.html" target="_blank">
                                             PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/login" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/login" target="_blank">
 <i class="fas fa-laptop-code"></i> CRM-HK原型
                                         </a>
 </div>
@@ -974,10 +974,10 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-leads-list" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-leads-list.html" target="_blank">
                                             PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/leads-list" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/leads" target="_blank">
 <i class="fas fa-laptop-code"></i> 原型
                                         </a>
 </div>
@@ -1024,10 +1024,10 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-register" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-register.html" target="_blank">
                                             PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/register" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/register" target="_blank">
 <i class="fas fa-laptop-code"></i> Crm-Group原型
                                         </a>
 </div>
@@ -1049,10 +1049,10 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-close-position" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-close-position.html" target="_blank">
                                             PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors border theme-border" href="#/report/close-position" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors border theme-border" href="#/report/close-trade" target="_blank">
 <i class="fas fa-laptop-code"></i> 原型
                                         </a>
 </div>
@@ -1073,7 +1073,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-report-sales-deposit" target="_blank">
+<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="prd-report-sales-deposit.html" target="_blank">
                                             PRD
                                         </a>
 <a class="px-3 py-1.5 text-xs font-medium text-brandGreen bg-green-50 hover:bg-green-100 rounded transition-colors flex items-center gap-1 border border-green-200" href="#/report/sales-deposit" target="_blank">
@@ -1096,7 +1096,7 @@
 <td class="px-5 py-4 text-center font-medium text-gray-800 relative group whitespace-nowrap">待定</td>
 <td class="px-5 py-4">
 <div class="flex items-center gap-2">
-<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-sales-add" target="_blank">
+<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="prd-sales-add.html" target="_blank">
                                         PRD
                                     </a>
 <a class="px-3 py-1.5 text-xs font-medium text-brandGreen bg-green-50 hover:bg-green-100 rounded transition-colors flex items-center gap-1 border border-green-200" href="#/crm/sales-add" target="_blank">
@@ -1136,10 +1136,10 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-bankcard-add" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-bankcard-add.html" target="_blank">
                                             PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/bankcard-add" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/fund/bankcard-add" target="_blank">
 <i class="fas fa-laptop-code"></i> 原型
                                         </a>
 </div>
@@ -1161,10 +1161,10 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-sales-list" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-sales-list.html" target="_blank">
                                             PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/sales-list" target="_blank">
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/sales" target="_blank">
 <i class="fas fa-laptop-code"></i> 原型
                                         </a>
 </div>
@@ -1186,7 +1186,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-sales-add" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-sales-add.html" target="_blank">
                                             PRD
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/sales-add" target="_blank">
@@ -1211,7 +1211,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-sales-trading" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-sales-trading.html" target="_blank">
                                             PRD
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/sales-trading" target="_blank">
@@ -1236,7 +1236,7 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-report-sales-deposit" target="_blank">
+<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-report-sales-deposit.html" target="_blank">
                                             PRD
                                         </a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/report/sales-deposit" target="_blank">

@@ -205,12 +205,12 @@
                     <div class="detail-row border-b-0">
                       <div class="detail-label">操作</div>
                       <div class="flex items-center gap-2">
-                        <a class="px-3 py-1.5 rounded border border-blue-500 bg-white text-blue-500 text-xs font-medium hover:bg-blue-50 transition-colors" href="#/fund/withdraw-audit-detail?account=8100453">
+                        <button class="px-3 py-1.5 rounded border border-blue-500 bg-white text-blue-500 text-xs font-medium hover:bg-blue-50 transition-colors" type="button" @click="goWithdrawAuditDetail('8100453')">
                           审核
-                        </a>
-                        <a class="px-3 py-1.5 rounded bg-blue-500 text-white text-xs font-medium hover:bg-blue-600 transition-colors" href="#/fund/withdraw-audit-detail?account=8100453">
+                        </button>
+                        <button class="px-3 py-1.5 rounded bg-blue-500 text-white text-xs font-medium hover:bg-blue-600 transition-colors" type="button" @click="goWithdrawAuditDetail('8100453')">
                           查看
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -280,12 +280,12 @@
                     <div class="detail-row border-b-0">
                       <div class="detail-label">操作</div>
                       <div class="flex items-center gap-2">
-                        <a class="px-3 py-1.5 rounded border border-blue-500 bg-white text-blue-500 text-xs font-medium hover:bg-blue-50 transition-colors" href="#/fund/withdraw-audit-detail?account=9900456">
+                        <button class="px-3 py-1.5 rounded border border-blue-500 bg-white text-blue-500 text-xs font-medium hover:bg-blue-50 transition-colors" type="button" @click="goWithdrawAuditDetail('9900456')">
                           审核
-                        </a>
-                        <a class="px-3 py-1.5 rounded bg-blue-500 text-white text-xs font-medium hover:bg-blue-600 transition-colors" href="#/fund/withdraw-audit-detail?account=9900456">
+                        </button>
+                        <button class="px-3 py-1.5 rounded bg-blue-500 text-white text-xs font-medium hover:bg-blue-600 transition-colors" type="button" @click="goWithdrawAuditDetail('9900456')">
                           查看
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -359,6 +359,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const expandedRows = ref([])
 
@@ -427,6 +430,10 @@ const closeManageWithdrawModal = () => {
     comment: '',
     remark: ''
   }
+}
+
+const goWithdrawAuditDetail = (account) => {
+  router.push({ path: '/crm/withdraw-audit-detail', query: { account: String(account || '') } })
 }
 </script>
 

@@ -3,9 +3,9 @@
     <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto">
       <div class="flex-1 p-4 sm:p-6 overflow-y-auto bg-mainBg flex flex-col gap-6 w-full">
  <div class="flex justify-end">
-  <a class="text-xs text-blue-500 hover:text-blue-600 transition-colors" data-prd-drawer="" data-prd-title="客户详情页面PRD" href="#">
+  <button class="text-xs text-blue-500 hover:text-blue-600 transition-colors" type="button" @click="openPagePrd">
    查看页面PRD
-  </a>
+  </button>
  </div>
  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
   <!-- 左侧两列：核心信息 -->
@@ -263,11 +263,11 @@
       <span class="bg-green-100 text-green-600 text-xs px-2 py-1 rounded">
        已转化
       </span>
-      <a class="text-sm text-blue-600 hover:text-blue-800 transition-colors hidden sm:inline-flex items-center gap-1" href="#">
+      <button class="text-sm text-blue-600 hover:text-blue-800 transition-colors hidden sm:inline-flex items-center gap-1" type="button" @click="goLeadsTrace">
        <i class="fa-solid fa-arrow-left">
        </i>
        查看留资轨迹
-      </a>
+      </button>
      </div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 sm:gap-y-6 text-sm">
@@ -376,11 +376,11 @@
      </div>
     </div>
     <!-- 移动端显示的溯源按钮 -->
-    <a class="mt-4 sm:hidden flex items-center justify-center gap-2 text-sm text-blue-600 bg-white border border-blue-200 hover:bg-blue-50 px-4 py-2 rounded transition-colors w-full" href="#">
+    <button class="mt-4 sm:hidden flex items-center justify-center gap-2 text-sm text-blue-600 bg-white border border-blue-200 hover:bg-blue-50 px-4 py-2 rounded transition-colors w-full" type="button" @click="goLeadsTrace">
      <i class="fa-solid fa-arrow-left">
      </i>
      查看原始留资轨迹
-    </a>
+    </button>
    </div>
   </div>
   <!-- 右侧一列：基础及注册信息 -->
@@ -498,11 +498,11 @@
        </i>
        登录环境风险
       </h3>
-      <a class="text-sm text-[#C19B5E] hover:text-[#a88651] transition-colors whitespace-nowrap" href="#">
+      <button class="text-sm text-[#C19B5E] hover:text-[#a88651] transition-colors whitespace-nowrap" type="button" @click="goIpAlert">
        查看明细
        <i class="fa-solid fa-angle-right ml-1">
        </i>
-      </a>
+      </button>
      </div>
     </div>
     <p class="text-xs text-gray-500 leading-5 mb-4">
@@ -610,7 +610,9 @@
     <tbody class="text-gray-700">
      <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
       <td class="py-4 px-4 text-red-500">
-       8100457
+       <button class="text-red-500 hover:underline font-medium" type="button" @click="goAccountDetail('8100457')">
+        8100457
+       </button>
       </td>
       <td class="py-4 px-4 text-red-500">
        标准账户[交易]
@@ -654,7 +656,9 @@
      </tr>
      <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
       <td class="py-4 px-4 text-red-500">
-       8300255
+       <button class="text-red-500 hover:underline font-medium" type="button" @click="goAccountDetail('8300255')">
+        8300255
+       </button>
       </td>
       <td class="py-4 px-4 text-red-500">
        标准账户[佣金]
@@ -698,7 +702,9 @@
      </tr>
      <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
       <td class="py-4 px-4 text-red-500">
-       9900456
+       <button class="text-red-500 hover:underline font-medium" type="button" @click="goAccountDetail('9900456')">
+        9900456
+       </button>
       </td>
       <td class="py-4 px-4 text-red-500">
        美分账户[交易]
@@ -745,9 +751,9 @@
   </div>
   <!-- 底部返回按钮 -->
   <div class="p-6 pt-2 flex justify-center border-t border-gray-50">
-   <a class="border border-gray-300 text-gray-600 px-6 py-2 rounded text-sm hover:bg-gray-50 transition-colors" href="#">
+   <button class="border border-gray-300 text-gray-600 px-6 py-2 rounded text-sm hover:bg-gray-50 transition-colors" type="button" @click="goBack">
     返回
-   </a>
+   </button>
   </div>
  </div>
 </div>
@@ -757,5 +763,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { openPrd } from '@/store/prd'
+
+const router = useRouter()
+const route = useRoute()
+
+const openPagePrd = () => {
+  openPrd('prd-client-detail.html', '客户详情 - PRD')
+}
+
+const goLeadsTrace = () => {
+  router.push({ path: '/crm/leads-detail', query: { fromClientId: String(route.query.id || '') } })
+}
+
+const goIpAlert = () => {
+  router.push({ path: '/risk/ip-alert', query: { clientId: String(route.query.id || '') } })
+}
+
+const goAccountDetail = (mtAccount) => {
+  router.push({ path: '/crm/account-detail', query: { id: String(mtAccount || '') } })
+}
+
+const goBack = () => {
+  router.back()
+}
 </script>

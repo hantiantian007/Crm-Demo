@@ -23,11 +23,11 @@
        </span>
        选择分组
       </label>
-      <select class="w-full border border-gray-300 rounded-md px-3 py-2.5 text-sm outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn text-gray-600 bg-white" id="groupSelect" onchange="previewAccounts()">
+      <select v-model="selectedGroup" class="w-full border border-gray-300 rounded-md px-3 py-2.5 text-sm outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn text-gray-600 bg-white" @change="previewAccounts">
        <option value="">
         -- 请选择 MT 服务器分组 --
        </option>
-       <option selected="" value="group1">
+       <option value="group1">
         MT5-Live-01（真实盘 #1）
        </option>
        <option value="group2">
@@ -112,8 +112,8 @@
     <div class="flex items-center justify-between mb-3">
      <div class="text-sm font-medium text-gray-700">
       待处理账号预览
-      <span class="ml-2 text-xs text-gray-400 font-normal" id="accountCount">
-       共 0 个账号
+      <span class="ml-2 text-xs text-gray-400 font-normal">
+       共 {{ accountCount }} 个账号
       </span>
      </div>
      <span class="text-xs text-gray-400">
@@ -174,4 +174,11 @@
 
 <script setup>
 import { ref } from 'vue'
+
+const selectedGroup = ref('group1')
+const accountCount = ref(0)
+
+const previewAccounts = () => {
+  accountCount.value = selectedGroup.value ? 12 : 0
+}
 </script>

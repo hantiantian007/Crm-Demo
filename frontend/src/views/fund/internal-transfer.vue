@@ -4,7 +4,12 @@
       <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-mainBg">
         <div class="space-y-4">
           <section class="bg-white rounded-xl border border-gray-200 p-5">
-            <div class="text-sm font-semibold text-gray-700 mb-4">搜索</div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-sm font-semibold text-gray-700">搜索</div>
+              <button class="h-8 px-3 rounded-md bg-white border border-gray-200 text-gray-600 text-xs hover:bg-gray-50 transition-colors" type="button" @click="goTransferRecord">
+                转账记录
+              </button>
+            </div>
             <div class="grid grid-cols-6 gap-4">
               <div class="col-span-2">
                 <label class="block text-xs text-gray-500 mb-2">转出MT账号</label>
@@ -73,7 +78,11 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 const form = reactive({
   fromMt: '',
@@ -95,4 +104,20 @@ const handleReset = () => {
   form.startDate = ''
   form.endDate = ''
 }
+
+const goTransferRecord = () => {
+  const account = String(form.fromMt || form.toMt || '').trim()
+  router.push({ path: '/fund/internal-transfer-record', query: account ? { account } : {} })
+}
+
+watch(
+  () => route.query.account,
+  (value) => {
+    const account = Array.isArray(value) ? value[0] : value
+    if (typeof account !== 'string' || !account.trim()) return
+    if (form.fromMt || form.toMt) return
+    form.fromMt = account.trim()
+  },
+  { immediate: true }
+)
 </script>

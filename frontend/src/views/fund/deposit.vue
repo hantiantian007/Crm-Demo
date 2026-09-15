@@ -3,8 +3,12 @@
     <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto w-full">
       <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-mainBg">
         <div class="bg-[#F7F7F8] rounded-xl border border-gray-200 p-4 md:p-6 min-h-full">
-          <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
-            <div class="px-5 py-4 border-b border-gray-100">
+            <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500">MT账号</span>
+                <input v-model="filters.account" class="h-9 w-44 rounded border border-gray-200 bg-white px-3 text-sm outline-none focus:border-primary" placeholder="输入MT账号" type="text" />
+              </div>
               <router-link class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium transition-colors" to="/crm/client-deposit-cent-account">
                 <i class="fas fa-plus text-xs"></i>
                 入金申请
@@ -47,131 +51,53 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                  <tr class="align-top hover:bg-gray-50/70">
+                  <tr v-for="row in filteredRows" :key="row.orderId" class="align-top hover:bg-gray-50/70">
                     <td class="px-5 py-5 whitespace-nowrap font-medium text-gray-800">
-                      9900456
+                      {{ row.mtAccount }}
                     </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-primary font-medium change-highlight">
-                      美分账户 / USC
+                    <td class="px-5 py-5 whitespace-nowrap font-medium change-highlight" :class="row.accountType === 'cent' ? 'text-primary' : 'text-gray-500'">
+                      {{ row.mtTypeText }}
                     </td>
                     <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      904617301918089429
+                      {{ row.orderId }}
                     </td>
                     <td class="px-5 py-5 whitespace-nowrap">
-                      <div class="font-medium text-gray-800 change-highlight">
-                        10,000 USC
-                      </div>
-                      <div class="text-xs text-gray-400 mt-2 change-highlight">
-                        折算 100.00 USD
-                      </div>
+                      <template v-if="row.accountType === 'cent'">
+                        <div class="font-medium text-gray-800 change-highlight">
+                          {{ row.depositText }}
+                        </div>
+                        <div class="text-xs text-gray-400 mt-2 change-highlight">
+                          {{ row.depositUsdText }}
+                        </div>
+                      </template>
+                      <template v-else>
+                        <div class="font-medium text-gray-800 change-highlight">
+                          {{ row.depositText }}
+                        </div>
+                      </template>
                     </td>
                     <td class="px-5 py-5 whitespace-nowrap">
-                      <div class="font-medium text-gray-800">
-                        100.00 USD
+                      <div class="font-medium text-gray-800" :class="row.accountType === 'cent' ? '' : ''">
+                        {{ row.payText }}
                       </div>
                       <div class="text-xs text-gray-400 mt-2">
-                        汇率 1.0000
+                        {{ row.rateText }}
                       </div>
                     </td>
                     <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      crm
+                      {{ row.payMethod }}
                     </td>
                     <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      已审核
+                      {{ row.reviewStatus }}
                     </td>
                     <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      支付成功
+                      {{ row.payStatus }}
                     </td>
                     <td class="px-5 py-5 whitespace-nowrap text-gray-500">
-                      2026-07-31 14:34:19
+                      {{ row.time }}
                     </td>
                     <td class="px-5 py-5 whitespace-nowrap">
-                      <button class="px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-xs font-medium transition-colors">
-                        查看详情
-                      </button>
-                    </td>
-                  </tr>
-                  <tr class="align-top hover:bg-gray-50/70">
-                    <td class="px-5 py-5 whitespace-nowrap font-medium text-gray-800">
-                      8800123
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-500 font-medium change-highlight">
-                      标准账户 / USD
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      904617301918089430
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap">
-                      <div class="font-medium text-gray-800 change-highlight">
-                        100.00 USD
-                      </div>
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap">
-                      <div class="font-medium text-gray-800">
-                        100.00 USD
-                      </div>
-                      <div class="text-xs text-gray-400 mt-2">
-                        汇率 1.0000
-                      </div>
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      MAXPAY(USDT)
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      处理中
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      待支付
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-500">
-                      2026-07-31 13:11:06
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap">
-                      <button class="px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-xs font-medium transition-colors">
-                        查看详情
-                      </button>
-                    </td>
-                  </tr>
-                  <tr class="align-top hover:bg-gray-50/70">
-                    <td class="px-5 py-5 whitespace-nowrap font-medium text-gray-800">
-                      9900668
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-primary font-medium change-highlight">
-                      美分账户 / USC
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      904617301918089431
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap">
-                      <div class="font-medium text-gray-800 change-highlight">
-                        25,000 USC
-                      </div>
-                      <div class="text-xs text-gray-400 mt-2 change-highlight">
-                        折算 250.00 USD
-                      </div>
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap">
-                      <div class="font-medium text-gray-800 change-highlight">
-                        1,795.00 CNY
-                      </div>
-                      <div class="text-xs text-gray-400 mt-2 change-highlight">
-                        汇率 7.1800
-                      </div>
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      UGATE
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      已审核
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-600">
-                      支付成功
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap text-gray-500">
-                      2026-07-30 18:42:51
-                    </td>
-                    <td class="px-5 py-5 whitespace-nowrap">
-                      <button class="px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-xs font-medium transition-colors">
+                      <button class="px-3 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-xs font-medium transition-colors" type="button" @click="goDepositDetail(row)">
                         查看详情
                       </button>
                     </td>
@@ -203,7 +129,87 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+
+const filters = reactive({
+  account: ''
+})
+
+const rows = ref([
+  {
+    mtAccount: '9900456',
+    accountType: 'cent',
+    mtTypeText: '美分账户 / USC',
+    orderId: '904617301918089429',
+    depositText: '10,000 USC',
+    depositUsdText: '折算 100.00 USD',
+    payText: '100.00 USD',
+    rateText: '汇率 1.0000',
+    payMethod: 'crm',
+    reviewStatus: '已审核',
+    payStatus: '支付成功',
+    time: '2026-07-31 14:34:19'
+  },
+  {
+    mtAccount: '8800123',
+    accountType: 'standard',
+    mtTypeText: '标准账户 / USD',
+    orderId: '904617301918089430',
+    depositText: '100.00 USD',
+    depositUsdText: '',
+    payText: '100.00 USD',
+    rateText: '汇率 1.0000',
+    payMethod: 'MAXPAY(USDT)',
+    reviewStatus: '处理中',
+    payStatus: '待支付',
+    time: '2026-07-31 13:11:06'
+  },
+  {
+    mtAccount: '9900668',
+    accountType: 'cent',
+    mtTypeText: '美分账户 / USC',
+    orderId: '904617301918089431',
+    depositText: '25,000 USC',
+    depositUsdText: '折算 250.00 USD',
+    payText: '1,795.00 CNY',
+    rateText: '汇率 7.1800',
+    payMethod: 'UGATE',
+    reviewStatus: '已审核',
+    payStatus: '支付成功',
+    time: '2026-07-30 18:42:51'
+  }
+])
+
+const normalizedAccount = computed(() => String(filters.account || '').trim())
+
+const filteredRows = computed(() => {
+  if (!normalizedAccount.value) return rows.value
+  return rows.value.filter((r) => String(r.mtAccount || '').includes(normalizedAccount.value))
+})
+
+watch(
+  () => route.query.account,
+  (value) => {
+    if (typeof value === 'string' && value.trim()) {
+      filters.account = value.trim()
+      return
+    }
+    if (Array.isArray(value) && value[0]) {
+      filters.account = String(value[0]).trim()
+      return
+    }
+    filters.account = ''
+  },
+  { immediate: true }
+)
+
+const goDepositDetail = (row) => {
+  router.push({ path: '/fund/deposit-detail', query: { orderId: String(row?.orderId || '') } })
+}
 </script>
 
 <style scoped>

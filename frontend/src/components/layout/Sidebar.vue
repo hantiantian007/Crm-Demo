@@ -31,9 +31,10 @@
         <el-menu-item index="/fund/deposit">入金</el-menu-item>
         <el-menu-item index="/fund/withdraw">出金</el-menu-item>
         <el-menu-item index="/fund/internal-transfer">内部转账</el-menu-item>
+        <el-menu-item index="/fund/internal-transfer-record">内部转账记录</el-menu-item>
         <el-menu-item v-if="!isClientRole" index="/fund/commission-withdraw">返佣提现</el-menu-item>
         <el-menu-item v-if="!isClientRole" index="/fund/my-bonus">我的赠金</el-menu-item>
-        <el-menu-item v-if="!isClientRole" index="/fund/audit-deposit">待审核入金</el-menu-item>
+        <el-menu-item v-if="!isClientRole" index="/fund/deposit-pending-review">待审核入金</el-menu-item>
         <el-menu-item v-if="!isClientRole" index="/fund/audit-withdraw">待审核出金</el-menu-item>
         <el-menu-item v-if="!isClientRole" index="/fund/audit-bonus">赠金审核</el-menu-item>
         <el-menu-item v-if="!isClientRole" index="/fund/audit-bankcard">待审核银行卡</el-menu-item>
@@ -84,7 +85,7 @@
         </template>
         <el-menu-item index="/crm/account">账户管理</el-menu-item>
         <el-menu-item index="/crm/list">客户列表</el-menu-item>
-        <el-menu-item index="/crm/audit">账户审核</el-menu-item>
+        <el-menu-item index="/crm/audit-list">账户审核</el-menu-item>
         <el-menu-item index="/crm/change-detail">客户变动详情</el-menu-item>
         <el-menu-item index="/crm/group">分组管理</el-menu-item>
         <el-menu-item index="/crm/share">分享链接</el-menu-item>

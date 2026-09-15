@@ -68,13 +68,13 @@
         发布状态
        </span>
        <div class="mt-2 flex items-center gap-2 flex-wrap">
-        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium border-gray-200 text-gray-600 hover:bg-gray-50" data-state="draft" onclick="setPreviewState('draft')" type="button">
+        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium" :class="previewState === 'draft' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600 hover:bg-gray-50'" data-state="draft" type="button" @click="setPreviewState('draft')">
          草稿
         </button>
-        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium border-gray-200 text-gray-600 hover:bg-gray-50" data-state="scheduled" onclick="setPreviewState('scheduled')" type="button">
+        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium" :class="previewState === 'scheduled' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600 hover:bg-gray-50'" data-state="scheduled" type="button" @click="setPreviewState('scheduled')">
          待发布
         </button>
-        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium border-brand text-[#8c6b45] bg-brandSoft" data-state="published" onclick="setPreviewState('published')" type="button">
+        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium" :class="previewState === 'published' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600 hover:bg-gray-50'" data-state="published" type="button" @click="setPreviewState('published')">
          已发布
         </button>
        </div>
@@ -205,7 +205,7 @@
         支持模块新增、排序、删除与配置；当前示例已覆盖单图、双图、轮播。
        </p>
       </div>
-      <button class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm hover:opacity-90 transition-colors" onclick="openModuleModal()" type="button">
+      <button class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm hover:opacity-90 transition-colors" type="button" @click="openModuleModal">
        <i class="fa-solid fa-plus mr-1">
        </i>
        新增模块
@@ -298,243 +298,46 @@
           模块配置顺序
          </div>
         </div>
-        <span class="px-3 py-1 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-600" id="moduleCountBadge">
-         当前 4 个模块
+        <span class="px-3 py-1 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-600">
+         当前 {{ modules.length }} 个模块
         </span>
        </div>
-       <div class="mt-4 space-y-3" id="moduleSequenceList">
-        <div class="rounded-2xl border border-gray-200 bg-white px-4 py-4 module-sequence-item">
+       <div class="mt-4 space-y-3">
+        <div v-for="(module, index) in modules" :key="module.id" class="rounded-2xl border border-gray-200 bg-white px-4 py-4 module-sequence-item">
          <div class="flex items-center justify-between gap-4">
           <div>
            <div class="text-sm font-semibold text-gray-800">
-            模块 01：单图模块（长图 1）
+            模块 {{ pad2(index + 1) }}：{{ module.title }}
            </div>
            <div class="mt-1 text-sm text-gray-600">
-            用于承接正文后的第一张长方形图片，按单列展示。
+            {{ module.desc }}
            </div>
           </div>
           <div class="flex items-center gap-2">
-           <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100">
-            single-image
+           <span class="px-2.5 py-1 rounded-full text-xs font-semibold border" :class="moduleTagClass(module.tag)">
+            {{ module.tag }}
            </span>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" onclick="moveModule(this, -1)" type="button">
+           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" type="button" :disabled="index === 0" @click="moveModule(index, -1)">
             <i class="fa-solid fa-arrow-up">
             </i>
            </button>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" onclick="moveModule(this, 1)" type="button">
+           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" type="button" :disabled="index === modules.length - 1" @click="moveModule(index, 1)">
             <i class="fa-solid fa-arrow-down">
             </i>
            </button>
-           <button class="w-8 h-8 rounded-lg border border-red-100 text-red-500 hover:bg-red-50" onclick="removeModule(this)" type="button">
+           <button class="w-8 h-8 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed" type="button" :disabled="modules.length <= 1" @click="removeModule(index)">
             <i class="fa-regular fa-trash-can">
             </i>
            </button>
           </div>
          </div>
-         <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
+         <div :class="module.details.length === 3 ? 'mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm' : 'mt-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-sm'">
+          <div v-for="detail in module.details" :key="detail.label" class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
            <div class="text-xs text-gray-500">
-            展示比例
+            {{ detail.label }}
            </div>
            <div class="mt-2 text-gray-800 font-medium">
-            原比例 / auto
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            图注
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            长方形图片 01
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            移动端
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            单列展示
-           </div>
-          </div>
-         </div>
-        </div>
-        <div class="rounded-2xl border border-gray-200 bg-white px-4 py-4 module-sequence-item">
-         <div class="flex items-center justify-between gap-4">
-          <div>
-           <div class="text-sm font-semibold text-gray-800">
-            模块 02：单图模块（长图 2）
-           </div>
-           <div class="mt-1 text-sm text-gray-600">
-            继续承接第二张长方形图片，形成上下两张长图结构。
-           </div>
-          </div>
-          <div class="flex items-center gap-2">
-           <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100">
-            single-image
-           </span>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" onclick="moveModule(this, -1)" type="button">
-            <i class="fa-solid fa-arrow-up">
-            </i>
-           </button>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" onclick="moveModule(this, 1)" type="button">
-            <i class="fa-solid fa-arrow-down">
-            </i>
-           </button>
-           <button class="w-8 h-8 rounded-lg border border-red-100 text-red-500 hover:bg-red-50" onclick="removeModule(this)" type="button">
-            <i class="fa-regular fa-trash-can">
-            </i>
-           </button>
-          </div>
-         </div>
-         <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            展示比例
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            原比例 / auto
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            图注
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            长方形图片 02
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            间距策略
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            与上下模块统一 24px
-           </div>
-          </div>
-         </div>
-        </div>
-        <div class="rounded-2xl border border-gray-200 bg-white px-4 py-4 module-sequence-item">
-         <div class="flex items-center justify-between gap-4">
-          <div>
-           <div class="text-sm font-semibold text-gray-800">
-            模块 03：双图模块（方图并排）
-           </div>
-           <div class="mt-1 text-sm text-gray-600">
-            承接后续两张正方形图片，桌面端并排，移动端建议自动堆叠。
-           </div>
-          </div>
-          <div class="flex items-center gap-2">
-           <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold border border-amber-100">
-            double-image
-           </span>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" onclick="moveModule(this, -1)" type="button">
-            <i class="fa-solid fa-arrow-up">
-            </i>
-           </button>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" onclick="moveModule(this, 1)" type="button">
-            <i class="fa-solid fa-arrow-down">
-            </i>
-           </button>
-           <button class="w-8 h-8 rounded-lg border border-red-100 text-red-500 hover:bg-red-50" onclick="removeModule(this)" type="button">
-            <i class="fa-regular fa-trash-can">
-            </i>
-           </button>
-          </div>
-         </div>
-         <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            展示比例
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            1:1
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            桌面端
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            双列并排
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            移动端
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            自动堆叠
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            图注
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            活动现场
-           </div>
-          </div>
-         </div>
-        </div>
-        <div class="rounded-2xl border border-gray-200 bg-white px-4 py-4 module-sequence-item">
-         <div class="flex items-center justify-between gap-4">
-          <div>
-           <div class="text-sm font-semibold text-gray-800">
-            模块 04：轮播模块（活动组图）
-           </div>
-           <div class="mt-1 text-sm text-gray-600">
-            承接 3 张以上活动现场图，前端统一按轮播形式渲染，避免正文过长。
-           </div>
-          </div>
-          <div class="flex items-center gap-2">
-           <span class="px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 text-xs font-semibold border border-violet-100">
-            carousel
-           </span>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" onclick="moveModule(this, -1)" type="button">
-            <i class="fa-solid fa-arrow-up">
-            </i>
-           </button>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" onclick="moveModule(this, 1)" type="button">
-            <i class="fa-solid fa-arrow-down">
-            </i>
-           </button>
-           <button class="w-8 h-8 rounded-lg border border-red-100 text-red-500 hover:bg-red-50" onclick="removeModule(this)" type="button">
-            <i class="fa-regular fa-trash-can">
-            </i>
-           </button>
-          </div>
-         </div>
-         <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            图片数量
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            3 张
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            展示比例
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            16:9
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            自动播放
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            关闭
-           </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            指示点
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            显示
+            {{ detail.value }}
            </div>
           </div>
          </div>
@@ -556,22 +359,22 @@
        </p>
       </div>
       <div class="flex items-center gap-2">
-       <button class="device-toggle active px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600" data-device="desktop" onclick="setDeviceMode('desktop')" type="button">
+       <button class="device-toggle px-3 py-1.5 rounded-full border text-xs font-medium" :class="deviceMode === 'desktop' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600'" data-device="desktop" type="button" @click="setDeviceMode('desktop')">
         <i class="fa-solid fa-desktop mr-1">
         </i>
         桌面端
        </button>
-       <button class="device-toggle px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600" data-device="mobile" onclick="setDeviceMode('mobile')" type="button">
+       <button class="device-toggle px-3 py-1.5 rounded-full border text-xs font-medium" :class="deviceMode === 'mobile' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600'" data-device="mobile" type="button" @click="setDeviceMode('mobile')">
         <i class="fa-solid fa-mobile-screen-button mr-1">
         </i>
         移动端
        </button>
-       <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100" id="previewBadge">
-        已发布效果
+       <span class="px-3 py-1 rounded-full text-xs font-semibold border" :class="isPublished ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-gray-100 text-gray-600 border-gray-200'">
+        {{ previewBadgeText }}
        </span>
       </div>
      </div>
-     <div class="preview-device" id="desktopPreview">
+     <div class="preview-device" id="desktopPreview" v-show="deviceMode === 'desktop'">
       <div class="px-5 py-4 bg-[#faf8f2] border-b border-[#f0eadf]">
        <div class="text-xs text-gray-500">
         集团动态 &gt; 动态详情
@@ -583,7 +386,7 @@
         2026-07-10
        </div>
       </div>
-      <div class="p-5" id="publishedPreviewDesktop">
+      <div class="p-5" id="publishedPreviewDesktop" v-show="isPublished">
        <div class="rounded-2xl bg-[#f8fafc] border border-slate-200 px-4 py-4">
         <div class="text-xs font-semibold tracking-[0.18em] text-brand">
          ARTICLE SUMMARY
@@ -651,7 +454,7 @@
         </ul>
        </div>
       </div>
-      <div class="hidden p-5" id="emptyPreviewDesktop">
+      <div class="p-5" id="emptyPreviewDesktop" v-show="!isPublished">
        <div class="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center">
         <div class="w-14 h-14 rounded-2xl bg-white border border-gray-200 mx-auto flex items-center justify-center text-gray-400">
          <i class="fa-regular fa-eye-slash text-xl">
@@ -671,7 +474,7 @@
        </div>
       </div>
      </div>
-     <div class="preview-device hidden px-5 py-6 bg-[#f7f7f7]" id="mobilePreview">
+     <div class="preview-device px-5 py-6 bg-[#f7f7f7]" id="mobilePreview" v-show="deviceMode === 'mobile'">
       <div class="mx-auto w-[320px] rounded-[28px] border-[10px] border-[#111827] bg-white shadow-soft overflow-hidden">
        <div class="h-6 bg-[#111827] flex items-center justify-center">
         <div class="w-20 h-1.5 rounded-full bg-gray-500">
@@ -688,7 +491,7 @@
          2026-07-10
         </div>
        </div>
-       <div class="px-4 py-4" id="publishedPreviewMobile">
+       <div class="px-4 py-4" id="publishedPreviewMobile" v-show="isPublished">
         <div class="rounded-2xl bg-[#f8fafc] border border-slate-200 px-4 py-4">
          <div class="text-[11px] font-semibold tracking-[0.18em] text-brand">
           SUMMARY
@@ -738,7 +541,7 @@
          </div>
         </div>
        </div>
-       <div class="hidden px-4 py-10" id="emptyPreviewMobile">
+       <div class="px-4 py-10" id="emptyPreviewMobile" v-show="!isPublished">
         <div class="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center">
          <div class="w-12 h-12 rounded-2xl bg-white border border-gray-200 mx-auto flex items-center justify-center text-gray-400">
           <i class="fa-regular fa-eye-slash">
@@ -772,6 +575,38 @@
      </div>
     </div>
    </aside>
+   <div class="fixed inset-0 z-[90] bg-black/40 flex items-center justify-center px-4" v-show="isModuleModalOpen">
+    <div class="w-full max-w-[520px] rounded-2xl bg-white border border-gray-200 shadow-2xl overflow-hidden">
+     <div class="h-14 px-6 border-b border-gray-100 flex items-center justify-between">
+      <div class="text-base font-semibold text-gray-800">
+       新增模块
+      </div>
+      <button class="text-gray-400 hover:text-gray-600" type="button" @click="closeModuleModal">
+       <i class="fa-solid fa-xmark text-lg">
+       </i>
+      </button>
+     </div>
+     <div class="p-6 space-y-3">
+      <button class="w-full h-11 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-sm text-gray-700 flex items-center justify-between px-4" type="button" @click="addModule('single-image')">
+       <span>单图模块</span>
+       <span class="text-xs text-gray-400">single-image</span>
+      </button>
+      <button class="w-full h-11 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-sm text-gray-700 flex items-center justify-between px-4" type="button" @click="addModule('double-image')">
+       <span>双图模块</span>
+       <span class="text-xs text-gray-400">double-image</span>
+      </button>
+      <button class="w-full h-11 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-sm text-gray-700 flex items-center justify-between px-4" type="button" @click="addModule('carousel')">
+       <span>轮播模块</span>
+       <span class="text-xs text-gray-400">carousel</span>
+      </button>
+     </div>
+     <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-end">
+      <button class="h-9 px-4 rounded-xl bg-white border border-gray-200 text-gray-600 text-sm hover:bg-gray-50" type="button" @click="closeModuleModal">
+       关闭
+      </button>
+     </div>
+    </div>
+   </div>
   </div>
  </section>
 </main>
@@ -781,5 +616,157 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+
+const previewState = ref('published')
+const deviceMode = ref('desktop')
+const isModuleModalOpen = ref(false)
+
+const modules = ref([
+  {
+    id: 'm1',
+    title: '单图模块（长图 1）',
+    desc: '用于承接正文后的第一张长方形图片，按单列展示。',
+    tag: 'single-image',
+    details: [
+      { label: '展示比例', value: '原比例 / auto' },
+      { label: '图注', value: '长方形图片 01' },
+      { label: '移动端', value: '单列展示' }
+    ]
+  },
+  {
+    id: 'm2',
+    title: '单图模块（长图 2）',
+    desc: '继续承接第二张长方形图片，形成上下两张长图结构。',
+    tag: 'single-image',
+    details: [
+      { label: '展示比例', value: '原比例 / auto' },
+      { label: '图注', value: '长方形图片 02' },
+      { label: '间距策略', value: '与上下模块统一 24px' }
+    ]
+  },
+  {
+    id: 'm3',
+    title: '双图模块（方图并排）',
+    desc: '承接后续两张正方形图片，桌面端并排，移动端建议自动堆叠。',
+    tag: 'double-image',
+    details: [
+      { label: '展示比例', value: '1:1' },
+      { label: '桌面端', value: '双列并排' },
+      { label: '移动端', value: '自动堆叠' },
+      { label: '图注', value: '活动现场' }
+    ]
+  },
+  {
+    id: 'm4',
+    title: '轮播模块（活动组图）',
+    desc: '承接 3 张以上活动现场图，前端统一按轮播形式渲染，避免正文过长。',
+    tag: 'carousel',
+    details: [
+      { label: '图片数量', value: '3 张' },
+      { label: '展示比例', value: '16:9' },
+      { label: '自动播放', value: '关闭' },
+      { label: '指示点', value: '显示' }
+    ]
+  }
+])
+
+const isPublished = computed(() => previewState.value === 'published')
+const previewBadgeText = computed(() => (isPublished.value ? '已发布效果' : '未发布预览'))
+
+const pad2 = (n) => String(n).padStart(2, '0')
+
+const setPreviewState = (state) => {
+  previewState.value = state
+}
+
+const setDeviceMode = (mode) => {
+  deviceMode.value = mode
+}
+
+const openModuleModal = () => {
+  isModuleModalOpen.value = true
+}
+
+const closeModuleModal = () => {
+  isModuleModalOpen.value = false
+}
+
+const moveModule = (index, delta) => {
+  const nextIndex = index + delta
+  if (nextIndex < 0 || nextIndex >= modules.value.length) return
+  const list = [...modules.value]
+  const [picked] = list.splice(index, 1)
+  list.splice(nextIndex, 0, picked)
+  modules.value = list
+}
+
+const removeModule = (index) => {
+  if (modules.value.length <= 1) return
+  modules.value = modules.value.filter((_, i) => i !== index)
+}
+
+const moduleTagClass = (tag) => {
+  if (tag === 'single-image') return 'bg-emerald-50 text-emerald-700 border-emerald-100'
+  if (tag === 'double-image') return 'bg-amber-50 text-amber-700 border-amber-100'
+  if (tag === 'carousel') return 'bg-violet-50 text-violet-700 border-violet-100'
+  return 'bg-gray-50 text-gray-700 border-gray-200'
+}
+
+const addModule = (type) => {
+  const id = `m${Date.now()}`
+  if (type === 'single-image') {
+    modules.value = [
+      ...modules.value,
+      {
+        id,
+        title: '单图模块（新增）',
+        desc: '用于承接一张图片，按单列展示。',
+        tag: 'single-image',
+        details: [
+          { label: '展示比例', value: '原比例 / auto' },
+          { label: '图注', value: '请填写' },
+          { label: '移动端', value: '单列展示' }
+        ]
+      }
+    ]
+    closeModuleModal()
+    return
+  }
+  if (type === 'double-image') {
+    modules.value = [
+      ...modules.value,
+      {
+        id,
+        title: '双图模块（新增）',
+        desc: '承接两张图片，桌面端并排，移动端建议堆叠。',
+        tag: 'double-image',
+        details: [
+          { label: '展示比例', value: '1:1' },
+          { label: '桌面端', value: '双列并排' },
+          { label: '移动端', value: '自动堆叠' },
+          { label: '图注', value: '请填写' }
+        ]
+      }
+    ]
+    closeModuleModal()
+    return
+  }
+  modules.value = [
+    ...modules.value,
+    {
+      id,
+      title: '轮播模块（新增）',
+      desc: '承接多图，前端统一轮播渲染。',
+      tag: 'carousel',
+      details: [
+        { label: '图片数量', value: '3 张' },
+        { label: '展示比例', value: '16:9' },
+        { label: '自动播放', value: '关闭' },
+        { label: '指示点', value: '显示' }
+      ]
+    }
+  ]
+  closeModuleModal()
+}
 </script>

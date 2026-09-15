@@ -13,11 +13,11 @@
      维护和管理智能交易系统商品，支持实体/虚拟类型及多支付方式配置
     </p>
    </div>
-   <button class="px-4 py-2 bg-primary hover:bg-primaryHover text-white rounded shadow-sm text-sm font-medium transition-colors flex items-center gap-2">
+   <router-link class="px-4 py-2 bg-primary hover:bg-primaryHover text-white rounded shadow-sm text-sm font-medium transition-colors flex items-center gap-2" to="/product/edit">
     <i class="fas fa-plus">
     </i>
     新增商品
-   </button>
+   </router-link>
   </div>
   <div class="flex flex-wrap gap-4 items-end">
    <div class="w-64">
@@ -196,10 +196,10 @@
        </span>
       </td>
       <td class="px-6 py-4 text-right">
-       <button class="text-primary hover:text-primaryHover font-medium text-sm transition-colors mr-3">
+       <router-link class="text-primary hover:text-primaryHover font-medium text-sm transition-colors mr-3" to="/product/edit?id=2">
         编辑
-       </button>
-       <button class="text-red-500 hover:text-red-700 font-medium text-sm transition-colors">
+       </router-link>
+       <button class="text-red-500 hover:text-red-700 font-medium text-sm transition-colors" type="button" @click="confirmAction('确认要下架该商品吗？下架后客户端将无法购买此商品。')">
         下架
        </button>
       </td>
@@ -241,7 +241,7 @@
        </div>
       </td>
       <td class="px-6 py-4">
-       <div class="text-sm font-medium text-gray-800 cursor-help relative group" onmouseenter="showPackageTooltip(this)" onmouseleave="hidePackageTooltip(this)">
+       <div class="text-sm font-medium text-gray-800 cursor-help relative group">
         $5,000.00 起
         <span class="text-xs text-primary font-normal px-1.5 py-0.5 bg-blue-50 border border-blue-100 rounded ml-1 transition-colors group-hover:bg-blue-100">
          多套餐
@@ -249,7 +249,7 @@
          </i>
         </span>
         <!-- 套餐预览浮层 (Tooltip) -->
-        <div class="hidden absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-100 z-50 p-1">
+        <div class="hidden group-hover:block absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-100 z-50 p-1">
          <div class="px-3 py-2 border-b border-gray-50 flex justify-between items-center">
           <span class="text-xs font-bold text-gray-800">
            套餐明细 (3)
@@ -339,10 +339,10 @@
        </span>
       </td>
       <td class="px-6 py-4 text-right">
-       <button class="text-primary hover:text-primaryHover font-medium text-sm transition-colors mr-3">
+       <router-link class="text-primary hover:text-primaryHover font-medium text-sm transition-colors mr-3" to="/product/edit?id=1">
         编辑
-       </button>
-       <button class="text-red-500 hover:text-red-700 font-medium text-sm transition-colors">
+       </router-link>
+       <button class="text-red-500 hover:text-red-700 font-medium text-sm transition-colors" type="button" @click="confirmAction('确认要下架该商品吗？下架后客户端将无法购买此商品。')">
         下架
        </button>
       </td>
@@ -423,10 +423,10 @@
        </span>
       </td>
       <td class="px-6 py-4 text-right">
-       <button class="text-primary hover:text-primaryHover font-medium text-sm transition-colors mr-3">
+       <router-link class="text-primary hover:text-primaryHover font-medium text-sm transition-colors mr-3" to="/product/edit?id=3">
         编辑
-       </button>
-       <button class="text-red-500 hover:text-red-700 font-medium text-sm transition-colors">
+       </router-link>
+       <button class="text-red-500 hover:text-red-700 font-medium text-sm transition-colors" type="button" @click="confirmAction('确认要下架该商品吗？下架后客户端将无法购买此商品。')">
         下架
        </button>
       </td>
@@ -469,7 +469,7 @@
       </td>
       <td class="px-6 py-4">
        <div class="flex flex-col gap-1 text-sm font-medium">
-        <div class="text-gray-800 cursor-help relative group" onmouseenter="showPackageTooltip(this)" onmouseleave="hidePackageTooltip(this)">
+       <div class="text-gray-800 cursor-help relative group">
          $1,200.00 起
          <span class="text-xs text-primary font-normal px-1.5 py-0.5 bg-blue-50 border border-blue-100 rounded ml-1 transition-colors group-hover:bg-blue-100">
           多套餐
@@ -477,7 +477,7 @@
           </i>
          </span>
          <!-- 套餐预览浮层 (Tooltip) -->
-         <div class="hidden absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-100 z-50 p-1">
+         <div class="hidden group-hover:block absolute top-full left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-100 z-50 p-1">
           <div class="px-3 py-2 border-b border-gray-50 flex justify-between items-center">
            <span class="text-xs font-bold text-gray-800">
             套餐明细 (2)
@@ -568,10 +568,10 @@
        </span>
       </td>
       <td class="px-6 py-4 text-right">
-       <button class="text-primary hover:text-primaryHover font-medium text-sm transition-colors mr-3">
+       <router-link class="text-primary hover:text-primaryHover font-medium text-sm transition-colors mr-3" to="/product/edit?id=4">
         编辑
-       </button>
-       <button class="text-green-600 hover:text-green-800 font-medium text-sm transition-colors">
+       </router-link>
+       <button class="text-green-600 hover:text-green-800 font-medium text-sm transition-colors" type="button" @click="confirmAction('确认要上架该商品吗？上架后客户端将可以购买此商品。')">
         上架
        </button>
       </td>
@@ -587,5 +587,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+const confirmAction = (message) => {
+  if (confirm(message)) alert('已完成（演示）')
+}
 </script>

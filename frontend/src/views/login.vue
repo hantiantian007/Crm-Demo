@@ -72,15 +72,18 @@
 </div>
 </div>
 <!-- 登录按钮 -->
-<button class="w-full bg-brandYellow hover:bg-brandYellowHover text-gray-900 font-bold py-3.5 rounded-lg transition-colors mt-2 shadow-lg shadow-yellow-500/20" type="button">
-                    登录
-                </button>
+<button class="w-full bg-brandYellow hover:bg-brandYellowHover text-gray-900 font-bold py-3.5 rounded-lg transition-colors mt-2 shadow-lg shadow-yellow-500/20 disabled:opacity-75 disabled:cursor-not-allowed" type="button" :disabled="isSubmitting" @click="handleLogin">
+<span v-if="isSubmitting"><i class="fas fa-spinner fa-spin"></i> 登录中...</span>
+<span v-else>登录</span>
+</button>
 <!-- 底部辅助链接 -->
 <div class="flex justify-between items-center text-sm mt-6">
 <div class="text-gray-400">
-                        没有账号？ <a class="text-brandYellow hover:text-brandYellowHover font-medium transition-colors" href="#">去注册</a>
+                        没有账号？ <router-link class="text-brandYellow hover:text-brandYellowHover font-medium transition-colors" to="/register">去注册</router-link>
 </div>
-<a class="text-gray-400 hover:text-white transition-colors" href="#">忘记密码</a>
+<button class="text-gray-400 hover:text-white transition-colors" type="button">
+  忘记密码
+</button>
 </div>
 </form>
 </div>
@@ -89,32 +92,35 @@
 <button class="absolute bottom-8 right-8 w-14 h-14 bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] flex items-center justify-center hover:scale-110 transition-transform z-20 group">
 <i class="fas fa-headset text-2xl text-gray-800 group-hover:text-brandYellow transition-colors"></i>
 </button>
-<script>
-        function handleLogin() {
-            // 获取 URL 参数中的 redirect 字段
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirectUrl = urlParams.get('redirect');
-            
-            // 简单的模拟登录动画
-            const btn = document.querySelector('button[onclick="handleLogin()"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 登录中...';
-            btn.disabled = true;
-            btn.classList.add('opacity-75', 'cursor-not-allowed');
-
-            setTimeout(() => {
-                // 如果有 redirect 参数，则跳转到指定页面，否则默认跳转到 admin-home.html
-                if (redirectUrl) {
-                    window.location.href = redirectUrl;
-                } else {
-                    window.location.href = 'admin-home.html';
-                }
-            }, 800);
-        }
-    </script>
-
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+
+const isSubmitting = ref(false)
+
+const normalizeRedirect = (value) => {
+  const raw = String(value || '').trim()
+  if (!raw) return ''
+  if (raw.startsWith('#/')) return raw.slice(1)
+  if (raw.startsWith('/')) return raw
+  if (raw === 'admin-home.html') return '/home'
+  return ''
+}
+
+const handleLogin = async () => {
+  if (isSubmitting.value) return
+  isSubmitting.value = true
+  const redirect = normalizeRedirect(route.query.redirect)
+
+  window.setTimeout(() => {
+    router.push(redirect || '/home')
+    isSubmitting.value = false
+  }, 800)
+}
 </script>

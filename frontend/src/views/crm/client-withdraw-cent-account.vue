@@ -4,6 +4,12 @@
       <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-mainBg">
  <div class="bg-[#F7F7F8] rounded-xl border border-gray-200 p-4 md:p-6 min-h-full">
   <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+   <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+    <div class="text-lg font-semibold text-gray-800">出金管理</div>
+    <button class="px-3 py-1.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-medium transition-colors" type="button" @click="goWithdrawRecord">
+     出金记录
+    </button>
+   </div>
    <div class="overflow-x-auto">
     <table class="min-w-full text-sm">
      <thead class="bg-white text-gray-500">
@@ -69,9 +75,9 @@
         125.4012 USD/美元
        </td>
        <td class="px-5 py-5 whitespace-nowrap">
-        <a class="inline-flex px-4 py-1.5 rounded-md bg-primary hover:bg-primaryHover text-white text-xs font-medium transition-colors" href="client-withdraw-apply-cent-account.html?account=8300251">
+        <button class="inline-flex px-4 py-1.5 rounded-md bg-primary hover:bg-primaryHover text-white text-xs font-medium transition-colors" type="button" @click="goApply('8300251')">
          出金
-        </a>
+        </button>
        </td>
       </tr>
       <tr class="hover:bg-gray-50/70">
@@ -147,9 +153,9 @@
         </div>
        </td>
        <td class="px-5 py-5 whitespace-nowrap">
-        <a class="inline-flex px-4 py-1.5 rounded-md bg-primary hover:bg-primaryHover text-white text-xs font-medium transition-colors" href="client-withdraw-apply-cent-account.html?account=9900456">
+        <button class="inline-flex px-4 py-1.5 rounded-md bg-primary hover:bg-primaryHover text-white text-xs font-medium transition-colors" type="button" @click="goApply('9900456')">
          出金
-        </a>
+        </button>
        </td>
       </tr>
      </tbody>
@@ -164,5 +170,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goApply = (account) => {
+  router.push({ path: '/crm/client-withdraw-apply-cent-account', query: { account } })
+}
+
+const goWithdrawRecord = () => {
+  router.push('/crm/client-withdraw-record-cent-account')
+}
 </script>

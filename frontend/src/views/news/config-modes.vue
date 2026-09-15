@@ -59,7 +59,7 @@
        </p>
       </div>
       <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
-       <button class="mode-card active rounded-2xl border border-gray-200 p-5 text-left transition-all" id="mode-rich" onclick="setMode('rich')" type="button">
+       <button class="mode-card rounded-2xl border border-gray-200 p-5 text-left transition-all" :class="selectedMode === 'rich' ? 'active border-brand bg-brandSoft/30' : ''" id="mode-rich" type="button" @click="setMode('rich')">
         <div class="flex items-center justify-between">
          <span class="text-sm font-bold text-gray-900">
           模式 01
@@ -75,7 +75,7 @@
          除基础信息和摘要外，正文、图片、图注都在一个编辑器里完成。录入快，但前端最不稳定。
         </p>
        </button>
-       <button class="mode-card rounded-2xl border border-gray-200 p-5 text-left transition-all" id="mode-hybrid" onclick="setMode('hybrid')" type="button">
+       <button class="mode-card rounded-2xl border border-gray-200 p-5 text-left transition-all" :class="selectedMode === 'hybrid' ? 'active border-blue-200 bg-blue-50/50' : ''" id="mode-hybrid" type="button" @click="setMode('hybrid')">
         <div class="flex items-center justify-between">
          <span class="text-sm font-bold text-gray-900">
           模式 02
@@ -91,7 +91,7 @@
          正文负责叙述，图片和特殊版式交给模块。兼顾录入效率和前端稳定性，最适合官网动态。
         </p>
        </button>
-       <button class="mode-card rounded-2xl border border-gray-200 p-5 text-left transition-all" id="mode-module" onclick="setMode('module')" type="button">
+       <button class="mode-card rounded-2xl border border-gray-200 p-5 text-left transition-all" :class="selectedMode === 'module' ? 'active border-emerald-200 bg-emerald-50/50' : ''" id="mode-module" type="button" @click="setMode('module')">
         <div class="flex items-center justify-between">
          <span class="text-sm font-bold text-gray-900">
           模式 03
@@ -178,7 +178,7 @@
        </label>
       </div>
      </div>
-     <div class="field-panel active rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" id="panel-rich">
+     <div class="field-panel rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" id="panel-rich" v-show="selectedMode === 'rich'">
       <div class="px-6 py-4 border-b border-gray-100">
        <div class="text-lg font-bold text-gray-900">
         3. 模式 01 配置内容
@@ -216,7 +216,7 @@
        </div>
       </div>
      </div>
-     <div class="field-panel rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" id="panel-hybrid">
+     <div class="field-panel rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" id="panel-hybrid" v-show="selectedMode === 'hybrid'">
       <div class="px-6 py-4 border-b border-gray-100">
        <div class="text-lg font-bold text-gray-900">
         3. 模式 02 配置内容
@@ -287,7 +287,7 @@
        </div>
       </div>
      </div>
-     <div class="field-panel rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" id="panel-module">
+     <div class="field-panel rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" id="panel-module" v-show="selectedMode === 'module'">
       <div class="px-6 py-4 border-b border-gray-100">
        <div class="text-lg font-bold text-gray-900">
         3. 模式 03 配置内容
@@ -387,10 +387,10 @@
         </p>
        </div>
        <div class="flex items-center gap-2">
-        <button class="device-toggle active px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600" data-device="desktop" onclick="setDevice('desktop')" type="button">
+        <button class="device-toggle px-3 py-1.5 rounded-full border text-xs font-medium" :class="deviceMode === 'desktop' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600'" data-device="desktop" type="button" @click="setDevice('desktop')">
          桌面端
         </button>
-        <button class="device-toggle px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600" data-device="mobile" onclick="setDevice('mobile')" type="button">
+        <button class="device-toggle px-3 py-1.5 rounded-full border text-xs font-medium" :class="deviceMode === 'mobile' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600'" data-device="mobile" type="button" @click="setDevice('mobile')">
          移动端
         </button>
        </div>
@@ -400,26 +400,20 @@
         <div class="text-sm font-semibold text-gray-800">
          当前模式
         </div>
-        <div class="mt-2 text-lg font-bold text-gray-900" id="currentModeName">
-         纯富文本模式
+        <div class="mt-2 text-lg font-bold text-gray-900">
+         {{ currentMode.name }}
         </div>
-        <div class="mt-2 text-sm text-gray-600 leading-7" id="currentModeDesc">
-         后台最省事，但图片、图注和版式都混在编辑器里，移动端最容易失控。
+        <div class="mt-2 text-sm text-gray-600 leading-7">
+         {{ currentMode.desc }}
         </div>
        </div>
        <div class="rounded-2xl border border-gray-200 bg-gray-50 p-4">
         <div class="text-sm font-semibold text-gray-800">
          适用场景
         </div>
-        <ul class="mt-3 text-sm text-gray-600 leading-7 list-disc pl-5" id="currentModeTips">
-         <li>
-          文字多、图片少
-         </li>
-         <li>
-          对前端排版要求不高
-         </li>
-         <li>
-          只追求发布速度
+        <ul class="mt-3 text-sm text-gray-600 leading-7 list-disc pl-5">
+         <li v-for="tip in currentMode.tips" :key="tip">
+          {{ tip }}
          </li>
         </ul>
        </div>
@@ -427,8 +421,8 @@
         <div class="text-sm font-semibold text-amber-700">
          当前设备关注点
         </div>
-        <div class="mt-2 text-sm text-amber-700 leading-7" id="deviceFocus">
-         桌面端下主要观察图片与正文是否混排过于松散。
+        <div class="mt-2 text-sm text-amber-700 leading-7">
+         {{ deviceFocus }}
         </div>
        </div>
       </div>
@@ -444,5 +438,53 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+
+const selectedMode = ref('rich')
+const deviceMode = ref('desktop')
+
+const modeMap = {
+  rich: {
+    name: '纯富文本模式',
+    desc: '后台最省事，但图片、图注和版式都混在编辑器里，移动端最容易失控。',
+    tips: ['文字多、图片少', '对前端排版要求不高', '只追求发布速度'],
+    focus: {
+      desktop: '桌面端下主要观察图片与正文是否混排过于松散。',
+      mobile: '移动端下重点观察图片并排、段落换行与图注错位风险。'
+    }
+  },
+  hybrid: {
+    name: '正文 + 模块模式',
+    desc: '正文负责叙述，图片和特殊版式交给模块。兼顾录入效率和前端稳定性。',
+    tips: ['常规集团动态', '图文搭配较多', '需要稳定移动端阅读节奏'],
+    focus: {
+      desktop: '桌面端下重点观察正文段落节奏与模块间距是否统一。',
+      mobile: '移动端下重点观察模块是否能自然堆叠，避免并排挤压。'
+    }
+  },
+  module: {
+    name: '全模块化模式',
+    desc: '整篇文章按结构化模块配置，不依赖长富文本，前端适配最稳定。',
+    tips: ['品牌专题', '版式规范要求高', '需要强可控的结构化内容'],
+    focus: {
+      desktop: '桌面端下主要观察模块结构是否清晰、是否存在冗余模块。',
+      mobile: '移动端下重点观察模块堆叠顺序与首屏信息密度是否合理。'
+    }
+  }
+}
+
+const currentMode = computed(() => modeMap[selectedMode.value] || modeMap.rich)
+
+const deviceFocus = computed(() => {
+  const focus = currentMode.value.focus || {}
+  return deviceMode.value === 'mobile' ? focus.mobile : focus.desktop
+})
+
+const setMode = (mode) => {
+  selectedMode.value = mode
+}
+
+const setDevice = (device) => {
+  deviceMode.value = device
+}
 </script>

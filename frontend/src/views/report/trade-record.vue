@@ -180,7 +180,7 @@
      <label class="text-[13px] text-gray-600 w-16 shrink-0 text-right mr-3">
       MT账号:
      </label>
-     <input class="custom-input" placeholder="请输入不超过50字符" type="text"/>
+     <input v-model="filters.account" class="custom-input" placeholder="请输入不超过50字符" type="text"/>
     </div>
     <div class="flex items-center">
      <label class="text-[13px] text-gray-600 w-16 shrink-0 text-right mr-3">
@@ -401,7 +401,7 @@
       </tr>
      </thead>
      <tbody>
-      <tr>
+      <tr v-if="matchAccount('8100458')">
        <td>
         <button class="text-[#FF6B6B]">
          <i class="fas fa-chevron-right text-[10px] transition-transform">
@@ -459,7 +459,7 @@
         0.00
        </td>
       </tr>
-      <tr class="hidden change-bg" id="tradeDetail1">
+      <tr v-if="matchAccount('8100458')" class="hidden change-bg" id="tradeDetail1">
        <td>
        </td>
        <td class="text-left" colspan="16">
@@ -491,7 +491,7 @@
         </div>
        </td>
       </tr>
-      <tr>
+      <tr v-if="matchAccount('9900456')">
        <td>
         <button class="text-[#FF6B6B]">
          <i class="fas fa-chevron-right text-[10px] transition-transform">
@@ -559,7 +559,7 @@
         </span>
        </td>
       </tr>
-      <tr class="hidden change-bg" id="tradeDetail2">
+      <tr v-if="matchAccount('9900456')" class="hidden change-bg" id="tradeDetail2">
        <td>
        </td>
        <td class="text-left" colspan="16">
@@ -605,5 +605,35 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, reactive, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const filters = reactive({
+  account: ''
+})
+
+const normalizedAccount = computed(() => String(filters.account || '').trim())
+
+const matchAccount = (mtAccount) => {
+  if (!normalizedAccount.value) return true
+  return String(mtAccount || '').includes(normalizedAccount.value)
+}
+
+watch(
+  () => route.query.account,
+  (value) => {
+    if (typeof value === 'string' && value.trim()) {
+      filters.account = value.trim()
+      return
+    }
+    if (Array.isArray(value) && value[0]) {
+      filters.account = String(value[0]).trim()
+      return
+    }
+    filters.account = ''
+  },
+  { immediate: true }
+)
 </script>

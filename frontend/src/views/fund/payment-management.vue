@@ -7,7 +7,7 @@
   <!-- 操作栏 -->
   <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3 flex-wrap">
    <div class="flex items-center gap-3 flex-1 min-w-0">
-    <select class="flex-shrink-0 w-32 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primaryBtn/20 focus:border-primaryBtn transition-all bg-white" id="filterStatus" onchange="filterPaymentList()">
+    <select v-model="filterStatus" class="flex-shrink-0 w-32 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primaryBtn/20 focus:border-primaryBtn transition-all bg-white" @change="handleFilterPaymentList">
      <option value="">
       全部状态
      </option>
@@ -1396,4 +1396,8 @@
 
 <script setup>
 import { ref } from 'vue'
+
+const filterStatus = ref('')
+
+const handleFilterPaymentList = () => {}
 </script>

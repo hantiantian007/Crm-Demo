@@ -249,12 +249,12 @@
         --
        </td>
        <td class="px-4 py-4 flex items-center gap-3">
-        <a class="text-[#C19B5E] hover:underline" href="admin-trust-rule-config.html">
+        <button class="text-[#C19B5E] hover:underline" type="button" @click="goRuleConfig">
          查看规则
-        </a>
-        <a class="text-blue-600 hover:underline" href="javascript:void(0)">
+        </button>
+        <button class="text-blue-600 hover:underline disabled:opacity-60 disabled:cursor-not-allowed" type="button" disabled>
          查看变更记录
-        </a>
+        </button>
        </td>
       </tr>
       <tr class="hover:bg-gray-50 transition-colors">
@@ -293,12 +293,12 @@
         --
        </td>
        <td class="px-4 py-4 flex items-center gap-3">
-        <a class="text-[#C19B5E] hover:underline" href="admin-trust-rule-config.html">
+        <button class="text-[#C19B5E] hover:underline" type="button" @click="goRuleConfig">
          查看规则
-        </a>
-        <a class="text-blue-600 hover:underline" href="javascript:void(0)">
+        </button>
+        <button class="text-blue-600 hover:underline disabled:opacity-60 disabled:cursor-not-allowed" type="button" disabled>
          查看变更记录
-        </a>
+        </button>
        </td>
       </tr>
       <tr class="hover:bg-gray-50 transition-colors">
@@ -335,12 +335,12 @@
         2026-07-18 17:40:21
        </td>
        <td class="px-4 py-4 flex items-center gap-3">
-        <a class="text-[#C19B5E] hover:underline" href="admin-trust-rule-config.html">
+        <button class="text-[#C19B5E] hover:underline" type="button" @click="goRuleConfig">
          查看规则
-        </a>
-        <a class="text-blue-600 hover:underline" href="javascript:void(0)">
+        </button>
+        <button class="text-blue-600 hover:underline disabled:opacity-60 disabled:cursor-not-allowed" type="button" disabled>
          查看变更记录
-        </a>
+        </button>
        </td>
       </tr>
      </tbody>
@@ -355,5 +355,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goRuleConfig = () => {
+  router.push('/trust/rule-config')
+}
 </script>

@@ -347,7 +347,7 @@
         </i>
         重新分配
        </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700">
+       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20250101-001')">
         <i class="fas fa-file-alt mr-1">
         </i>
         详情
@@ -439,7 +439,7 @@
         </i>
         认领
        </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700">
+       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20250101-002')">
         <i class="fas fa-file-alt mr-1">
         </i>
         详情
@@ -516,7 +516,7 @@
         </i>
         重新分配
        </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700">
+       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241220-003')">
         <i class="fas fa-file-alt mr-1">
         </i>
         详情
@@ -598,7 +598,7 @@
         </i>
         认领
        </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700">
+       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241210-004')">
         <i class="fas fa-file-alt mr-1">
         </i>
         详情
@@ -668,7 +668,7 @@
        -
       </td>
       <td class="text-sm whitespace-nowrap">
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700">
+       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241120-005')">
         <i class="fas fa-file-alt mr-1">
         </i>
         详情
@@ -738,12 +738,12 @@
        -
       </td>
       <td class="text-sm whitespace-nowrap">
-       <button class="text-blue-500 hover:text-blue-700 mx-1 font-medium">
+       <button class="text-blue-500 hover:text-blue-700 mx-1 font-medium" type="button" @click="goClientDetail('88820391')">
         <i class="fas fa-user-circle mr-1">
         </i>
         客户画像
        </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700">
+       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241101-006')">
         <i class="fas fa-file-alt mr-1">
         </i>
         详情
@@ -1000,5 +1000,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goLeadDetail = (id) => {
+  router.push({ path: '/crm/leads-detail', query: { id: String(id || '') } })
+}
+
+const goClientDetail = (id) => {
+  router.push({ path: '/crm/client-detail', query: { id: String(id || '') } })
+}
 </script>

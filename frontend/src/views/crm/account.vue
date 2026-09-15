@@ -3,16 +3,16 @@
     <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto w-full">
       <div class="flex-1 p-6 overflow-y-auto bg-white m-4 rounded-lg shadow-sm border border-gray-100 flex flex-col">
  <div class="flex justify-end gap-2 mb-4">
-  <a class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded text-xs font-medium transition-colors flex items-center" data-prd-drawer="" data-prd-title="账户管理页面PRD" href="#">
+  <button class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded text-xs font-medium transition-colors flex items-center" type="button" @click="openPagePrd">
    <i class="fas fa-file-alt mr-1.5">
    </i>
    查看页面PRD
-  </a>
-  <a class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-xs font-medium transition-colors flex items-center" href="#">
+  </button>
+  <router-link class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-xs font-medium transition-colors flex items-center" to="/kanban">
    <i class="fas fa-arrow-left mr-1.5">
    </i>
    返回需求看板
-  </a>
+  </router-link>
  </div>
  <div class="bg-white p-6 rounded shadow-sm mb-6 border border-gray-100">
   <div class="flex justify-between items-center mb-4">
@@ -60,17 +60,17 @@
     <span class="text-right w-[82px] shrink-0 change-highlight">
      账户类型：
     </span>
-    <select class="border rounded px-2 py-2 outline-none flex-1 change-highlight change-border">
-     <option>
+    <select v-model="accountType" class="border rounded px-2 py-2 outline-none flex-1 change-highlight change-border">
+     <option value="">
       全部
      </option>
-     <option>
+     <option value="standard">
       标准账户
      </option>
-     <option>
+     <option value="commission">
       佣金账户
      </option>
-     <option>
+     <option value="cent">
       美分账户
      </option>
     </select>
@@ -99,9 +99,9 @@
  </div>
  <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex-1 flex flex-col">
   <div class="px-5 py-4 border-b border-gray-100">
-   <a class="inline-flex items-center rounded bg-[#C4A373] px-4 py-2 text-sm font-medium text-white hover:bg-[#b09063] transition-colors" href="#">
+   <button class="inline-flex items-center rounded bg-[#C4A373] px-4 py-2 text-sm font-medium text-white hover:bg-[#b09063] transition-colors" type="button" @click="goMtOpen">
     MT开户
-   </a>
+   </button>
   </div>
   <div class="overflow-x-auto flex-1">
    <table class="w-full text-sm whitespace-nowrap">
@@ -166,7 +166,7 @@
        <span class="text-red-500 mr-2">
         ›
        </span>
-       <span class="text-blue-500 hover:underline cursor-pointer">
+      <span class="text-blue-500 hover:underline cursor-pointer" @click="goClientDetail('8100458')">
         test-杨均
        </span>
       </td>
@@ -174,7 +174,9 @@
        直客客户
       </td>
       <td class="px-5 py-4">
-       8100458
+       <button class="text-blue-600 hover:underline font-medium" type="button" @click="goAccountDetail('8100458')">
+        8100458
+       </button>
       </td>
       <td class="px-5 py-4">
        交易
@@ -242,7 +244,7 @@
        <span class="text-red-500 mr-2">
         ›
        </span>
-       <span class="text-blue-500 hover:underline cursor-pointer">
+      <span class="text-blue-500 hover:underline cursor-pointer" @click="goClientDetail('8300255')">
         test-杨均
        </span>
       </td>
@@ -250,7 +252,9 @@
        代理
       </td>
       <td class="px-5 py-4">
-       8300255
+       <button class="text-blue-600 hover:underline font-medium" type="button" @click="goAccountDetail('8300255')">
+        8300255
+       </button>
       </td>
       <td class="px-5 py-4">
        佣金
@@ -318,7 +322,7 @@
        <span class="mr-2">
         ›
        </span>
-       <span class="text-blue-500 hover:underline cursor-pointer">
+      <span class="text-blue-500 hover:underline cursor-pointer" @click="goClientDetail('9900456')">
         test-杨均
        </span>
       </td>
@@ -326,7 +330,9 @@
        直客客户
       </td>
       <td class="px-5 py-4 change-highlight">
-       9900456
+       <button class="text-blue-600 hover:underline font-medium" type="button" @click="goAccountDetail('9900456')">
+        9900456
+       </button>
       </td>
       <td class="px-5 py-4 change-highlight">
        交易
@@ -394,7 +400,7 @@
        <span class="text-red-500 mr-2">
         ›
        </span>
-       <span class="text-blue-500 hover:underline cursor-pointer">
+      <span class="text-blue-500 hover:underline cursor-pointer" @click="goClientDetail('8300254')">
         test-韩心
        </span>
       </td>
@@ -402,7 +408,9 @@
        代理
       </td>
       <td class="px-5 py-4">
-       8300254
+       <button class="text-blue-600 hover:underline font-medium" type="button" @click="goAccountDetail('8300254')">
+        8300254
+       </button>
       </td>
       <td class="px-5 py-4">
        佣金
@@ -476,5 +484,32 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { openPrd } from '@/store/prd'
+
+const router = useRouter()
+const route = useRoute()
+
+const accountType = ref('')
+
+onMounted(() => {
+  if (route.query.accountType === 'cent') accountType.value = 'cent'
+})
+
+const openPagePrd = () => {
+  openPrd('prd-cent-account-page-account-management.html', '账户管理 - PRD')
+}
+
+const goMtOpen = () => {
+  router.push('/crm/account-mt-open')
+}
+
+const goClientDetail = (id) => {
+  router.push({ path: '/crm/client-detail', query: { id: String(id || '') } })
+}
+
+const goAccountDetail = (id) => {
+  router.push({ path: '/crm/account-detail', query: { id: String(id || '') } })
+}
 </script>

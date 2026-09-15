@@ -3,9 +3,9 @@
     <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto w-full">
       <div class="flex-1 p-6 overflow-y-auto bg-white m-4 rounded-lg shadow-sm border border-gray-100 flex flex-col">
  <div class="flex justify-end mb-4">
-  <a class="text-xs text-blue-500 hover:text-blue-600 transition-colors" data-prd-drawer="" data-prd-title="客户列表页面PRD" href="#">
+  <button class="text-xs text-blue-500 hover:text-blue-600 transition-colors" type="button" @click="openPagePrd">
    查看页面PRD
-  </a>
+  </button>
  </div>
  <!-- 1. 顶部搜索过滤区 -->
  <div class="bg-white p-6 rounded shadow-sm mb-6 border border-gray-100">
@@ -268,9 +268,9 @@
        </div>
       </td>
       <td class="py-4 px-4">
-       <a class="text-blue-500 hover:underline block" href="#">
+       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('123123')">
         han111@g.com
-       </a>
+       </button>
        <div class="text-gray-500 mt-1">
         15213099999
        </div>
@@ -394,9 +394,9 @@
           操作
          </span>
          <div class="flex items-center gap-2">
-          <a class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" href="#">
+          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('123123')">
            查看
-          </a>
+          </button>
           <button class="text-blue-500 px-4 py-1 rounded text-xs hover:bg-blue-50 border border-blue-200 bg-white">
            修改代理
           </button>
@@ -430,9 +430,9 @@
        </div>
       </td>
       <td class="py-4 px-4">
-       <a class="text-blue-500 hover:underline block" href="#">
+       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('b13@qq.com')">
         b13@qq.com
-       </a>
+       </button>
        <div class="text-gray-500 mt-1">
         13670510921
        </div>
@@ -551,9 +551,9 @@
           操作
          </span>
          <div class="flex items-center gap-2">
-          <a class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" href="#">
+          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('b13@qq.com')">
            查看
-          </a>
+          </button>
           <button class="text-blue-500 px-4 py-1 rounded text-xs hover:bg-blue-50 border border-blue-200 bg-white">
            修改代理
           </button>
@@ -587,9 +587,9 @@
        </div>
       </td>
       <td class="py-4 px-4">
-       <a class="text-blue-500 hover:underline block" href="#">
+       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('b12@qq.com')">
         b12@qq.com
-       </a>
+       </button>
        <div class="text-gray-500 mt-1">
         13993242210
        </div>
@@ -682,9 +682,9 @@
           操作
          </span>
          <div class="flex items-center gap-2">
-          <a class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" href="#">
+          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('b12@qq.com')">
            查看
-          </a>
+          </button>
           <button class="text-blue-500 px-4 py-1 rounded text-xs hover:bg-blue-50 border border-blue-200 bg-white">
            修改代理
           </button>
@@ -750,5 +750,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { openPrd } from '@/store/prd'
+
+const router = useRouter()
+
+const openPagePrd = () => {
+  openPrd('prd-cent-account-page-client-list.html', '客户列表 - PRD')
+}
+
+const goClientDetail = (id) => {
+  router.push({ path: '/crm/client-detail', query: { id: String(id || '') } })
+}
 </script>

@@ -71,6 +71,13 @@
    </button>
   </div>
  </div>
+ <div class="mb-4 flex items-center justify-between">
+  <button class="inline-flex items-center gap-2 px-3 py-2 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors" type="button" @click="goBack">
+   <i class="fa-solid fa-arrow-left text-xs">
+   </i>
+   返回
+  </button>
+ </div>
  <!-- 主体内容分左右两列 -->
  <div class="flex flex-col lg:flex-row flex-1 gap-4 lg:min-h-0">
   <!-- 左侧：基础信息表单 -->
@@ -664,12 +671,12 @@
          关联客户账户
         </p>
         <div class="font-medium text-gray-800 flex items-center gap-3">
-         <a class="text-blue-600 hover:underline flex items-center gap-1" href="#">
+         <button class="text-blue-600 hover:underline flex items-center gap-1" type="button" @click="goClientDetail('88820391')">
           ID: 88820391
           <i class="fa-solid fa-external-link-alt text-[10px]">
           </i>
-         </a>
-         <button class="text-xs text-indigo-600 border border-indigo-200 bg-indigo-50 px-2 py-0.5 rounded hover:bg-indigo-100 transition-colors">
+         </button>
+         <button class="text-xs text-indigo-600 border border-indigo-200 bg-indigo-50 px-2 py-0.5 rounded hover:bg-indigo-100 transition-colors cursor-not-allowed opacity-60" type="button" disabled="">
           修改关联
          </button>
         </div>
@@ -734,9 +741,9 @@
        </div>
       </div>
       <div class="mt-5 text-center">
-       <a class="inline-block px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors shadow-sm text-sm" href="#">
+       <button class="inline-block px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors shadow-sm text-sm" type="button" @click="goClientDetail('88820391')">
         查看完整客户画像
-       </a>
+       </button>
       </div>
      </div>
      <!-- 手动关联区 (当未转化时显示，此处仅做UI占位演示) -->
@@ -767,5 +774,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goClientDetail = (id) => {
+  router.push({ path: '/crm/client-detail', query: { id: String(id || '') } })
+}
+
+const goBack = () => {
+  router.back()
+}
 </script>

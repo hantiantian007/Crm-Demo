@@ -1,17 +1,17 @@
 <template>
   <div class="flex h-full bg-mainBg overflow-hidden">
     <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto">
-      <main class="flex-1 overflow-y-auto p-6 bg-mainBg">
+      <div class="flex-1 p-6 bg-mainBg">
  <div class="w-full mx-auto flex flex-col gap-6">
   <div class="flex justify-between items-center">
    <h2 class="text-2xl font-bold text-gray-800">
-    商品编辑
+    {{ pageTitle }}
    </h2>
    <div class="flex gap-3">
-    <button class="px-5 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded shadow-sm text-sm font-medium transition-colors text-red-500 hover:text-red-700" onclick="window.location.href='admin-product-management.html'">
+    <button class="px-5 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded shadow-sm text-sm font-medium transition-colors text-red-500 hover:text-red-700" type="button" @click="cancel">
      取消
     </button>
-    <button class="px-6 py-2 bg-primary hover:bg-primaryHover text-white rounded shadow-sm text-sm font-medium transition-colors" onclick="saveProduct()">
+    <button class="px-6 py-2 bg-primary hover:bg-primaryHover text-white rounded shadow-sm text-sm font-medium transition-colors" type="button" @click="save">
      保存并发布
     </button>
    </div>
@@ -31,7 +31,7 @@
          *
         </span>
        </label>
-       <input class="w-full text-sm border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="输入商品名称" type="text" value="先锋一号"/>
+       <input v-model.trim="form.name" class="w-full text-sm border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="输入商品名称" type="text"/>
       </div>
       <div>
        <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -40,8 +40,8 @@
          *
         </span>
        </label>
-       <select class="w-full text-sm border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary bg-white">
-        <option selected="" value="virtual">
+       <select v-model="form.type" class="w-full text-sm border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary bg-white">
+        <option value="virtual">
          虚拟商品
         </option>
         <option value="physical">
@@ -57,7 +57,7 @@
         *
        </span>
       </label>
-      <textarea class="w-full text-sm border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-y min-h-[100px]" placeholder="输入商品简介，将展示在客户端商品列表卡片中" rows="3">顶级量化团队操盘，采用多因子对冲策略，穿越牛熊周期，为您提供稳健增值服务。</textarea>
+      <textarea v-model.trim="form.desc" class="w-full text-sm border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-y min-h-[100px]" placeholder="输入商品简介，将展示在客户端商品列表卡片中" rows="3"></textarea>
      </div>
      <div class="grid grid-cols-2 gap-6 mt-6">
       <div>
@@ -84,21 +84,20 @@
        <div class="flex flex-col gap-3 mt-2">
         <div class="flex gap-4">
          <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-          <input checked="" class="text-primary focus:ring-primary" name="status" onchange="toggleScheduleTime(this.value)" type="radio" value="immediate"/>
+          <input v-model="form.status" class="text-primary focus:ring-primary" name="status" type="radio" value="immediate"/>
           立即上架
          </label>
          <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-          <input class="text-primary focus:ring-primary" name="status" onchange="toggleScheduleTime(this.value)" type="radio" value="offline"/>
+          <input v-model="form.status" class="text-primary focus:ring-primary" name="status" type="radio" value="offline"/>
           暂不上架
          </label>
          <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-          <input class="text-primary focus:ring-primary" name="status" onchange="toggleScheduleTime(this.value)" type="radio" value="scheduled"/>
+          <input v-model="form.status" class="text-primary focus:ring-primary" name="status" type="radio" value="scheduled"/>
           定时上架
          </label>
         </div>
-        <!-- 定时上架时间选择器 (默认隐藏) -->
-        <div class="hidden mt-1 w-64" id="schedule-time-container">
-         <input class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" type="datetime-local"/>
+        <div v-if="form.status === 'scheduled'" class="mt-1 w-64">
+         <input v-model="form.scheduleTime" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" type="datetime-local"/>
          <p class="text-xs text-gray-500 mt-1">
           请选择到达该时间后自动上架
          </p>
@@ -177,15 +176,25 @@
       <h3 class="text-lg font-bold text-gray-800 border-l-4 border-primary pl-3">
        多套餐配置
       </h3>
-      <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded text-sm font-medium transition-colors flex items-center gap-1.5" onclick="addPackageRow()" type="button">
+      <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded text-sm font-medium transition-colors flex items-center gap-1.5" type="button" @click="addPackageRow">
        <i class="fas fa-plus text-xs">
        </i>
        添加套餐
       </button>
      </div>
      <div class="space-y-4" id="package_list">
-      <!-- 默认第一条套餐 -->
-      <div class="p-5 border border-gray-200 rounded-lg bg-gray-50 relative group package-item">
+      <div v-for="(pkg, idx) in packages" :key="pkg.id" class="p-5 border border-gray-200 rounded-lg bg-gray-50 relative group package-item">
+       <div class="flex items-start justify-end mb-3">
+        <button
+          v-if="packages.length > 1"
+          class="text-xs text-gray-500 hover:text-red-600 transition-colors"
+          type="button"
+          @click="removePackageRow(idx)"
+        >
+         <i class="fas fa-trash mr-1"></i>
+         删除
+        </button>
+       </div>
        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div>
          <label class="block text-xs font-medium text-gray-700 mb-1">
@@ -194,7 +203,7 @@
            *
           </span>
          </label>
-         <input class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="如: 基础版" type="text" value="基础版"/>
+         <input v-model.trim="pkg.name" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="如: 基础版" type="text"/>
         </div>
         <div>
          <label class="block text-xs font-medium text-gray-700 mb-1">
@@ -203,7 +212,7 @@
            *
           </span>
          </label>
-         <select class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary bg-white">
+         <select v-model="pkg.spec" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary bg-white">
           <option value="buyout">
            无时间限制
           </option>
@@ -213,7 +222,7 @@
           <option value="week">
            /周（订阅）
           </option>
-          <option selected="" value="month">
+          <option value="month">
            /月（订阅）
           </option>
           <option value="year">
@@ -234,7 +243,7 @@
             $
            </span>
           </div>
-          <input class="w-full text-sm border border-gray-300 rounded pl-6 pr-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="0.00" type="number" value="6000.00"/>
+          <input v-model.number="pkg.originalPrice" class="w-full text-sm border border-gray-300 rounded pl-6 pr-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="0.00" type="number"/>
          </div>
         </div>
         <div>
@@ -250,7 +259,7 @@
             $
            </span>
           </div>
-          <input class="w-full text-sm border border-gray-300 rounded pl-6 pr-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="0.00" type="number" value="5000.00"/>
+          <input v-model.number="pkg.price" class="w-full text-sm border border-gray-300 rounded pl-6 pr-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="0.00" type="number"/>
          </div>
         </div>
         <div>
@@ -260,13 +269,13 @@
            *
           </span>
          </label>
-         <input class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="默认999" type="number" value="999"/>
+         <input v-model.number="pkg.stock" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="默认999" type="number"/>
         </div>
         <div class="col-span-3">
          <label class="block text-xs font-medium text-gray-700 mb-1">
           限购份数 (可选)
          </label>
-         <input class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="如不限购请留空" type="number"/>
+         <input v-model.number="pkg.limit" class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary" placeholder="如不限购请留空" type="number"/>
         </div>
        </div>
       </div>
@@ -278,12 +287,7 @@
       商品详细介绍
      </h3>
      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white">
-      <!-- Quill Editor Container -->
-      <div class="h-64" id="editor-container">
-       <p>
-        欢迎购买先锋一号商品...
-       </p>
-      </div>
+      <textarea v-model.trim="form.detail" class="w-full h-64 p-4 text-sm outline-none resize-y" placeholder="输入商品详细介绍（演示数据）"></textarea>
      </div>
      <p class="text-xs text-gray-500 mt-2">
       支持图文排版，该内容将展示在客户端商品详情页中。
@@ -292,12 +296,57 @@
    </div>
   </div>
  </div>
-</main>
+</div>
 
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+
+const isEdit = computed(() => !!route.query.id)
+const pageTitle = computed(() => (isEdit.value ? '商品编辑' : '新增商品'))
+
+const form = ref({
+  name: isEdit.value ? '先锋一号' : '',
+  type: 'virtual',
+  desc: '顶级量化团队操盘，采用多因子对冲策略，穿越牛熊周期，为您提供稳健增值服务。',
+  status: 'immediate',
+  scheduleTime: '',
+  detail: '欢迎购买先锋一号商品...'
+})
+
+const packages = ref([
+  { id: 1, name: '基础版', spec: 'month', originalPrice: 6000, price: 5000, stock: 999, limit: null }
+])
+
+const addPackageRow = () => {
+  packages.value.push({
+    id: Date.now(),
+    name: '',
+    spec: 'month',
+    originalPrice: 0,
+    price: 0,
+    stock: 999,
+    limit: null
+  })
+}
+
+const removePackageRow = (idx) => {
+  packages.value.splice(idx, 1)
+}
+
+const cancel = () => {
+  router.push('/product/management')
+}
+
+const save = () => {
+  alert('保存成功（演示）')
+  router.push('/product/management')
+}
 </script>

@@ -20,12 +20,12 @@
         </div>
 <!-- 功能按钮与语言切换 -->
 <div class="flex items-center gap-4">
-<a class="flex items-center gap-1.5 bg-white/5 hover:bg-white/10 text-cyan-100 px-3 py-1.5 rounded-full transition-colors border border-cyan-300/20 text-xs font-medium" data-prd-drawer="" data-prd-title="注册页面PRD" href="#">
+<button class="flex items-center gap-1.5 bg-white/5 hover:bg-white/10 text-cyan-100 px-3 py-1.5 rounded-full transition-colors border border-cyan-300/20 text-xs font-medium disabled:opacity-60 disabled:cursor-not-allowed" type="button" disabled>
 <i class="fas fa-file-alt"></i> 查看页面PRD
-            </a>
-<a class="flex items-center gap-1.5 bg-white/5 hover:bg-white/10 text-gray-200 px-3 py-1.5 rounded-full transition-colors border border-white/10 text-xs font-medium" href="#">
+            </button>
+<router-link class="flex items-center gap-1.5 bg-white/5 hover:bg-white/10 text-gray-200 px-3 py-1.5 rounded-full transition-colors border border-white/10 text-xs font-medium" to="/kanban">
 <i class="fas fa-arrow-left"></i> 返回需求看板
-            </a>
+            </router-link>
 <!-- 语言切换 -->
 <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity ml-2">
 <img alt="CN" class="w-5 h-auto rounded-sm" src="https://flagcdn.com/w20/cn.png"/>
@@ -118,13 +118,13 @@
 </div>
 </div>
 <!-- 注册按钮 -->
-<button class="w-full bg-gradient-to-r from-brandBlue to-brandBlueDark hover:from-[#08c6f1] hover:to-[#0495c1] text-white font-bold py-3.5 rounded-2xl transition-all duration-200 mt-6 shadow-[0_16px_36px_rgba(0,180,219,0.28)]" type="button">
+<button class="w-full bg-gradient-to-r from-brandBlue to-brandBlueDark hover:from-[#08c6f1] hover:to-[#0495c1] text-white font-bold py-3.5 rounded-2xl transition-all duration-200 mt-6 shadow-[0_16px_36px_rgba(0,180,219,0.28)]" type="button" @click="goProfileFill">
                     提交注册
                 </button>
 <!-- 底部辅助信息 -->
 <div class="flex flex-col gap-3 text-sm mt-4">
 <div class="text-gray-400">
-                        已有账号？ <a class="text-brandCyan hover:text-brandCyanHover font-medium transition-colors" href="#">登录</a>
+                        已有账号？ <router-link class="text-brandCyan hover:text-brandCyanHover font-medium transition-colors" to="/login">登录</router-link>
 </div>
 <label class="flex items-center gap-2 cursor-pointer group">
 <div class="relative flex items-center justify-center w-4 h-4 rounded border border-gray-500 bg-transparent group-hover:border-brandCyan transition-colors">
@@ -132,7 +132,7 @@
 <i class="fas fa-check text-[10px] text-brandCyan opacity-0 peer-checked:opacity-100 transition-opacity"></i>
 </div>
 <span class="text-gray-400 text-xs">
-<a class="text-brandCyan hover:underline" href="#">《注册条款》</a>我本人知晓和同意上述所有条款
+<button class="text-brandCyan hover:underline disabled:opacity-60 disabled:cursor-not-allowed" type="button" disabled>《注册条款》</button>我本人知晓和同意上述所有条款
                         </span>
 </label>
 </div>
@@ -293,4 +293,11 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goProfileFill = () => {
+  router.push({ path: '/profile-fill' })
+}
 </script>

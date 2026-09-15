@@ -141,7 +141,7 @@
      </select>
     </div>
     <div class="flex items-end">
-     <button class="h-9 px-4 rounded-md bg-primary hover:bg-primaryHover text-white text-sm font-medium transition-colors">
+     <button class="h-9 px-4 rounded-md bg-primary hover:bg-primaryHover text-white text-sm font-medium transition-colors" type="button">
       搜索
      </button>
     </div>
@@ -150,7 +150,7 @@
   <section class="bg-white rounded-xl border border-gray-200 overflow-hidden">
    <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
     <div class="flex items-center gap-3">
-     <button class="inline-flex items-center px-3 py-1.5 rounded-md bg-primary text-white text-sm font-medium hover:bg-primaryHover transition-colors" onclick="openManageDepositModal()" type="button">
+     <button class="inline-flex items-center px-3 py-1.5 rounded-md bg-primary text-white text-sm font-medium hover:bg-primaryHover transition-colors" type="button" @click="openManageDepositModal">
       管理入金
      </button>
      <div class="text-xs text-gray-500">
@@ -211,8 +211,8 @@
       <div class="px-5 py-4 hover:bg-gray-50/80">
        <div class="list-grid">
         <div class="pt-1">
-         <button class="text-gray-400 hover:text-primary transition-colors" onclick="toggleDetail('deposit-detail-1', this)">
-          <i class="fa-solid fa-chevron-right text-xs transition-transform">
+         <button class="text-gray-400 hover:text-primary transition-colors" type="button" @click="toggleDetail('deposit-detail-1')">
+          <i class="fa-solid fa-chevron-right text-xs transition-transform" :class="{ 'rotate-90': expandedRows.includes('deposit-detail-1') }">
           </i>
          </button>
         </div>
@@ -271,7 +271,7 @@
        </div>
       </div>
      </div>
-     <div class="hidden px-8 pb-5 border-t border-gray-100" id="deposit-detail-1">
+     <div class="px-8 pb-5 border-t border-gray-100" v-show="expandedRows.includes('deposit-detail-1')">
       <div class="detail-panel">
        <div class="detail-row">
         <div class="detail-label">
@@ -291,10 +291,10 @@
          操作
         </div>
         <div class="flex items-center gap-2">
-         <button class="px-3 py-1.5 rounded border border-blue-300 bg-white text-blue-600 text-xs font-medium hover:bg-blue-50 transition-colors">
+         <button class="px-3 py-1.5 rounded border border-blue-300 bg-white text-blue-600 text-xs font-medium hover:bg-blue-50 transition-colors" type="button" @click="openAudit('9900761')">
           审核
          </button>
-         <button class="px-3 py-1.5 rounded bg-primary text-white text-xs font-medium hover:bg-primaryHover transition-colors">
+         <button class="px-3 py-1.5 rounded bg-primary text-white text-xs font-medium hover:bg-primaryHover transition-colors" type="button" @click="goDepositDetail('OUT_923832107870979672')">
           查看
          </button>
         </div>
@@ -307,8 +307,8 @@
       <div class="px-5 py-4 hover:bg-gray-50/80">
        <div class="list-grid">
         <div class="pt-1">
-         <button class="text-gray-400 hover:text-primary transition-colors" onclick="toggleDetail('deposit-detail-2', this)">
-          <i class="fa-solid fa-chevron-right text-xs transition-transform">
+         <button class="text-gray-400 hover:text-primary transition-colors" type="button" @click="toggleDetail('deposit-detail-2')">
+          <i class="fa-solid fa-chevron-right text-xs transition-transform" :class="{ 'rotate-90': expandedRows.includes('deposit-detail-2') }">
           </i>
          </button>
         </div>
@@ -370,7 +370,7 @@
        </div>
       </div>
      </div>
-     <div class="hidden px-8 pb-5 border-t border-gray-100" id="deposit-detail-2">
+     <div class="px-8 pb-5 border-t border-gray-100" v-show="expandedRows.includes('deposit-detail-2')">
       <div class="detail-panel">
        <div class="detail-row">
         <div class="detail-label">
@@ -390,10 +390,10 @@
          操作
         </div>
         <div class="flex items-center gap-2">
-         <button class="px-3 py-1.5 rounded border border-blue-300 bg-white text-blue-600 text-xs font-medium hover:bg-blue-50 transition-colors">
+         <button class="px-3 py-1.5 rounded border border-blue-300 bg-white text-blue-600 text-xs font-medium hover:bg-blue-50 transition-colors" type="button" @click="openAudit('8300105')">
           审核
          </button>
-         <button class="px-3 py-1.5 rounded bg-primary text-white text-xs font-medium hover:bg-primaryHover transition-colors">
+         <button class="px-3 py-1.5 rounded bg-primary text-white text-xs font-medium hover:bg-primaryHover transition-colors" type="button" @click="goDepositDetail('OUT_919847271934199098')">
           查看
          </button>
         </div>
@@ -406,10 +406,111 @@
  </div>
 </main>
 
+      <div class="modal-mask" v-show="isModalOpen">
+        <div class="w-full max-w-[620px] bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200">
+          <div class="h-14 px-6 border-b border-gray-200 flex items-center justify-between">
+            <div class="text-lg font-semibold text-gray-700">管理入金</div>
+            <button type="button" @click="closeManageDepositModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+          <div class="px-6 py-5 space-y-5">
+            <div>
+              <label class="block text-[15px] font-medium text-gray-600 mb-3">
+                <span class="change-highlight">*</span> 入金金额（美元）：
+              </label>
+              <input v-model="modalForm.amount" class="modal-input" placeholder="请输入美元金额" />
+            </div>
+            <div>
+              <label class="block text-[15px] font-medium text-gray-600 mb-3">
+                <span class="change-highlight">*</span> MT账号：
+              </label>
+              <input v-model="modalForm.mtAccount" class="modal-input" placeholder="请输入MT账号" />
+              <div class="mt-2 text-xs text-gray-400">请输入 MT账号 后自动识别入金单位（演示）。</div>
+            </div>
+            <div>
+              <label class="block text-[15px] font-medium text-gray-600 mb-3">
+                <span class="change-highlight">*</span> 确认账号：
+              </label>
+              <input v-model="modalForm.confirmAccount" class="modal-input" placeholder="确认账号" />
+            </div>
+            <div>
+              <label class="block text-[15px] font-medium text-gray-600 mb-3">
+                <span class="change-highlight">*</span> MT Comment：
+              </label>
+              <input v-model="modalForm.comment" maxlength="32" class="modal-input" placeholder="请输入（最多32字符）" />
+            </div>
+            <div>
+              <label class="block text-[15px] font-medium text-gray-600 mb-3">
+                <span class="change-highlight">*</span> 备注：
+              </label>
+              <textarea v-model="modalForm.remark" class="modal-textarea" placeholder="请输入备注"></textarea>
+            </div>
+          </div>
+          <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3 bg-gray-50">
+            <button type="button" @click="closeManageDepositModal" class="px-6 py-2 rounded-lg bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors">
+              取消
+            </button>
+            <button type="button" @click="closeManageDepositModal" class="px-6 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primaryHover transition-colors">
+              确认
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const expandedRows = ref([])
+const isModalOpen = ref(false)
+const modalForm = ref({
+  amount: '',
+  mtAccount: '',
+  confirmAccount: '',
+  comment: '',
+  remark: ''
+})
+
+const toggleDetail = (id) => {
+  if (expandedRows.value.includes(id)) {
+    expandedRows.value = expandedRows.value.filter((x) => x !== id)
+    return
+  }
+  expandedRows.value.push(id)
+}
+
+const openManageDepositModal = () => {
+  isModalOpen.value = true
+}
+
+const openAudit = (mtAccount) => {
+  modalForm.value = {
+    ...modalForm.value,
+    mtAccount: String(mtAccount || ''),
+    confirmAccount: String(mtAccount || '')
+  }
+  openManageDepositModal()
+}
+
+const goDepositDetail = (orderId) => {
+  router.push({ path: '/fund/deposit-detail', query: { orderId: String(orderId || '') } })
+}
+
+const closeManageDepositModal = () => {
+  isModalOpen.value = false
+  modalForm.value = {
+    amount: '',
+    mtAccount: '',
+    confirmAccount: '',
+    comment: '',
+    remark: ''
+  }
+}
 </script>

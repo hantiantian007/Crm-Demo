@@ -27,6 +27,9 @@
         <button @click="handleSearch" class="bg-[#d1a84f] hover:bg-[#b89241] text-white px-6 h-[32px] rounded text-sm font-medium transition-colors">
           搜索
         </button>
+        <button @click="goAddBankcard" class="bg-primary hover:bg-primaryHover text-white px-6 h-[32px] rounded text-sm font-medium transition-colors">
+          新增银行卡
+        </button>
       </div>
     </div>
 
@@ -52,7 +55,7 @@
           <tbody class="divide-y divide-gray-100">
             <tr v-for="(item, index) in tableData" :key="index" class="hover:bg-gray-50/50 transition-colors">
               <td class="py-4 px-4">
-                <a href="javascript:void(0)" class="text-gray-600 hover:text-blue-500 underline decoration-gray-300 underline-offset-2">{{ item.email }}</a>
+                <button type="button" class="text-gray-600 hover:text-blue-500 underline decoration-gray-300 underline-offset-2" @click="goDetail(item)">{{ item.email }}</button>
               </td>
               <td class="py-4 px-4 break-all">{{ item.bankCard }}</td>
               <td class="py-4 px-4">{{ item.accountName }}</td>
@@ -189,6 +192,9 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const searchForm = reactive({
   email: '',
@@ -337,6 +343,14 @@ const submitAudit = () => {
     result: auditForm.result
   })
   auditDialogVisible.value = false
+}
+
+const goDetail = (item) => {
+  router.push({ path: '/fund/bankcard-detail', query: { id: String(item?.bankCard || '') } })
+}
+
+const goAddBankcard = () => {
+  router.push('/fund/bankcard-add')
 }
 </script>
 

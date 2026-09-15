@@ -13,7 +13,7 @@
     <label class="text-[13px] text-gray-600 shrink-0">
      转入/转出账户:
     </label>
-    <input class="filter-input" placeholder="请输入MT账户" type="text"/>
+    <input v-model="filters.account" class="filter-input" placeholder="请输入MT账户" type="text"/>
    </div>
    <div class="flex items-center gap-3 col-span-1">
     <label class="text-[13px] text-gray-600 shrink-0">
@@ -132,7 +132,7 @@
      </tr>
     </thead>
     <tbody>
-     <tr>
+     <tr v-show="matchRow(['8300184', '8100324'])">
       <td>
        <span class="account-chip chip-live">
         美分
@@ -173,12 +173,12 @@
        2026-08-04 15:00:20
       </td>
       <td>
-       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500">
+       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500" type="button" @click="openDetail('detail_1')">
         查看详情
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchRow(['8350104', '8150105'])">
       <td>
        <span class="account-chip chip-demo">
         标准
@@ -219,12 +219,12 @@
        2026-05-08 18:06:57
       </td>
       <td>
-       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500">
+       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500" type="button" @click="openDetail('detail_2')">
         查看详情
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchRow(['8150114', '8150111'])">
       <td>
        <span class="account-chip chip-demo">
         标准
@@ -265,12 +265,12 @@
        2026-03-19 15:11:08
       </td>
       <td>
-       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500">
+       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500" type="button" @click="openDetail('detail_3')">
         查看详情
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchRow(['1810105', '1810103'])">
       <td>
        <span class="account-chip chip-live">
         美分
@@ -311,12 +311,12 @@
        2025-12-04 17:01:38
       </td>
       <td>
-       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500">
+       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500" type="button" @click="openDetail('detail_4')">
         查看详情
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchRow(['8310102', '1810103'])">
       <td>
        <span class="account-chip chip-live">
         美分
@@ -357,7 +357,7 @@
        2025-12-04 16:55:36
       </td>
       <td>
-       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500">
+       <button class="px-3 py-1 rounded text-white hover:bg-primaryBtnHover transition-colors border bg-blue-500 hover:bg-blue-600 border-blue-500" type="button" @click="openDetail('detail_5')">
         查看详情
        </button>
       </td>
@@ -368,10 +368,103 @@
  </section>
 </div>
 
+      <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" v-show="detailModal.visible">
+        <div class="w-full max-w-[520px] bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200">
+          <div class="h-14 px-6 border-b border-gray-200 flex items-center justify-between">
+            <div class="text-lg font-semibold text-gray-700">内部转账详情</div>
+            <button type="button" class="text-gray-400 hover:text-gray-600 transition-colors" @click="closeDetail">
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+          <div class="px-6 py-5 space-y-3 text-sm">
+            <div class="flex items-center justify-between">
+              <div class="text-gray-500">状态</div>
+              <div class="font-semibold text-gray-800">{{ detailModal.data.statusText }}</div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="text-gray-500">转出单号</div>
+              <div class="font-medium text-gray-800">{{ detailModal.data.outOrderNo }}</div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="text-gray-500">转入单号</div>
+              <div class="font-medium text-gray-800">{{ detailModal.data.inOrderNo }}</div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="text-gray-500">转账金额</div>
+              <div class="font-semibold text-gray-900 change-highlight">{{ detailModal.data.amount }}</div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="text-gray-500">申请时间</div>
+              <div class="font-medium text-gray-800">{{ detailModal.data.applyTime }}</div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="text-gray-500">失败原因</div>
+              <div class="font-medium text-gray-800">{{ detailModal.data.reason }}</div>
+            </div>
+          </div>
+          <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3 bg-gray-50">
+            <button type="button" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-colors" @click="closeDetail">
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const filters = reactive({
+  account: ''
+})
+
+watch(
+  () => route.query.account,
+  (value) => {
+    if (typeof value === 'string' && value.trim()) {
+      filters.account = value.trim()
+      return
+    }
+    if (Array.isArray(value) && value[0]) {
+      filters.account = String(value[0]).trim()
+      return
+    }
+    filters.account = ''
+  },
+  { immediate: true }
+)
+
+const normalizedAccount = computed(() => String(filters.account || '').trim())
+
+const matchRow = (accounts) => {
+  if (!normalizedAccount.value) return true
+  return (accounts || []).some((a) => String(a || '').includes(normalizedAccount.value))
+}
+
+const detailMap = {
+  detail_1: { statusText: '转账成功', outOrderNo: 'OUT_925279955741314450', inOrderNo: 'IN_925279955720342550', amount: '1,125.00USD', applyTime: '2026-08-04 15:00:20', reason: '-' },
+  detail_2: { statusText: '转账成功', outOrderNo: 'OUT_893436878825113770', inOrderNo: 'IN_893436878276726268', amount: '10.00USD', applyTime: '2026-05-08 18:06:57', reason: '-' },
+  detail_3: { statusText: '转账成功', outOrderNo: 'OUT_875273148629519344', inOrderNo: 'IN_875273148600156214', amount: '400.00USD', applyTime: '2026-03-19 15:11:08', reason: '-' },
+  detail_4: { statusText: '转账成功', outOrderNo: 'OUT_837250233216796339', inOrderNo: 'IN_837250233216794800', amount: '6.00USD', applyTime: '2025-12-04 17:01:38', reason: '-' },
+  detail_5: { statusText: '转账失败', outOrderNo: 'OUT_837248714950052973', inOrderNo: 'IN_837248714950050224', amount: '7.00USD', applyTime: '2025-12-04 16:55:36', reason: '目标账户异常，转账失败' }
+}
+
+const detailModal = ref({
+  visible: false,
+  data: detailMap.detail_1
+})
+
+const openDetail = (key) => {
+  detailModal.value = { visible: true, data: detailMap[key] || detailMap.detail_1 }
+}
+
+const closeDetail = () => {
+  detailModal.value = { visible: false, data: detailModal.value.data }
+}
 </script>

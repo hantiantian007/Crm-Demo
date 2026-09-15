@@ -4,10 +4,11 @@
       <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-mainBg">
  <div class="bg-[#F7F7F8] rounded-xl border border-gray-200 p-4 md:p-6 min-h-full">
   <div class="bg-white rounded-xl border border-gray-100 px-6 py-6 md:px-8 md:py-7 w-full">
-   <div class="pb-4 border-b border-gray-100">
-    <div class="text-lg font-semibold text-gray-800">
-     入金
-    </div>
+   <div class="pb-4 border-b border-gray-100 flex items-center justify-between gap-3">
+    <div class="text-lg font-semibold text-gray-800">入金</div>
+    <button class="px-3 py-1.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-medium transition-colors" type="button" @click="goDepositRecord">
+      入金记录
+    </button>
    </div>
    <div class="pt-6 max-w-[640px] space-y-5">
     <div>
@@ -161,5 +162,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goDepositRecord = () => {
+  router.push('/crm/client-deposit-record-cent-account')
+}
 </script>

@@ -73,7 +73,10 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const form = reactive({
   orderNo: '',
@@ -95,4 +98,15 @@ const handleReset = () => {
   form.startDate = ''
   form.endDate = ''
 }
+
+watch(
+  () => route.query.account,
+  (value) => {
+    const account = Array.isArray(value) ? value[0] : value
+    if (typeof account !== 'string' || !account.trim()) return
+    if (form.fromMt || form.toMt) return
+    form.fromMt = account.trim()
+  },
+  { immediate: true }
+)
 </script>

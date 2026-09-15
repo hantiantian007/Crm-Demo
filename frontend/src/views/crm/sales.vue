@@ -79,11 +79,11 @@
    <button class="bg-gray-400 hover:bg-gray-500 text-white px-5 py-1.5 rounded text-sm transition-colors shadow-sm">
     重置
    </button>
-   <a class="bg-primaryBtn hover:bg-primaryBtnHover text-white px-5 py-1.5 rounded text-sm transition-colors shadow-sm flex items-center gap-1 ml-2" href="#">
+   <router-link class="bg-primaryBtn hover:bg-primaryBtnHover text-white px-5 py-1.5 rounded text-sm transition-colors shadow-sm flex items-center gap-1 ml-2" to="/crm/sales-add">
     <i class="fa-solid fa-plus text-xs">
     </i>
     新增账户
-   </a>
+   </router-link>
   </div>
  </div>
  <!-- 2. 数据表格区 -->
@@ -154,10 +154,10 @@
       2025-01-01
      </td>
      <td class="text-sm">
-      <button class="mx-1 text-blue-500 hover:text-blue-700">
+      <button class="mx-1 text-blue-500 hover:text-blue-700" type="button" @click="goSalesDetail('S-001')">
        详情
       </button>
-      <button class="text-[#41B8AF] hover:text-[#359f97] mx-1">
+      <button class="text-[#41B8AF] hover:text-[#359f97] mx-1" type="button" @click="goSalesEdit('S-001')">
        编辑
       </button>
      </td>
@@ -192,10 +192,10 @@
       2025-01-01
      </td>
      <td class="text-sm">
-      <button class="mx-1 text-blue-500 hover:text-blue-700">
+      <button class="mx-1 text-blue-500 hover:text-blue-700" type="button" @click="goSalesDetail('S-002')">
        详情
       </button>
-      <button class="text-[#41B8AF] hover:text-[#359f97] mx-1">
+      <button class="text-[#41B8AF] hover:text-[#359f97] mx-1" type="button" @click="goSalesEdit('S-002')">
        编辑
       </button>
      </td>
@@ -381,5 +381,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goSalesDetail = (id) => {
+  router.push({ path: '/crm/sales-detail', query: { id: String(id || '') } })
+}
+
+const goSalesEdit = (id) => {
+  router.push({ path: '/crm/sales-edit', query: { id: String(id || '') } })
+}
 </script>
