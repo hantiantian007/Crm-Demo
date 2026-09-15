@@ -19,7 +19,7 @@
         <i class="fa-solid fa-house w-6 text-center text-lg mr-2"></i>
         <template #title>首页</template>
       </el-menu-item>
-      <el-menu-item v-if="!isClientRole" index="/agent-home">
+      <el-menu-item index="/agent-home">
         <i class="fa-solid fa-chart-line w-6 text-center text-lg mr-2"></i>
         <template #title>代理首页</template>
       </el-menu-item>

@@ -1,92 +1,10 @@
 <template>
   <div
     ref="homeScrollRef"
-    :class="[
-      'flex flex-col flex-1 min-h-0 custom-scrollbar',
-      isAgentRole ? 'bg-mainBg overflow-hidden' : 'overflow-y-auto bg-gray-50 p-4 md:p-6'
-    ]"
+    class="flex flex-col flex-1 min-h-0 custom-scrollbar overflow-y-auto bg-gray-50 p-4 md:p-6"
   >
-    <div v-if="isAgentRole" class="flex-1 min-h-0">
-      <AgentHome />
-    </div>
-
-    <div v-else class="w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px] gap-6">
+    <div class="w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px] gap-6">
       <div class="min-w-0 flex flex-col gap-6">
-        <div class="flex flex-col gap-6">
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="p-6">
-              <div class="flex items-start justify-between gap-6">
-                <div class="flex items-start gap-4 min-w-0">
-                  <div class="w-12 h-12 rounded-xl bg-[#C19B5E] text-white flex items-center justify-center flex-shrink-0">
-                    <i class="fa-regular fa-credit-card text-xl"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <div class="text-base font-bold text-gray-900 truncate">星际起航免费开卡</div>
-                    <div class="text-xs text-orange-500 font-medium mt-1 truncate">新用户开户即送100USD赠金</div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3 flex-shrink-0">
-                  <div class="flex items-center gap-2 text-xs font-medium">
-                    <span class="w-1.5 h-1.5 rounded-full" :class="activityJoined ? 'bg-emerald-500' : 'bg-gray-300'"></span>
-                    <span :class="activityJoined ? 'text-emerald-600' : 'text-gray-500'">{{ activityJoined ? '已参与' : '未参加活动' }}</span>
-                  </div>
-                  <button
-                    class="h-8 px-4 rounded-md text-white text-xs font-bold transition-colors"
-                    :class="activityJoined ? 'bg-gray-300 cursor-not-allowed' : 'bg-rose-500 hover:bg-rose-600'"
-                    :disabled="activityJoined"
-                    type="button"
-                    @click="handleJoinActivity"
-                  >
-                    {{ activityJoined ? '已参与' : '立即参与' }}
-                  </button>
-                </div>
-              </div>
-
-              <div v-if="activityJoined" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-gray-500">
-                <div class="flex items-center gap-2">
-                  <span class="text-gray-400">参与 MT 账号</span>
-                  <span class="font-medium text-gray-700">{{ joinedMtAccount }}</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-gray-400">参与时间</span>
-                  <span class="font-medium text-gray-700">{{ joinedAt }}</span>
-                </div>
-              </div>
-
-              <div class="mt-5 space-y-4">
-                <div class="flex items-center justify-between gap-4">
-                  <div class="text-xs text-emerald-600 font-medium flex items-center gap-2">
-                    <i class="fa-solid fa-dollar-sign"></i>
-                    净入金
-                  </div>
-                  <div class="text-xs font-bold text-gray-800">${{ effectiveNetDeposit }} <span class="text-gray-400 font-normal">/ $1,000</span></div>
-                </div>
-                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-emerald-400 rounded-full" :style="{ width: `${netDepositProgress}%` }"></div>
-                </div>
-
-                <div class="flex items-center justify-between gap-4">
-                  <div class="text-xs text-blue-600 font-medium flex items-center gap-2">
-                    <i class="fa-solid fa-chart-line"></i>
-                    交易手数
-                  </div>
-                  <div class="text-xs font-bold text-gray-800">{{ effectiveTradeLots }} <span class="text-gray-400 font-normal">/ 10 Lot</span></div>
-                </div>
-                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-blue-500 rounded-full" :style="{ width: `${tradeLotsProgress}%` }"></div>
-                </div>
-
-                <div class="bg-orange-50 border border-orange-200 text-orange-600 px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-2">
-                  <i class="fa-solid fa-circle-info mt-0.5"></i>
-                  <span>
-                    活动进度从申请成功时间开始统计，申请前产生的净入金及交易手数不计入本次活动。
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex justify-between items-start">
             <div>
@@ -108,24 +26,6 @@
             <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500">
               <i class="fa-solid fa-file-invoice-dollar"></i>
             </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <p class="text-sm text-gray-500 font-medium mb-4">快捷入口</p>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <router-link to="/fund/deposit" class="h-10 rounded-md border border-gray-200 bg-white text-xs text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-              <i class="fa-solid fa-arrow-down text-[13px] text-gray-500"></i>
-              <span>入金</span>
-            </router-link>
-            <router-link to="/fund/withdraw" class="h-10 rounded-md border border-gray-200 bg-white text-xs text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-              <i class="fa-solid fa-arrow-up text-[13px] text-gray-500"></i>
-              <span>出金</span>
-            </router-link>
-            <router-link to="/report/trade-record" class="h-10 rounded-md border border-gray-200 bg-white text-xs text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-              <i class="fa-solid fa-list text-[13px] text-gray-500"></i>
-              <span>交易记录</span>
-            </router-link>
           </div>
         </div>
 
@@ -175,24 +75,56 @@
       </div>
 
       <div class="min-w-0 flex flex-col gap-6">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex-1 min-h-[200px]">
-          <div class="flex justify-between items-center mb-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4">
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <p class="text-sm text-gray-500 font-medium">活动信息</p>
+              <div class="mt-2 flex items-center gap-2 min-w-0">
+                <span class="w-2 h-2 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
+                <p class="text-sm font-medium text-gray-800 truncate">先锋一号 50,000 USD 体验金活动</p>
+              </div>
+            </div>
+            <button
+              class="mt-[22px] h-7 px-3 rounded-md text-white text-xs font-bold transition-colors flex-shrink-0"
+              :class="activityJoined ? 'bg-gray-300 cursor-not-allowed' : 'bg-rose-500 hover:bg-rose-600'"
+              :disabled="activityJoined"
+              type="button"
+              @click="handleJoinActivity"
+            >
+              {{ activityJoined ? '已参与' : '立即参与' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4">
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-gray-500">先锋盈利金额：</span>
+            <span class="text-gray-700 font-medium">-</span>
+          </div>
+          <div class="mt-3 flex items-center justify-between text-sm">
+            <span class="text-gray-500">先锋活动奖励：</span>
+            <span class="text-gray-700 font-medium">-</span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4">
+          <div class="flex justify-between items-center mb-2">
             <p class="text-sm text-gray-500 font-medium">通知公告</p>
             <a href="#" class="text-xs text-gray-400 hover:text-gray-600">查看更多 ></a>
           </div>
-          <div class="flex justify-between items-center group cursor-pointer mt-2 py-2">
-            <div class="flex items-center gap-2">
-              <span class="w-1.5 h-1.5 bg-[#d1a84f] rounded-full"></span>
-              <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors">关于美国大选期间保证金调整通知</p>
+          <div class="flex justify-between items-center group cursor-pointer mt-1 py-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-1.5 h-1.5 bg-[#d1a84f] rounded-full flex-shrink-0"></span>
+              <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors truncate">关于美国大选期间保证金调整通知</p>
             </div>
-            <span class="text-xs text-gray-400">11-04</span>
+            <span class="text-xs text-gray-400 flex-shrink-0">11-04</span>
           </div>
-          <div class="flex justify-between items-center group cursor-pointer mt-2 py-2">
-            <div class="flex items-center gap-2">
-              <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
-              <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors">感恩节假期交易时间调整</p>
+          <div class="flex justify-between items-center group cursor-pointer mt-1 py-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-1.5 h-1.5 bg-gray-300 rounded-full flex-shrink-0"></span>
+              <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors truncate">感恩节假期交易时间调整</p>
             </div>
-            <span class="text-xs text-gray-400">10-28</span>
+            <span class="text-xs text-gray-400 flex-shrink-0">10-28</span>
           </div>
         </div>
       </div>
@@ -200,122 +132,63 @@
 
     <el-dialog
       v-model="joinDialogVisible"
-      title="申请参与 PCard 活动"
+      title="提示"
       width="92%"
       :style="{ maxWidth: '560px' }"
       :close-on-click-modal="false"
       destroy-on-close
     >
-      <div class="space-y-4 text-xs text-gray-600">
-        <div class="flex items-center justify-between">
-          <div class="text-[11px] text-gray-400">用户类型</div>
-          <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
-            <button
-              type="button"
-              class="px-3 py-1 rounded-md text-xs font-medium transition-all"
-              :class="isNewUser ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
-              @click="userType = 'new'"
-            >
-              新用户
-            </button>
-            <button
-              type="button"
-              class="px-3 py-1 rounded-md text-xs font-medium transition-all"
-              :class="!isNewUser ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
-              @click="userType = 'old'"
-            >
-              老用户
-            </button>
-          </div>
+      <div class="px-4">
+        <div class="text-center text-base text-gray-700 font-medium py-10">
+          您正在申请参加先锋一号 50,000 USD 体验金活动
         </div>
 
-        <div class="grid grid-cols-1 gap-3">
-          <div class="flex items-start gap-3">
-            <span class="w-16 text-gray-400 shrink-0">活动名称</span>
-            <span class="font-medium text-gray-800">星际起航免费开卡</span>
+        <div class="space-y-5 pb-8">
+          <div class="flex items-center gap-4">
+            <div class="w-20 text-sm text-gray-600">
+              体验账号 <span class="text-red-500">*</span>
+            </div>
+            <el-input v-model="demoAccount" placeholder="请输入体验账号" />
           </div>
-          <div class="flex items-start gap-3">
-            <span class="w-16 text-gray-400 shrink-0">活动说明</span>
-            <span class="font-medium text-gray-800">
-              {{ isNewUser ? '新用户开户即送100USD赠金，免费办理星际信用卡' : '参与活动可免费办理星际信用卡' }}
-            </span>
-          </div>
-          <div class="flex items-start gap-3">
-            <span class="w-16 text-gray-400 shrink-0">活动条件</span>
-            <div class="space-y-1">
-              <div>净入金达到 <span class="font-medium text-gray-800">$1,000</span></div>
-              <div>累计交易达到 <span class="font-medium text-gray-800">10 Lot</span></div>
-              <div>双条件达标即可免费办理 <span class="font-medium text-gray-800">PCard</span></div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-20 text-sm text-gray-600 pt-1">
+              上传图片
+            </div>
+            <div class="flex-1">
+              <input class="w-full text-sm text-gray-600" type="file" accept="image/*" @change="onScreenshotChange" />
+              <div v-if="screenshotUrl" class="mt-3">
+                <a :href="screenshotUrl" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline">
+                  <img :src="screenshotUrl" alt="" class="w-24 h-16 object-cover rounded border border-gray-200" />
+                  <span class="text-xs">{{ screenshotName }}</span>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="bg-orange-50 border border-orange-200 text-orange-700 px-4 py-3 rounded-lg text-xs leading-relaxed">
-          {{ isNewUser ? '将使用本次享受赠金的 MT 账号参与活动，进度从申请成功时间开始统计。' : '老用户参与活动不享受开户赠金，请选择一个 MT 账号参加活动。' }}
-        </div>
-
-        <div v-if="!isNewUser" class="space-y-3">
-          <div class="text-gray-500">参与 MT 账号</div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex justify-center pt-2">
             <button
-              v-for="mt in displayMtAccounts"
-              :key="mt"
               type="button"
-              class="p-3 rounded-lg border text-left transition-colors"
-              :class="selectedJoinMtAccount === mt ? 'border-[#d1a84f] bg-amber-50' : 'border-gray-200 bg-white hover:bg-gray-50'"
-              @click="selectedJoinMtAccount = mt"
+              class="h-10 px-10 rounded-md text-white text-sm font-medium transition-colors"
+              :class="joinConfirmDisabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#d1a84f] hover:bg-[#b89241]'"
+              :disabled="joinConfirmDisabled"
+              @click="confirmJoinActivity"
             >
-              <div class="flex items-center justify-between gap-3">
-                <div class="font-medium text-gray-800">{{ mt }}</div>
-                <span class="w-3 h-3 rounded-full border flex items-center justify-center" :class="selectedJoinMtAccount === mt ? 'border-[#d1a84f]' : 'border-gray-300'">
-                  <span class="w-1.5 h-1.5 rounded-full" :class="selectedJoinMtAccount === mt ? 'bg-[#d1a84f]' : 'bg-transparent'"></span>
-                </span>
-              </div>
+              报名
             </button>
-          </div>
-        </div>
-
-        <div v-else class="space-y-2">
-          <div class="text-gray-500">参与 MT 账号</div>
-          <div class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-200 bg-amber-50 text-amber-700">
-            <span class="w-2 h-2 rounded-full bg-[#d1a84f]"></span>
-            <span class="text-sm font-bold tracking-wide">{{ bonusMtAccount }}</span>
           </div>
         </div>
       </div>
-
-      <template #footer>
-        <div class="flex justify-end gap-3">
-          <button
-            type="button"
-            class="h-9 px-4 rounded-md border border-gray-200 bg-white text-gray-600 text-xs font-medium hover:bg-gray-50"
-            @click="joinDialogVisible = false"
-          >
-            取消
-          </button>
-          <button
-            type="button"
-            class="h-9 px-5 rounded-md text-white text-xs font-bold transition-colors"
-            :class="joinConfirmDisabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#d1a84f] hover:bg-[#b89241]'"
-            :disabled="joinConfirmDisabled"
-            @click="confirmJoinActivity"
-          >
-            确认参与
-          </button>
-        </div>
-      </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref } from 'vue'
-import AgentHome from '@/views/agent-home.vue'
-import { demoRoleState } from '@/store/demoRole'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const homeScrollRef = ref(null)
-
-const isAgentRole = computed(() => demoRoleState.role === 'agent')
+const route = useRoute()
 
 const activityJoined = ref(false)
 const netDeposit = ref(0)
@@ -324,12 +197,9 @@ const tradeLots = ref(0)
 const tradeLotsTarget = ref(10)
 
 const joinDialogVisible = ref(false)
-const userType = ref('new')
-const isNewUser = computed(() => userType.value === 'new')
-const mockMtAccounts = ref(['MT100001', 'MT100002', 'MT100003', 'MT100004', 'MT100005'])
-const displayMtAccounts = computed(() => mockMtAccounts.value.slice(0, 5))
-const bonusMtAccount = ref('MT100001')
-const selectedJoinMtAccount = ref('')
+const demoAccount = ref('')
+const screenshotUrl = ref('')
+const screenshotName = ref('')
 
 const joinedMtAccount = ref('-')
 const joinedAt = ref('-')
@@ -369,19 +239,22 @@ const formatDateTime = (date) => {
 }
 
 const joinConfirmDisabled = computed(() => {
-  if (isNewUser.value) return false
-  return !selectedJoinMtAccount.value
+  if (!demoAccount.value.trim()) return true
+  if (!screenshotUrl.value) return true
+  return false
 })
 
 const handleJoinActivity = () => {
   if (activityJoined.value) return
-  selectedJoinMtAccount.value = ''
+  demoAccount.value = ''
+  screenshotUrl.value = ''
+  screenshotName.value = ''
   joinDialogVisible.value = true
 }
 
 const confirmJoinActivity = () => {
   if (joinConfirmDisabled.value) return
-  const mt = isNewUser.value ? bonusMtAccount.value : selectedJoinMtAccount.value
+  const mt = demoAccount.value.trim()
   const now = formatDateTime(new Date())
   joinedMtAccount.value = mt
   joinedAt.value = now
@@ -389,6 +262,19 @@ const confirmJoinActivity = () => {
   joinStartTradeLots.value = tradeLots.value
   activityJoined.value = true
   joinDialogVisible.value = false
+  window.alert('申请已提交，等待审核')
+}
+
+const onScreenshotChange = (e) => {
+  const input = e.target
+  const file = input?.files?.[0]
+  if (!file) {
+    screenshotUrl.value = ''
+    screenshotName.value = ''
+    return
+  }
+  screenshotName.value = file.name
+  screenshotUrl.value = URL.createObjectURL(file)
 }
 
 const scrollToTop = () => {
@@ -397,6 +283,16 @@ const scrollToTop = () => {
   el.scrollTop = 0
   el.scrollLeft = 0
 }
+
+watch(
+  () => route.query.join,
+  (value) => {
+    const join = Array.isArray(value) ? value[0] : value
+    if (join !== 'pioneer-one-50000') return
+    handleJoinActivity()
+  },
+  { immediate: true }
+)
 
 onMounted(async () => {
   await nextTick()

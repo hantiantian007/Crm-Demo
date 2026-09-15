@@ -135,7 +135,7 @@
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
-<button type="button" class="text-gray-400 text-xs font-medium transition-colors cursor-not-allowed" disabled>原型</button>
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/home?join=pioneer-one-50000" target="_blank">原型</a>
 <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPioneerOnePrd">
 <i class="fas fa-file-alt"></i> PRD
 </button>
