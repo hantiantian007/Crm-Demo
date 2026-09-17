@@ -16,124 +16,6 @@
         </div>
       </div>
 
-      <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-4">
-        <div class="flex items-start justify-between gap-4 flex-wrap">
-          <div class="flex items-center gap-2 text-[11px] text-gray-500">
-            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
-            <span class="font-medium text-gray-700">MT账户概览</span>
-          </div>
-
-          <div class="flex items-center gap-3 flex-wrap justify-end">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] text-gray-500">范围</span>
-              <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
-              <button
-                v-for="t in mtScopeTabs"
-                :key="t.key"
-                type="button"
-                class="px-3 py-1 rounded-md text-xs font-medium transition-all"
-                :class="mtScopeKey === t.key ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
-                @click="mtScopeKey = t.key"
-              >
-                {{ t.label }}
-              </button>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] text-gray-500">时间</span>
-              <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
-              <button
-                v-for="t in mtTimeTabs"
-                :key="t.key"
-                type="button"
-                class="px-3 py-1 rounded-md text-xs font-medium transition-all"
-                :class="mtTimeKey === t.key ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
-                @click="mtTimeKey = t.key"
-              >
-                {{ t.label }}
-              </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="mtTimeKey === 'custom'" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div class="flex items-center gap-2">
-            <div class="text-gray-500 w-[52px] shrink-0 text-right">开始：</div>
-            <input v-model="mtCustomStart" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
-          </div>
-          <div class="flex items-center gap-2">
-            <div class="text-gray-500 w-[52px] shrink-0 text-right">结束：</div>
-            <input v-model="mtCustomEnd" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
-          </div>
-        </div>
-
-        <div class="mt-3">
-          <div class="text-[11px] font-medium text-gray-700">当前数据</div>
-
-          <div class="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-            <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-              <div class="flex items-center justify-between gap-2">
-                <div class="text-[11px] text-gray-500">MT余额</div>
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
-              </div>
-              <div class="mt-0.5 font-mono font-bold text-base text-gray-900">$ {{ formatMoney(mtRealtime.balance) }}</div>
-            </div>
-
-            <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-              <div class="flex items-center justify-between gap-2">
-                <div class="text-[11px] text-gray-500">持仓量</div>
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
-              </div>
-              <div class="mt-0.5 font-mono font-bold text-base text-gray-900">{{ formatLots(mtRealtime.positionLots) }} Lot</div>
-            </div>
-
-            <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-              <div class="flex items-center justify-between gap-2">
-                <div class="text-[11px] text-gray-500">浮动盈亏</div>
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
-              </div>
-              <div class="mt-0.5 font-mono font-bold text-base" :class="pnlClass(mtRealtime.floatingPnl)">$ {{ formatMoney(mtRealtime.floatingPnl) }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-4 pt-4 border-t border-gray-100">
-          <div class="text-[11px] font-medium text-gray-700">期间数据</div>
-
-          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-              <div class="text-[11px] text-gray-500">入金 / 出金</div>
-              <div class="mt-2 space-y-1">
-                <div class="flex items-center justify-between gap-3">
-                  <span class="text-gray-500">{{ mtPeriodLabel }}入金 $</span>
-                  <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtPeriod.deposit) }}</span>
-                </div>
-                <div class="flex items-center justify-between gap-3">
-                  <span class="text-gray-500">{{ mtPeriodLabel }}出金 $</span>
-                  <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtPeriod.withdraw) }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-              <div class="text-[11px] text-gray-500">交易量 / 平仓盈亏</div>
-              <div class="mt-2 space-y-1">
-                <div class="flex items-center justify-between gap-3">
-                  <span class="text-gray-500">{{ mtPeriodLabel }}交易量 Lot</span>
-                  <span class="font-mono font-semibold text-gray-800">{{ formatLots(mtPeriod.tradingLots) }} Lot</span>
-                </div>
-                <div class="flex items-center justify-between gap-3">
-                  <span class="text-gray-500">{{ mtPeriodLabel }}平仓盈亏 $</span>
-                  <span class="font-mono font-semibold" :class="pnlClass(mtPeriod.closedPnl)">$ {{ formatMoney(mtPeriod.closedPnl) }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="flex gap-4">
         <div class="flex-1 min-w-0 flex flex-col gap-4">
           <div v-if="isActivityOngoing" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -184,21 +66,6 @@
               </div>
             </div>
 
-            <div class="mt-3 text-[11px] text-gray-500 flex items-center gap-4 flex-wrap">
-              <div class="flex items-center gap-2">
-                <span class="text-gray-400">旗下参与</span>
-                <span class="font-medium text-gray-700 font-mono">{{ formatInt(activity.participants) }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-gray-400">已达标</span>
-                <span class="font-medium text-gray-700 font-mono">{{ formatInt(activity.achieved) }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-gray-400">接近达标</span>
-                <span class="font-medium text-gray-700 font-mono">{{ formatInt(activity.nearGoal) }}</span>
-              </div>
-            </div>
-
             <div class="mt-5 space-y-4">
               <div class="flex items-center justify-between gap-4">
                 <div class="text-xs text-emerald-600 font-medium flex items-center gap-2">
@@ -228,6 +95,124 @@
               </div>
             </div>
           </div>
+          </div>
+
+          <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-4">
+            <div class="flex items-start justify-between gap-4 flex-wrap">
+              <div class="flex items-center gap-2 text-[11px] text-gray-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                <span class="font-medium text-gray-700">MT账户概览</span>
+              </div>
+
+              <div class="flex items-center gap-3 flex-wrap justify-end">
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] text-gray-500">范围</span>
+                  <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
+                  <button
+                    v-for="t in mtScopeTabs"
+                    :key="t.key"
+                    type="button"
+                    class="px-3 py-1 rounded-md text-xs font-medium transition-all"
+                    :class="mtScopeKey === t.key ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
+                    @click="mtScopeKey = t.key"
+                  >
+                    {{ t.label }}
+                  </button>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] text-gray-500">时间</span>
+                  <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
+                  <button
+                    v-for="t in mtTimeTabs"
+                    :key="t.key"
+                    type="button"
+                    class="px-3 py-1 rounded-md text-xs font-medium transition-all"
+                    :class="mtTimeKey === t.key ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
+                    @click="mtTimeKey = t.key"
+                  >
+                    {{ t.label }}
+                  </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="mtTimeKey === 'custom'" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="flex items-center gap-2">
+                <div class="text-gray-500 w-[52px] shrink-0 text-right">开始：</div>
+                <input v-model="mtCustomStart" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="text-gray-500 w-[52px] shrink-0 text-right">结束：</div>
+                <input v-model="mtCustomEnd" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <div class="text-[11px] font-medium text-gray-700">当前数据</div>
+
+              <div class="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="text-[11px] text-gray-500">MT余额</div>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
+                  </div>
+                  <div class="mt-0.5 font-mono font-bold text-base text-gray-900">$ {{ formatMoney(mtRealtime.balance) }}</div>
+                </div>
+
+                <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="text-[11px] text-gray-500">持仓量</div>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
+                  </div>
+                  <div class="mt-0.5 font-mono font-bold text-base text-gray-900">{{ formatLots(mtRealtime.positionLots) }} Lot</div>
+                </div>
+
+                <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="text-[11px] text-gray-500">浮动盈亏</div>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
+                  </div>
+                  <div class="mt-0.5 font-mono font-bold text-base" :class="pnlClass(mtRealtime.floatingPnl)">$ {{ formatMoney(mtRealtime.floatingPnl) }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <div class="text-[11px] font-medium text-gray-700">期间数据</div>
+
+              <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
+                  <div class="text-[11px] text-gray-500">入金 / 出金</div>
+                  <div class="mt-2 space-y-1">
+                    <div class="flex items-center justify-between gap-3">
+                      <span class="text-gray-500">{{ mtPeriodLabel }}入金 $</span>
+                      <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtPeriod.deposit) }}</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-3">
+                      <span class="text-gray-500">{{ mtPeriodLabel }}出金 $</span>
+                      <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtPeriod.withdraw) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
+                  <div class="text-[11px] text-gray-500">交易量 / 平仓盈亏</div>
+                  <div class="mt-2 space-y-1">
+                    <div class="flex items-center justify-between gap-3">
+                      <span class="text-gray-500">{{ mtPeriodLabel }}交易量 Lot</span>
+                      <span class="font-mono font-semibold text-gray-800">{{ formatLots(mtPeriod.tradingLots) }} Lot</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-3">
+                      <span class="text-gray-500">{{ mtPeriodLabel }}平仓盈亏 $</span>
+                      <span class="font-mono font-semibold" :class="pnlClass(mtPeriod.closedPnl)">$ {{ formatMoney(mtPeriod.closedPnl) }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="bg-white border border-gray-100 rounded-lg shadow-sm">
@@ -324,6 +309,39 @@
                     <td class="px-3 py-2 font-mono">{{ a.agentId }}</td>
                     <td class="px-3 py-2">{{ a.agentName }}</td>
                     <td class="px-3 py-2 text-right font-mono">{{ formatInt(a.customers) }}</td>
+                    <td class="px-3 py-2 text-right font-mono">{{ formatMoney(a.monthCommission) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-100 rounded-lg shadow-sm">
+          <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+            <div class="text-sm font-bold text-gray-800">下级代理列表</div>
+            <div class="text-[11px] text-gray-400">演示数据</div>
+          </div>
+          <div class="p-5">
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs min-w-[980px]">
+                <thead class="bg-gray-50 text-gray-600 border border-gray-100">
+                  <tr>
+                    <th class="text-left font-medium px-3 py-2">代理账号</th>
+                    <th class="text-left font-medium px-3 py-2">代理名称</th>
+                    <th class="text-right font-medium px-3 py-2">下级客户数</th>
+                    <th class="text-right font-medium px-3 py-2">本月净入金($)</th>
+                    <th class="text-right font-medium px-3 py-2">本月交易量(Lot)</th>
+                    <th class="text-right font-medium px-3 py-2">本月返佣($)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50 border border-gray-100 border-t-0 text-gray-700">
+                  <tr v-for="a in subAgentRows" :key="a.agentId" class="hover:bg-gray-50/60 transition-colors">
+                    <td class="px-3 py-2 font-mono">{{ a.agentId }}</td>
+                    <td class="px-3 py-2">{{ a.agentName }}</td>
+                    <td class="px-3 py-2 text-right font-mono">{{ formatInt(a.customers) }}</td>
+                    <td class="px-3 py-2 text-right font-mono">{{ formatMoney(a.netDeposit) }}</td>
+                    <td class="px-3 py-2 text-right font-mono">{{ formatLots(a.tradingLots) }}</td>
                     <td class="px-3 py-2 text-right font-mono">{{ formatMoney(a.monthCommission) }}</td>
                   </tr>
                 </tbody>
@@ -729,6 +747,14 @@ const topAgents = [
   { agentId: 'IB1020', agentName: 'jack', customers: 260, monthCommission: 3680.5 },
   { agentId: 'IB1108', agentName: 'Mikey', customers: 190, monthCommission: 2410.2 },
   { agentId: 'IB1217', agentName: 'Luna', customers: 165, monthCommission: 1980.0 }
+]
+
+const subAgentRows = [
+  { agentId: 'IB1020', agentName: 'jack', customers: 260, netDeposit: 68500.0, tradingLots: 312.5, monthCommission: 3680.5 },
+  { agentId: 'IB1108', agentName: 'Mikey', customers: 190, netDeposit: 52300.0, tradingLots: 268.35, monthCommission: 2410.2 },
+  { agentId: 'IB1217', agentName: 'Luna', customers: 165, netDeposit: 41800.55, tradingLots: 215.9, monthCommission: 1980.0 },
+  { agentId: 'IB1350', agentName: 'Kris', customers: 132, netDeposit: 35600.0, tradingLots: 182.75, monthCommission: 1520.65 },
+  { agentId: 'IB1406', agentName: 'Noah', customers: 98, netDeposit: 22850.0, tradingLots: 120.6, monthCommission: 980.3 }
 ]
 
 const promoTab = ref('client')

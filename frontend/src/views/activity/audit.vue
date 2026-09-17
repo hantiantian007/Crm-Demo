@@ -248,16 +248,35 @@
     <div class="grid grid-cols-2 gap-4 text-xs">
       <div>
         <div class="flex items-center gap-1 text-gray-600 mb-2">
+          <span v-if="auditForm.result === '通过'" class="text-red-500">*</span>
+          <span>盈利金额（USD）</span>
+        </div>
+        <el-input
+          v-model="auditForm.profitAmount"
+          placeholder="请输入盈利金额（USD）"
+          size="small"
+          type="number"
+          inputmode="decimal"
+          step="0.01"
+          min="0"
+          @input="clearError('profitAmount')"
+          @blur="normalizeProfitAmount"
+        />
+        <div v-if="errors.profitAmount" class="text-red-500 text-[11px] mt-1">{{ errors.profitAmount }}</div>
+        <div class="text-[11px] text-gray-400 mt-1">统一按 USD 填写；美分账户换算由后台处理。盈利金额 ≤ 0 时，不产生奖励。</div>
+      </div>
+      <div>
+        <div class="flex items-center gap-1 text-gray-600 mb-2">
           <span class="text-red-500">*</span>
           <span>审核结果</span>
         </div>
-        <el-select v-model="auditForm.result" placeholder="请选择审核结果" class="w-full" size="small" @change="clearError('result')">
+        <el-select v-model="auditForm.result" placeholder="请选择审核结果" class="w-full" size="small" @change="onAuditResultChange">
           <el-option label="通过" value="通过" />
           <el-option label="拒绝" value="拒绝" />
         </el-select>
         <div v-if="errors.result" class="text-red-500 text-[11px] mt-1">{{ errors.result }}</div>
       </div>
-      <div>
+      <div class="col-span-2">
         <div class="text-gray-600 mb-2">审核备注</div>
         <el-input v-model="auditForm.remark" type="textarea" :rows="2" placeholder="可选" size="small" />
       </div>
@@ -360,6 +379,7 @@ const rows = ref([
     demoAccount: 'D-9000231',
     screenshotName: 'demo_account_9000231.png',
     screenshotUrl: createSvgDataUrl('9000231'),
+    profitAmountUsd: '',
     auditor: '',
     auditAt: ''
   },
@@ -379,6 +399,7 @@ const rows = ref([
     demoAccount: 'D-9000418',
     screenshotName: 'demo_account_9000418.png',
     screenshotUrl: createSvgDataUrl('9000418'),
+    profitAmountUsd: '8000.00',
     auditor: '史密斯',
     auditAt: '2026-09-07 15:02:12'
   },
@@ -398,6 +419,7 @@ const rows = ref([
     demoAccount: 'D-9000662',
     screenshotName: 'demo_account_9000662.png',
     screenshotUrl: createSvgDataUrl('9000662'),
+    profitAmountUsd: '',
     auditor: '系统管理员',
     auditAt: '2026-09-10 10:12:44'
   },
@@ -417,6 +439,7 @@ const rows = ref([
     demoAccount: '2024',
     screenshotName: 'demo_account_2024.png',
     screenshotUrl: createSvgDataUrl('2024'),
+    profitAmountUsd: '',
     auditor: '',
     auditAt: ''
   }
@@ -463,11 +486,13 @@ const selected = reactive({
   demoAccount: '',
   screenshotName: '',
   screenshotUrl: '',
+  profitAmountUsd: '',
   auditor: '',
   auditAt: ''
 })
 
 const auditForm = reactive({
+  profitAmount: '',
   result: '',
   remark: '',
   rejectReason: '',
@@ -475,6 +500,7 @@ const auditForm = reactive({
 })
 
 const errors = reactive({
+  profitAmount: '',
   result: '',
   rejectReason: '',
   extraDesc: ''
@@ -499,10 +525,12 @@ const openView = (row) => {
 
 const openAudit = (row) => {
   Object.assign(selected, row)
+  auditForm.profitAmount = ''
   auditForm.result = ''
   auditForm.remark = ''
   auditForm.rejectReason = ''
   auditForm.extraDesc = ''
+  errors.profitAmount = ''
   errors.result = ''
   errors.rejectReason = ''
   errors.extraDesc = ''
@@ -511,6 +539,7 @@ const openAudit = (row) => {
 
 const closeAudit = () => {
   auditVisible.value = false
+  errors.profitAmount = ''
   errors.result = ''
   errors.rejectReason = ''
   errors.extraDesc = ''
@@ -520,6 +549,23 @@ const clearError = (key) => {
   errors[key] = ''
 }
 
+const onAuditResultChange = () => {
+  clearError('result')
+  clearError('profitAmount')
+}
+
+const normalizeProfitAmount = () => {
+  const raw = String(auditForm.profitAmount || '').trim()
+  if (!raw) return
+  const n = Number(raw)
+  if (Number.isNaN(n)) {
+    auditForm.profitAmount = ''
+    return
+  }
+  const safe = Math.max(0, n)
+  auditForm.profitAmount = safe.toFixed(2)
+}
+
 const nowText = () => {
   const d = new Date()
   const pad = (n) => String(n).padStart(2, '0')
@@ -527,17 +573,24 @@ const nowText = () => {
 }
 
 const submitAudit = () => {
+  errors.profitAmount = ''
   errors.result = ''
   errors.rejectReason = ''
   errors.extraDesc = ''
 
   if (!auditForm.result) errors.result = '请选择审核结果'
+  if (auditForm.result === '通过') {
+    const raw = String(auditForm.profitAmount || '').trim()
+    const n = Number(raw)
+    if (!raw || Number.isNaN(n)) errors.profitAmount = '请输入盈利金额（USD）'
+    else auditForm.profitAmount = Math.max(0, n).toFixed(2)
+  }
   if (auditForm.result === '拒绝') {
     if (!auditForm.rejectReason) errors.rejectReason = '请选择拒绝原因'
     if (auditForm.rejectReason === '其他' && !auditForm.extraDesc.trim()) errors.extraDesc = '补充说明必填'
   }
 
-  if (errors.result || errors.rejectReason || errors.extraDesc) return
+  if (errors.profitAmount || errors.result || errors.rejectReason || errors.extraDesc) return
 
   const idx = rows.value.findIndex(r => r.id === selected.id)
   if (idx < 0) return
@@ -550,12 +603,14 @@ const submitAudit = () => {
     next.auditStatus = '已通过'
     next.rejectReason = ''
     next.rejectExtra = ''
+    next.profitAmountUsd = auditForm.profitAmount
     next.auditor = operator
     next.auditAt = at
   } else {
     next.auditStatus = '已拒绝'
     next.rejectReason = auditForm.rejectReason
     next.rejectExtra = auditForm.extraDesc.trim()
+    next.profitAmountUsd = ''
     next.auditor = operator
     next.auditAt = at
   }

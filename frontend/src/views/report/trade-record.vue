@@ -344,8 +344,8 @@
      报表导出
     </button>
    </div>
-   <div class="overflow-x-auto flex-1">
-    <table class="w-full custom-table">
+   <div class="trade-record-table overflow-x-auto flex-1 no-scrollbar">
+    <table class="w-full custom-table min-w-[1600px]">
      <thead class="bg-tableHeader">
       <tr>
        <th class="w-8">
@@ -409,7 +409,7 @@
         </button>
        </td>
        <td class="text-left">
-        <div class="font-medium text-gray-800">
+        <div class="text-gray-700">
          test-杨均
         </div>
        </td>
@@ -499,7 +499,7 @@
         </button>
        </td>
        <td class="text-left">
-        <div class="font-medium text-gray-800">
+        <div class="text-gray-700">
          test-杨均
         </div>
        </td>
@@ -637,3 +637,92 @@ watch(
   { immediate: true }
 )
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.trade-record-table .custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+}
+
+.trade-record-table .custom-table thead th {
+  font-weight: 600;
+  color: #374151;
+  background: #f9fafb;
+  padding: 10px 10px;
+  white-space: nowrap;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #f3f4f6;
+}
+.trade-record-table .custom-table thead th:last-child {
+  border-right: 0;
+}
+
+.trade-record-table .custom-table tbody td {
+  color: #4b5563;
+  padding: 10px 10px;
+  line-height: 18px;
+  border-bottom: 1px solid #f3f4f6;
+  border-right: 1px solid #f9fafb;
+  vertical-align: middle;
+}
+.trade-record-table .custom-table tbody td:last-child {
+  border-right: 0;
+}
+
+.trade-record-table .custom-table tbody td:not(:last-child) {
+  white-space: nowrap;
+}
+
+.trade-record-table .custom-table tbody td:last-child {
+  white-space: normal;
+  word-break: break-word;
+  min-width: 160px;
+}
+
+.trade-record-table .custom-table .change-highlight {
+  font-size: 12px;
+  font-weight: 400;
+  color: #4b5563;
+}
+
+.trade-record-table .multiline-cell .main-value {
+  display: block;
+  font-weight: 400;
+  color: #4b5563;
+  line-height: 18px;
+}
+.trade-record-table .multiline-cell .sub-value {
+  display: block;
+  font-size: 11px;
+  color: #9ca3af;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.trade-record-table .detail-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 16px;
+}
+.trade-record-table .detail-row-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+.trade-record-table .detail-label {
+  color: #6b7280;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.trade-record-table .detail-value {
+  color: #374151;
+  font-size: 12px;
+  word-break: break-word;
+}
+</style>

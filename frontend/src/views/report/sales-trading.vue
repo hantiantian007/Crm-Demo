@@ -130,8 +130,8 @@
   </div>
  </div>
  <!-- 2. 数据表格区 -->
- <div class="flex-1 overflow-auto border border-gray-200 rounded">
-  <table class="w-full custom-table text-sm">
+ <div class="sales-trading-table flex-1 overflow-x-auto overflow-y-auto border border-gray-200 rounded no-scrollbar">
+  <table class="w-full custom-table min-w-[1600px]">
    <thead class="bg-tableHeader sticky top-0 z-10">
     <tr>
      <th class="w-24">
@@ -697,5 +697,62 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.sales-trading-table .custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+}
+
+.sales-trading-table .custom-table thead th {
+  font-weight: 600;
+  color: #374151;
+  background: #f9fafb;
+  padding: 10px 10px;
+  white-space: nowrap;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #f3f4f6;
+}
+.sales-trading-table .custom-table thead th:last-child {
+  border-right: 0;
+}
+
+.sales-trading-table .custom-table tbody td {
+  color: #4b5563;
+  padding: 10px 10px;
+  line-height: 18px;
+  border-bottom: 1px solid #f3f4f6;
+  border-right: 1px solid #f9fafb;
+  vertical-align: middle;
+}
+.sales-trading-table .custom-table tbody td:last-child {
+  border-right: 0;
+}
+
+.sales-trading-table .custom-table tbody td:not(:last-child) {
+  white-space: nowrap;
+}
+
+.sales-trading-table .custom-table tbody td:last-child {
+  white-space: normal;
+  word-break: break-word;
+  min-width: 220px;
+}
+
+.sales-trading-table .custom-table .change-highlight {
+  font-size: 12px;
+  font-weight: 400;
+  color: #4b5563;
+}
+
+.sales-trading-table .type-pill {
+  font-size: 11px;
+  line-height: 16px;
+}
+</style>

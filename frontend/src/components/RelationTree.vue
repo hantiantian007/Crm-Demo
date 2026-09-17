@@ -1,5 +1,5 @@
 <template>
-  <div :class="[widthClass, 'bg-white border border-gray-200 rounded shadow-sm flex flex-col shrink-0 overflow-hidden h-full']">
+  <div :class="[widthClass, heightClass, 'bg-white border border-gray-200 rounded shadow-sm flex flex-col shrink-0 overflow-hidden']">
     <!-- 顶部操作区 -->
     <div class="p-3 border-b border-gray-100 flex gap-2 items-center bg-gray-50/50">
       <div class="flex-1 flex bg-white border border-gray-200 rounded overflow-hidden">
@@ -50,13 +50,16 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { CaretRight } from '@element-plus/icons-vue'
 import { relationTreeDemoData } from '@/mocks/relation-tree-demo'
 
 const props = defineProps({
   data: { type: Array, default: null },
-  widthClass: { type: String, default: 'w-64' }
+  widthClass: { type: String, default: 'w-64' },
+  heightClass: { type: String, default: 'h-full' },
+  autoSelect: { type: Boolean, default: false },
+  defaultSelectedText: { type: String, default: '' }
 })
 
 const filterText = ref('')
@@ -88,6 +91,43 @@ const emit = defineEmits(['node-click'])
 const handleNodeClick = (data) => {
   emit('node-click', data)
 }
+
+const findFirstNode = (nodes, predicate) => {
+  const list = Array.isArray(nodes) ? nodes : []
+  for (const node of list) {
+    if (predicate(node)) return node
+    const found = findFirstNode(node.children, predicate)
+    if (found) return found
+  }
+  return null
+}
+
+const selectDefaultNode = async () => {
+  await nextTick()
+  if (!treeRef.value) return
+
+  const roots = treeData.value || []
+  const keyword = String(props.defaultSelectedText || '').trim()
+
+  const target =
+    (keyword
+      ? findFirstNode(roots, (n) => String(n?.label || '').includes(keyword))
+      : null) || (Array.isArray(roots) ? roots[0] : null)
+
+  if (!target?.id) return
+
+  treeRef.value.setCurrentKey(target.id)
+  emit('node-click', target)
+}
+
+watch(
+  () => [treeData.value, props.autoSelect, props.defaultSelectedText],
+  () => {
+    if (!props.autoSelect) return
+    selectDefaultNode()
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped>

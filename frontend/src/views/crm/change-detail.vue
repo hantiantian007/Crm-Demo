@@ -36,7 +36,7 @@
           </div>
           <div class="lg:col-span-2 flex items-end gap-4">
             <div class="flex-1 min-w-0">
-              <label class="block text-xs text-gray-500 mb-1">处理时间</label>
+              <label class="block text-xs text-gray-500 mb-1">系统时间</label>
               <el-date-picker
                 v-model="searchForm.dateRange"
                 type="daterange"
@@ -81,7 +81,8 @@
             </template>
           </el-table-column>
           <el-table-column prop="operator" label="操作者" width="100" />
-          <el-table-column prop="processTime" label="处理时间" width="160" />
+          <el-table-column prop="mtTime" label="MT时间" width="160" />
+          <el-table-column prop="systemTime" label="系统时间" width="160" />
         </DataTable>
       </div>
     </div>
@@ -109,11 +110,11 @@ const limit = ref(20)
 
 // 模拟数据 (直接取自原型)
 const allData = [
-  { clientId: '463', clientName: 'test-孙春', group: '', changeType: '基础资料变更', type: '真实姓名', oldValue: 'test-孙春', newValue: '孙春测试', operator: 'test-F7', processTime: '2026-09-07 10:29:20' },
-  { clientId: '477', clientName: 'test-杨晗和', group: 'real\\HATC\\Test\\Stan', changeType: '敏感数据变更', type: '-', oldValue: '0', newValue: '0', operator: 'test-F7', processTime: '2026-08-21 10:46:54' },
-  { clientId: '477', clientName: 'test-杨晗和', group: 'real\\HATC\\Test\\Stan', changeType: '佣金变更', type: '股指配置', oldValue: '0', newValue: '0', operator: 'test-F7', processTime: '2026-08-21 10:46:54' },
-  { clientId: '477', clientName: 'test-杨晗和', group: 'real\\HATC\\Test\\Stan', changeType: '佣金变更', type: '白银配置', oldValue: '0', newValue: '13', operator: 'test-F7', processTime: '2026-08-21 10:46:53' },
-  { clientId: '477', clientName: 'test-杨晗和', group: 'real\\HATC\\Test\\Stan', changeType: '佣金变更', type: '黄金配置', oldValue: '0', newValue: '6', operator: 'test-F7', processTime: '2026-08-21 10:46:53' }
+  { clientId: '463', clientName: 'test-孙春', group: '', changeType: '基础资料变更', type: '真实姓名', oldValue: 'test-孙春', newValue: '孙春测试', operator: 'test-F7', mtTime: '2026-09-07 10:29:01', systemTime: '2026-09-07 10:29:20' },
+  { clientId: '477', clientName: 'test-杨晗和', group: 'real\\HATC\\Test\\Stan', changeType: '敏感数据变更', type: '-', oldValue: '0', newValue: '0', operator: 'test-F7', mtTime: '2026-08-21 10:46:33', systemTime: '2026-08-21 10:46:54' },
+  { clientId: '477', clientName: 'test-杨晗和', group: 'real\\HATC\\Test\\Stan', changeType: '佣金变更', type: '股指配置', oldValue: '0', newValue: '0', operator: 'test-F7', mtTime: '2026-08-21 10:46:33', systemTime: '2026-08-21 10:46:54' },
+  { clientId: '477', clientName: 'test-杨晗和', group: 'real\\HATC\\Test\\Stan', changeType: '佣金变更', type: '白银配置', oldValue: '0', newValue: '13', operator: 'test-F7', mtTime: '2026-08-21 10:46:31', systemTime: '2026-08-21 10:46:53' },
+  { clientId: '477', clientName: 'test-杨晗和', group: 'real\\HATC\\Test\\Stan', changeType: '佣金变更', type: '黄金配置', oldValue: '0', newValue: '6', operator: 'test-F7', mtTime: '2026-08-21 10:46:31', systemTime: '2026-08-21 10:46:53' }
 ]
 
 const tableData = ref([...allData])

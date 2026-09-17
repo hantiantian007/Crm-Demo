@@ -5,14 +5,17 @@
       <span v-else class="text-2xl font-black text-white">H</span>
     </div>
     <el-menu
+      ref="menuRef"
       :default-active="$route.path"
       :default-openeds="defaultOpeneds"
+      :unique-opened="true"
       :collapse="isCollapse"
       active-text-color="#d1a84f"
       background-color="#2A2F3E"
       class="el-menu-vertical flex-1 overflow-y-auto no-scrollbar border-r-0"
       text-color="#A1A5B7"
       router
+      @select="handleMenuSelect"
     >
 
       <el-menu-item index="/home">
@@ -23,6 +26,10 @@
         <i class="fa-solid fa-chart-line w-6 text-center text-lg mr-2"></i>
         <template #title>代理首页</template>
       </el-menu-item>
+      <el-menu-item index="/direct-home">
+        <i class="fa-solid fa-chart-line w-6 text-center text-lg mr-2"></i>
+        <template #title>直客首页</template>
+      </el-menu-item>
       <el-sub-menu index="fund">
         <template #title>
           <i class="fa-solid fa-money-bill-transfer w-6 text-center text-lg mr-2"></i>
@@ -32,8 +39,8 @@
         <el-menu-item index="/fund/withdraw">出金</el-menu-item>
         <el-menu-item index="/fund/internal-transfer">内部转账</el-menu-item>
         <el-menu-item index="/fund/internal-transfer-record">内部转账记录</el-menu-item>
-        <el-menu-item v-if="isAgentRole" index="/fund/commission-withdraw">返佣提现</el-menu-item>
-        <el-menu-item v-if="isAgentRole" index="/fund/my-bonus">我的赠金</el-menu-item>
+        <el-menu-item index="/fund/commission-withdraw">返佣提现</el-menu-item>
+        <el-menu-item index="/fund/my-bonus">我的赠金</el-menu-item>
         <el-menu-item index="/fund/deposit-pending-review">待审核入金</el-menu-item>
         <el-menu-item index="/fund/audit-withdraw">待审核出金</el-menu-item>
         <el-menu-item index="/fund/audit-bonus">赠金审核</el-menu-item>
@@ -48,7 +55,7 @@
         <el-menu-item index="/reconciliation/daily-record">每日对账日志</el-menu-item>
         <el-menu-item index="/reconciliation/internal">对账异常看板</el-menu-item>
       </el-sub-menu>
-      <el-sub-menu v-if="isAgentRole" index="commission">
+      <el-sub-menu index="commission">
         <template #title>
           <i class="fa-solid fa-hand-holding-dollar w-6 text-center text-lg mr-2"></i>
           <span>佣金管理</span>
@@ -57,6 +64,7 @@
         <el-menu-item index="/commission/config">佣金配置</el-menu-item>
         <el-menu-item index="/commission/basic-config">基础分佣配置</el-menu-item>
         <el-menu-item index="/commission/markup-config">加点分佣配置</el-menu-item>
+        <el-menu-item index="/commission/sales-list">销售列表</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="activity">
         <template #title>
@@ -68,6 +76,7 @@
         <el-menu-item index="/activity/ib">IB 计划</el-menu-item>
         <el-menu-item index="/activity/audit">活动审核</el-menu-item>
         <el-menu-item index="/activity/pcard">Pcard活动</el-menu-item>
+        <el-menu-item v-if="showActivityParticipationAnalysis" index="/activity/participation-analysis">活动参与分析</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="news">
         <template #title>
@@ -97,13 +106,16 @@
           <i class="fa-solid fa-chart-pie w-6 text-center text-lg mr-2"></i>
           <span>报表中心</span>
         </template>
-        <el-menu-item v-if="isAgentRole" index="/report/commission-stats">佣金统计</el-menu-item>
+        <el-menu-item index="/report/commission-stats">佣金统计</el-menu-item>
         <el-menu-item index="/report/trading">交易报表</el-menu-item>
         <el-menu-item index="/report/trade-record">交易记录</el-menu-item>
         <el-menu-item index="/report/close-trade">平仓交易记录</el-menu-item>
         <el-menu-item index="/report/position">持仓报表</el-menu-item>
+        <el-menu-item index="/report/real-position">现实持仓报表</el-menu-item>
         <el-menu-item index="/report/finance">财务报表</el-menu-item>
-        <el-menu-item v-if="isAgentRole" index="/report/commission-report">佣金报表</el-menu-item>
+        <el-menu-item index="/report/deposit-withdraw">出入金报表</el-menu-item>
+        <el-menu-item index="/report/withdraw-report">提现报表</el-menu-item>
+        <el-menu-item index="/report/commission-report">佣金报表</el-menu-item>
         <el-menu-item index="/report/position-stats">持仓统计</el-menu-item>
         <el-menu-item index="/report/sales-trading">销售交易奖励报表</el-menu-item>
         <el-menu-item index="/report/sales-deposit">销售入金奖励统计</el-menu-item>
@@ -160,6 +172,14 @@
         <el-menu-item index="/risk/blacklist">黑名单管理</el-menu-item>
         <el-menu-item index="/risk/close-interval">平仓间隔统计</el-menu-item>
       </el-sub-menu>
+
+      <el-sub-menu index="other-pages">
+        <template #title>
+          <i class="fa-solid fa-folder w-6 text-center text-lg mr-2"></i>
+          <span>其他页面</span>
+        </template>
+        <el-menu-item index="/other/login-register">新版登录注册</el-menu-item>
+      </el-sub-menu>
     </el-menu>
     <!-- 底部收起按钮 -->
     <div class="h-12 border-t border-gray-700/50 flex items-center justify-center cursor-pointer hover:bg-[#373D4E] transition-colors text-gray-400 hover:text-white" @click="toggleCollapse">
@@ -175,13 +195,60 @@ import { demoRoleState } from '@/store/demoRole'
 
 const route = useRoute()
 const isCollapse = ref(false)
+const menuRef = ref(null)
+const showActivityParticipationAnalysis = ref(false)
 
 const isClientRole = computed(() => demoRoleState.role === 'customer')
 const isAgentRole = computed(() => demoRoleState.role === 'agent')
+
+const getSubMenuIndexByPath = (path) => {
+  if (typeof path !== 'string') return ''
+  if (path.startsWith('/fund/')) return 'fund'
+  if (path.startsWith('/reconciliation/')) return 'reconciliation'
+  if (path.startsWith('/commission/')) return 'commission'
+  if (path.startsWith('/activity/')) return 'activity'
+  if (path.startsWith('/news/')) return 'news'
+  if (path.startsWith('/crm/')) return 'crm'
+  if (path.startsWith('/report/')) return 'report'
+  if (path.startsWith('/trust/')) return 'trust'
+  if (path.startsWith('/system/')) return 'system'
+  if (path.startsWith('/finance-management/')) return 'finance-management'
+  if (path.startsWith('/risk/')) return 'risk'
+  if (path.startsWith('/other/')) return 'other-pages'
+  return ''
+}
+
+const subMenuIndexes = [
+  'fund',
+  'reconciliation',
+  'commission',
+  'activity',
+  'news',
+  'crm',
+  'report',
+  'trust',
+  'system',
+  'finance-management',
+  'risk',
+  'other-pages'
+]
+
 const defaultOpeneds = computed(() => {
   if (isCollapse.value) return []
-  return ['crm', 'fund', 'report', 'activity', 'system', 'risk']
+  const idx = getSubMenuIndexByPath(route.path)
+  return idx ? [idx] : []
 })
+
+const handleMenuSelect = (_, indexPath) => {
+  if (isCollapse.value) return
+  const parent = Array.isArray(indexPath) ? indexPath[0] : ''
+  if (!subMenuIndexes.includes(parent)) return
+
+  for (const k of subMenuIndexes) {
+    if (k !== parent) menuRef.value?.close?.(k)
+  }
+  menuRef.value?.open?.(parent)
+}
 
 const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value

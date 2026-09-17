@@ -293,8 +293,8 @@
     </button>
    </div>
    <!-- 表格区域 -->
-   <div class="overflow-x-auto flex-1">
-    <table class="w-full custom-table">
+   <div class="overflow-x-auto flex-1 no-scrollbar">
+    <table class="w-full custom-table min-w-[1400px]">
      <thead class="bg-tableHeader">
       <tr>
        <th>
@@ -1003,11 +1003,11 @@
    </div>
    <!-- 分页 -->
    <div class="px-5 py-4 border-t border-gray-100 flex items-center justify-between bg-white mt-auto">
-    <div class="text-[13px] text-gray-500">
+    <div class="text-xs text-gray-500">
      显示第 1 至 13 项结果，共 13 项
     </div>
     <div class="flex items-center gap-2">
-     <select class="border border-gray-200 rounded px-2 py-1 text-[13px] outline-none focus:border-primaryBtn">
+     <select class="border border-gray-200 rounded px-2 py-1 text-xs outline-none focus:border-primaryBtn">
       <option>
        10 条/页
       </option>
@@ -1019,14 +1019,14 @@
       </option>
      </select>
      <div class="flex items-center border border-gray-200 rounded overflow-hidden">
-      <button class="px-3 py-1 bg-gray-50 text-gray-400 cursor-not-allowed border-r border-gray-200 text-[13px]">
+      <button class="px-3 py-1 bg-gray-50 text-gray-400 cursor-not-allowed border-r border-gray-200 text-xs">
        <i class="fas fa-chevron-left">
        </i>
       </button>
-      <button class="px-3 py-1 bg-primaryBtn text-white font-medium text-[13px]">
+      <button class="px-3 py-1 bg-primaryBtn text-white font-medium text-xs">
        1
       </button>
-      <button class="px-3 py-1 bg-gray-50 text-gray-400 cursor-not-allowed border-l border-gray-200 text-[13px]">
+      <button class="px-3 py-1 bg-gray-50 text-gray-400 cursor-not-allowed border-l border-gray-200 text-xs">
        <i class="fas fa-chevron-right">
        </i>
       </button>
@@ -1041,6 +1041,45 @@
   </div>
 </template>
 
+
 <script setup>
-import { ref } from 'vue'
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+}
+
+.custom-table thead th {
+  font-weight: 600;
+  color: #374151;
+  background: #f9fafb;
+  padding: 8px 10px;
+  white-space: nowrap;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.custom-table tbody td {
+  color: #4b5563;
+  padding: 8px 10px;
+  line-height: 18px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.custom-table tbody td:not(:last-child) {
+  white-space: nowrap;
+}
+
+.custom-table tbody td:last-child {
+  white-space: normal;
+  word-break: break-word;
+  min-width: 220px;
+}
+</style>

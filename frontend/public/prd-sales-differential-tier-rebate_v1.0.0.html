@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>产品需求文档 (PRD) - 销售差异化阶梯返佣配置</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #333; }
+    h1, h2, h3, h4 { color: #1e293b; }
+    h2 { border-bottom: 2px solid #C19B5E; padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
+    h3 { color: #C19B5E; margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1.05rem; }
+    h4 { font-weight: 700; margin-top: 1rem; }
+    ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.5rem; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; }
+    th, td { border: 1px solid #e2e8f0; padding: 0.6rem; text-align: left; vertical-align: top; }
+    th { background-color: #f8fafc; font-weight: 700; }
+    code { background: #f1f5f9; padding: 0.1rem 0.3rem; border-radius: 0.25rem; font-size: 0.9em; }
+    .hint { background-color: #fffbeb; border: 1px solid #fde68a; padding: 1rem; border-radius: 0.75rem; }
+    .badge { display: inline-flex; align-items: center; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 12px; border: 1px solid #e2e8f0; background: #fff; color: #475569; }
+    .prd-section { border: 1px solid #e5e7eb; border-radius: 16px; background: #fff; padding: 20px; margin-top: 16px; }
+    .prd-section h2 { margin-top: 0; }
+    .prd-toc { border: 1px solid #e5e7eb; border-radius: 16px; background: #ffffff; padding: 16px; margin-top: 16px; }
+    .prd-toc a { color: #0f172a; text-decoration: none; }
+    .prd-toc a:hover { color: #C19B5E; text-decoration: underline; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6 md:p-10">
+  <div class="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-200">
+    <div class="text-center mb-10">
+      <h1 class="text-3xl font-bold mb-2">销售差异化阶梯返佣配置 - PRD</h1>
+      <div class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500">
+        <span class="badge">当前版本：V1.0.0</span>
+        <span class="badge">文件：prd-sales-differential-tier-rebate_v1.0.0.html</span>
+      </div>
+    </div>
+
+    <div class="hint text-sm text-gray-700">
+      <div class="font-semibold text-gray-800 mb-1">范围声明</div>
+      <ul class="mb-0">
+        <li>本 PRD 用于描述“销售差异化阶梯返佣配置”的规则口径与页面交互。</li>
+        <li>当前阶段仅用于前端演示（演示数据），不连接真实接口，不实现真实净入金统计与返佣计算。</li>
+      </ul>
+    </div>
+
+    <div class="prd-toc text-sm">
+      <div class="font-semibold text-gray-800 mb-2">目录</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <a href="#sec-1">1. 默认阶梯返佣</a>
+        <a href="#sec-2">2. 动态档位校验</a>
+        <a href="#sec-3">3. 差异化阶梯开关与入口</a>
+        <a href="#sec-4">4. 差异化阶梯配置（弹窗）</a>
+        <a href="#sec-5">5. 规则优先级</a>
+        <a href="#sec-6">6. 净入金统计口径</a>
+        <a href="#sec-7">7. 销售切换</a>
+        <a href="#sec-8">8. 页面交互与状态</a>
+        <a href="#sec-9">9. 验收标准</a>
+      </div>
+    </div>
+
+    <div style="display:none;">
+    <h2>1. 需求背景</h2>
+    <ul>
+      <li>不同销售、代理层级和 MT 分组的客户质量与净入金门槛不同，单一固定返佣规则无法满足差异化销售政策。</li>
+      <li>需要根据销售团队真实净入金档位，确定每标准手返佣金额，并支持按代理、按 MT 分组配置差异化阶梯。</li>
+    </ul>
+    </div>
+
+    <div style="display:none;">
+    <h2>2. 适用页面</h2>
+    <table>
+      <thead>
+        <tr>
+          <th width="26%">页面</th>
+          <th width="24%">路由</th>
+          <th width="50%">说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>销售列表</td>
+          <td><code>/commission/sales-list</code></td>
+          <td>展示销售配置列表，并提供 PRD 入口。</td>
+        </tr>
+        <tr>
+          <td>新增销售</td>
+          <td><code>/commission/sales-list/create</code></td>
+          <td>配置销售的交易返佣计算方式；当选择“团队净入金阶梯计算”时，配置默认阶梯与差异化规则。</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>后续“编辑销售”页面可复用同一规则与交互规范。</li>
+    </ul>
+    </div>
+
+    <section class="prd-section">
+    <h2 id="sec-1">1. 默认阶梯返佣（团队净入金阶梯）</h2>
+    <h3>3.1 规则定义</h3>
+    <ul>
+      <li>默认阶梯规则覆盖未命中任何代理特殊规则与 MT 分组特殊规则的交易账户。</li>
+      <li>阶梯以“累计真实净入金”作为档位判断依据，输出“每标准手返佣金额”。</li>
+    </ul>
+
+    <h3>3.2 初始演示规则</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>净入金起始值（USD）</th>
+          <th>净入金结束值（USD）</th>
+          <th>返佣金额</th>
+          <th>单位</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0.00</td>
+          <td>99,999.99</td>
+          <td>1.50</td>
+          <td>USD/标准手</td>
+        </tr>
+        <tr>
+          <td>100,000.00</td>
+          <td>不设上限</td>
+          <td>2.00</td>
+          <td>USD/标准手</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3.3 可配置能力</h3>
+    <ul>
+      <li>支持：编辑 / 新增档位 / 删除档位 / 保存 / 取消。</li>
+      <li>第一档起始值固定为 <code>0.00</code>。</li>
+      <li>第二档及后续档位起始值自动计算为：<code>上一档结束值 + 0.01</code>（按“美分整数”计算，避免浮点误差）。</li>
+      <li>起始值只读，不允许手动修改。</li>
+      <li>最后一档结束值固定为“<strong>不设上限</strong>”，且必须是最后一行，只能存在一行。</li>
+      <li>至少保留一档，不能全部删除。</li>
+      <li>连续新增控制：若当前新增的非最后档位未填写结束值，则禁止继续新增，并提示用户先填写结束值。</li>
+    </ul>
+    </section>
+
+    <section class="prd-section">
+    <h2 id="sec-2">2. 动态档位校验</h2>
+    <h3>4.1 保存校验规则</h3>
+    <ul>
+      <li>每个非最后档位必须填写结束值。</li>
+      <li>结束值不得小于当前档位起始值。</li>
+      <li>返佣金额必填且不得小于 0。</li>
+      <li>所有数字最多保留 2 位小数。</li>
+      <li>档位必须连续，不能重叠或留空；最后一档必须为“不设上限”。</li>
+      <li>错误提示需明确到具体档位，例如：<code>第2档净入金结束值不能为空</code>、<code>第3档结束值必须大于等于起始值</code>。</li>
+    </ul>
+
+    <h3>4.2 编辑联动校验</h3>
+    <ul>
+      <li>修改任意前置档位结束值后，立即重新计算后续档位起始值。</li>
+      <li>若重算后出现“后续结束值小于起始值”，对应输入框显示错误状态并禁止保存。</li>
+    </ul>
+    </section>
+
+    <section class="prd-section">
+    <h2 id="sec-3">3. 差异化阶梯开关与入口</h2>
+    <ul>
+      <li>差异化阶梯默认关闭；开启后显示“配置差异化阶梯”入口。</li>
+      <li>进入差异化配置前必须先选择销售名称。</li>
+      <li>未选择销售名称点击入口：提示 <code>请先选择销售名称</code>，并定位销售名称字段。</li>
+    </ul>
+    </section>
+
+    <section class="prd-section">
+    <h2 id="sec-4">4. 差异化阶梯配置（弹窗）</h2>
+    <h3>6.1 弹窗结构</h3>
+    <ul>
+      <li>弹窗标题：差异化阶梯配置。</li>
+      <li>包含两个 Tab：按代理配置 / 按 MT 分组配置。</li>
+      <li>弹窗展示当前销售名称；同一订单只命中一套规则，不叠加返佣。</li>
+    </ul>
+
+    <h3>6.2 按代理配置</h3>
+    <ul>
+      <li>左侧：代理关系树（仅演示数据），支持展开/收起、搜索、已配置状态展示。</li>
+      <li>右侧：选中代理的阶梯配置，默认可复制默认阶梯后进行调整。</li>
+      <li>统计范围：该代理及其全部下级代理、直客的净入金合计（口径见第 6 节）。</li>
+      <li>多级代理同时配置时，采用“距离客户最近一级”的已配置代理规则。</li>
+      <li>独立阶梯的编辑能力与默认阶梯一致（新增/删除/保存/取消、动态校验）。</li>
+    </ul>
+
+    <h3>6.3 按 MT 分组配置</h3>
+    <ul>
+      <li>左侧：MT 分组列表（仅演示数据），支持搜索、已配置状态展示。</li>
+      <li>右侧：选中分组的阶梯配置，默认可复制默认阶梯后进行调整。</li>
+      <li>统计范围：当前销售名下、属于该 MT 分组的交易账户净入金合计（口径见第 6 节）。</li>
+      <li>独立阶梯的编辑能力与默认阶梯一致（新增/删除/保存/取消、动态校验）。</li>
+    </ul>
+    </section>
+
+    <section class="prd-section">
+    <h2 id="sec-5">5. 规则优先级</h2>
+    <ul>
+      <li><strong>MT 分组规则</strong> &gt; <strong>最近一级已配置代理规则</strong> &gt; <strong>默认阶梯规则</strong>。</li>
+      <li>每笔交易只命中一条规则，不叠加多个返佣金额。</li>
+      <li>已结算交易不因规则变化重新计算；规则变化只影响生效后的符合条件交易。</li>
+      <li>代理关系或 MT 分组变化后，仅影响后续订单。</li>
+    </ul>
+    </section>
+
+    <section class="prd-section">
+    <h2 id="sec-6">6. 净入金统计口径</h2>
+    <ul>
+      <li>净入金 = 真实入金 - 真实出金。</li>
+      <li>不计入：赠金、信用金、佣金账户资金、内部转账。</li>
+      <li>净入金不按月重置；净入金下降后，后续交易按下降后的档位计算。</li>
+      <li>交易量统一按标准手统计。</li>
+    </ul>
+    </section>
+
+    <section class="prd-section">
+    <h2 id="sec-7">7. 销售切换</h2>
+    <ul>
+      <li>若已存在差异化配置，更换销售名称需二次确认：</li>
+      <li><code>更换销售后，当前差异化阶梯配置将被清空，是否继续？</code></li>
+      <li>确认：切换销售并清空差异化配置；取消：保留原销售与配置。</li>
+    </ul>
+    </section>
+
+    <section class="prd-section">
+    <h2 id="sec-8">8. 页面交互与状态</h2>
+    <ul>
+      <li>编辑前保存数据快照。</li>
+      <li>保存后更新当前页面演示状态。</li>
+      <li>取消后恢复编辑前数据。</li>
+      <li>配置弹窗关闭或取消时，不保留未保存修改。</li>
+      <li>当前阶段仅使用演示数据，不接真实接口。</li>
+    </ul>
+    </section>
+
+    <section class="prd-section">
+    <h2 id="sec-9">9. 验收标准</h2>
+    <h3>11.1 默认阶梯</h3>
+    <ul>
+      <li>支持新增/删除档位，起始值自动衔接，最后一档始终为“不设上限”。</li>
+      <li>保存时触发档位连续、非空、金额精度等校验，错误提示可定位到具体档位。</li>
+      <li>取消可恢复编辑前快照。</li>
+    </ul>
+
+    <h3>11.2 差异化配置</h3>
+    <ul>
+      <li>差异化开关开启后可进入弹窗；未选择销售时点击入口会提示并定位销售名称字段。</li>
+      <li>按代理配置：可对代理配置独立阶梯，并支持新增/删除/保存/取消与动态校验。</li>
+      <li>按 MT 分组配置：可对分组配置独立阶梯，并支持新增/删除/保存/取消与动态校验。</li>
+      <li>保存时校验所有已启用的代理与 MT 分组规则；错误提示包含对象名称与档位。</li>
+    </ul>
+
+    <h3>11.3 优先级</h3>
+    <ul>
+      <li>优先级遵循第 5 节；同一订单只命中一条规则，不叠加。</li>
+    </ul>
+    </section>
+
+    <div style="display:none;">
+    <h2>12. 边界与非本期范围</h2>
+    <ul>
+      <li>不实现真实净入金统计。</li>
+      <li>不实现真实交易返佣计算。</li>
+      <li>不连接真实代理关系与 MT 分组接口。</li>
+      <li>不处理历史订单重新结算。</li>
+      <li>不修改净入金奖励配置、不修改基础分佣配置。</li>
+    </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>活动参与分析 - PRD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = { theme: { extend: { colors: { primary: '#C19B5E', secondary: '#A07D45' } } } }
+  </script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 md:p-8">
+  <div class="max-w-6xl mx-auto space-y-8">
+    <div class="bg-white rounded-lg shadow-sm p-6 border-t-4 border-primary">
+      <h1 class="text-2xl font-bold text-gray-900 mb-4">活动参与分析 - PRD</h1>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <div><span class="text-gray-500">目标用户：</span><span class="font-medium">市场、运营、代理管理</span></div>
+        <div><span class="text-gray-500">数据来源：</span><span class="font-medium">演示数据（本期 Demo 不接真实 API）</span></div>
+        <div><span class="text-gray-500">版本：</span><span class="font-medium">V1.0.0（当前）</span></div>
+        <div><span class="text-gray-500">更新日期：</span><span class="font-medium">2026-09-16</span></div>
+      </div>
+      <div class="mt-4 p-4 bg-yellow-50 text-yellow-800 rounded-md text-sm border border-yellow-200">
+        <strong>说明：</strong>本需求用于从活动维度演示“活动主键 + 产品维度汇总 + 代理/客户下钻”的分析能力；真实接口、复杂权限与统计引擎仅写入 PRD，不在 Demo 强实现。
+      </div>
+      <div class="mt-4 text-sm text-gray-700 space-y-2">
+        <div class="font-medium text-gray-900">Demo 页面</div>
+        <div class="mono bg-gray-50 border border-gray-200 rounded px-3 py-2">/#/activity/participation-analysis</div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-bullseye text-primary mr-2"></i>1. 需求说明
+      </h2>
+      <div class="space-y-3 text-sm text-gray-700">
+        <div>从活动维度分析代理及其伞下客户的参与度、达标率及业务贡献（净入金、交易手数、活跃客户等）。本页面不以奖励金额为核心，因为部分活动可能没有赠金、体验金或资金奖励。</div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-route text-primary mr-2"></i>2. 操作流程
+      </h2>
+      <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-700">
+        <li>进入【活动管理】&gt;【活动参与分析】。</li>
+        <li>左侧关系树默认选中“华安”，右侧展示该范围内的数据。</li>
+        <li>选择活动与筛选条件后，指标卡片、产品维度主表同步刷新。</li>
+        <li>点击产品行“查看代理”，在右侧抽屉查看该产品下的代理表现。</li>
+        <li>在代理表现中点击“查看客户”，在下一层抽屉查看客户明细。</li>
+      </ol>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-columns text-primary mr-2"></i>3. 页面结构
+      </h2>
+      <div class="space-y-6 text-sm text-gray-700">
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.1 左侧关系树</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>展示：代理 + 直客。</li>
+            <li>默认选中：包含“华安”的节点；若不存在则回退到首个可用节点（Demo 处理）。</li>
+            <li>选择代理节点：统计该代理及其所有下级代理、直客。</li>
+            <li>选择直客节点：仅统计该直客。</li>
+            <li>关系树为空：页面不报错，展示空状态或默认数据。</li>
+          </ul>
+        </div>
+
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.2 顶部筛选区</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>活动名称（第一筛选项，统计主键）、产品名称（第二筛选项，统计维度）。</li>
+            <li>活动状态、活动时间。</li>
+            <li>代理名称 / 客户名称 / MT账号（关键字）。</li>
+            <li>达标状态。</li>
+            <li>关系树筛选与顶部筛选按交集展示；切换关系树后保留其它筛选条件。</li>
+            <li>切换活动后，产品维度主表、代理表现与客户明细同步刷新。</li>
+          </ul>
+        </div>
+
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.3 指标卡片</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>报名客户数、有效参与客户数、达标客户数、达标率。</li>
+            <li>活动净入金、交易手数、活跃客户数、奖励/权益发放。</li>
+            <li>奖励/权益字段：无奖励活动显示“无奖励”；资金奖励显示金额；赠金/体验金显示应发/已释放；实物/资格类显示发放人数或状态。</li>
+          </ul>
+        </div>
+
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.4 产品维度主表</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>主表按“产品名称”汇总统计当前活动下数据。</li>
+            <li>字段：产品名称、报名客户数、有效参与客户数、达标客户数、达标率、活动净入金、交易手数、活跃客户数、奖励/权益发放、关联代理数、操作（查看代理）。</li>
+            <li>选择“全部产品”时展示当前活动下所有产品；选择单个产品时仅展示该产品或同步为该产品统计。</li>
+          </ul>
+        </div>
+
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.5 产品下钻：代理表现（抽屉）</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>入口：点击产品维度主表的“查看代理”。</li>
+            <li>字段：代理名称、代理层级、上级代理、伞下符合条件客户数、报名客户数、有效参与客户数、参与率、达标客户数、达标率、活动净入金、交易手数、活跃客户数、操作（查看客户）。</li>
+          </ul>
+        </div>
+
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.6 代理下钻：客户明细（抽屉）</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>入口：在代理表现中点击“查看客户”。</li>
+            <li>字段：客户姓名、MT账号、所属代理、产品名称、报名时间、审核通过时间、参与状态、达标状态、达标进度、活动净入金、交易手数、奖励/权益状态、最后更新时间。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-scale-balanced text-primary mr-2"></i>4. 业务规则
+      </h2>
+      <div class="space-y-3 text-sm text-gray-700">
+        <ul class="list-disc pl-5 space-y-2">
+          <li><span class="font-medium">报名客户数</span>：提交活动报名的客户数。</li>
+          <li><span class="font-medium">有效参与客户数</span>：活动审核通过的客户数；审核通过才算参与。</li>
+          <li><span class="font-medium">达标客户数</span>：满足当前活动 + 产品规则的有效参与客户数。</li>
+          <li><span class="font-medium">未达标客户数</span>：有效参与客户数 - 达标客户数。</li>
+          <li><span class="font-medium">达标率</span>：达标客户数 / 有效参与客户数（在当前活动 + 当前产品范围内计算）。</li>
+          <li><span class="font-medium">参与率</span>：有效参与客户数 / 伞下符合条件客户数。</li>
+          <li><span class="font-medium">代理伞下用户</span>：包含该代理所有下级代理及直客。</li>
+          <li>一个客户参与多个活动时，仅统计当前选择活动。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-table-list text-primary mr-2"></i>5. 字段说明
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-[900px] w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+          <thead class="bg-gray-50">
+            <tr class="text-gray-700">
+              <th class="text-left font-semibold py-3 px-4 border-b border-gray-200">模块</th>
+              <th class="text-left font-semibold py-3 px-4 border-b border-gray-200">字段</th>
+              <th class="text-left font-semibold py-3 px-4 border-b border-gray-200">说明</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-600">
+            <tr>
+              <td class="py-3 px-4 border-b border-gray-100">筛选区</td>
+              <td class="py-3 px-4 border-b border-gray-100">活动名称</td>
+              <td class="py-3 px-4 border-b border-gray-100">统计主键（活动 ID），用于确定当前分析范围。</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 border-b border-gray-100">筛选区</td>
+              <td class="py-3 px-4 border-b border-gray-100">产品名称</td>
+              <td class="py-3 px-4 border-b border-gray-100">当前活动下的统计维度；选择后指标与下钻范围同步切换。</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 border-b border-gray-100">筛选区</td>
+              <td class="py-3 px-4 border-b border-gray-100">代理/客户/MT</td>
+              <td class="py-3 px-4 border-b border-gray-100">关键字命中代理名称、客户名称或 MT 账号。</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 border-b border-gray-100">指标</td>
+              <td class="py-3 px-4 border-b border-gray-100">达标率/参与率</td>
+              <td class="py-3 px-4 border-b border-gray-100">分母为 0 时展示 “-” 或 0%，不能显示 NaN。</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 border-b border-gray-100">客户明细</td>
+              <td class="py-3 px-4 border-b border-gray-100">产品名称 / 达标进度</td>
+              <td class="py-3 px-4 border-b border-gray-100">产品名称用于归属维度；达标进度支持演示：已完成 80%，净入金 8,000 / 10,000，交易 35 / 50 Lot。</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4">奖励/权益</td>
+              <td class="py-3 px-4">奖励/权益发放</td>
+              <td class="py-3 px-4">无奖励活动显示“无奖励”；资金/赠金/资格权益按不同类型展示。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-hand-pointer text-primary mr-2"></i>6. 交互说明
+      </h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>关系树选择与顶部筛选条件同时存在时，按交集展示。</li>
+        <li>切换关系树节点后，不清空其它已选筛选条件。</li>
+        <li>切换活动后，指标、产品维度主表、代理表现、客户明细同步刷新。</li>
+        <li>点击产品“查看代理”后打开代理表现抽屉；在代理表现中点击“查看客户”后打开客户明细抽屉。</li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-triangle-exclamation text-primary mr-2"></i>7. 异常提示
+      </h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>有报名但未审核通过：不计入有效参与客户数。</li>
+        <li>达标率分母为 0：展示 “-” 或 0%，不能显示 NaN。</li>
+        <li>代理没有伞下客户：指标显示 0，排行榜/明细为空状态。</li>
+        <li>无奖励活动：奖励字段显示“无奖励”，页面不空白。</li>
+        <li>选择直客节点：仅展示该直客在当前活动 + 当前产品范围内的数据。</li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-flask text-primary mr-2"></i>8. Demo 说明
+      </h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>本页面使用演示数据展示筛选与联动效果，不接真实后端接口。</li>
+        <li>活动达标规则、净入金、交易手数等口径以演示数据为准；真实统计与口径校验仅写入 PRD，不在 Demo 强实现。</li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">
+        <i class="fas fa-circle-check text-primary mr-2"></i>9. 验收标准
+      </h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>页面包含关系树、筛选区、指标卡片、产品维度主表、代理表现（抽屉）、客户明细（抽屉）。</li>
+        <li>默认选中“华安”；选择代理包含所有下级代理与直客；选择直客仅统计当前直客。</li>
+        <li>筛选条件与关系树按交集生效；切换关系树不清空其它筛选。</li>
+        <li>无奖励活动可正常展示“无奖励”。</li>
+        <li>达标率分母为 0 不显示 NaN。</li>
+        <li>需求看板/业务页面/路由 meta 的 PRD 入口均指向同一份 PRD 主文件，且通过右侧 Drawer 打开。</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

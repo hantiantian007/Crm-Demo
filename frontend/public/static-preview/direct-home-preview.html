@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>直客首页确认页</title>
+    <style>
+      :root {
+        --bg: #f9fafb;
+        --card: #ffffff;
+        --border: #e5e7eb;
+        --text: #111827;
+        --muted: #6b7280;
+        --menu-bg: #2a2f3e;
+        --menu-text: #a1a5b7;
+        --menu-active: #d1a84f;
+        --gold: #d1a84f;
+        --gold-deep: #b89241;
+        --orange-bg: #fff7ed;
+        --orange-border: #fed7aa;
+        --orange-text: #9a3412;
+        --green: #34d399;
+        --blue: #3b82f6;
+        --danger: #f43f5e;
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+      a { color: inherit; text-decoration: none; }
+
+      .app { display: flex; min-height: 100vh; }
+      .sidebar { width: 240px; background: var(--menu-bg); color: var(--menu-text); display: flex; flex-direction: column; }
+      .brand { height: 80px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.08); font-weight: 900; letter-spacing: 2px; font-size: 34px; color: #fff; }
+      .menu { padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; }
+      .menu-item { padding: 10px 12px; border-radius: 10px; display: flex; align-items: center; gap: 10px; cursor: default; }
+      .menu-dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.18); }
+      .menu-item.active { background: rgba(209,168,79,0.14); color: #fff; }
+      .menu-item.active .menu-dot { background: var(--menu-active); }
+
+      .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+      .header { height: 56px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+      .crumb { font-size: 12px; color: var(--muted); }
+      .page-title { font-size: 14px; font-weight: 700; color: #374151; }
+
+      .content { padding: 18px; }
+      .container { max-width: 1280px; margin: 0 auto; }
+      .grid { display: grid; gap: 12px; }
+      .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+      @media (min-width: 1280px) { .kpi-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+      .kpi { padding: 14px; border-radius: 10px; border: 1px solid #f3f4f6; background: #fff; }
+      .kpi.emph { border-color: rgba(209,168,79,0.35); background: rgba(209,168,79,0.06); }
+      .kpi-label { font-size: 11px; color: var(--muted); }
+      .kpi-value { margin-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-weight: 800; font-size: 18px; color: #111827; }
+
+      .section-bd { padding: 18px; }
+      .section-hd { padding: 14px 18px; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .section-title { font-size: 14px; font-weight: 800; color: #1f2937; }
+
+      .activity-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+      .activity-left { display: flex; gap: 12px; min-width: 0; }
+      .icon-gold { width: 44px; height: 44px; border-radius: 12px; background: #c19b5e; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; flex-shrink: 0; }
+      .activity-name { font-size: 16px; font-weight: 800; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .activity-sub { margin-top: 6px; font-size: 13px; color: #f97316; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .activity-cond { margin-top: 6px; font-size: 12px; color: #f97316; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .activity-time { margin-top: 8px; font-size: 11px; color: #6b7280; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      .badge { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: #6b7280; white-space: nowrap; }
+      .dot { width: 6px; height: 6px; border-radius: 999px; background: #d1d5db; }
+      .dot.on { background: #10b981; }
+
+      .metric-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; }
+      .metric-label { color: #059669; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+      .metric-label.blue { color: #2563eb; }
+      .metric-val { font-weight: 800; color: #1f2937; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      .bar { height: 8px; border-radius: 999px; background: #f3f4f6; overflow: hidden; }
+      .fill { height: 100%; border-radius: 999px; background: var(--green); width: 100%; }
+      .fill.blue { background: var(--blue); width: 100%; }
+      .hint { background: var(--orange-bg); border: 1px solid var(--orange-border); color: var(--orange-text); padding: 10px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; display: flex; gap: 8px; }
+
+      .mt-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+      .mt-title { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11px; }
+      .tabs { display: inline-flex; background: rgba(243,244,246,0.8); border: 1px solid rgba(229,231,235,0.8); border-radius: 10px; padding: 4px; gap: 4px; }
+      .tab { padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #6b7280; border: 1px solid transparent; background: transparent; cursor: default; }
+      .tab.on { background: #fff; border-color: rgba(229,231,235,0.9); color: #1f2937; box-shadow: 0 1px 1px rgba(0,0,0,0.05); }
+      .mt-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+      @media (min-width: 768px) { .mt-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+      .mt-box { border: 1px solid #f3f4f6; background: rgba(249,250,251,0.8); border-radius: 12px; padding: 10px 12px; }
+      .mt-box .t { font-size: 11px; color: #6b7280; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+      .mt-box .v { margin-top: 4px; font-size: 16px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; color: #111827; }
+      .mt-two { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 12px; }
+      @media (min-width: 768px) { .mt-two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      .mt-box2 { border: 1px solid #f3f4f6; background: rgba(249,250,251,0.8); border-radius: 12px; padding: 10px 12px; }
+      .mt-box2 .t { font-size: 11px; color: #6b7280; }
+      .mt-pair { margin-top: 10px; display: grid; gap: 6px; }
+      .mt-line { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; color: #6b7280; }
+      .mt-line strong { color: #1f2937; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      .mt-line strong.pos { color: #059669; }
+
+      .layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); margin-top: 16px; }
+      @media (min-width: 1024px) { .layout { grid-template-columns: minmax(0, 1fr) 360px; } }
+      .trend { height: 180px; background: linear-gradient(180deg, rgba(209,168,79,0.12), rgba(209,168,79,0.02)); border: 1px dashed rgba(209,168,79,0.35); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: rgba(176, 137, 63, 0.9); font-weight: 700; font-size: 12px; }
+
+      .notice { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid #f3f4f6; }
+      .notice:first-child { border-top: none; }
+      .notice .l { min-width: 0; display: flex; align-items: center; gap: 10px; }
+      .notice .t { min-width: 0; font-size: 13px; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .notice .d { font-size: 12px; color: #9ca3af; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; white-space: nowrap; }
+
+      @media (max-width: 980px) { .sidebar { display: none; } }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">HATC</div>
+        <nav class="menu">
+          <div class="menu-item"><span class="menu-dot"></span><span>首页</span></div>
+          <div class="menu-item"><span class="menu-dot"></span><span>代理首页</span></div>
+          <div class="menu-item active"><span class="menu-dot"></span><span>直客首页</span></div>
+          <div class="menu-item"><span class="menu-dot"></span><span>活动管理</span></div>
+          <div class="menu-item"><span class="menu-dot"></span><span>报表中心</span></div>
+        </nav>
+      </aside>
+
+      <div class="main">
+        <header class="header">
+          <div>
+            <div class="page-title">直客首页确认页</div>
+            <div class="crumb">首页 / 直客首页</div>
+          </div>
+          <div class="crumb">静态确认页（仅用于业务确认）</div>
+        </header>
+
+        <div class="content">
+          <div class="container">
+            <div class="grid kpi-grid">
+              <div class="kpi">
+                <div class="kpi-label">MT余额</div>
+                <div class="kpi-value">$ 125,820.45</div>
+              </div>
+              <div class="kpi emph">
+                <div class="kpi-label">净入金</div>
+                <div class="kpi-value">$ 52,600.00</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">交易量</div>
+                <div class="kpi-value">185.25 Lot</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">持仓量</div>
+                <div class="kpi-value">18.60 Lot</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-label">浮动盈亏</div>
+                <div class="kpi-value">$ 520.35</div>
+              </div>
+            </div>
+
+            <div style="margin-top:16px; display:flex; flex-direction:column; gap:16px;">
+              <div class="card">
+                <div class="section-bd">
+                  <div class="activity-hd">
+                    <div class="activity-left">
+                      <div class="icon-gold">★</div>
+                      <div style="min-width:0">
+                        <div class="activity-name">星际起航免费开卡</div>
+                        <div class="activity-sub">新用户开户即送100USD赠金</div>
+                        <div class="activity-cond">单客户达标条件：净入金 $1,000.00 + 交易 10.00 Lot</div>
+                        <div class="activity-time">2026-09-01 ~ 2026-09-28 | 剩余 13 天</div>
+                      </div>
+                    </div>
+                    <div class="badge"><span class="dot"></span><span>未参加活动</span></div>
+                  </div>
+
+                  <div style="margin-top:18px; display:flex; flex-direction:column; gap:12px;">
+                    <div class="metric-row">
+                      <div class="metric-label">活动净入金</div>
+                      <div class="metric-val">$126,000.50</div>
+                    </div>
+                    <div class="bar"><div class="fill" style="width:100%"></div></div>
+
+                    <div class="metric-row">
+                      <div class="metric-label blue">活动交易手数</div>
+                      <div class="metric-val">680.25 Lot</div>
+                    </div>
+                    <div class="bar"><div class="fill blue" style="width:100%"></div></div>
+
+                    <div class="hint"><span style="margin-top:1px;">i</span><span>达标口径：按客户维度判断；统计从客户参与成功时间起算。</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-bd">
+                  <div class="mt-hd">
+                    <div class="mt-title"><span class="menu-dot"></span><span style="font-weight:700; color:#374151;">账户概览</span></div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <span style="font-size:11px; color:#6b7280;">时间</span>
+                      <div class="tabs">
+                        <div class="tab muted">今日</div>
+                        <div class="tab muted">本周</div>
+                        <div class="tab on">本月</div>
+                        <div class="tab muted">上月</div>
+                        <div class="tab muted">自定义</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="margin-top:14px;">
+                    <div style="font-size:11px; font-weight:700; color:#374151;">当前数据</div>
+                    <div class="mt-grid" style="margin-top:10px;">
+                      <div class="mt-box">
+                        <div class="t"><span>MT余额</span><span style="font-size:10px; color:#6b7280; background:#fff; border:1px solid var(--border); padding:1px 6px; border-radius:999px;">当前</span></div>
+                        <div class="v">$ 125,820.45</div>
+                      </div>
+                      <div class="mt-box">
+                        <div class="t"><span>持仓量</span><span style="font-size:10px; color:#6b7280; background:#fff; border:1px solid var(--border); padding:1px 6px; border-radius:999px;">当前</span></div>
+                        <div class="v">18.60 Lot</div>
+                      </div>
+                      <div class="mt-box">
+                        <div class="t"><span>浮动盈亏</span><span style="font-size:10px; color:#6b7280; background:#fff; border:1px solid var(--border); padding:1px 6px; border-radius:999px;">当前</span></div>
+                        <div class="v">$ 520.35</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="margin-top:16px; padding-top:16px; border-top:1px solid #f3f4f6;">
+                    <div style="font-size:11px; font-weight:700; color:#374151;">期间数据</div>
+                    <div class="mt-two">
+                      <div class="mt-box2">
+                        <div class="t">入金 / 出金</div>
+                        <div class="mt-pair">
+                          <div class="mt-line"><span>本月入金 $</span><strong>$ 85,200.00</strong></div>
+                          <div class="mt-line"><span>本月出金 $</span><strong>$ 32,600.00</strong></div>
+                        </div>
+                      </div>
+                      <div class="mt-box2">
+                        <div class="t">交易量 / 平仓盈亏</div>
+                        <div class="mt-pair">
+                          <div class="mt-line"><span>本月交易量 Lot</span><strong>185.25 Lot</strong></div>
+                          <div class="mt-line"><span>本月平仓盈亏 $</span><strong class="pos">$ 3,200.25</strong></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="layout">
+                <div class="card">
+                  <div class="section-hd">
+                    <div class="section-title">经营趋势</div>
+                    <div class="crumb">默认展示：净入金（演示）</div>
+                  </div>
+                  <div class="section-bd">
+                    <div class="trend">趋势图区域（静态预览）</div>
+                    <div style="margin-top:10px; display:flex; justify-content:space-between; gap:12px; font-size:11px; color:#9ca3af; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
+                      <span>近30天</span>
+                      <span>演示范围</span>
+                    </div>
+                  </div>
+                </div>
+
+                <aside class="card">
+                  <div class="section-bd" style="padding-bottom:10px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px;">
+                      <div style="font-size:13px; color:#6b7280; font-weight:700;">通知公告</div>
+                      <div class="crumb">查看更多 ></div>
+                    </div>
+                    <div class="notice">
+                      <div class="l"><span class="dot on"></span><div class="t">节假日交易时间调整通知</div></div><div class="d">09-11</div>
+                    </div>
+                    <div class="notice">
+                      <div class="l"><span class="dot"></span><div class="t">产品/交易规则更新说明</div></div><div class="d">09-10</div>
+                    </div>
+                    <div class="notice">
+                      <div class="l"><span class="dot"></span><div class="t">系统维护公告（周末 02:00-04:00）</div></div><div class="d">09-09</div>
+                    </div>
+                    <div class="notice">
+                      <div class="l"><span class="dot"></span><div class="t">重要业务通知：入金通道切换安排</div></div><div class="d">09-08</div>
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

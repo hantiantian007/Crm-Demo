@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>报表关系树筛选 - PRD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = { theme: { extend: { colors: { primary: '#C19B5E', secondary: '#A07D45' } } } }
+  </script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 md:p-8">
+  <div class="max-w-6xl mx-auto space-y-8">
+    <div class="bg-white rounded-lg shadow-sm p-6 border-t-4 border-primary">
+      <h1 class="text-2xl font-bold text-gray-900 mb-4">报表关系树筛选 - PRD</h1>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <div><span class="text-gray-500">目标用户：</span><span class="font-medium">运营、市场、财务、代理管理</span></div>
+        <div><span class="text-gray-500">数据来源：</span><span class="font-medium">演示数据（本期 Demo 不接真实 API）</span></div>
+        <div><span class="text-gray-500">版本：</span><span class="font-medium">V1.0.0（当前）</span></div>
+        <div><span class="text-gray-500">更新日期：</span><span class="font-medium">2026-09-15</span></div>
+      </div>
+      <div class="mt-4 p-4 bg-yellow-50 text-yellow-800 rounded-md text-sm border border-yellow-200">
+        <strong>说明：</strong>本需求用于 Demo 演示“关系树 + 报表筛选”的联动效果；真实接口、复杂权限、缓存、性能优化与真实分页仅写入 PRD，不在 Demo 强实现。
+      </div>
+      <div class="mt-4 text-sm text-gray-700 space-y-2">
+        <div class="font-medium text-gray-900">Demo 页面</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <div class="mono bg-gray-50 border border-gray-200 rounded px-3 py-2">/#/report/deposit-withdraw</div>
+          <div class="mono bg-gray-50 border border-gray-200 rounded px-3 py-2">/#/report/withdraw-report</div>
+          <div class="mono bg-gray-50 border border-gray-200 rounded px-3 py-2">/#/report/real-position</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-bullseye text-primary mr-2"></i>1. 需求说明</h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>出入金报表、提现报表、现实持仓报表增加左侧关系树，用于按代理与直客关系筛选报表数据。</li>
+        <li>关系树与原有筛选条件同时存在时，按交集展示。</li>
+        <li>页面文案统一使用“演示数据”，不使用 “Mock”。</li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-route text-primary mr-2"></i>2. 操作流程</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-700">
+        <li>进入报表页面（出入金 / 提现 / 现实持仓）。</li>
+        <li>左侧关系树默认选中“华安”。</li>
+        <li>点击代理节点：右侧报表展示该代理及其所有下级代理、直客范围内的数据。</li>
+        <li>点击直客节点：右侧报表仅展示该直客的数据。</li>
+        <li>在顶部筛选区继续选择筛选条件，与关系树选中范围共同生效（交集）。</li>
+      </ol>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-layer-group text-primary mr-2"></i>3. 页面状态</h2>
+      <div class="space-y-4 text-sm text-gray-700">
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.1 通用结构（3 个页面一致）</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>左侧：关系树（代理 + 直客）。</li>
+            <li>右侧：顶部筛选区 / 汇总数据区域 / 列表表格。</li>
+            <li>顶部 PRD 按钮：通过右侧 Drawer 打开本 PRD。</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.2 出入金报表</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>筛选：类型（入金/出金）、MT账号、系统时间。</li>
+            <li>汇总：记录数、入金合计、出金合计、净入金。</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.3 提现报表</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>筛选：MT账号、状态、系统时间。</li>
+            <li>汇总：记录数、出金合计、待处理、已完成。</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">3.4 现实持仓报表</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>筛选：交易品种。</li>
+            <li>汇总：交易品种数、订单数、浮动盈亏、净头寸。</li>
+            <li>列表：按交易品种聚合展示（演示聚合逻辑）。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-scale-balanced text-primary mr-2"></i>4. 业务规则</h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>关系树默认选中：华安；若默认节点不存在，则回退为第一个可用节点或“全部”（Demo 处理）。</li>
+        <li>选中代理：查询范围包含该代理及其所有下级代理、直客。</li>
+        <li>选中直客：仅查询该直客。</li>
+        <li>关系树选中范围与顶部筛选条件同时存在时：按交集展示。</li>
+        <li>切换关系树节点后：刷新报表数据，不清空其它已选筛选条件。</li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-table-columns text-primary mr-2"></i>5. 字段说明</h2>
+      <div class="space-y-4 text-sm text-gray-700">
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">5.1 关系树节点</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>节点类型：代理 / 直客。</li>
+            <li>展示：编号-名称（演示数据）。</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">5.2 出入金/提现表格字段（演示）</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>订单号、客户、代理、MT账号、金额(USD)、状态、MT时间、系统时间。</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+          <div class="font-bold text-gray-800 mb-2">5.3 现实持仓表格字段（演示）</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>交易品种、净头寸(手)、浮动盈亏(USD)、笔数(BUY/SELL)、买入/价格、卖出/价格。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-hand-pointer text-primary mr-2"></i>6. 交互说明</h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>关系树搜索：支持按代理/直客关键字搜索，并支持 MT 账号命中（演示）。</li>
+        <li>当前选中节点高亮；点击节点立即刷新右侧报表。</li>
+        <li>Desktop / Tablet / Mobile：关系树与报表内容不遮挡，移动端关系树位于内容上方（演示布局）。</li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-triangle-exclamation text-primary mr-2"></i>7. 异常提示</h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>关系树数据为空：页面不报错，可展示空状态或保持默认数据（演示）。</li>
+        <li>选中代理但下级无数据：报表展示空状态。</li>
+        <li>选中直客但无记录：报表展示空状态。</li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-flask text-primary mr-2"></i>8. Demo 说明</h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>本期 Demo 使用静态演示数据模拟筛选效果，不接真实后端接口。</li>
+        <li>不实现导出、复杂权限、真实分页等生产能力；如后续需要，以本 PRD 为依据再拆分任务。</li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fas fa-clipboard-check text-primary mr-2"></i>9. 验收标准</h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
+        <li>三个页面均存在左侧关系树，且默认选中“华安”。</li>
+        <li>选中代理节点：右侧结果包含该代理及其所有下级代理、直客范围数据。</li>
+        <li>选中直客节点：右侧结果仅展示该直客数据。</li>
+        <li>关系树筛选与原筛选条件并存时按交集展示，切换关系树不清空已选筛选条件。</li>
+        <li>页面 PRD 入口、需求看板 PRD 入口统一打开同一份 PRD 主文件。</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -300,7 +300,7 @@
     </button>
    </div>
    <!-- 表格区域 -->
-   <div class="overflow-x-auto flex-1 no-scrollbar">
+   <div class="position-stats-table overflow-x-auto flex-1 no-scrollbar">
     <table class="w-full custom-table min-w-[1500px]">
      <thead class="bg-tableHeader">
       <tr>
@@ -664,7 +664,7 @@
    </div>
    <!-- 分页 -->
    <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between bg-white">
-    <div class="text-sm text-gray-500">
+    <div class="text-xs text-gray-500">
      共
      <span class="font-medium text-gray-700">
       5
@@ -672,13 +672,13 @@
      条记录
     </div>
     <div class="flex items-center gap-2">
-     <button class="px-3 py-1 text-sm border border-gray-200 rounded text-gray-400 cursor-not-allowed">
+     <button class="px-3 py-1 text-xs border border-gray-200 rounded text-gray-400 cursor-not-allowed">
       上一页
      </button>
-     <button class="px-3 py-1 text-sm bg-menuActive text-white rounded">
+     <button class="px-3 py-1 text-xs bg-menuActive text-white rounded">
       1
      </button>
-     <button class="px-3 py-1 text-sm border border-gray-200 rounded text-gray-600 hover:bg-gray-50 transition-colors">
+     <button class="px-3 py-1 text-xs border border-gray-200 rounded text-gray-600 hover:bg-gray-50 transition-colors">
       下一页
      </button>
     </div>
@@ -692,5 +692,46 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.position-stats-table .custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+}
+
+.position-stats-table .custom-table thead th {
+  font-weight: 600;
+  color: #374151;
+  background: #f9fafb;
+  padding: 10px 10px;
+  white-space: nowrap;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #f3f4f6;
+}
+.position-stats-table .custom-table thead th:last-child {
+  border-right: 0;
+}
+
+.position-stats-table .custom-table tbody td {
+  color: #4b5563;
+  padding: 10px 10px;
+  line-height: 18px;
+  border-bottom: 1px solid #f3f4f6;
+  border-right: 1px solid #f9fafb;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.position-stats-table .custom-table tbody td:last-child {
+  border-right: 0;
+}
+
+.position-stats-table .expanded-row td {
+  white-space: normal;
+}
+</style>
