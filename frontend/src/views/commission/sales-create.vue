@@ -186,6 +186,22 @@
                     </div>
                     <div class="text-xs text-gray-500 mb-3">适用于未配置代理或MT分组特殊规则的客户及交易账户。</div>
 
+                    <div class="tier-products">
+                      <div class="tier-products-label">产品</div>
+                      <div class="tier-products-tabs">
+                        <button
+                          v-for="opt in tierProductOptions"
+                          :key="opt.key"
+                          class="tier-product-tab"
+                          :class="selectedDefaultProductKey === opt.key ? 'is-active' : ''"
+                          type="button"
+                          @click="selectedDefaultProductKey = opt.key"
+                        >
+                          {{ opt.label }}
+                        </button>
+                      </div>
+                    </div>
+
                     <div class="overflow-x-auto border border-gray-200 rounded-lg">
                       <table class="min-w-[760px] w-full text-xs">
                         <thead class="bg-tableHeader text-gray-600">
@@ -246,6 +262,7 @@
                         <div class="mt-3 flex items-center gap-12 flex-wrap">
                           <button class="btn btn-outline-gold" type="button" @click="handleDiffTierEntryClick">配置差异化阶梯</button>
                         </div>
+                        <div class="help">MT分组＋产品 &gt; 最近一级已配置代理＋产品 &gt; 默认配置＋产品</div>
                         <div class="mt-3">
                           <div v-if="diffSummary.hasAny" class="diff-summary">
                             <div class="diff-summary-head">
@@ -628,7 +645,7 @@
           </div>
           <div class="diff-modal-line">
             <div class="diff-modal-label">规则优先级</div>
-            <div class="diff-modal-value">-</div>
+            <div class="diff-modal-value">MT分组＋产品 &gt; 最近一级已配置代理＋产品 &gt; 默认配置＋产品</div>
           </div>
           <div class="diff-modal-line">
             <div class="diff-modal-label">说明</div>
@@ -653,7 +670,7 @@
                     <div class="tree-title">{{ node.name }}</div>
                     <div class="tree-sub">{{ node.account }}</div>
                   </div>
-                  <div class="tree-tag" :class="agentRulesDraft[node.id]?.enabled ? 'is-config' : ''">{{ agentRulesDraft[node.id]?.enabled ? '已配置' : '默认' }}</div>
+                  <div class="tree-tag" :class="hasScopeConfig(agentRulesDraft[node.id]) ? 'is-config' : ''">{{ hasScopeConfig(agentRulesDraft[node.id]) ? '已配置' : '默认' }}</div>
                 </div>
               </div>
 
@@ -662,7 +679,7 @@
                   <div class="tree-main">
                     <div class="tree-title">{{ g.name }}</div>
                   </div>
-                  <div class="tree-tag" :class="mtRulesDraft[g.id]?.enabled ? 'is-config' : ''">{{ mtRulesDraft[g.id]?.enabled ? '已配置' : '默认' }}</div>
+                  <div class="tree-tag" :class="hasScopeConfig(mtRulesDraft[g.id]) ? 'is-config' : ''">{{ hasScopeConfig(mtRulesDraft[g.id]) ? '已配置' : '默认' }}</div>
                 </div>
               </div>
             </div>
@@ -678,21 +695,46 @@
                   </div>
 
                   <div class="mt-3">
-                    <div class="flex items-center justify-between gap-4 mb-2">
+                    <div class="diff-product-bar">
+                      <div class="diff-product-label">产品</div>
+                      <div class="diff-product-controls">
+                        <div class="diff-product-tabs">
+                          <button
+                            v-for="opt in tierProductOptions"
+                            :key="opt.key"
+                            class="diff-product-tab"
+                            :class="getScopeSelectedProduct(agentRulesDraft[selectedAgentId]) === opt.key ? 'is-active' : ''"
+                            type="button"
+                            @click="setScopeSelectedProduct(agentRulesDraft[selectedAgentId], opt.key)"
+                          >
+                            {{ opt.label }}
+                          </button>
+                        </div>
+                        <button
+                          v-if="!scopeHasProduct(agentRulesDraft[selectedAgentId], getScopeSelectedProduct(agentRulesDraft[selectedAgentId]))"
+                          class="btn btn-outline-gold btn-sm"
+                          type="button"
+                          @click="copyDefaultToScopeProduct(agentRulesDraft[selectedAgentId])"
+                        >
+                          复制默认阶梯并启用
+                        </button>
+                      </div>
+                    </div>
+
+                    <div v-if="!scopeHasProduct(agentRulesDraft[selectedAgentId], getScopeSelectedProduct(agentRulesDraft[selectedAgentId]))" class="help">
+                      当前产品未启用覆盖规则，继承下一优先级规则（演示）。
+                    </div>
+
+                    <div class="flex items-center justify-between gap-4 mb-2 mt-3">
                       <div class="text-sm font-semibold text-gray-700">阶梯配置（演示数据）</div>
                       <div class="flex items-center gap-2">
-                        <button
-                          v-if="!agentRulesDraft[selectedAgentId].editing"
-                          class="btn btn-outline btn-sm"
-                          type="button"
-                          @click="agentRulesDraft[selectedAgentId].enabled ? startEditRuleTier(agentRulesDraft[selectedAgentId]) : startEditAgentRule(selectedAgentId)"
-                        >
+                        <button v-if="!isScopeEditing(agentRulesDraft[selectedAgentId])" class="btn btn-outline btn-sm" type="button" @click="startEditScopeProduct(agentRulesDraft[selectedAgentId])">
                           编辑
                         </button>
                         <template v-else>
-                          <button class="btn btn-outline-gold btn-sm" type="button" @click="addRuleTierRow(agentRulesDraft[selectedAgentId])">新增档位</button>
-                          <button class="btn btn-primary btn-sm" type="button" @click="saveRuleTier(agentRulesDraft[selectedAgentId])">保存</button>
-                          <button class="btn btn-outline btn-sm" type="button" @click="cancelRuleTier(agentRulesDraft[selectedAgentId])">取消</button>
+                          <button class="btn btn-outline-gold btn-sm" type="button" @click="addRuleTierRow(getScopeCurrentRule(agentRulesDraft[selectedAgentId]))">新增档位</button>
+                          <button class="btn btn-primary btn-sm" type="button" @click="saveRuleTier(getScopeCurrentRule(agentRulesDraft[selectedAgentId]))">保存</button>
+                          <button class="btn btn-outline btn-sm" type="button" @click="cancelRuleTier(getScopeCurrentRule(agentRulesDraft[selectedAgentId]))">取消</button>
                         </template>
                       </div>
                     </div>
@@ -709,31 +751,31 @@
                           </tr>
                         </thead>
                         <tbody class="text-gray-700">
-                          <tr v-for="(row, idx) in getRuleRows(agentRulesDraft[selectedAgentId], !agentRulesDraft[selectedAgentId].enabled)" :key="row.id" class="border-t border-gray-100">
+                          <tr v-for="(row, idx) in getScopeRows(agentRulesDraft[selectedAgentId])" :key="row.id" class="border-t border-gray-100">
                             <td class="px-4 py-3 whitespace-nowrap">
                               <span>{{ formatMoney(row.start) }}</span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
                               <input
-                                v-if="agentRulesDraft[selectedAgentId].enabled && agentRulesDraft[selectedAgentId].editing && row.endType === 'value'"
+                                v-if="isScopeEditing(agentRulesDraft[selectedAgentId]) && row.endType === 'value'"
                                 v-model="row.end"
                                 class="input input-sm w-[160px]"
-                                :class="agentRulesDraft[selectedAgentId].fieldErrors[row.id]?.end ? 'input-error' : ''"
+                                :class="getScopeCurrentRule(agentRulesDraft[selectedAgentId])?.fieldErrors?.[row.id]?.end ? 'input-error' : ''"
                                 inputmode="decimal"
                               />
                               <span v-else>{{ row.endType === 'unlimited' ? '不设上限' : formatMoney(row.end) }}</span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
-                              <input v-if="agentRulesDraft[selectedAgentId].enabled && agentRulesDraft[selectedAgentId].editing" v-model="row.commission" class="input input-sm w-[140px]" inputmode="decimal" />
+                              <input v-if="isScopeEditing(agentRulesDraft[selectedAgentId])" v-model="row.commission" class="input input-sm w-[140px]" inputmode="decimal" />
                               <span v-else>{{ formatMoney(row.commission) }}</span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">{{ row.unit }}</td>
                             <td class="px-4 py-3 whitespace-nowrap w-[90px]">
                               <button
-                                v-if="agentRulesDraft[selectedAgentId].enabled && agentRulesDraft[selectedAgentId].editing"
+                                v-if="isScopeEditing(agentRulesDraft[selectedAgentId])"
                                 class="btn-danger-text"
                                 type="button"
-                                @click="deleteRuleTierRow(agentRulesDraft[selectedAgentId], idx)"
+                                @click="deleteRuleTierRow(getScopeCurrentRule(agentRulesDraft[selectedAgentId]), idx)"
                               >
                                 删除
                               </button>
@@ -758,21 +800,46 @@
                   </div>
 
                   <div class="mt-3">
-                    <div class="flex items-center justify-between gap-4 mb-2">
+                    <div class="diff-product-bar">
+                      <div class="diff-product-label">产品</div>
+                      <div class="diff-product-controls">
+                        <div class="diff-product-tabs">
+                          <button
+                            v-for="opt in tierProductOptions"
+                            :key="opt.key"
+                            class="diff-product-tab"
+                            :class="getScopeSelectedProduct(mtRulesDraft[selectedMtGroupId]) === opt.key ? 'is-active' : ''"
+                            type="button"
+                            @click="setScopeSelectedProduct(mtRulesDraft[selectedMtGroupId], opt.key)"
+                          >
+                            {{ opt.label }}
+                          </button>
+                        </div>
+                        <button
+                          v-if="!scopeHasProduct(mtRulesDraft[selectedMtGroupId], getScopeSelectedProduct(mtRulesDraft[selectedMtGroupId]))"
+                          class="btn btn-outline-gold btn-sm"
+                          type="button"
+                          @click="copyDefaultToScopeProduct(mtRulesDraft[selectedMtGroupId])"
+                        >
+                          复制默认阶梯并启用
+                        </button>
+                      </div>
+                    </div>
+
+                    <div v-if="!scopeHasProduct(mtRulesDraft[selectedMtGroupId], getScopeSelectedProduct(mtRulesDraft[selectedMtGroupId]))" class="help">
+                      当前产品未启用覆盖规则，继承下一优先级规则（演示）。
+                    </div>
+
+                    <div class="flex items-center justify-between gap-4 mb-2 mt-3">
                       <div class="text-sm font-semibold text-gray-700">阶梯配置（演示数据）</div>
                       <div class="flex items-center gap-2">
-                        <button
-                          v-if="!mtRulesDraft[selectedMtGroupId].editing"
-                          class="btn btn-outline btn-sm"
-                          type="button"
-                          @click="mtRulesDraft[selectedMtGroupId].enabled ? startEditRuleTier(mtRulesDraft[selectedMtGroupId]) : startEditMtRule(selectedMtGroupId)"
-                        >
+                        <button v-if="!isScopeEditing(mtRulesDraft[selectedMtGroupId])" class="btn btn-outline btn-sm" type="button" @click="startEditScopeProduct(mtRulesDraft[selectedMtGroupId])">
                           编辑
                         </button>
                         <template v-else>
-                          <button class="btn btn-outline-gold btn-sm" type="button" @click="addRuleTierRow(mtRulesDraft[selectedMtGroupId])">新增档位</button>
-                          <button class="btn btn-primary btn-sm" type="button" @click="saveRuleTier(mtRulesDraft[selectedMtGroupId])">保存</button>
-                          <button class="btn btn-outline btn-sm" type="button" @click="cancelRuleTier(mtRulesDraft[selectedMtGroupId])">取消</button>
+                          <button class="btn btn-outline-gold btn-sm" type="button" @click="addRuleTierRow(getScopeCurrentRule(mtRulesDraft[selectedMtGroupId]))">新增档位</button>
+                          <button class="btn btn-primary btn-sm" type="button" @click="saveRuleTier(getScopeCurrentRule(mtRulesDraft[selectedMtGroupId]))">保存</button>
+                          <button class="btn btn-outline btn-sm" type="button" @click="cancelRuleTier(getScopeCurrentRule(mtRulesDraft[selectedMtGroupId]))">取消</button>
                         </template>
                       </div>
                     </div>
@@ -789,27 +856,27 @@
                           </tr>
                         </thead>
                         <tbody class="text-gray-700">
-                          <tr v-for="(row, idx) in getRuleRows(mtRulesDraft[selectedMtGroupId], !mtRulesDraft[selectedMtGroupId].enabled)" :key="row.id" class="border-t border-gray-100">
+                          <tr v-for="(row, idx) in getScopeRows(mtRulesDraft[selectedMtGroupId])" :key="row.id" class="border-t border-gray-100">
                             <td class="px-4 py-3 whitespace-nowrap">
                               <span>{{ formatMoney(row.start) }}</span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
                               <input
-                                v-if="mtRulesDraft[selectedMtGroupId].enabled && mtRulesDraft[selectedMtGroupId].editing && row.endType === 'value'"
+                                v-if="isScopeEditing(mtRulesDraft[selectedMtGroupId]) && row.endType === 'value'"
                                 v-model="row.end"
                                 class="input input-sm w-[160px]"
-                                :class="mtRulesDraft[selectedMtGroupId].fieldErrors[row.id]?.end ? 'input-error' : ''"
+                                :class="getScopeCurrentRule(mtRulesDraft[selectedMtGroupId])?.fieldErrors?.[row.id]?.end ? 'input-error' : ''"
                                 inputmode="decimal"
                               />
                               <span v-else>{{ row.endType === 'unlimited' ? '不设上限' : formatMoney(row.end) }}</span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
-                              <input v-if="mtRulesDraft[selectedMtGroupId].enabled && mtRulesDraft[selectedMtGroupId].editing" v-model="row.commission" class="input input-sm w-[140px]" inputmode="decimal" />
+                              <input v-if="isScopeEditing(mtRulesDraft[selectedMtGroupId])" v-model="row.commission" class="input input-sm w-[140px]" inputmode="decimal" />
                               <span v-else>{{ formatMoney(row.commission) }}</span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">{{ row.unit }}</td>
                             <td class="px-4 py-3 whitespace-nowrap w-[90px]">
-                              <button v-if="mtRulesDraft[selectedMtGroupId].enabled && mtRulesDraft[selectedMtGroupId].editing" class="btn-danger-text" type="button" @click="deleteRuleTierRow(mtRulesDraft[selectedMtGroupId], idx)">删除</button>
+                              <button v-if="isScopeEditing(mtRulesDraft[selectedMtGroupId])" class="btn-danger-text" type="button" @click="deleteRuleTierRow(getScopeCurrentRule(mtRulesDraft[selectedMtGroupId]), idx)">删除</button>
                             </td>
                           </tr>
                         </tbody>
@@ -931,6 +998,19 @@ const formatMoney = (v) => {
 
 const products = ['外汇', '黄金', '白银', '原油', '比特币', '数字货币', '股指', '公斤条']
 
+const tierProductOptions = [
+  { key: 'forex', label: '外汇' },
+  { key: 'gold', label: '黄金' },
+  { key: 'silver', label: '白银' },
+  { key: 'oil', label: '原油' },
+  { key: 'btc', label: '比特币' },
+  { key: 'crypto', label: '数字货币' },
+  { key: 'index', label: '股指' },
+  { key: 'kg', label: '公斤条' },
+]
+
+const getTierProductLabel = (key) => tierProductOptions.find((p) => p.key === key)?.label || key
+
 const createUniformRows = () =>
   products.map((p) => ({
     product: p,
@@ -990,11 +1070,85 @@ const createTierRows = () => [
   },
 ]
 
-const tierEditing = ref(false)
-const tierSaved = ref(createTierRows())
-const tierDraft = ref(createTierRows())
+const createGoldTierRows = () => [
+  {
+    id: 'tier-g-1',
+    start: '0.00',
+    endType: 'value',
+    end: '49999.99',
+    commission: '2.50',
+    unit: 'USD/标准手',
+  },
+  {
+    id: 'tier-g-2',
+    start: '50000.00',
+    endType: 'unlimited',
+    end: '',
+    commission: '3.00',
+    unit: 'USD/标准手',
+  },
+]
 
-const tierFieldErrors = ref({})
+const selectedDefaultProductKey = ref('forex')
+
+const buildTierState = (rows) =>
+  reactive({
+    editing: false,
+    saved: cloneRows(rows),
+    draft: cloneRows(rows),
+    fieldErrors: {},
+    syncing: false,
+  })
+
+const defaultTierStates = reactive({
+  forex: buildTierState(createTierRows()),
+  gold: buildTierState(createGoldTierRows()),
+  silver: buildTierState(createTierRows()),
+  oil: buildTierState(createTierRows()),
+  btc: buildTierState(createTierRows()),
+  crypto: buildTierState(createTierRows()),
+  index: buildTierState(createTierRows()),
+  kg: buildTierState(createTierRows()),
+})
+
+const currentDefaultTierState = computed(() => {
+  return defaultTierStates[selectedDefaultProductKey.value] || defaultTierStates.forex
+})
+
+const tierEditing = computed({
+  get: () => !!currentDefaultTierState.value.editing,
+  set: (v) => {
+    currentDefaultTierState.value.editing = !!v
+  },
+})
+
+const tierSaved = computed({
+  get: () => currentDefaultTierState.value.saved,
+  set: (v) => {
+    currentDefaultTierState.value.saved = v
+  },
+})
+
+const tierDraft = computed({
+  get: () => currentDefaultTierState.value.draft,
+  set: (v) => {
+    currentDefaultTierState.value.draft = v
+  },
+})
+
+const tierFieldErrors = computed({
+  get: () => currentDefaultTierState.value.fieldErrors,
+  set: (v) => {
+    currentDefaultTierState.value.fieldErrors = v
+  },
+})
+
+const syncingTier = computed({
+  get: () => !!currentDefaultTierState.value.syncing,
+  set: (v) => {
+    currentDefaultTierState.value.syncing = !!v
+  },
+})
 
 const parseMoneyToCents = (v) => {
   const raw = String(v ?? '').trim()
@@ -1013,6 +1167,8 @@ const centsToFixedMoney = (cents) => {
   const frac = String(abs % 100).padStart(2, '0')
   return `${intPart}.${frac}`
 }
+
+const getDefaultSavedRowsByProduct = (key) => cloneRows(defaultTierStates[key]?.saved || createTierRows())
 
 const diffTierEnabled = ref('no')
 const diffTierModalVisible = ref(false)
@@ -1092,6 +1248,60 @@ const buildRuleDraft = (initialRows, enabled) => {
   return rule
 }
 
+const buildScopeDraft = () =>
+  reactive({
+    selectedProduct: 'forex',
+    products: reactive({}),
+  })
+
+const hasScopeConfig = (scope) => {
+  const keys = Object.keys(scope?.products || {})
+  return keys.length > 0
+}
+
+const getScopeSelectedProduct = (scope) => String(scope?.selectedProduct || 'forex')
+const setScopeSelectedProduct = (scope, key) => {
+  if (!scope) return
+  scope.selectedProduct = key
+}
+
+const scopeHasProduct = (scope, key) => !!scope?.products?.[key]
+
+const getScopeCurrentRule = (scope) => {
+  if (!scope) return null
+  const key = getScopeSelectedProduct(scope)
+  return scope.products?.[key] || null
+}
+
+const isScopeEditing = (scope) => !!getScopeCurrentRule(scope)?.editing
+
+const getScopeRows = (scope) => {
+  if (!scope) return []
+  const key = getScopeSelectedProduct(scope)
+  const rule = scope.products?.[key]
+  if (rule) return rule.editing ? rule.draft : rule.saved
+  return getDefaultSavedRowsByProduct(key)
+}
+
+const copyDefaultToScopeProduct = (scope) => {
+  if (!scope) return
+  const key = getScopeSelectedProduct(scope)
+  if (scope.products?.[key]) return
+  const seed = getDefaultSavedRowsByProduct(key)
+  scope.products[key] = buildRuleDraft(seed, true)
+  startEditRuleTier(scope.products[key])
+}
+
+const startEditScopeProduct = (scope) => {
+  if (!scope) return
+  const key = getScopeSelectedProduct(scope)
+  if (!scope.products?.[key]) {
+    const seed = getDefaultSavedRowsByProduct(key)
+    scope.products[key] = buildRuleDraft(seed, true)
+  }
+  startEditRuleTier(scope.products[key])
+}
+
 const openDiffTierModal = () => {
   if (!form.salesNameValue) return
   diffTierModalVisible.value = true
@@ -1103,17 +1313,31 @@ const openDiffTierModal = () => {
   mtRulesDraft.value = {}
 
   agentTreeBase.forEach((n) => {
-    const saved = agentRuleConfigs.value[n.id]
-    const seed = saved?.tiers || demoAgentTiers[n.id] || tierSaved.value
-    const defaultEnabled = saved?.enabled ?? (n.id === 'agent-a' || n.id === 'agent-b')
-    agentRulesDraft.value[n.id] = buildRuleDraft(seed, !!defaultEnabled)
+    const scope = buildScopeDraft()
+    const saved = agentRuleConfigs.value?.[n.id]
+    const savedProducts = saved?.products || null
+    if (savedProducts) {
+      Object.entries(savedProducts).forEach(([k, tiers]) => {
+        scope.products[k] = buildRuleDraft(tiers, true)
+      })
+    } else if (demoAgentTiers[n.id]) {
+      scope.products.forex = buildRuleDraft(demoAgentTiers[n.id], true)
+    }
+    agentRulesDraft.value[n.id] = scope
   })
 
   mtGroupsBase.forEach((g) => {
-    const saved = mtRuleConfigs.value[g.id]
-    const seed = saved?.tiers || demoMtTiers[g.id] || tierSaved.value
-    const defaultEnabled = saved?.enabled ?? g.id === 'mt-real-vip-standard'
-    mtRulesDraft.value[g.id] = buildRuleDraft(seed, !!defaultEnabled)
+    const scope = buildScopeDraft()
+    const saved = mtRuleConfigs.value?.[g.id]
+    const savedProducts = saved?.products || null
+    if (savedProducts) {
+      Object.entries(savedProducts).forEach(([k, tiers]) => {
+        scope.products[k] = buildRuleDraft(tiers, true)
+      })
+    } else if (demoMtTiers[g.id]) {
+      scope.products.forex = buildRuleDraft(demoMtTiers[g.id], true)
+    }
+    mtRulesDraft.value[g.id] = scope
   })
 
   selectedAgentId.value = 'agent-a'
@@ -1128,10 +1352,20 @@ const closeDiffTierModal = () => {
 
 const snapshotDiffTierModal = () => {
   const agentPlain = Object.fromEntries(
-    Object.entries(agentRulesDraft.value || {}).map(([id, r]) => [id, { enabled: !!r.enabled, saved: cloneRows(r.saved || []), draft: cloneRows(r.draft || []) }])
+    Object.entries(agentRulesDraft.value || {}).map(([id, scope]) => {
+      const productsPlain = Object.fromEntries(
+        Object.entries(scope?.products || {}).map(([k, r]) => [k, { saved: cloneRows(r.saved || []), draft: cloneRows(r.draft || []), editing: !!r.editing }])
+      )
+      return [id, { selectedProduct: scope?.selectedProduct || 'forex', products: productsPlain }]
+    })
   )
   const mtPlain = Object.fromEntries(
-    Object.entries(mtRulesDraft.value || {}).map(([id, r]) => [id, { enabled: !!r.enabled, saved: cloneRows(r.saved || []), draft: cloneRows(r.draft || []) }])
+    Object.entries(mtRulesDraft.value || {}).map(([id, scope]) => {
+      const productsPlain = Object.fromEntries(
+        Object.entries(scope?.products || {}).map(([k, r]) => [k, { saved: cloneRows(r.saved || []), draft: cloneRows(r.draft || []), editing: !!r.editing }])
+      )
+      return [id, { selectedProduct: scope?.selectedProduct || 'forex', products: productsPlain }]
+    })
   )
   return JSON.stringify({ agentPlain, mtPlain })
 }
@@ -1412,47 +1646,53 @@ const cancelRuleTier = (rule) => {
 
 const saveDiffTierModal = () => {
   const agentEntries = Object.entries(agentRulesDraft.value || {})
-  for (const [id, rule] of agentEntries) {
-    if (!rule?.enabled) continue
-    if (rule.editing) {
-      const r = validateRuleTier(rule)
-      if (!r.ok) {
-        const name = agentTreeBase.find((n) => n.id === id)?.name || '代理'
-        ElMessage({ message: `${name}：${r.msg}`, type: 'warning' })
-        return
-      }
-      rule.saved = cloneRows(rule.draft)
-      rule.editing = false
-    } else {
-      rule.draft = cloneRows(rule.saved)
-      const r = validateRuleTier(rule)
-      if (!r.ok) {
-        const name = agentTreeBase.find((n) => n.id === id)?.name || '代理'
-        ElMessage({ message: `${name}：${r.msg}`, type: 'warning' })
-        return
+  for (const [id, scope] of agentEntries) {
+    const name = agentTreeBase.find((n) => n.id === id)?.name || '代理'
+    const productsEntries = Object.entries(scope?.products || {})
+    for (const [productKey, rule] of productsEntries) {
+      if (!rule) continue
+      if (rule.editing) {
+        const r = validateRuleTier(rule)
+        if (!r.ok) {
+          ElMessage({ message: `${name}（${getTierProductLabel(productKey)}）：${r.msg}`, type: 'warning' })
+          return
+        }
+        rule.saved = cloneRows(rule.draft)
+        rule.editing = false
+      } else {
+        rule.draft = cloneRows(rule.saved)
+        const r = validateRuleTier(rule)
+        if (!r.ok) {
+          ElMessage({ message: `${name}（${getTierProductLabel(productKey)}）：${r.msg}`, type: 'warning' })
+          return
+        }
+        rule.saved = cloneRows(rule.draft)
       }
     }
   }
 
   const mtEntries = Object.entries(mtRulesDraft.value || {})
-  for (const [id, rule] of mtEntries) {
-    if (!rule?.enabled) continue
-    if (rule.editing) {
-      const r = validateRuleTier(rule)
-      if (!r.ok) {
-        const name = mtGroupsBase.find((g) => g.id === id)?.name || 'MT分组'
-        ElMessage({ message: `${name}：${r.msg}`, type: 'warning' })
-        return
-      }
-      rule.saved = cloneRows(rule.draft)
-      rule.editing = false
-    } else {
-      rule.draft = cloneRows(rule.saved)
-      const r = validateRuleTier(rule)
-      if (!r.ok) {
-        const name = mtGroupsBase.find((g) => g.id === id)?.name || 'MT分组'
-        ElMessage({ message: `${name}：${r.msg}`, type: 'warning' })
-        return
+  for (const [id, scope] of mtEntries) {
+    const name = mtGroupsBase.find((g) => g.id === id)?.name || 'MT分组'
+    const productsEntries = Object.entries(scope?.products || {})
+    for (const [productKey, rule] of productsEntries) {
+      if (!rule) continue
+      if (rule.editing) {
+        const r = validateRuleTier(rule)
+        if (!r.ok) {
+          ElMessage({ message: `${name}（${getTierProductLabel(productKey)}）：${r.msg}`, type: 'warning' })
+          return
+        }
+        rule.saved = cloneRows(rule.draft)
+        rule.editing = false
+      } else {
+        rule.draft = cloneRows(rule.saved)
+        const r = validateRuleTier(rule)
+        if (!r.ok) {
+          ElMessage({ message: `${name}（${getTierProductLabel(productKey)}）：${r.msg}`, type: 'warning' })
+          return
+        }
+        rule.saved = cloneRows(rule.draft)
       }
     }
   }
@@ -1460,11 +1700,13 @@ const saveDiffTierModal = () => {
   agentRuleConfigs.value = {}
   mtRuleConfigs.value = {}
 
-  agentEntries.forEach(([id, rule]) => {
-    if (rule?.enabled) agentRuleConfigs.value[id] = { enabled: true, tiers: cloneRows(rule.saved) }
+  agentEntries.forEach(([id, scope]) => {
+    const products = Object.fromEntries(Object.entries(scope?.products || {}).map(([k, r]) => [k, cloneRows(r.saved || [])]))
+    if (Object.keys(products).length) agentRuleConfigs.value[id] = { products }
   })
-  mtEntries.forEach(([id, rule]) => {
-    if (rule?.enabled) mtRuleConfigs.value[id] = { enabled: true, tiers: cloneRows(rule.saved) }
+  mtEntries.forEach(([id, scope]) => {
+    const products = Object.fromEntries(Object.entries(scope?.products || {}).map(([k, r]) => [k, cloneRows(r.saved || [])]))
+    if (Object.keys(products).length) mtRuleConfigs.value[id] = { products }
   })
 
   ElMessage({ message: '差异化阶梯配置已保存（演示）', type: 'success' })
@@ -1492,23 +1734,29 @@ const summarizeRuleLine = (label, tiers) => {
 }
 
 const diffSummary = computed(() => {
-  const agents = Object.entries(agentRuleConfigs.value || {}).filter(([, v]) => v?.enabled)
-  const mts = Object.entries(mtRuleConfigs.value || {}).filter(([, v]) => v?.enabled)
+  const agents = Object.entries(agentRuleConfigs.value || {}).filter(([, v]) => v?.products && Object.keys(v.products).length > 0)
+  const mts = Object.entries(mtRuleConfigs.value || {}).filter(([, v]) => v?.products && Object.keys(v.products).length > 0)
 
-  const agentLines = agents.map(([id, v]) => {
+  const agentLines = []
+  agents.forEach(([id, v]) => {
     const name = agentTreeBase.find((n) => n.id === id)?.name || id
-    return summarizeRuleLine(name, v.tiers)
+    Object.entries(v.products || {}).forEach(([productKey, tiers]) => {
+      agentLines.push(summarizeRuleLine(`${name}-${getTierProductLabel(productKey)}`, tiers))
+    })
   })
 
-  const mtLines = mts.map(([id, v]) => {
+  const mtLines = []
+  mts.forEach(([id, v]) => {
     const name = mtGroupsBase.find((g) => g.id === id)?.name || id
-    return summarizeRuleLine(name, v.tiers)
+    Object.entries(v.products || {}).forEach(([productKey, tiers]) => {
+      mtLines.push(summarizeRuleLine(`${name}-${getTierProductLabel(productKey)}`, tiers))
+    })
   })
 
   return {
     hasAny: agentLines.length > 0 || mtLines.length > 0,
-    agentCount: agentLines.length,
-    mtCount: mtLines.length,
+    agentCount: agents.length,
+    mtCount: mts.length,
     agentLines,
     mtLines,
   }
@@ -1567,8 +1815,6 @@ const syncTierRows = () => {
     }
   }
 }
-
-const syncingTier = ref(false)
 
 watch(
   tierDraft,
@@ -1872,6 +2118,148 @@ const handleSubmit = async () => {
   font-size: 13px;
   color: #4b5563;
   padding-top: 7px;
+}
+
+.tier-products {
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  background: #fafafa;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.tier-products-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tier-products-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.tier-products-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tier-products-tabs {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tier-product-tab {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tier-product-tab.is-active {
+  border-color: rgba(209, 168, 79, 0.55);
+  color: #b89241;
+  background: rgba(209, 168, 79, 0.12);
+}
+
+.diff-product-bar {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 10px;
+}
+
+.diff-product-label {
+  font-size: 12px;
+  color: #9ca3af;
+  padding-top: 7px;
+}
+
+.diff-product-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.diff-product-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.diff-product-tab {
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.diff-product-tab.is-active {
+  border-color: rgba(209, 168, 79, 0.55);
+  color: #b89241;
+  background: rgba(209, 168, 79, 0.12);
+}
+
+.diff-product-controls .btn-danger-text {
+  margin-left: auto;
+}
+
+.diff-product-controls .btn.btn-outline-gold.btn-sm {
+  white-space: nowrap;
+}
+
+.diff-product-controls .btn-danger-text {
+  white-space: nowrap;
+}
+
+.diff-product-controls .diff-product-tabs {
+  flex: 1;
+}
+
+.diff-product-controls .diff-product-tabs .diff-product-tab {
+  white-space: nowrap;
+}
+
+.diff-product-controls .tier-product-tab {
+  white-space: nowrap;
+}
+
+.diff-product-controls .btn {
+  flex-shrink: 0;
+}
+
+.diff-product-controls .btn-danger-text {
+  flex-shrink: 0;
+}
+
+.diff-product-controls .btn.btn-outline-gold.btn-sm {
+  flex-shrink: 0;
+}
+
+.diff-product-controls .diff-product-tabs {
+  min-width: 0;
+}
+
+.diff-product-controls .diff-product-tabs {
+  overflow: hidden;
 }
 
 .form-label {
