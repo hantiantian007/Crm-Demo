@@ -5,58 +5,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>产品需求文档 (PRD) - 销售差异化阶梯返佣配置</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primaryColor: '#C4A373',
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #333; }
-    h1, h2, h3, h4 { color: #1e293b; }
-    h2 { border-bottom: 2px solid #C19B5E; padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
-    h3 { color: #C19B5E; margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 1.05rem; }
-    h4 { font-weight: 700; margin-top: 1rem; }
-    ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    ul { list-style-type: disc; padding-left: 1.5rem; }
     li { margin-bottom: 0.5rem; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; }
-    th, td { border: 1px solid #e2e8f0; padding: 0.6rem; text-align: left; vertical-align: top; }
-    th { background-color: #f8fafc; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    thead { background-color: #f9fafb; }
+    th, td { border: 1px solid #e5e7eb; padding: 0.75rem; text-align: left; vertical-align: top; }
+    th { font-weight: 700; color: #374151; }
+    td { color: #4b5563; }
     code { background: #f1f5f9; padding: 0.1rem 0.3rem; border-radius: 0.25rem; font-size: 0.9em; }
-    .hint { background-color: #fffbeb; border: 1px solid #fde68a; padding: 1rem; border-radius: 0.75rem; }
-    .badge { display: inline-flex; align-items: center; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 12px; border: 1px solid #e2e8f0; background: #fff; color: #475569; }
-    .prd-section { border: 1px solid #e5e7eb; border-radius: 16px; background: #fff; padding: 20px; margin-top: 16px; }
-    .prd-section h2 { margin-top: 0; }
-    .prd-toc { border: 1px solid #e5e7eb; border-radius: 16px; background: #ffffff; padding: 16px; margin-top: 16px; }
-    .prd-toc a { color: #0f172a; text-decoration: none; }
-    .prd-toc a:hover { color: #C19B5E; text-decoration: underline; }
+    .print-break-inside-avoid { break-inside: avoid; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: white; }
+      .shadow-sm, .shadow-md { box-shadow: none !important; border: 1px solid #e5e7eb; }
+    }
   </style>
 </head>
-<body class="bg-gray-50 p-6 md:p-10">
-  <div class="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-200">
-    <div class="text-center mb-10">
-      <h1 class="text-3xl font-bold mb-2">销售差异化阶梯返佣配置 - PRD</h1>
-      <div class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500">
-        <span class="badge">当前版本：V1.0.1</span>
-        <span class="badge">文件：prd-sales-differential-tier-rebate_v1.0.1.html</span>
+<body class="bg-gray-50 p-6 md:p-12 text-gray-800">
+  <div class="max-w-5xl mx-auto bg-white p-8 md:p-12 rounded-xl shadow-md">
+    <div class="border-b border-gray-200 pb-6 mb-8 flex justify-between items-start">
+      <div>
+        <h1 class="text-3xl font-black text-gray-900 mb-2">销售差异化阶梯返佣配置 - PRD</h1>
+        <p class="text-gray-500 text-sm">所属模块：佣金管理 | 当前版本：V1.0.1 | 文件：prd-sales-differential-tier-rebate_v1.0.1.html</p>
+      </div>
+      <button onclick="window.print()" class="no-print bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded text-sm font-medium transition-colors flex items-center">
+        <i class="fa-solid fa-print mr-2"></i> 打印 / 导出 PDF
+      </button>
+    </div>
+
+    <div class="mb-8 print-break-inside-avoid">
+      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">文档说明</h2>
+      <div class="bg-gray-50 p-5 rounded-lg text-sm text-gray-700 leading-relaxed border border-gray-100">
+        <ul class="mb-0">
+          <li>本 PRD 用于描述“销售差异化阶梯返佣配置”的规则口径与页面交互。</li>
+        </ul>
       </div>
     </div>
 
-    <div class="hint text-sm text-gray-700">
-      <div class="font-semibold text-gray-800 mb-1">范围声明</div>
-      <ul class="mb-0">
-        <li>本 PRD 用于描述“销售差异化阶梯返佣配置”的规则口径与页面交互。</li>
-        <li>当前阶段仅用于前端演示（演示数据），不连接真实接口，不实现真实净入金统计与返佣计算。</li>
-      </ul>
-    </div>
-
-    <div class="prd-toc text-sm">
-      <div class="font-semibold text-gray-800 mb-2">目录</div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <a href="#sec-1">1. 默认阶梯返佣</a>
-        <a href="#sec-2">2. 动态档位校验</a>
-        <a href="#sec-3">3. 差异化阶梯开关与入口</a>
-        <a href="#sec-4">4. 差异化阶梯配置（弹窗）</a>
-        <a href="#sec-5">5. 规则优先级</a>
-        <a href="#sec-6">6. 净入金统计口径</a>
-        <a href="#sec-7">7. 销售切换</a>
-        <a href="#sec-8">8. 页面交互与状态</a>
-        <a href="#sec-9">9. 验收标准</a>
-        <a href="#sec-10">10. 销售交易奖励报表</a>
+    <div class="mb-10 print-break-inside-avoid">
+      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">目录</h2>
+      <div class="bg-gray-50 p-5 rounded-lg text-sm text-gray-700 leading-relaxed border border-gray-100">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-1">1. 默认阶梯返佣</a>
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-2">2. 动态档位校验</a>
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-3">3. 差异化阶梯开关与入口</a>
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-4">4. 差异化阶梯配置（弹窗）</a>
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-5">5. 规则优先级</a>
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-6">6. 净入金统计口径</a>
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-7">7. 销售切换</a>
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-8">8. 页面交互与状态</a>
+          <a class="text-gray-700 hover:text-primaryColor hover:underline" href="#sec-9">9. 验收标准</a>
+        </div>
       </div>
     </div>
 
@@ -96,15 +109,23 @@
     </ul>
     </div>
 
-    <section class="prd-section">
-    <h2 id="sec-1">1. 默认阶梯返佣（团队净入金阶梯）</h2>
-    <h3>3.1 规则定义</h3>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-1" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">1. 默认阶梯返佣（团队净入金阶梯）</h2>
+    <h3 class="font-bold text-gray-800 mb-2 mt-4">3.1 规则定义</h3>
     <ul>
       <li>默认阶梯规则覆盖未命中任何代理特殊规则与 MT 分组特殊规则的交易账户。</li>
       <li>阶梯以“累计真实净入金”作为档位判断依据，输出“每标准手返佣金额”。</li>
     </ul>
 
-    <h3>3.2 初始演示规则</h3>
+    <h3 class="font-bold text-gray-800 mb-2 mt-6">3.2 产品维度（固定产品）</h3>
+    <ul>
+      <li>产品维度为固定列表：外汇、黄金、白银、原油、比特币、数字货币、股指、公斤条。</li>
+      <li>不允许新增或删除产品。</li>
+      <li>每个产品拥有独立的阶梯返佣规则；配置互不覆盖。</li>
+      <li>差异化规则同样按“对象 + 产品”维度进行覆盖；未启用覆盖的产品继续继承下一优先级规则。</li>
+    </ul>
+
+    <h3 class="font-bold text-gray-800 mb-2 mt-6">3.3 初始规则</h3>
     <table>
       <thead>
         <tr>
@@ -130,7 +151,7 @@
       </tbody>
     </table>
 
-    <h3>3.3 可配置能力</h3>
+    <h3 class="font-bold text-gray-800 mb-2 mt-6">3.4 可配置能力</h3>
     <ul>
       <li>支持：编辑 / 新增档位 / 删除档位 / 保存 / 取消。</li>
       <li>第一档起始值固定为 <code>0.00</code>。</li>
@@ -140,11 +161,11 @@
       <li>至少保留一档，不能全部删除。</li>
       <li>连续新增控制：若当前新增的非最后档位未填写结束值，则禁止继续新增，并提示用户先填写结束值。</li>
     </ul>
-    </section>
+    </div>
 
-    <section class="prd-section">
-    <h2 id="sec-2">2. 动态档位校验</h2>
-    <h3>4.1 保存校验规则</h3>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-2" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">2. 动态档位校验</h2>
+    <h3 class="font-bold text-gray-800 mb-2 mt-4">4.1 保存校验规则</h3>
     <ul>
       <li>每个非最后档位必须填写结束值。</li>
       <li>结束值不得小于当前档位起始值。</li>
@@ -154,99 +175,99 @@
       <li>错误提示需明确到具体档位，例如：<code>第2档净入金结束值不能为空</code>、<code>第3档结束值必须大于等于起始值</code>。</li>
     </ul>
 
-    <h3>4.2 编辑联动校验</h3>
+    <h3 class="font-bold text-gray-800 mb-2 mt-6">4.2 编辑联动校验</h3>
     <ul>
       <li>修改任意前置档位结束值后，立即重新计算后续档位起始值。</li>
       <li>若重算后出现“后续结束值小于起始值”，对应输入框显示错误状态并禁止保存。</li>
     </ul>
-    </section>
+    </div>
 
-    <section class="prd-section">
-    <h2 id="sec-3">3. 差异化阶梯开关与入口</h2>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-3" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">3. 差异化阶梯开关与入口</h2>
     <ul>
       <li>差异化阶梯默认关闭；开启后显示“配置差异化阶梯”入口。</li>
       <li>进入差异化配置前必须先选择销售名称。</li>
       <li>未选择销售名称点击入口：提示 <code>请先选择销售名称</code>，并定位销售名称字段。</li>
     </ul>
-    </section>
+    </div>
 
-    <section class="prd-section">
-    <h2 id="sec-4">4. 差异化阶梯配置（弹窗）</h2>
-    <h3>6.1 弹窗结构</h3>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-4" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">4. 差异化阶梯配置（弹窗）</h2>
+    <h3 class="font-bold text-gray-800 mb-2 mt-4">6.1 弹窗结构</h3>
     <ul>
       <li>弹窗标题：差异化阶梯配置。</li>
       <li>包含两个 Tab：按代理配置 / 按 MT 分组配置。</li>
       <li>弹窗展示当前销售名称；同一订单只命中一套规则，不叠加返佣。</li>
+      <li>产品维度为固定列表：外汇、黄金、白银、原油、比特币、数字货币、股指、公斤条。</li>
     </ul>
 
-    <h3>6.2 按代理配置</h3>
+    <h3 class="font-bold text-gray-800 mb-2 mt-6">6.2 按代理配置</h3>
     <ul>
-      <li>左侧：代理关系树（仅演示数据），支持展开/收起、搜索、已配置状态展示。</li>
+      <li>左侧：代理关系树（按销售代理层级展示），支持展开/收起、搜索、已配置状态展示。</li>
       <li>右侧：选中代理的阶梯配置，默认可复制默认阶梯后进行调整。</li>
       <li>统计范围：该代理及其全部下级代理、直客的净入金合计（口径见第 6 节）。</li>
       <li>多级代理同时配置时，采用“距离客户最近一级”的已配置代理规则。</li>
       <li>独立阶梯的编辑能力与默认阶梯一致（新增/删除/保存/取消、动态校验）。</li>
     </ul>
 
-    <h3>6.3 按 MT 分组配置</h3>
+    <h3 class="font-bold text-gray-800 mb-2 mt-6">6.3 按 MT 分组配置</h3>
     <ul>
-      <li>左侧：MT 分组列表（仅演示数据），支持搜索、已配置状态展示。</li>
+      <li>左侧：MT 分组列表，支持搜索、已配置状态展示。</li>
       <li>右侧：选中分组的阶梯配置，默认可复制默认阶梯后进行调整。</li>
       <li>统计范围：当前销售名下、属于该 MT 分组的交易账户净入金合计（口径见第 6 节）。</li>
       <li>独立阶梯的编辑能力与默认阶梯一致（新增/删除/保存/取消、动态校验）。</li>
     </ul>
-    </section>
+    </div>
 
-    <section class="prd-section">
-    <h2 id="sec-5">5. 规则优先级</h2>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-5" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">5. 规则优先级</h2>
     <ul>
-      <li><strong>MT 分组规则</strong> &gt; <strong>最近一级已配置代理规则</strong> &gt; <strong>默认阶梯规则</strong>。</li>
+      <li><strong>MT 分组＋产品</strong> &gt; <strong>最近一级已配置代理＋产品</strong> &gt; <strong>默认配置＋产品</strong>。</li>
       <li>每笔交易只命中一条规则，不叠加多个返佣金额。</li>
       <li>已结算交易不因规则变化重新计算；规则变化只影响生效后的符合条件交易。</li>
       <li>代理关系或 MT 分组变化后，仅影响后续订单。</li>
     </ul>
-    </section>
+    </div>
 
-    <section class="prd-section">
-    <h2 id="sec-6">6. 净入金统计口径</h2>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-6" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">6. 净入金统计口径</h2>
     <ul>
       <li>净入金 = 真实入金 - 真实出金。</li>
       <li>不计入：赠金、信用金、佣金账户资金、内部转账。</li>
       <li>净入金不按月重置；净入金下降后，后续交易按下降后的档位计算。</li>
       <li>交易量统一按标准手统计。</li>
     </ul>
-    </section>
+    </div>
 
-    <section class="prd-section">
-    <h2 id="sec-7">7. 销售切换</h2>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-7" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">7. 销售切换</h2>
     <ul>
       <li>若已存在差异化配置，更换销售名称需二次确认：</li>
       <li><code>更换销售后，当前差异化阶梯配置将被清空，是否继续？</code></li>
       <li>确认：切换销售并清空差异化配置；取消：保留原销售与配置。</li>
     </ul>
-    </section>
+    </div>
 
-    <section class="prd-section">
-    <h2 id="sec-8">8. 页面交互与状态</h2>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-8" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">8. 页面交互与状态</h2>
     <ul>
       <li>编辑前保存数据快照。</li>
-      <li>保存后更新当前页面演示状态。</li>
+      <li>保存后更新当前页面状态。</li>
       <li>取消后恢复编辑前数据。</li>
       <li>配置弹窗关闭或取消时，不保留未保存修改。</li>
-      <li>当前阶段仅使用演示数据，不接真实接口。</li>
     </ul>
-    </section>
+    </div>
 
-    <section class="prd-section">
-    <h2 id="sec-9">9. 验收标准</h2>
-    <h3>11.1 默认阶梯</h3>
+    <div class="mb-10 print-break-inside-avoid">
+    <h2 id="sec-9" class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">9. 验收标准</h2>
+    <h3 class="font-bold text-gray-800 mb-2 mt-4">11.1 默认阶梯</h3>
     <ul>
       <li>支持新增/删除档位，起始值自动衔接，最后一档始终为“不设上限”。</li>
       <li>保存时触发档位连续、非空、金额精度等校验，错误提示可定位到具体档位。</li>
       <li>取消可恢复编辑前快照。</li>
     </ul>
 
-    <h3>11.2 差异化配置</h3>
+    <h3 class="font-bold text-gray-800 mb-2 mt-6">11.2 差异化配置</h3>
     <ul>
       <li>差异化开关开启后可进入弹窗；未选择销售时点击入口会提示并定位销售名称字段。</li>
       <li>按代理配置：可对代理配置独立阶梯，并支持新增/删除/保存/取消与动态校验。</li>
@@ -254,106 +275,12 @@
       <li>保存时校验所有已启用的代理与 MT 分组规则；错误提示包含对象名称与档位。</li>
     </ul>
 
-    <h3>11.3 优先级</h3>
+    <h3 class="font-bold text-gray-800 mb-2 mt-6">11.3 优先级</h3>
     <ul>
       <li>优先级遵循第 5 节；同一订单只命中一条规则，不叠加。</li>
     </ul>
-    </section>
-
-    <section class="prd-section">
-    <h2 id="sec-10">10. 销售交易奖励报表</h2>
-    <h3>10.1 页面</h3>
-    <ul>
-      <li>路由：销售交易奖励报表现有路由。</li>
-      <li>页面文件：<code>frontend/src/views/report/sales-trading.vue</code></li>
-    </ul>
-
-    <h3>10.2 筛选条件</h3>
-    <ul>
-      <li>销售姓名、销售邮箱、平仓编号、客户邮箱、客户姓名、平仓日期。</li>
-      <li>交易品种（即产品，不新增“产品名称”字段）。</li>
-      <li>奖励计算方式、奖励周期、奖励时间、入账时间、MT类型、奖励状态。</li>
-      <li>规则来源、规则对象。</li>
-    </ul>
-
-    <h3>10.3 主表字段</h3>
-    <ul>
-      <li>销售名称、销售邮箱、客户名称、MT交易账号、MT类型、交易品种。</li>
-      <li>计算手数（标准手）、平仓编号、平仓时间。</li>
-      <li>奖励计算方式、返佣标准、奖励金额、奖励周期、奖励状态、备注、操作。</li>
-      <li>主表不显示“规则来源”。</li>
-    </ul>
-
-    <h3>10.4 奖励计算方式</h3>
-    <ul>
-      <li>统一计算</li>
-      <li>规则计算</li>
-      <li>团队净入金阶梯计算</li>
-    </ul>
-
-    <h3>10.5 详情 Drawer</h3>
-    <h4>交易信息</h4>
-    <ul>
-      <li>销售及客户信息、MT账号和类型、交易品种、平仓信息。</li>
-      <li>原始交易手数、计算标准手数。</li>
-    </ul>
-    <h4>返佣计算依据</h4>
-    <ul>
-      <li>奖励计算方式、规则来源、规则对象。</li>
-      <li>净入金统计范围、计算时净入金、命中净入金档位。</li>
-      <li>返佣标准、计算公式、配置版本。</li>
-    </ul>
-    <h4>奖励结果</h4>
-    <ul>
-      <li>奖励周期、奖励金额、奖励时间、入账时间、奖励状态、备注或失败原因。</li>
-    </ul>
-
-    <h3>10.6 规则来源（仅详情展示）</h3>
-    <ul>
-      <li>默认规则、代理规则、MT分组规则。</li>
-      <li>优先级：<code>MT分组＋交易品种 &gt; 最近一级代理＋交易品种 &gt; 默认配置＋交易品种</code></li>
-      <li>每笔奖励只命中一条规则，不叠加。</li>
-    </ul>
-
-    <h3>10.7 计算快照</h3>
-    <ul>
-      <li>奖励生成时保存：交易品种、原始手数、计算标准手数、奖励计算方式、规则来源、规则对象。</li>
-      <li>同时保存：计算时净入金、命中档位、返佣标准、最终奖励金额、配置版本。</li>
-      <li>历史记录不跟随后续配置变化重新计算。</li>
-    </ul>
-
-    <h3>10.8 导出</h3>
-    <ul>
-      <li>导出包含主表字段及完整计算快照。</li>
-    </ul>
-
-    <h3>10.9 页面样式</h3>
-    <ul>
-      <li>使用 CRM 现有搜索卡片、表格卡片和分页样式。</li>
-      <li>查询、重置、导出按钮位于筛选区底部左侧。</li>
-      <li>表格过宽时支持横向滚动；详情使用右侧 Drawer。</li>
-    </ul>
-
-    <h3>10.10 非本期范围</h3>
-    <ul>
-      <li>不实现真实手数换算。</li>
-      <li>不实现真实返佣计算。</li>
-      <li>不连接真实报表接口。</li>
-      <li>不新增产品字段。</li>
-      <li>不重新计算历史奖励。</li>
-    </ul>
-    </section>
-
-    <div style="display:none;">
-    <h2>12. 边界与非本期范围</h2>
-    <ul>
-      <li>不实现真实净入金统计。</li>
-      <li>不实现真实交易返佣计算。</li>
-      <li>不连接真实代理关系与 MT 分组接口。</li>
-      <li>不处理历史订单重新结算。</li>
-      <li>不修改净入金奖励配置、不修改基础分佣配置。</li>
-    </ul>
     </div>
+
   </div>
 </body>
 </html>

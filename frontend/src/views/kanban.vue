@@ -164,6 +164,51 @@
 <div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">佣金管理</span>
+<h3 class="text-base font-bold text-gray-800">销售交易奖励报表</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">展示销售交易奖励记录，并支持查看奖励计算依据与计算快照。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">销售交易奖励报表</td>
+<td class="px-4 py-3 text-gray-500">支持筛选、主表展示、导出与详情 Drawer。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/report/sales-trading" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openSalesTradingRewardReportPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
 <div class="flex items-center gap-3 flex-wrap">
 <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">活动管理</span>
 <h3 class="text-base font-bold text-gray-800">先锋一号 50,000 USD 体验金盈利释放管理</h3>
@@ -1016,6 +1061,7 @@ const openPioneerOneAuditPrd = () => openPrd('prd-activity-audit.html', '活动�
 const openPaymentConfigRecordsPrd = () => openPrd('prd-payment-management.html', '支付设置 - 配置记录 - PRD')
 const openWithdrawConfigRecordsPrd = () => openPrd('prd-withdraw-settings.html', '提现设置 - 配置记录 - PRD')
 const openSalesDifferentialTierRebatePrd = () => openPrd('prd-sales-differential-tier-rebate.html', '销售差异化阶梯返佣配置 - PRD')
+const openSalesTradingRewardReportPrd = () => openPrd('prd-sales-trading-reward-report.html', '销售交易奖励报表 - PRD')
 
 const handlePrdAnchors = (e) => {
   const el = e.target?.closest?.('a')
