@@ -22,14 +22,6 @@
         <i class="fa-solid fa-house w-6 text-center text-lg mr-2"></i>
         <template #title>首页</template>
       </el-menu-item>
-      <el-menu-item index="/agent-home">
-        <i class="fa-solid fa-chart-line w-6 text-center text-lg mr-2"></i>
-        <template #title>代理首页</template>
-      </el-menu-item>
-      <el-menu-item index="/direct-home">
-        <i class="fa-solid fa-chart-line w-6 text-center text-lg mr-2"></i>
-        <template #title>直客首页</template>
-      </el-menu-item>
       <el-sub-menu index="fund">
         <template #title>
           <i class="fa-solid fa-money-bill-transfer w-6 text-center text-lg mr-2"></i>
@@ -178,7 +170,10 @@
           <i class="fa-solid fa-folder w-6 text-center text-lg mr-2"></i>
           <span>其他页面</span>
         </template>
-        <el-menu-item index="/other/login-register">新版登录注册</el-menu-item>
+        <el-menu-item index="/agent-home">代理首页</el-menu-item>
+        <el-menu-item index="/direct-home">直客首页</el-menu-item>
+        <el-menu-item index="/other/customer-register-profile">客户注册资料</el-menu-item>
+        <el-menu-item index="/other/new-home">新版首页</el-menu-item>
       </el-sub-menu>
     </el-menu>
     <!-- 底部收起按钮 -->

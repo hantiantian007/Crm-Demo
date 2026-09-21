@@ -2,11 +2,6 @@
   <div class="flex h-full bg-mainBg overflow-hidden">
     <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto">
       <div class="flex-1 p-4 sm:p-6 overflow-y-auto bg-mainBg flex flex-col gap-6 w-full">
- <div class="flex justify-end">
-  <button class="text-xs text-blue-500 hover:text-blue-600 transition-colors" type="button" @click="openPagePrd">
-   查看页面PRD
-  </button>
- </div>
  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
   <!-- 左侧两列：核心信息 -->
   <div class="xl:col-span-2 flex flex-col gap-6">
@@ -385,58 +380,74 @@
   </div>
   <!-- 右侧一列：基础及注册信息 -->
   <div class="flex flex-col gap-6">
-   <!-- 卡片5：基础信息 -->
+   <!-- 卡片5：身份与居住信息 -->
    <div class="bg-white rounded-lg p-4 sm:p-6 shadow-sm border border-gray-100">
     <h3 class="text-base font-bold text-gray-800 mb-4 sm:mb-6">
-     基础信息
+     身份与居住信息
     </h3>
     <div class="flex flex-col gap-3 sm:gap-4 text-sm">
      <div class="flex">
-      <span class="text-gray-500 w-24 shrink-0">
+      <span class="text-gray-500 w-28 sm:w-32 shrink-0">
        证件号码:
       </span>
       <span class="text-gray-800 break-all">
-       210102196808159167
+       {{ displayOrDash(identityResidence.certNo) }}
       </span>
      </div>
      <div class="flex">
-      <span class="text-gray-500 w-24 shrink-0">
-       住宅地址:
-      </span>
-      <span class="text-gray-800 break-all">
-       dadas
-      </span>
-     </div>
-     <div class="flex">
-      <span class="text-gray-500 w-24 shrink-0">
+      <span class="text-gray-500 w-28 sm:w-32 shrink-0">
        出生日期:
       </span>
       <span class="text-gray-800">
-       1999-11-26
+       {{ displayOrDash(identityResidence.birthDate) }}
       </span>
      </div>
      <div class="flex">
-      <span class="text-gray-500 w-24 shrink-0">
-       居住国家:
-      </span>
-      <span class="text-gray-800">
-       -
-      </span>
-     </div>
-     <div class="flex">
-      <span class="text-gray-500 w-24 shrink-0">
+      <span class="text-gray-500 w-28 sm:w-32 shrink-0">
        出生国家:
       </span>
       <span class="text-gray-800">
-       -
+       {{ displayOrDash(identityResidence.birthCountry) }}
       </span>
      </div>
      <div class="flex">
-      <span class="text-gray-500 w-24 shrink-0">
-       地区:
+      <span class="text-[#2563EB] w-28 sm:w-32 shrink-0">
+       注册地区:
       </span>
-      <span class="text-gray-800">
-       中国
+      <span class="text-[#2563EB]">
+       {{ displayOrDash(identityResidence.registerRegion) }}
+      </span>
+     </div>
+     <div class="flex">
+      <span class="text-[#2563EB] w-28 sm:w-32 shrink-0">
+       常住国家/地区:
+      </span>
+      <span class="text-[#2563EB]">
+       {{ displayOrDash(identityResidence.residenceCountry) }}
+      </span>
+     </div>
+     <div class="flex">
+      <span class="text-[#2563EB] w-28 sm:w-32 shrink-0">
+       省/州:
+      </span>
+      <span class="text-[#2563EB]">
+       {{ displayOrDash(identityResidence.province) }}
+      </span>
+     </div>
+     <div class="flex">
+      <span class="text-[#2563EB] w-28 sm:w-32 shrink-0">
+       城市:
+      </span>
+      <span class="text-[#2563EB]">
+       {{ displayOrDash(identityResidence.city) }}
+      </span>
+     </div>
+     <div class="flex">
+      <span class="text-[#2563EB] w-28 sm:w-32 shrink-0">
+       详细居住地址:
+      </span>
+      <span class="text-[#2563EB] break-words whitespace-normal leading-5">
+       {{ displayOrDash(identityResidence.addressDetail) }}
       </span>
      </div>
     </div>
@@ -448,43 +459,46 @@
     </h3>
     <div class="flex flex-col gap-3 sm:gap-4 text-sm">
      <div class="flex">
-      <span class="text-gray-500 w-28 shrink-0">
+      <span class="text-gray-500 w-32 shrink-0">
        注册时间:
       </span>
       <span class="text-gray-800">
-       2026-06-08 15:03:53
+       {{ displayOrDash(registerInfo.registerAt) }}
       </span>
      </div>
      <div class="flex">
-      <span class="text-gray-500 w-28 shrink-0">
+      <span class="text-gray-500 w-32 shrink-0">
        注册IP:
       </span>
       <span class="text-gray-800 break-all">
-       123.145.242.250
+       {{ displayOrDash(registerInfo.registerIp) }}
       </span>
      </div>
      <div class="flex">
-      <span class="text-gray-500 w-28 shrink-0">
-       注册地址:
+      <span class="w-32 shrink-0 flex items-center gap-1">
+       <span class="text-[#D97706]">注册IP归属地:</span>
+       <span class="text-gray-300 cursor-help" title="根据注册IP解析，仅用于地区分析和风险辅助判断。">
+        <i class="fa-regular fa-circle-question text-[12px]"></i>
+       </span>
       </span>
-      <span class="text-gray-800 break-all">
-       中国/重庆市/重庆市/九龙坡区
+      <span class="text-gray-800 break-words whitespace-normal leading-5">
+       {{ displayOrDash(registerInfo.registerIpLocation) }}
       </span>
      </div>
      <div class="flex">
-      <span class="text-gray-500 w-28 shrink-0">
-       登陆次数:
+      <span class="text-[#D97706] w-32 shrink-0">
+       登录次数:
       </span>
       <span class="text-gray-800">
-       1
+       {{ displayOrDash(registerInfo.loginCount) }}
       </span>
      </div>
      <div class="flex">
-      <span class="text-gray-500 w-28 shrink-0">
+      <span class="text-gray-500 w-32 shrink-0">
        最后一次登录时间:
       </span>
       <span class="text-gray-800">
-       2026-06-08 15:04:05
+       {{ displayOrDash(registerInfo.lastLoginAt) }}
       </span>
      </div>
     </div>
@@ -506,37 +520,126 @@
      </div>
     </div>
     <p class="text-xs text-gray-500 leading-5 mb-4">
-     当前只做异常预警，供风控人工核查，不会直接影响客户操作。
+     地区判断仅用于风险提示和人工核查，不会直接限制客户操作。
     </p>
-    <div class="space-y-3 text-sm">
+    <div class="space-y-4 text-sm">
      <div class="rounded-xl bg-[#fbfaf7] border border-[#efe4d4] p-3">
-      <div class="flex items-center justify-between">
-       <span class="text-gray-500 text-xs">
-        最近判定时间
-       </span>
-      </div>
-      <div class="text-gray-800 font-medium mt-2">
-       2026-07-09 15:46:12
+      <div class="flex items-start justify-between gap-3">
+       <div class="min-w-0">
+        <div class="text-gray-500 text-xs">
+         最近判定时间
+        </div>
+        <div class="text-gray-800 font-medium mt-2">
+         {{ displayOrDash(loginRisk.judgedAt) }}
+        </div>
+       </div>
+       <div class="text-right shrink-0">
+        <div class="text-[#2563EB] text-xs">
+         整体风险等级
+        </div>
+        <div class="mt-2">
+         <span class="inline-flex items-center gap-1 px-2 py-1 rounded border text-[11px] font-medium" :class="riskLevelTagClass(loginRisk.overallRisk)">
+          <span class="w-1.5 h-1.5 rounded-full" :class="riskLevelDotClass(loginRisk.overallRisk)"></span>
+          <span class="text-[#2563EB]">{{ displayOrDash(loginRisk.overallRisk) }}</span>
+         </span>
+        </div>
+       </div>
       </div>
      </div>
-     <div class="grid grid-cols-2 gap-3">
+
+     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div class="rounded-xl bg-gray-50 p-3">
-       <div class="text-xs text-gray-500 mb-2">
-        CRM 登录
+       <div class="text-xs text-[#2563EB] mb-2 font-medium">
+        CRM登录
        </div>
-       <div class="text-gray-800 font-medium">
-        171.221.10.51
+       <div class="space-y-2 text-xs">
+        <div class="flex items-start gap-2">
+         <span class="text-[#2563EB] w-20 shrink-0">最近登录IP</span>
+         <span class="text-[#2563EB] break-all">{{ displayOrDash(loginRisk.crm.ip) }}</span>
+        </div>
+        <div class="flex items-start gap-2">
+         <span class="text-[#2563EB] w-20 shrink-0">最近登录地区</span>
+         <span class="text-[#2563EB] break-words whitespace-normal leading-5">{{ displayOrDash(loginRisk.crm.region) }}</span>
+        </div>
+        <div class="flex items-start gap-2">
+         <span class="text-[#2563EB] w-20 shrink-0">最近登录时间</span>
+         <span class="text-[#2563EB] font-mono">{{ displayOrDash(loginRisk.crm.at) }}</span>
+        </div>
        </div>
       </div>
       <div class="rounded-xl bg-gray-50 p-3">
-       <div class="text-xs text-gray-500 mb-2">
-        MT5 登录
+       <div class="text-xs text-[#2563EB] mb-2 font-medium">
+        MT5登录
        </div>
-       <div class="text-gray-800 font-medium">
-        171.221.54.12
+       <div class="space-y-2 text-xs">
+        <div class="flex items-start gap-2">
+         <span class="text-[#2563EB] w-20 shrink-0">最近登录IP</span>
+         <span class="text-[#2563EB] break-all">{{ displayOrDash(loginRisk.mt5.ip) }}</span>
+        </div>
+        <div class="flex items-start gap-2">
+         <span class="text-[#2563EB] w-20 shrink-0">最近登录地区</span>
+         <span class="text-[#2563EB] break-words whitespace-normal leading-5">{{ displayOrDash(loginRisk.mt5.region) }}</span>
+        </div>
+        <div class="flex items-start gap-2">
+         <span class="text-[#2563EB] w-20 shrink-0">MT账号</span>
+         <span class="text-[#2563EB] font-mono">{{ displayOrDash(loginRisk.mt5.mtAccount) }}</span>
+        </div>
+        <div class="flex items-start gap-2">
+         <span class="text-[#2563EB] w-20 shrink-0">最近登录时间</span>
+         <span class="text-[#2563EB] font-mono">{{ displayOrDash(loginRisk.mt5.at) }}</span>
+        </div>
        </div>
-       <div class="text-xs text-gray-500 mt-2">
-        MT账号：8801732
+      </div>
+     </div>
+
+     <div class="rounded-xl bg-gray-50 p-3">
+      <div class="text-xs text-[#2563EB] font-medium">
+       登录地区统计
+      </div>
+      <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+       <div class="rounded-lg bg-white border border-gray-100 px-3 py-2.5">
+        <div class="text-[#2563EB] text-[11px]">近30天常用登录地区</div>
+        <div class="mt-1 text-[#2563EB] break-words whitespace-normal leading-5">{{ displayOrDash(loginRisk.stats.commonRegion30d) }}</div>
+       </div>
+       <div class="rounded-lg bg-white border border-gray-100 px-3 py-2.5">
+        <div class="text-[#2563EB] text-[11px]">近30天登录国家/地区数量</div>
+        <div class="mt-1 text-[#2563EB] font-mono">{{ displayOrDash(loginRisk.stats.countryCount30d) }}</div>
+       </div>
+       <div class="rounded-lg bg-white border border-gray-100 px-3 py-2.5">
+        <div class="text-[#2563EB] text-[11px]">近30天异常地区登录次数</div>
+        <div class="mt-1 text-[#2563EB] font-mono">{{ displayOrDash(loginRisk.stats.abnormalCount30d) }}</div>
+       </div>
+      </div>
+     </div>
+
+     <div class="rounded-xl bg-gray-50 p-3">
+      <div class="text-xs text-[#2563EB] font-medium">
+       一致性判断
+      </div>
+      <div class="mt-3 space-y-2 text-xs">
+       <div class="flex items-center justify-between gap-3">
+        <span class="text-[#2563EB]">注册地区与常住地区</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded border text-[11px] font-medium" :class="consistencyTagClass(loginRisk.consistency.registerVsResidence.status)">
+         {{ loginRisk.consistency.registerVsResidence.status }}
+        </span>
+       </div>
+       <div class="flex items-center justify-between gap-3">
+        <span class="text-[#2563EB]">注册地区与CRM登录地区</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded border text-[11px] font-medium" :class="consistencyTagClass(loginRisk.consistency.registerVsCrm.status)">
+         {{ loginRisk.consistency.registerVsCrm.status }}
+        </span>
+       </div>
+       <div class="flex items-center justify-between gap-3">
+        <span class="text-[#2563EB]">注册地区与MT5登录地区</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded border text-[11px] font-medium" :class="consistencyTagClass(loginRisk.consistency.registerVsMt5.status)">
+         {{ loginRisk.consistency.registerVsMt5.status }}
+        </span>
+       </div>
+       <div class="flex items-center justify-between gap-3">
+        <span class="text-[#2563EB]">CRM与MT5登录地区</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded border text-[11px] font-medium" :class="consistencyTagClass(loginRisk.consistency.crmVsMt5.status)">
+         {{ loginRisk.consistency.crmVsMt5.status }}
+        </span>
        </div>
       </div>
      </div>
@@ -763,15 +866,11 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { openPrd } from '@/store/prd'
 
 const router = useRouter()
 const route = useRoute()
-
-const openPagePrd = () => {
-  openPrd('prd-client-detail.html', '客户详情 - PRD')
-}
 
 const goLeadsTrace = () => {
   router.push({ path: '/crm/leads-detail', query: { fromClientId: String(route.query.id || '') } })
@@ -787,5 +886,61 @@ const goAccountDetail = (mtAccount) => {
 
 const goBack = () => {
   router.back()
+}
+
+const displayOrDash = (v) => {
+  const s = String(v ?? '').trim()
+  return s ? s : '-'
+}
+
+const identityResidence = computed(() => ({
+  certNo: '210102196808159167',
+  birthDate: '1999-11-26',
+  birthCountry: '',
+  registerRegion: '中国',
+  residenceCountry: '中国',
+  province: '重庆市',
+  city: '重庆市',
+  addressDetail: '九龙坡区XX路XX号'
+}))
+
+const registerInfo = computed(() => ({
+  registerAt: '2026-06-08 15:03:53',
+  registerIp: '123.145.242.250',
+  registerIpLocation: '中国 / 重庆市 / 重庆市 / 九龙坡区',
+  loginCount: '1',
+  lastLoginAt: '2026-06-08 15:04:05'
+}))
+
+const loginRisk = computed(() => ({
+  judgedAt: '2026-07-09 15:46:12',
+  overallRisk: '中风险',
+  crm: { ip: '171.221.10.51', region: '中国 / 四川省 / 成都市', at: '2026-07-09 15:45:52' },
+  mt5: { ip: '171.221.54.12', region: '新加坡', mtAccount: '8801732', at: '2026-07-09 15:45:36' },
+  stats: { commonRegion30d: '中国 / 四川省 / 成都市', countryCount30d: '2', abnormalCount30d: '1' },
+  consistency: {
+    registerVsResidence: { status: '一致' },
+    registerVsCrm: { status: '一致' },
+    registerVsMt5: { status: '不一致' },
+    crmVsMt5: { status: '不一致' }
+  }
+}))
+
+const riskLevelTagClass = (level) => {
+  if (level === '高风险') return 'border-rose-200 bg-rose-50 text-rose-700'
+  if (level === '中风险') return 'border-orange-200 bg-orange-50 text-orange-700'
+  return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+}
+
+const riskLevelDotClass = (level) => {
+  if (level === '高风险') return 'bg-rose-500'
+  if (level === '中风险') return 'bg-orange-400'
+  return 'bg-emerald-500'
+}
+
+const consistencyTagClass = (status) => {
+  if (status === '一致') return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+  if (status === '不一致') return 'border-amber-200 bg-amber-50 text-amber-700'
+  return 'border-rose-200 bg-rose-50 text-rose-700'
 }
 </script>

@@ -101,100 +101,156 @@
         <div class="flex items-start justify-between gap-4 flex-wrap">
           <div class="flex items-center gap-2 text-[11px] text-gray-500">
             <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
-            <span class="font-medium text-gray-700">账户概览</span>
+            <span class="font-medium text-gray-700">MT账户概览</span>
           </div>
 
           <div class="flex items-center gap-3 flex-wrap justify-end">
             <div class="flex items-center gap-2">
-              <span class="text-[11px] text-gray-500">时间</span>
-              <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
-                <button
-                  v-for="t in mtTimeTabs"
-                  :key="t.key"
-                  type="button"
-                  class="px-3 py-1 rounded-md text-xs font-medium transition-all"
-                  :class="mtTimeKey === t.key ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
-                  @click="mtTimeKey = t.key"
-                >
-                  {{ t.label }}
-                </button>
-              </div>
+              <span class="text-[11px] text-gray-500">MT账户</span>
+              <select
+                v-model="mtOverviewAccountId"
+                class="h-8 rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-700 outline-none focus:border-[#d1a84f] focus:ring-2 focus:ring-[#d1a84f]/10"
+                :disabled="mtOverviewAccounts.length <= 1"
+              >
+                <option v-for="a in mtOverviewAccounts" :key="a.id" :value="a.id">{{ a.id }}</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-2 text-[11px] text-gray-500">
+              <span class="text-gray-400">MT类型</span>
+              <span class="font-medium text-gray-700">{{ mtOverviewSelectedAccount.mtType }}</span>
+            </div>
+
+            <div class="flex items-center gap-2 text-[11px] text-gray-500">
+              <span class="text-gray-400">最后更新时间</span>
+              <span class="font-mono text-gray-700">{{ mtOverviewUpdatedAt }}</span>
             </div>
           </div>
         </div>
 
-        <div v-if="mtTimeKey === 'custom'" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div class="flex items-center gap-2">
-            <div class="text-gray-500 w-[52px] shrink-0 text-right">开始：</div>
-            <input v-model="mtCustomStart" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
-          </div>
-          <div class="flex items-center gap-2">
-            <div class="text-gray-500 w-[52px] shrink-0 text-right">结束：</div>
-            <input v-model="mtCustomEnd" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
-          </div>
-        </div>
-
         <div class="mt-3">
-          <div class="text-[11px] font-medium text-gray-700">当前数据</div>
+          <div class="text-[11px] font-medium text-gray-700">当前账户状态</div>
 
-          <div class="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 text-xs">
             <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
               <div class="flex items-center justify-between gap-2">
                 <div class="text-[11px] text-gray-500">MT余额</div>
                 <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
               </div>
-              <div class="mt-0.5 font-mono font-bold text-base text-gray-900">$ {{ formatMoney(mtRealtime.balance) }}</div>
+              <div class="mt-0.5 font-mono font-bold text-base text-gray-900">$ {{ formatMoney(mtOverviewSelectedAccount.realtime.balance) }}</div>
             </div>
 
             <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
               <div class="flex items-center justify-between gap-2">
-                <div class="text-[11px] text-gray-500">持仓量</div>
+                <div class="text-[11px] text-gray-500">净值</div>
                 <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
               </div>
-              <div class="mt-0.5 font-mono font-bold text-base text-gray-900">{{ formatLots(mtRealtime.positionLots) }} Lot</div>
+              <div class="mt-0.5 font-mono font-bold text-base text-gray-900">$ {{ formatMoney(mtOverviewSelectedAccount.realtime.equity) }}</div>
             </div>
 
             <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
               <div class="flex items-center justify-between gap-2">
-                <div class="text-[11px] text-gray-500">浮动盈亏</div>
+                <div class="text-[11px] text-gray-500">可用预付款</div>
                 <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
               </div>
-              <div class="mt-0.5 font-mono font-bold text-base" :class="pnlClass(mtRealtime.floatingPnl)">$ {{ formatMoney(mtRealtime.floatingPnl) }}</div>
+              <div class="mt-0.5 font-mono font-bold text-base text-gray-900">$ {{ formatMoney(mtOverviewSelectedAccount.realtime.availableCredit) }}</div>
+            </div>
+
+            <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="text-[11px] text-gray-500">当前持仓量</div>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
+              </div>
+              <div class="mt-0.5 font-mono font-bold text-base text-gray-900">{{ formatLots(mtOverviewSelectedAccount.realtime.positionLots) }} Lot</div>
+            </div>
+
+            <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="text-[11px] text-gray-500">当前浮动盈亏</div>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
+              </div>
+              <div class="mt-0.5 font-mono font-bold text-base" :class="pnlClass(mtOverviewSelectedAccount.realtime.floatingPnl)">$ {{ formatMoney(mtOverviewSelectedAccount.realtime.floatingPnl) }}</div>
+            </div>
+
+            <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="text-[11px] text-gray-500">预付款比例</div>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
+              </div>
+              <div class="mt-0.5 font-mono font-bold text-base" :class="mtOverviewPrepayRatioClass">
+                {{ mtOverviewPrepayRatioText }}
+              </div>
             </div>
           </div>
         </div>
 
         <div class="mt-4 pt-4 border-t border-gray-100">
-          <div class="text-[11px] font-medium text-gray-700">期间数据</div>
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div class="text-[11px] font-medium text-gray-700">{{ mtOverviewPeriodTitle }}</div>
+            <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
+              <button
+                v-for="t in mtTimeTabs"
+                :key="t.key"
+                type="button"
+                class="px-3 py-1 rounded-md text-xs font-medium transition-all"
+                :class="mtTimeKey === t.key ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
+                @click="mtTimeKey = t.key"
+              >
+                {{ t.label }}
+              </button>
+            </div>
+          </div>
+
+          <div v-if="mtTimeKey === 'custom'" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="flex items-center gap-2">
+              <div class="text-gray-500 w-[52px] shrink-0 text-right">开始：</div>
+              <input v-model="mtCustomStart" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="text-gray-500 w-[52px] shrink-0 text-right">结束：</div>
+              <input v-model="mtCustomEnd" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
+            </div>
+          </div>
 
           <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-              <div class="text-[11px] text-gray-500">入金 / 出金</div>
+              <div class="text-[11px] text-gray-500">入金 / 出金 / 净入金</div>
               <div class="mt-2 space-y-1">
                 <div class="flex items-center justify-between gap-3">
                   <span class="text-gray-500">{{ mtPeriodLabel }}入金 $</span>
-                  <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtPeriod.deposit) }}</span>
+                  <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtOverviewPeriod.deposit) }}</span>
                 </div>
                 <div class="flex items-center justify-between gap-3">
                   <span class="text-gray-500">{{ mtPeriodLabel }}出金 $</span>
-                  <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtPeriod.withdraw) }}</span>
+                  <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtOverviewPeriod.withdraw) }}</span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                  <span class="text-gray-500">{{ mtPeriodLabel }}净入金 $</span>
+                  <span class="font-mono font-semibold text-gray-800">$ {{ formatMoney(mtOverviewPeriodNetDeposit) }}</span>
                 </div>
               </div>
             </div>
 
             <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-              <div class="text-[11px] text-gray-500">交易量 / 平仓盈亏</div>
+              <div class="text-[11px] text-gray-500">交易量 / 已平仓盈亏</div>
               <div class="mt-2 space-y-1">
                 <div class="flex items-center justify-between gap-3">
                   <span class="text-gray-500">{{ mtPeriodLabel }}交易量 Lot</span>
-                  <span class="font-mono font-semibold text-gray-800">{{ formatLots(mtPeriod.tradingLots) }} Lot</span>
+                  <span class="font-mono font-semibold text-gray-800">{{ formatLots(mtOverviewPeriod.tradingLots) }} Lot</span>
                 </div>
                 <div class="flex items-center justify-between gap-3">
-                  <span class="text-gray-500">{{ mtPeriodLabel }}平仓盈亏 $</span>
-                  <span class="font-mono font-semibold" :class="pnlClass(mtPeriod.closedPnl)">$ {{ formatMoney(mtPeriod.closedPnl) }}</span>
+                  <span class="text-gray-500">{{ mtPeriodLabel }}已平仓盈亏 $</span>
+                  <span class="font-mono font-semibold" :class="pnlClass(mtOverviewPeriod.closedPnl)">$ {{ formatMoney(mtOverviewPeriod.closedPnl) }}</span>
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="mt-3 text-[11px] text-gray-400">
+            余额、净值、持仓及浮动盈亏为当前数据；入金、出金、交易量及已平仓盈亏按所选时间统计。
+          </div>
+          <div class="mt-1 text-[11px] text-gray-400">
+            口径：净入金＝真实入金－真实出金；浮动盈亏统计当前未平仓订单；已平仓盈亏统计所选时间内的平仓订单。
           </div>
         </div>
       </div>
@@ -296,6 +352,43 @@ const mtPeriodLabel = computed(() => {
   return mtTimeTabs.find((t) => t.key === mtTimeKey.value)?.label || mtTimeKey.value
 })
 
+const mtOverviewAccounts = [
+  {
+    id: '8100458',
+    mtType: '标准账户',
+    realtime: { balance: 125820.45, equity: 130260.35, availableCredit: 25600.0, positionLots: 18.6, floatingPnl: 520.35, prepayRatio: 0.62 },
+    month: { deposit: 85200.0, withdraw: 32600.0, tradingLots: 185.25, closedPnl: 3200.25 }
+  },
+  {
+    id: '8200781',
+    mtType: '美分账户',
+    realtime: { balance: 68520.2, equity: 64210.55, availableCredit: 8200.0, positionLots: 9.35, floatingPnl: -860.12, prepayRatio: 0.28 },
+    month: { deposit: 46200.0, withdraw: 18500.0, tradingLots: 102.5, closedPnl: -980.8 }
+  }
+]
+
+const mtOverviewAccountId = ref(mtOverviewAccounts[0]?.id || '')
+const mtOverviewSelectedAccount = computed(() => mtOverviewAccounts.find((a) => a.id === mtOverviewAccountId.value) || mtOverviewAccounts[0])
+const mtOverviewUpdatedAt = ref('2026-09-13 14:30:25')
+
+const mtOverviewPrepayRatioText = computed(() => {
+  const v = Number(mtOverviewSelectedAccount.value?.realtime?.prepayRatio || 0)
+  return `${(v * 100).toFixed(0)}%`
+})
+
+const mtOverviewPrepayRatioClass = computed(() => {
+  const v = Number(mtOverviewSelectedAccount.value?.realtime?.prepayRatio || 0)
+  if (v <= 0.3) return 'text-red-600'
+  if (v <= 0.6) return 'text-orange-600'
+  return 'text-gray-900'
+})
+
+const mtOverviewPeriodTitle = computed(() => {
+  const map = { today: '今日', week: '本周', month: '本月', lastMonth: '上月', custom: '自定义' }
+  const prefix = map[mtTimeKey.value] || mtPeriodLabel.value
+  return `${prefix}期间数据`
+})
+
 const mtDemo = {
   realtime: { balance: 125820.45, positionLots: 18.6, floatingPnl: 520.35 },
   month: { deposit: 85200.0, withdraw: 32600.0, tradingLots: 185.25, closedPnl: 3200.25 }
@@ -337,6 +430,19 @@ const mtPeriod = computed(() => {
     closedPnl: base.closedPnl * f
   }
 })
+
+const mtOverviewPeriod = computed(() => {
+  const base = mtOverviewSelectedAccount.value?.month || { deposit: 0, withdraw: 0, tradingLots: 0, closedPnl: 0 }
+  const f = mtFactor.value
+  return {
+    deposit: base.deposit * f,
+    withdraw: base.withdraw * f,
+    tradingLots: base.tradingLots * f,
+    closedPnl: base.closedPnl * f
+  }
+})
+
+const mtOverviewPeriodNetDeposit = computed(() => mtOverviewPeriod.value.deposit - mtOverviewPeriod.value.withdraw)
 
 const netDepositValue = computed(() => mtPeriod.value.deposit - mtPeriod.value.withdraw)
 

@@ -15,6 +15,9 @@
           <div v-if="k.sub" class="mt-0.5 text-[11px] text-gray-400">{{ k.sub }}</div>
         </div>
       </div>
+      <p class="mt-2 text-[11px] text-gray-400">
+        客户总数为当前数据；活跃客户统计最近30天；新增客户、净入金、交易量及返佣统计本月1日至当前时间。
+      </p>
 
       <div class="flex gap-4">
         <div class="flex-1 min-w-0 flex flex-col gap-4">
@@ -106,7 +109,7 @@
 
               <div class="flex items-center gap-3 flex-wrap justify-end">
                 <div class="flex items-center gap-2">
-                  <span class="text-[11px] text-gray-500">范围</span>
+                  <span class="text-[11px] text-gray-500">账户范围</span>
                   <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
                   <button
                     v-for="t in mtScopeTabs"
@@ -120,68 +123,67 @@
                   </button>
                   </div>
                 </div>
-
-                <div class="flex items-center gap-2">
-                  <span class="text-[11px] text-gray-500">时间</span>
-                  <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
-                  <button
-                    v-for="t in mtTimeTabs"
-                    :key="t.key"
-                    type="button"
-                    class="px-3 py-1 rounded-md text-xs font-medium transition-all"
-                    :class="mtTimeKey === t.key ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
-                    @click="mtTimeKey = t.key"
-                  >
-                    {{ t.label }}
-                  </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div v-if="mtTimeKey === 'custom'" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div class="flex items-center gap-2">
-                <div class="text-gray-500 w-[52px] shrink-0 text-right">开始：</div>
-                <input v-model="mtCustomStart" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="text-gray-500 w-[52px] shrink-0 text-right">结束：</div>
-                <input v-model="mtCustomEnd" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="text" />
               </div>
             </div>
 
             <div class="mt-3">
-              <div class="text-[11px] font-medium text-gray-700">当前数据</div>
+              <div class="flex items-center justify-between gap-3 flex-wrap">
+                <div class="text-[11px] font-medium text-gray-700">当前实时数据</div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-[#d1a84f]/10 border border-[#d1a84f]/30 text-[#b8903f] font-medium">实时快照</span>
+                  <span class="text-[11px] text-gray-400 font-mono">{{ mtRealtimeSyncAt }}</span>
+                </div>
+              </div>
+              <div class="mt-1 text-[11px] text-gray-400">当前数据为所选账户范围的最新快照，不受时间筛选影响。</div>
 
               <div class="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-                  <div class="flex items-center justify-between gap-2">
-                    <div class="text-[11px] text-gray-500">MT余额</div>
-                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
-                  </div>
+                  <div class="text-[11px] text-gray-500">当前MT余额</div>
                   <div class="mt-0.5 font-mono font-bold text-base text-gray-900">$ {{ formatMoney(mtRealtime.balance) }}</div>
                 </div>
 
                 <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-                  <div class="flex items-center justify-between gap-2">
-                    <div class="text-[11px] text-gray-500">持仓量</div>
-                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
-                  </div>
+                  <div class="text-[11px] text-gray-500">当前持仓量</div>
                   <div class="mt-0.5 font-mono font-bold text-base text-gray-900">{{ formatLots(mtRealtime.positionLots) }} Lot</div>
                 </div>
 
                 <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
-                  <div class="flex items-center justify-between gap-2">
-                    <div class="text-[11px] text-gray-500">浮动盈亏</div>
-                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-gray-500">当前</span>
-                  </div>
+                  <div class="text-[11px] text-gray-500">当前浮动盈亏</div>
                   <div class="mt-0.5 font-mono font-bold text-base" :class="pnlClass(mtRealtime.floatingPnl)">$ {{ formatMoney(mtRealtime.floatingPnl) }}</div>
                 </div>
               </div>
             </div>
 
             <div class="mt-4 pt-4 border-t border-gray-100">
-              <div class="text-[11px] font-medium text-gray-700">期间数据</div>
+              <div class="flex items-center justify-between gap-3 flex-wrap">
+                <div class="text-[11px] font-medium text-gray-700">{{ mtPeriodTitle }}</div>
+                <div class="flex bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
+                <button
+                  v-for="t in mtTimeTabs"
+                  :key="t.key"
+                  type="button"
+                  class="px-3 py-1 rounded-md text-xs font-medium transition-all"
+                  :class="mtTimeKey === t.key ? 'bg-white text-gray-800 shadow-sm border border-gray-200/60' : 'text-gray-500 hover:text-gray-700'"
+                  @click="mtTimeKey = t.key"
+                >
+                  {{ t.label }}
+                </button>
+                </div>
+              </div>
+
+              <div v-if="mtTimeKey === 'custom'" class="mt-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div class="flex items-center gap-2">
+                    <div class="text-gray-500 w-[72px] shrink-0 text-right">开始日期：</div>
+                    <input v-model="mtCustomStart" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="date" />
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="text-gray-500 w-[72px] shrink-0 text-right">结束日期：</div>
+                    <input v-model="mtCustomEnd" class="border border-gray-300 rounded px-3 py-2 outline-none flex-1 bg-white text-center" placeholder="YYYY-MM-DD" type="date" />
+                  </div>
+                </div>
+                <div v-if="mtCustomError" class="mt-2 text-[11px] text-red-500">{{ mtCustomError }}</div>
+              </div>
 
               <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div class="rounded-lg border border-gray-100 bg-gray-50/60 px-3 py-2.5">
@@ -352,6 +354,64 @@
       </div>
 
         <div class="w-[360px] shrink-0 hidden xl:flex flex-col gap-4">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="flex justify-between items-center mb-4">
+              <p class="text-sm text-gray-500 font-medium">通知公告</p>
+              <button class="text-xs text-gray-400 hover:text-gray-600" type="button" @click="viewAllNotices">查看更多 ></button>
+            </div>
+
+            <button
+              v-for="n in notices"
+              :key="n.id"
+              type="button"
+              class="w-full flex justify-between items-center group cursor-pointer mt-2 py-2"
+              @click="openNotice(n)"
+            >
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-1.5 h-1.5 rounded-full" :class="n.isLatest ? 'bg-[#d1a84f]' : 'bg-gray-300'"></span>
+                <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors truncate">
+                  {{ n.title }}
+                </p>
+                <span v-if="n.isLatest" class="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0">最新</span>
+              </div>
+              <span class="text-xs text-gray-400 font-mono shrink-0">{{ n.date }}</span>
+            </button>
+          </div>
+
+        <div v-if="showMessageCenter" class="bg-white border border-gray-100 rounded-lg shadow-sm">
+          <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+            <div class="text-sm font-bold text-gray-800">站内信 / 消息</div>
+            <div class="inline-flex items-center gap-2">
+              <span v-if="unreadCount > 0" class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold">{{ unreadCount }}</span>
+            </div>
+          </div>
+          <div class="p-5 text-xs">
+            <div class="space-y-3">
+              <button
+                v-for="m in messages"
+                :key="m.id"
+                type="button"
+                class="w-full text-left flex items-start gap-3 hover:bg-gray-50 rounded p-2 -m-2 transition-colors"
+                @click="openMessage(m)"
+              >
+                <span :class="['w-2 h-2 rounded-full mt-1.5', m.read ? 'bg-gray-300' : 'bg-red-500']"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="font-medium text-gray-800 truncate">{{ m.title }}</div>
+                    <div class="text-[11px] text-gray-400 font-mono shrink-0">{{ m.time }}</div>
+                  </div>
+                  <div class="mt-0.5 text-[11px] text-gray-500 truncate">{{ m.desc }}</div>
+                </div>
+              </button>
+            </div>
+            <div class="mt-4">
+              <button class="w-full px-3 py-2 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors" type="button" @click="viewAllMessages">
+                查看全部
+              </button>
+            </div>
+          </div>
+        </div>
+
           <div class="bg-white border border-gray-100 rounded-lg shadow-sm">
             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
               <div class="text-sm font-bold text-gray-800">推广中心</div>
@@ -403,64 +463,6 @@
               </div>
             </div>
           </div>
-
-        <div v-if="showMessageCenter" class="bg-white border border-gray-100 rounded-lg shadow-sm">
-          <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
-            <div class="text-sm font-bold text-gray-800">站内信 / 消息</div>
-            <div class="inline-flex items-center gap-2">
-              <span v-if="unreadCount > 0" class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold">{{ unreadCount }}</span>
-            </div>
-          </div>
-          <div class="p-5 text-xs">
-            <div class="space-y-3">
-              <button
-                v-for="m in messages"
-                :key="m.id"
-                type="button"
-                class="w-full text-left flex items-start gap-3 hover:bg-gray-50 rounded p-2 -m-2 transition-colors"
-                @click="openMessage(m)"
-              >
-                <span :class="['w-2 h-2 rounded-full mt-1.5', m.read ? 'bg-gray-300' : 'bg-red-500']"></span>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between gap-3">
-                    <div class="font-medium text-gray-800 truncate">{{ m.title }}</div>
-                    <div class="text-[11px] text-gray-400 font-mono shrink-0">{{ m.time }}</div>
-                  </div>
-                  <div class="mt-0.5 text-[11px] text-gray-500 truncate">{{ m.desc }}</div>
-                </div>
-              </button>
-            </div>
-            <div class="mt-4">
-              <button class="w-full px-3 py-2 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors" type="button" @click="viewAllMessages">
-                查看全部
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div class="flex justify-between items-center mb-4">
-            <p class="text-sm text-gray-500 font-medium">通知公告</p>
-            <button class="text-xs text-gray-400 hover:text-gray-600" type="button" @click="viewAllNotices">查看更多 ></button>
-          </div>
-
-          <button
-            v-for="n in notices"
-            :key="n.id"
-            type="button"
-            class="w-full flex justify-between items-center group cursor-pointer mt-2 py-2"
-            @click="openNotice(n)"
-          >
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="w-1.5 h-1.5 rounded-full" :class="n.isLatest ? 'bg-[#d1a84f]' : 'bg-gray-300'"></span>
-              <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors truncate">
-                {{ n.title }}
-              </p>
-              <span v-if="n.isLatest" class="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0">最新</span>
-            </div>
-            <span class="text-xs text-gray-400 font-mono shrink-0">{{ n.date }}</span>
-          </button>
-        </div>
         </div>
       </div>
 
@@ -555,6 +557,120 @@
           </div>
         </template>
       </el-dialog>
+
+      <el-dialog v-model="reminderDialogVisible" :title="reminderDialogTitle" width="90%" :style="{ maxWidth: '1400px' }" destroy-on-close>
+        <div class="space-y-4">
+          <div class="flex items-start justify-between gap-3 flex-wrap">
+            <div class="text-xs text-gray-500">
+              <div class="flex items-center gap-2">
+                <span class="text-gray-400">当前统计总数</span>
+                <span class="font-mono font-bold text-gray-900">{{ formatInt(reminderTotal) }}</span>
+              </div>
+              <div class="mt-2 text-[11px] text-gray-500 leading-relaxed">
+                {{ reminderCaliber }}
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 border border-gray-100 rounded-lg p-4">
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_220px_auto] gap-3 items-end">
+              <div>
+                <div class="text-[11px] text-gray-500 mb-2">客户名称/邮箱</div>
+                <input v-model.trim="reminderKeywordInput" class="h-9 w-full rounded border border-gray-200 bg-white px-3 text-xs outline-none focus:border-[#d1a84f] focus:ring-2 focus:ring-[#d1a84f]/10" placeholder="请输入客户名称或邮箱" />
+              </div>
+              <div>
+                <div class="text-[11px] text-gray-500 mb-2">MT账号</div>
+                <input v-model.trim="reminderMtInput" class="h-9 w-full rounded border border-gray-200 bg-white px-3 text-xs outline-none focus:border-[#d1a84f] focus:ring-2 focus:ring-[#d1a84f]/10" placeholder="请输入MT账号" />
+              </div>
+              <div class="flex items-center justify-end gap-2">
+                <button type="button" class="h-9 px-4 rounded bg-[#d1a84f] hover:bg-[#b8903f] text-white text-xs font-bold transition-colors" @click="applyReminderSearch">查询</button>
+                <button type="button" class="h-9 px-4 rounded border border-gray-200 text-gray-600 hover:bg-gray-100 text-xs font-medium transition-colors" @click="resetReminderSearch">重置</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="border border-gray-100 rounded-lg overflow-hidden bg-white">
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs min-w-[1180px]">
+                <thead class="bg-gray-50 text-gray-600 border-b border-gray-100">
+                  <tr>
+                    <th v-for="c in reminderColumns" :key="c.key" class="text-left font-medium px-3 py-2" :style="c.width ? { width: c.width } : undefined">
+                      {{ c.label }}
+                    </th>
+                    <th class="text-left font-medium px-3 py-2 sticky right-0 bg-gray-50 border-l border-gray-100 w-[110px]">操作</th>
+                  </tr>
+                </thead>
+                <tbody v-if="reminderPageRows.length" class="divide-y divide-gray-50 text-gray-700">
+                  <tr v-for="row in reminderPageRows" :key="row.__rowKey" class="hover:bg-gray-50/60 transition-colors">
+                    <td v-for="c in reminderColumns" :key="c.key" class="px-3 py-2 align-top">
+                      <template v-if="c.key === 'noTradeDays'">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded border border-amber-200 bg-amber-50 text-amber-700 font-mono">{{ row.noTradeDays }}</span>
+                      </template>
+                      <template v-else-if="c.key === 'inactiveDays'">
+                        <span
+                          class="inline-flex items-center px-2 py-0.5 rounded border font-mono"
+                          :class="Number(row.inactiveDays) >= 60 ? 'border-red-200 bg-red-50 text-red-600' : 'border-amber-200 bg-amber-50 text-amber-700'"
+                        >
+                          {{ row.inactiveDays }}
+                        </span>
+                      </template>
+                      <template v-else-if="c.key === 'singleWithdraw'">
+                        <span class="font-mono" :class="Number(row.singleWithdraw) >= 10000 ? 'text-red-600 font-bold' : 'text-gray-700'">{{ row.singleWithdrawText }}</span>
+                      </template>
+                      <template v-else-if="c.key === 'withdraw24h'">
+                        <span class="font-mono" :class="Number(row.withdraw24h) >= 20000 ? 'text-red-600 font-bold' : 'text-gray-700'">{{ row.withdraw24hText }}</span>
+                      </template>
+                      <template v-else-if="c.key === 'withdrawRatio'">
+                        <span class="font-mono" :class="Number(row.withdrawRatio) >= 0.8 ? 'text-red-600 font-bold' : 'text-gray-700'">{{ row.withdrawRatioText }}</span>
+                      </template>
+                      <template v-else>
+                        <span :class="c.mono ? 'font-mono' : ''">{{ row[c.key] }}</span>
+                      </template>
+                    </td>
+                    <td class="px-3 py-2 sticky right-0 bg-white border-l border-gray-100">
+                      <button type="button" class="px-3 py-1.5 rounded bg-[#d1a84f] hover:bg-[#b8903f] text-white text-xs font-bold transition-colors whitespace-nowrap" @click="viewReminderClient(row)">查看客户</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div v-if="!reminderPageRows.length" class="py-12 text-center text-xs text-gray-400">
+              暂无数据
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div class="text-[11px] text-gray-400">共 {{ formatInt(reminderFilteredTotal) }} 条记录</div>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                class="h-8 px-3 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors text-xs disabled:opacity-40 disabled:cursor-not-allowed"
+                :disabled="reminderPage <= 1"
+                @click="reminderPage -= 1"
+              >
+                上一页
+              </button>
+              <div class="text-[11px] text-gray-500 font-mono">
+                {{ reminderPage }} / {{ reminderTotalPages }}
+              </div>
+              <button
+                type="button"
+                class="h-8 px-3 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors text-xs disabled:opacity-40 disabled:cursor-not-allowed"
+                :disabled="reminderPage >= reminderTotalPages"
+                @click="reminderPage += 1"
+              >
+                下一页
+              </button>
+            </div>
+          </div>
+        </div>
+        <template #footer>
+          <div class="flex items-center justify-end gap-2">
+            <button class="px-4 py-2 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors" type="button" @click="reminderDialogVisible = false">关闭</button>
+          </div>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -587,11 +703,12 @@ const mtScopeKey = ref('umbrella')
 const mtTimeKey = ref('month')
 const mtCustomStart = ref('2026-09-01')
 const mtCustomEnd = ref('2026-09-13')
+const mtRealtimeSyncAt = ref('2026-09-13 14:30:25')
 
-const mtScopeLabel = computed(() => mtScopeTabs.find((t) => t.key === mtScopeKey.value)?.label || mtScopeKey.value)
-const mtTimeLabel = computed(() => {
-  if (mtTimeKey.value === 'custom') return `${mtCustomStart.value} ~ ${mtCustomEnd.value}`
-  return mtTimeTabs.find((t) => t.key === mtTimeKey.value)?.label || mtTimeKey.value
+const mtPeriodTitle = computed(() => {
+  if (mtTimeKey.value === 'custom') return '自定义期间数据'
+  const t = mtTimeTabs.find((x) => x.key === mtTimeKey.value)
+  return `${t?.label || mtTimeKey.value}期间数据`
 })
 
 const mtPeriodLabel = computed(() => {
@@ -630,11 +747,24 @@ const diffDaysInclusive = (start, end) => {
   return Math.max(1, diff)
 }
 
+const mtCustomError = computed(() => {
+  if (mtTimeKey.value !== 'custom') return ''
+  if (!mtCustomStart.value) return '开始日期不能为空'
+  if (!mtCustomEnd.value) return '结束日期不能为空'
+  const s = parseYmd(mtCustomStart.value)
+  const e = parseYmd(mtCustomEnd.value)
+  if (!s) return '开始日期格式不正确'
+  if (!e) return '结束日期格式不正确'
+  if (s.getTime() > e.getTime()) return '开始日期不能晚于结束日期'
+  return ''
+})
+
 const mtFactor = computed(() => {
   if (mtTimeKey.value === 'today') return 1 / 30
   if (mtTimeKey.value === 'week') return 7 / 30
   if (mtTimeKey.value === 'month') return 1
   if (mtTimeKey.value === 'lastMonth') return 0.92
+  if (mtCustomError.value) return 0
   const days = diffDaysInclusive(mtCustomStart.value, mtCustomEnd.value)
   return Math.min(2, Math.max(0.05, days / 30))
 })
@@ -858,7 +988,272 @@ const copyText = async (text) => {
   }
 }
 
-const openReminder = () => {}
+const reminderDialogVisible = ref(false)
+const reminderActiveKey = ref('')
+const reminderPage = ref(1)
+const reminderPageSize = 10
+const reminderKeywordInput = ref('')
+const reminderMtInput = ref('')
+const reminderSearch = ref({ keyword: '', mt: '' })
+
+const reminderConfigs = computed(() => {
+  const mkRowKey = (prefix, idx) => `${prefix}-${idx + 1}`
+
+  const agents = ['IB1020', 'IB1108', 'IB1217', 'IB1350', 'IB1406']
+  const regions = ['中国', '中国香港', '日本', '韩国', '新加坡', '泰国', '越南']
+  const kyc = ['未提交', '审核中', '已通过', '未通过']
+  const mtOpen = ['未开户', '已开户', '开户中']
+
+  const newNoDepositRows = Array.from({ length: reminders.find((x) => x.key === 'newNoDeposit')?.value || 0 }).map((_, i) => {
+    const id = 8100000 + i + 1
+    return {
+      __rowKey: mkRowKey('newNoDeposit', i),
+      customerName: `客户${String(i + 1).padStart(2, '0')}`,
+      customerEmail: `client${id}@demo.com`,
+      registerAt: `2026-09-${String(((i % 7) + 7)).padStart(2, '0')} ${String((9 + (i % 10))).padStart(2, '0')}:1${i % 6}:0${i % 9}`,
+      registerRegion: regions[i % regions.length],
+      kycStatus: kyc[i % kyc.length],
+      mtOpenStatus: mtOpen[i % mtOpen.length],
+      totalDeposit: '0.00 USD',
+      agent: agents[i % agents.length],
+      lastContactAt: `2026-09-${String(((i % 7) + 7)).padStart(2, '0')} ${String((14 + (i % 6))).padStart(2, '0')}:0${i % 6}:2${i % 9}`,
+      clientId: String(id)
+    }
+  })
+
+  const depositNoTradeRows = Array.from({ length: reminders.find((x) => x.key === 'depositNoTrade')?.value || 0 }).map((_, i) => {
+    const id = 8200000 + i + 1
+    return {
+      __rowKey: mkRowKey('depositNoTrade', i),
+      customerName: `客户${String(i + 1).padStart(2, '0')}`,
+      customerEmail: `client${id}@demo.com`,
+      mtAccount: String(8100400 + (i % 80)),
+      firstDepositAt: `2026-08-${String(((i % 30) + 1)).padStart(2, '0')} 10:2${i % 6}:1${i % 9}`,
+      firstDepositAmount: `${formatMoney(200 + (i % 9) * 100)} USD`,
+      tradeCount: 0,
+      lastLoginAt: `2026-09-${String(((i % 7) + 6)).padStart(2, '0')} 12:0${i % 6}:3${i % 9}`,
+      agent: agents[i % agents.length],
+      clientId: i % 7 === 0 ? '' : String(id)
+    }
+  })
+
+  const noTrade7Rows = Array.from({ length: reminders.find((x) => x.key === 'noTrade7')?.value || 0 }).map((_, i) => {
+    const id = 8300000 + i + 1
+    const days = 7 + (i % 23)
+    return {
+      __rowKey: mkRowKey('noTrade7', i),
+      customerName: `客户${String(i + 1).padStart(2, '0')}`,
+      customerEmail: `client${id}@demo.com`,
+      mtAccount: String(8100600 + (i % 120)),
+      lastTradeAt: `2026-08-${String(((i % 23) + 1)).padStart(2, '0')} 09:3${i % 6}:0${i % 9}`,
+      noTradeDays: `${days}天`,
+      historyLots: `${formatLots(80 + (i % 12) * 12.5)} Lot`,
+      currentBalance: `${formatMoney(1000 + (i % 20) * 350)} USD`,
+      lastLoginAt: `2026-09-${String(((i % 7) + 6)).padStart(2, '0')} 16:1${i % 6}:0${i % 9}`,
+      agent: agents[i % agents.length],
+      clientId: String(id)
+    }
+  })
+
+  const inactive30Rows = Array.from({ length: reminders.find((x) => x.key === 'inactive30')?.value || 0 }).map((_, i) => {
+    const id = 8400000 + i + 1
+    const silentDays = 30 + (i % 45)
+    return {
+      __rowKey: mkRowKey('inactive30', i),
+      customerName: `客户${String(i + 1).padStart(2, '0')}`,
+      customerEmail: `client${id}@demo.com`,
+      mtAccount: String(8100200 + (i % 160)),
+      lastLoginAt: `2026-08-${String(((i % 28) + 1)).padStart(2, '0')} 11:0${i % 6}:1${i % 9}`,
+      lastDepositAt: i % 3 === 0 ? '-' : `2026-07-${String(((i % 28) + 1)).padStart(2, '0')} 15:2${i % 6}:0${i % 9}`,
+      lastTradeAt: `2026-07-${String(((i % 28) + 1)).padStart(2, '0')} 13:1${i % 6}:2${i % 9}`,
+      inactiveDays: `${silentDays}天`,
+      currentBalance: `${formatMoney(800 + (i % 22) * 420)} USD`,
+      historyNetDeposit: `${formatMoney(1200 + (i % 18) * 600)} USD`,
+      agent: agents[i % agents.length],
+      clientId: String(id)
+    }
+  })
+
+  const bigWithdrawRows = Array.from({ length: reminders.find((x) => x.key === 'bigWithdraw')?.value || 0 }).map((_, i) => {
+    const id = 8500000 + i + 1
+    const single = i % 3 === 0 ? 10000 : 6500 + i * 800
+    const sum24h = i % 2 === 0 ? 20000 : 12000 + i * 1500
+    const balance = 12000 + i * 5000
+    const ratio = i % 2 === 0 ? 0.8 : Math.min(0.95, single / balance)
+    const rule = i % 3 === 0 ? '单笔出金≥10,000 USD' : i % 3 === 1 ? '24小时累计出金≥20,000 USD' : '出金占比≥80%'
+    const status = ['待审核', '审核中', '已通过', '已完成'][i % 4]
+    return {
+      __rowKey: mkRowKey('bigWithdraw', i),
+      customerName: `客户${String(i + 1).padStart(2, '0')}`,
+      customerEmail: `client${id}@demo.com`,
+      mtAccount: String(8100800 + (i % 30)),
+      applyAt: `2026-09-${String(((i % 7) + 5)).padStart(2, '0')} 10:4${i % 6}:0${i % 9}`,
+      singleWithdraw: single,
+      singleWithdrawText: `${formatMoney(single)} USD`,
+      withdraw24h: sum24h,
+      withdraw24hText: `${formatMoney(sum24h)} USD`,
+      currentFunds: `${formatMoney(balance)} USD`,
+      withdrawRatio: ratio,
+      withdrawRatioText: `${Math.round(ratio * 100)}%`,
+      auditStatus: status,
+      triggerRule: rule,
+      agent: agents[i % agents.length],
+      clientId: String(id)
+    }
+  })
+
+  return {
+    newNoDeposit: {
+      label: '新注册未入金',
+      total: reminders.find((x) => x.key === 'newNoDeposit')?.value || 0,
+      caliber: '最近7天内注册，且累计成功真实入金金额为0的客户。注册不足24小时的客户也计入。',
+      columns: [
+        { key: 'customerName', label: '客户名称', width: '120px' },
+        { key: 'customerEmail', label: '客户邮箱', width: '180px', mono: true },
+        { key: 'registerAt', label: '注册时间', width: '150px', mono: true },
+        { key: 'registerRegion', label: '注册地区', width: '120px' },
+        { key: 'kycStatus', label: 'KYC状态', width: '100px' },
+        { key: 'mtOpenStatus', label: 'MT开户状态', width: '100px' },
+        { key: 'totalDeposit', label: '累计真实入金', width: '120px', mono: true },
+        { key: 'agent', label: '归属代理', width: '90px', mono: true },
+        { key: 'lastContactAt', label: '最近联系时间', width: '150px', mono: true }
+      ],
+      rows: newNoDepositRows
+    },
+    depositNoTrade: {
+      label: '已入金未交易',
+      total: reminders.find((x) => x.key === 'depositNoTrade')?.value || 0,
+      caliber: '最近30天完成首次成功真实入金，但所有真实MT账户均未产生有效交易的客户。',
+      columns: [
+        { key: 'customerName', label: '客户名称', width: '120px' },
+        { key: 'customerEmail', label: '客户邮箱', width: '180px', mono: true },
+        { key: 'mtAccount', label: 'MT账号', width: '110px', mono: true },
+        { key: 'firstDepositAt', label: '首次入金时间', width: '150px', mono: true },
+        { key: 'firstDepositAmount', label: '首次入金金额', width: '130px', mono: true },
+        { key: 'tradeCount', label: '有效交易笔数', width: '110px', mono: true },
+        { key: 'lastLoginAt', label: '最近登录时间', width: '150px', mono: true },
+        { key: 'agent', label: '归属代理', width: '90px', mono: true }
+      ],
+      rows: depositNoTradeRows
+    },
+    noTrade7: {
+      label: '7天未交易',
+      total: reminders.find((x) => x.key === 'noTrade7')?.value || 0,
+      caliber: '历史上存在有效真实交易，最后一次有效交易距当前7至29天的客户。',
+      columns: [
+        { key: 'customerName', label: '客户名称', width: '120px' },
+        { key: 'customerEmail', label: '客户邮箱', width: '180px', mono: true },
+        { key: 'mtAccount', label: 'MT账号', width: '110px', mono: true },
+        { key: 'lastTradeAt', label: '最后交易时间', width: '150px', mono: true },
+        { key: 'noTradeDays', label: '未交易天数', width: '100px', mono: true },
+        { key: 'historyLots', label: '历史交易量', width: '120px', mono: true },
+        { key: 'currentBalance', label: '当前余额', width: '120px', mono: true },
+        { key: 'lastLoginAt', label: '最近登录时间', width: '150px', mono: true },
+        { key: 'agent', label: '归属代理', width: '90px', mono: true }
+      ],
+      rows: noTrade7Rows
+    },
+    inactive30: {
+      label: '30天未活跃',
+      total: reminders.find((x) => x.key === 'inactive30')?.value || 0,
+      caliber: '连续30天没有CRM/MT登录、真实入金和有效交易行为的客户。',
+      columns: [
+        { key: 'customerName', label: '客户名称', width: '120px' },
+        { key: 'customerEmail', label: '客户邮箱', width: '180px', mono: true },
+        { key: 'mtAccount', label: 'MT账号', width: '110px', mono: true },
+        { key: 'lastLoginAt', label: '最后登录时间', width: '150px', mono: true },
+        { key: 'lastDepositAt', label: '最后入金时间', width: '150px', mono: true },
+        { key: 'lastTradeAt', label: '最后交易时间', width: '150px', mono: true },
+        { key: 'inactiveDays', label: '沉默天数', width: '100px', mono: true },
+        { key: 'currentBalance', label: '当前余额', width: '120px', mono: true },
+        { key: 'historyNetDeposit', label: '历史净入金', width: '120px', mono: true },
+        { key: 'agent', label: '归属代理', width: '90px', mono: true }
+      ],
+      rows: inactive30Rows
+    },
+    bigWithdraw: {
+      label: '大额出金客户',
+      total: reminders.find((x) => x.key === 'bigWithdraw')?.value || 0,
+      caliber: '当前统计周期内触发单笔大额出金、24小时累计出金或高出金占比规则的客户。',
+      columns: [
+        { key: 'customerName', label: '客户名称', width: '120px' },
+        { key: 'customerEmail', label: '客户邮箱', width: '180px', mono: true },
+        { key: 'mtAccount', label: 'MT账号', width: '110px', mono: true },
+        { key: 'applyAt', label: '申请时间', width: '150px', mono: true },
+        { key: 'singleWithdraw', label: '单笔出金金额', width: '130px', mono: true },
+        { key: 'withdraw24h', label: '24小时累计出金', width: '140px', mono: true },
+        { key: 'currentFunds', label: '当前资金', width: '120px', mono: true },
+        { key: 'withdrawRatio', label: '出金占比', width: '100px', mono: true },
+        { key: 'auditStatus', label: '审核状态', width: '100px' },
+        { key: 'triggerRule', label: '触发规则', width: '210px' },
+        { key: 'agent', label: '归属代理', width: '90px', mono: true }
+      ],
+      rows: bigWithdrawRows
+    }
+  }
+})
+
+const reminderActive = computed(() => reminderConfigs.value[reminderActiveKey.value] || null)
+const reminderDialogTitle = computed(() => (reminderActive.value ? `${reminderActive.value.label}明细` : '明细'))
+const reminderTotal = computed(() => reminderActive.value?.total || 0)
+const reminderCaliber = computed(() => reminderActive.value?.caliber || '')
+const reminderColumns = computed(() => reminderActive.value?.columns || [])
+const reminderAllRows = computed(() => reminderActive.value?.rows || [])
+
+const reminderFilteredRows = computed(() => {
+  const kw = String(reminderSearch.value.keyword || '').trim().toLowerCase()
+  const mt = String(reminderSearch.value.mt || '').trim()
+  return reminderAllRows.value.filter((r) => {
+    const okKw = !kw || String(r.customerName || '').toLowerCase().includes(kw) || String(r.customerEmail || '').toLowerCase().includes(kw)
+    const okMt = !mt || String(r.mtAccount || '').includes(mt)
+    return okKw && okMt
+  })
+})
+
+const reminderFilteredTotal = computed(() => reminderFilteredRows.value.length)
+const reminderTotalPages = computed(() => Math.max(1, Math.ceil(reminderFilteredTotal.value / reminderPageSize)))
+const reminderPageRows = computed(() => {
+  const start = (reminderPage.value - 1) * reminderPageSize
+  return reminderFilteredRows.value.slice(start, start + reminderPageSize)
+})
+
+watch(
+  () => reminderFilteredTotal.value,
+  () => {
+    if (reminderPage.value > reminderTotalPages.value) reminderPage.value = reminderTotalPages.value
+    if (reminderPage.value < 1) reminderPage.value = 1
+  }
+)
+
+const applyReminderSearch = () => {
+  reminderSearch.value = {
+    keyword: reminderKeywordInput.value,
+    mt: reminderMtInput.value
+  }
+  reminderPage.value = 1
+}
+
+const resetReminderSearch = () => {
+  reminderKeywordInput.value = ''
+  reminderMtInput.value = ''
+  reminderSearch.value = { keyword: '', mt: '' }
+  reminderPage.value = 1
+}
+
+const openReminder = (it) => {
+  reminderActiveKey.value = String(it?.key || '')
+  resetReminderSearch()
+  reminderDialogVisible.value = true
+}
+
+const viewReminderClient = (row) => {
+  const id = String(row?.clientId || '').trim()
+  if (!id) {
+    window.alert('客户详情为演示数据')
+    return
+  }
+  router.push(`/crm/client-detail?id=${id}`)
+}
 
 const handleJoinActivity = () => {
   joinDialogVisible.value = true
@@ -897,17 +1292,17 @@ const pnlClass = (v) => {
   return 'text-gray-700'
 }
 
-const formatInt = (n) => {
+function formatInt(n) {
   const v = Number(n || 0)
   return v.toLocaleString('en-US')
 }
 
-const formatMoney = (n) => {
+function formatMoney(n) {
   const v = Number(n || 0)
   return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
-const formatLots = (n) => {
+function formatLots(n) {
   const v = Number(n || 0)
   return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }

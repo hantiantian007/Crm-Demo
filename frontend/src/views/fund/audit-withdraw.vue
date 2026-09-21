@@ -101,7 +101,7 @@
                 </select>
               </div>
               <div class="flex items-end">
-                <button class="h-9 px-4 rounded-md bg-primary hover:bg-primaryHover text-white text-sm font-medium transition-colors">
+                <button class="h-9 px-4 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-sm font-medium transition-colors">
                   搜索
                 </button>
               </div>
@@ -111,7 +111,7 @@
           <section class="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <button class="inline-flex items-center px-3 py-1.5 rounded-md bg-primary text-white text-sm font-medium hover:bg-primaryHover transition-colors" @click="openManageWithdrawModal" type="button">
+                <button class="inline-flex items-center px-3 py-1.5 rounded-md bg-primaryBtn text-white text-sm font-medium hover:bg-primaryBtnHover transition-colors" @click="openManageWithdrawModal" type="button">
                   管理出金
                 </button>
                 <div class="text-xs text-gray-500">
@@ -120,7 +120,7 @@
                   <span class="ml-2 text-red-500">出金金额：合计$：200.00（USD：100.00、USC：10000.00）</span>
                 </div>
               </div>
-              <button class="px-4 py-2 rounded-md bg-primary hover:bg-primaryHover text-white text-xs font-medium transition-colors">
+              <button class="px-4 py-2 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-xs font-medium transition-colors">
                 报表导出
               </button>
             </div>
@@ -150,7 +150,7 @@
                   <div class="px-5 py-4 hover:bg-gray-50/80">
                     <div class="list-grid">
                       <div class="pt-1">
-                        <button class="transition-colors" :class="expandedRows.includes('withdraw-detail-1') ? 'text-red-500' : 'text-gray-400 hover:text-primary'" @click="toggleDetail('withdraw-detail-1')">
+                        <button class="transition-colors" :class="expandedRows.includes('withdraw-detail-1') ? 'text-red-500' : 'text-gray-400 hover:text-primaryBtn'" @click="toggleDetail('withdraw-detail-1')">
                           <i class="fa-solid fa-chevron-right text-xs transition-transform" :class="{ 'rotate-90': expandedRows.includes('withdraw-detail-1') }"></i>
                         </button>
                       </div>
@@ -223,7 +223,7 @@
                   <div class="px-5 py-4 hover:bg-gray-50/80">
                     <div class="list-grid">
                       <div class="pt-1">
-                        <button class="transition-colors" :class="expandedRows.includes('withdraw-detail-2') ? 'text-red-500' : 'text-gray-400 hover:text-primary'" @click="toggleDetail('withdraw-detail-2')">
+                        <button class="transition-colors" :class="expandedRows.includes('withdraw-detail-2') ? 'text-red-500' : 'text-gray-400 hover:text-primaryBtn'" @click="toggleDetail('withdraw-detail-2')">
                           <i class="fa-solid fa-chevron-right text-xs transition-transform" :class="{ 'rotate-90': expandedRows.includes('withdraw-detail-2') }"></i>
                         </button>
                       </div>
@@ -315,6 +315,23 @@
           </div>
           <div>
             <label class="block text-[15px] font-medium text-gray-600 mb-3">
+              <span class="change-highlight">*</span> 出金类型：
+            </label>
+            <select v-model="modalForm.withdrawType" class="modal-input">
+              <option value="真实出金补录">真实出金补录</option>
+              <option value="差额补出">差额补出</option>
+              <option value="活动奖励扣回">活动奖励扣回</option>
+              <option value="返佣多发扣回">返佣多发扣回</option>
+              <option value="账户资金扣减">账户资金扣减</option>
+              <option value="账务调整">账务调整</option>
+              <option value="演示数据">演示数据</option>
+            </select>
+            <div class="withdraw-type-hint" :class="withdrawTypeHintClass(modalForm.withdrawType)">
+              <div>是否计入真实出金：{{ withdrawTypeHint(modalForm.withdrawType) }}</div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[15px] font-medium text-gray-600 mb-3">
               <span class="change-highlight">*</span> MT账号：
             </label>
             <input v-model="modalForm.mtAccount" @input="updateManageWithdrawType" class="modal-input" placeholder="请输入MT账号" />
@@ -348,7 +365,7 @@
           <button type="button" @click="closeManageWithdrawModal" class="px-6 py-2 rounded-lg bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors">
             取消
           </button>
-          <button type="button" @click="closeManageWithdrawModal" class="px-6 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primaryHover transition-colors">
+          <button type="button" @click="submitManageWithdraw" class="px-6 py-2 rounded-lg bg-primaryBtn text-white text-sm font-medium hover:bg-primaryBtnHover transition-colors">
             确认
           </button>
         </div>
@@ -376,6 +393,7 @@ const toggleDetail = (id) => {
 const isModalOpen = ref(false)
 const modalForm = ref({
   amount: '',
+  withdrawType: '演示数据',
   mtAccount: '',
   confirmAccount: '',
   comment: '',
@@ -409,6 +427,18 @@ const isHighlightHint = computed(() => {
   return !!accountTypeMap[mtAccount]
 })
 
+const withdrawTypeHint = (type) => {
+  if (type === '真实出金补录') return '计入真实出金'
+  if (type === '差额补出') return '计入真实出金'
+  return '不计入真实出金'
+}
+
+const withdrawTypeHintClass = (type) => {
+  if (type === '真实出金补录' || type === '差额补出') return 'withdraw-type-hint--ok'
+  if (type === '账户资金扣减') return 'withdraw-type-hint--special'
+  return 'withdraw-type-hint--warn'
+}
+
 const updateManageWithdrawType = () => {
   if (!modalForm.value.confirmAccount.trim()) {
     modalForm.value.confirmAccount = modalForm.value.mtAccount.trim()
@@ -416,6 +446,9 @@ const updateManageWithdrawType = () => {
 }
 
 const openManageWithdrawModal = () => {
+  if (!modalForm.value.withdrawType) {
+    modalForm.value.withdrawType = '演示数据'
+  }
   isModalOpen.value = true
   updateManageWithdrawType()
 }
@@ -425,11 +458,21 @@ const closeManageWithdrawModal = () => {
   // Reset form
   modalForm.value = {
     amount: '',
+    withdrawType: '演示数据',
     mtAccount: '',
     confirmAccount: '',
     comment: '',
     remark: ''
   }
+}
+
+const submitManageWithdraw = () => {
+  if (!modalForm.value.withdrawType) {
+    window.alert('请选择出金类型')
+    return
+  }
+
+  closeManageWithdrawModal()
 }
 
 const goWithdrawAuditDetail = (account) => {
@@ -566,5 +609,28 @@ const goWithdrawAuditDetail = (account) => {
   outline: none;
   resize: none;
   background: #fff;
+}
+.withdraw-type-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  padding: 8px 10px;
+  line-height: 1.4;
+}
+.withdraw-type-hint--ok {
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+  color: #047857;
+}
+.withdraw-type-hint--warn {
+  background: #FFF7ED;
+  border-color: #FED7AA;
+  color: #9A3412;
+}
+.withdraw-type-hint--special {
+  background: #FFF7ED;
+  border-color: #FDBA74;
+  color: #B45309;
 }
 </style>
