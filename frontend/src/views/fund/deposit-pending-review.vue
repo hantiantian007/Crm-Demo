@@ -287,16 +287,11 @@
               <label class="block text-[15px] font-medium text-gray-600 mb-3">
                 <span class="change-highlight">*</span> 入金类型：
               </label>
-              <select v-model="modalForm.depositType" class="modal-input">
-                <option value="真实入金补录">真实入金补录</option>
-                <option value="差额补入">差额补入</option>
-                <option value="活动奖励">活动奖励</option>
-                <option value="账户补偿">账户补偿</option>
-                <option value="账务调整">账务调整</option>
-                <option value="演示数据">演示数据</option>
+              <select v-model="modalForm.depositTypeId" class="modal-input">
+                <option v-for="t in enabledDepositTypes" :key="t.id" :value="t.id">{{ t.name }}</option>
               </select>
-              <div class="deposit-type-hint" :class="depositTypeHintClass(modalForm.depositType)">
-                是否计入真实入金：{{ depositTypeHint(modalForm.depositType) }}
+              <div class="deposit-type-hint" :class="depositTypeHintClass">
+                是否计入真实入金：{{ depositTypeHintText }}
               </div>
             </div>
             <div>
@@ -341,9 +336,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { openPrd } from '@/store/prd'
+import { findTypeConfig, getEnabledTypeConfigs, pushFundOperationSnapshot } from '@/store/fund-type-config'
 
 const router = useRouter()
 const openAdminDepositPrd = () => openPrd('prd-admin-deposit.html', '管理员入金 - PRD')
@@ -352,27 +348,24 @@ const expandedRows = ref([])
 const isModalOpen = ref(false)
 const modalForm = ref({
   amount: '',
-  depositType: '演示数据',
+  depositTypeId: 'dt_demo',
   mtAccount: '',
   confirmAccount: '',
   comment: '',
   remark: ''
 })
 
-const depositTypeHint = (type) => {
-  if (type === '真实入金补录') return '计入真实入金'
-  if (type === '差额补入') return '计入真实入金'
-  if (type === '活动奖励') return '不计入真实入金'
-  if (type === '账户补偿') return '不计入真实入金，单独统计'
-  if (type === '账务调整') return '不计入真实入金'
-  return '不计入真实入金'
-}
+const enabledDepositTypes = computed(() => getEnabledTypeConfigs('deposit'))
 
-const depositTypeHintClass = (type) => {
-  if (type === '真实入金补录' || type === '差额补入') return 'deposit-type-hint--ok'
-  if (type === '账户补偿') return 'deposit-type-hint--special'
-  return 'deposit-type-hint--warn'
-}
+const currentDepositType = computed(() => {
+  const v = findTypeConfig('deposit', modalForm.value.depositTypeId)
+  if (v && v.status === 'enabled') return v
+  return enabledDepositTypes.value[0] || null
+})
+
+const depositTypeHintText = computed(() => (currentDepositType.value?.countAsReal ? '计入真实入金' : '不计入真实入金'))
+
+const depositTypeHintClass = computed(() => (currentDepositType.value?.countAsReal ? 'deposit-type-hint--ok' : 'deposit-type-hint--warn'))
 
 const toggleDetail = (id) => {
   if (expandedRows.value.includes(id)) {
@@ -383,8 +376,9 @@ const toggleDetail = (id) => {
 }
 
 const openManageDepositModal = () => {
-  if (!modalForm.value.depositType) {
-    modalForm.value.depositType = '演示数据'
+  const validIds = new Set(enabledDepositTypes.value.map((x) => String(x.id)))
+  if (!validIds.has(String(modalForm.value.depositTypeId))) {
+    modalForm.value.depositTypeId = enabledDepositTypes.value[0]?.id || ''
   }
   isModalOpen.value = true
 }
@@ -406,7 +400,7 @@ const closeManageDepositModal = () => {
   isModalOpen.value = false
   modalForm.value = {
     amount: '',
-    depositType: '演示数据',
+    depositTypeId: 'dt_demo',
     mtAccount: '',
     confirmAccount: '',
     comment: '',
@@ -417,7 +411,7 @@ const closeManageDepositModal = () => {
 const submitManageDeposit = () => {
   const requiredFields = [
     { key: 'amount', label: '入金金额（美元）' },
-    { key: 'depositType', label: '入金类型' },
+    { key: 'depositTypeId', label: '入金类型' },
     { key: 'mtAccount', label: 'MT账号' },
     { key: 'confirmAccount', label: '确认账号' },
     { key: 'comment', label: 'MT Comment' },
@@ -429,6 +423,17 @@ const submitManageDeposit = () => {
     window.alert(`请填写：${missing.label}（演示校验）`)
     return
   }
+
+  const type = currentDepositType.value
+  pushFundOperationSnapshot({
+    direction: 'deposit',
+    typeId: type?.id || String(modalForm.value.depositTypeId || ''),
+    typeNameSnapshot: type?.name || '',
+    countAsRealSnapshot: !!type?.countAsReal,
+    amount: Number(modalForm.value.amount || 0),
+    status: 'success',
+    settled: true
+  })
 
   closeManageDepositModal()
 }

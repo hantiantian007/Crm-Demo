@@ -15,7 +15,7 @@
           <div v-if="k.sub" class="mt-0.5 text-[11px] text-gray-400">{{ k.sub }}</div>
         </div>
       </div>
-      <p class="mt-2 text-[11px] text-gray-400">
+      <p class="mt-1 text-xs font-medium text-gray-600">
         客户总数为当前数据；活跃客户统计最近30天；新增客户、净入金、交易量及返佣统计本月1日至当前时间。
       </p>
 

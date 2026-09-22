@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>代理首页 - PRD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+      html, body { height: 100%; }
+      body { background: #f6f7fb; }
+      .table-cell-nowrap { white-space: nowrap; }
+    </style>
+  </head>
+  <body class="min-h-full">
+    <div class="max-w-6xl mx-auto px-6 py-8">
+      <div class="flex items-start justify-between gap-4 mb-6">
+        <div class="min-w-0">
+          <div class="text-2xl font-black text-gray-900">代理首页（Agent Home）</div>
+          <div class="mt-2 text-sm text-gray-600">
+            <div>版本：V1.0.3</div>
+            <div>更新时间：2026-09-22</div>
+          </div>
+        </div>
+        <span class="text-xs text-gray-500 bg-gray-100 border border-gray-200 px-2 py-1 rounded">PRD</span>
+      </div>
+
+      <div class="space-y-6">
+        <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-chart-line text-[#d1a84f] mr-2"></i>1. 核心经营数据</h2>
+
+          <div class="space-y-6 text-sm text-gray-700">
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">1.1 模块展示内容</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>指标卡：客户总数、活跃客户数、本月新增客户、客户净入金、客户交易量、本月返佣。</li>
+                <li>说明文案：客户总数为当前快照；活跃客户统计最近30天；新增客户、净入金、交易量及返佣统计本月1日至当前时间。</li>
+              </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">1.2 统一统计口径</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <thead class="bg-gray-100 text-gray-600">
+                    <tr>
+                      <th class="py-2 px-3 table-cell-nowrap">维度</th>
+                      <th class="py-2 px-3">说明</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td>
+                      <td class="py-2 px-3">客户（Client）。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td>
+                      <td class="py-2 px-3">当前代理本人及伞下客户（包含当前代理直属客户 + 下级代理名下客户）。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td>
+                      <td class="py-2 px-3">CRM 客户、资金流水（入/出金）、MT4/MT5 成交记录、返佣结算记录、代理关系树。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td>
+                      <td class="py-2 px-3">按客户ID去重；一个客户多个 MT 账号仍计为 1 个客户。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td>
+                      <td class="py-2 px-3">测试、内部、禁用/注销客户不计入；失败、取消、冲正数据不计入；模拟交易不计入。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">状态/异常判断</td>
+                      <td class="py-2 px-3">若客户归属关系发生调整，按统计时刻的有效归属关系参与统计；无有效归属的客户不计入。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">点击明细范围</td>
+                      <td class="py-2 px-3">当前页面 KPI 卡片不提供点击明细（仅展示汇总值）。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">1.3 指标计算公式</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <thead class="bg-gray-100 text-gray-600">
+                    <tr>
+                      <th class="py-2 px-3 table-cell-nowrap">指标</th>
+                      <th class="py-2 px-3">统计时间</th>
+                      <th class="py-2 px-3">计算公式 / 规则</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">客户总数</td>
+                      <td class="py-2 px-3">当前快照</td>
+                      <td class="py-2 px-3">客户总数 = 当前统计范围内的去重客户数。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">活跃客户数</td>
+                      <td class="py-2 px-3">最近30天</td>
+                      <td class="py-2 px-3">活跃客户数 = 最近30天存在有效真实入金或有效交易的去重客户数。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">本月新增客户</td>
+                      <td class="py-2 px-3">本月1日至当前时间</td>
+                      <td class="py-2 px-3">本月新增客户 = 本月1日至当前时间完成注册的去重客户数。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">客户净入金</td>
+                      <td class="py-2 px-3">本月1日至当前时间</td>
+                      <td class="py-2 px-3">客户净入金 = 成功真实入金 − 成功真实出金（按统计时间内发生时间汇总）。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">客户交易量</td>
+                      <td class="py-2 px-3">本月1日至当前时间</td>
+                      <td class="py-2 px-3">客户交易量 = 统计周期内有效已平仓交易的标准手数（Lot）汇总。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">本月返佣</td>
+                      <td class="py-2 px-3">本月1日至当前时间</td>
+                      <td class="py-2 px-3">本月返佣 = 本月已结算返佣 − 返佣冲正 − 返佣多发扣回（按结算入账时间汇总）。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-gift text-[#d1a84f] mr-2"></i>2. 活动概览</h2>
+
+          <div class="space-y-5 text-sm text-gray-700">
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">2.1 模块展示内容</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>活动卡：活动名称、活动时间范围、剩余天数、参与状态（已参与/未参加活动）。</li>
+                <li>未参与：展示“立即参与”入口，弹窗选择用户类型（新用户/老用户）并确认参与。</li>
+                <li>已参与：展示参与 MT 账号与参与时间；展示活动净入金与活动交易手数进度条。</li>
+              </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">2.2 统计规则</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td>
+                      <td class="py-2 px-3">客户维度判断达标；进度统计以参与确认的 MT 账号为统计口径。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td>
+                      <td class="py-2 px-3">当前代理范围内客户；仅统计确认参与该活动的客户/账号。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td>
+                      <td class="py-2 px-3">从“参与成功时间”起算至当前时间；活动结束后模块不展示。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td>
+                      <td class="py-2 px-3">活动配置、活动参与记录、入/出金流水、成交记录。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td>
+                      <td class="py-2 px-3">
+                        <div>活动净入金 = 参与成功时间后成功真实入金 − 成功真实出金。</div>
+                        <div>活动交易手数 = 参与成功时间后有效已平仓交易的标准手数（Lot）汇总。</div>
+                        <div>达标条件：活动净入金 ≥ 1,000 USD 且 活动交易手数 ≥ 10 Lot。</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td>
+                      <td class="py-2 px-3">达标判断按客户ID去重；同一客户多个参与账号的达标以客户维度为准。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td>
+                      <td class="py-2 px-3">失败、取消、冲正的入/出金与成交不计入；模拟交易不计入。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">状态/异常判断</td>
+                      <td class="py-2 px-3">老用户参与需选择 MT 账号；未选择则不可确认参与。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">点击明细范围</td>
+                      <td class="py-2 px-3">当前仅支持参与操作与进度展示，不提供按客户维度的参与明细列表。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-wallet text-[#d1a84f] mr-2"></i>3. MT账户概览</h2>
+
+          <div class="space-y-5 text-sm text-gray-700">
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">3.1 模块展示内容</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>账户范围切换：本人 / 伞下 / 全部。</li>
+                <li>当前实时数据（快照）：当前MT余额、当前持仓量、当前浮动盈亏；展示数据最后同步时间。</li>
+                <li>期间数据：按所选时间（今日/本周/本月/上月/自定义）展示入金、出金、交易量、平仓盈亏；指标名随时间条件动态变化（如“本周入金”）。</li>
+              </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">3.2 统计规则</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td>
+                      <td class="py-2 px-3">MT 账户（Account）汇总 + 客户维度关联归属。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td>
+                      <td class="py-2 px-3">
+                        <div>本人：当前代理自己名下 MT 账户。</div>
+                        <div>伞下：当前代理直属客户 + 下级代理名下客户对应的 MT 账户。</div>
+                        <div>全部：本人 + 伞下。</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td>
+                      <td class="py-2 px-3">
+                        <div>当前快照：当前MT余额、当前持仓量、当前浮动盈亏，不受时间筛选影响。</div>
+                        <div>期间统计：入金、出金、交易量、已平仓盈亏按所选时间统计。</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td>
+                      <td class="py-2 px-3">MT4/MT5 账户快照、持仓与浮动盈亏；CRM 入/出金流水；MT4/MT5 成交记录。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td>
+                      <td class="py-2 px-3">
+                        <div>当前MT余额 / 当前持仓量 / 当前浮动盈亏：取统计范围内 MT 账户最新快照汇总。</div>
+                        <div>期间入金：统计周期内成功真实入金金额汇总。</div>
+                        <div>期间出金：统计周期内成功真实出金金额汇总。</div>
+                        <div>期间交易量：统计周期内有效已平仓交易的标准手数（Lot）汇总。</div>
+                        <div>期间平仓盈亏：统计周期内已平仓订单的盈亏汇总。</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td>
+                      <td class="py-2 px-3">快照指标按 MT 账户汇总；期间流水按订单/流水ID累计，不按客户去重。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td>
+                      <td class="py-2 px-3">失败、取消、冲正的入/出金不计入；模拟交易不计入；无效成交不计入交易量与平仓盈亏。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">状态/异常判断</td>
+                      <td class="py-2 px-3">自定义日期开始时间晚于结束时间、或日期为空时提示错误；期间数据不参与统计。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">点击明细范围</td>
+                      <td class="py-2 px-3">当前模块不提供账户级明细跳转（仅展示汇总）。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-wave-square text-[#d1a84f] mr-2"></i>4. 经营趋势</h2>
+
+          <div class="space-y-5 text-sm text-gray-700">
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">4.1 模块展示内容</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>趋势指标切换：净入金 / 交易量 / 新增客户 / 返佣。</li>
+                <li>展示口径：近30天趋势（按天聚合）。</li>
+              </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">4.2 统计规则</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td>
+                      <td class="py-2 px-3">客户（新增客户）与资金/交易/返佣事件（净入金、交易量、返佣）。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td>
+                      <td class="py-2 px-3">当前代理本人及伞下客户。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td>
+                      <td class="py-2 px-3">固定近30天（按自然日聚合），不受其他模块时间筛选影响。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td>
+                      <td class="py-2 px-3">客户注册记录、入/出金流水、成交记录、返佣结算记录。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td>
+                      <td class="py-2 px-3">
+                        <div>净入金（日）= 当日成功真实入金 − 当日成功真实出金。</div>
+                        <div>交易量（日）= 当日有效已平仓交易标准手数（Lot）汇总。</div>
+                        <div>新增客户（日）= 当日完成注册的去重客户数。</div>
+                        <div>返佣（日）= 当日已结算返佣 − 当日返佣冲正 − 当日返佣多发扣回（按结算入账时间）。</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td>
+                      <td class="py-2 px-3">新增客户按客户ID去重；其他为事件累计。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td>
+                      <td class="py-2 px-3">测试、内部、禁用/注销客户不计入；失败、取消、冲正事件不计入；模拟交易不计入。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">状态/异常判断</td>
+                      <td class="py-2 px-3">当日无数据则为 0；不展示“暂无数据”提示，仅体现趋势线变化。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">点击明细范围</td>
+                      <td class="py-2 px-3">点击趋势指标仅切换展示，不提供按日明细列表。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-bell text-[#d1a84f] mr-2"></i>5. 客户运营提醒</h2>
+
+          <div class="space-y-5 text-sm text-gray-700">
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">5.1 模块展示内容</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>提醒卡片：新注册未入金、已入金未交易、7天未交易、30天未活跃、大额出金客户。</li>
+                <li>点击提醒卡进入明细弹窗，支持按“客户名称/邮箱、MT账号”筛选，支持分页。</li>
+              </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">5.2 统一统计规则</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td>
+                      <td class="py-2 px-3">客户（Client）。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td>
+                      <td class="py-2 px-3">当前代理本人及伞下客户。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td>
+                      <td class="py-2 px-3">按客户ID去重；不按 MT 账号计数。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td>
+                      <td class="py-2 px-3">测试、内部、禁用/注销客户不统计；失败、取消、冲正的入/出金不统计；模拟交易不统计。</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td>
+                      <td class="py-2 px-3">CRM 客户、资金流水、成交记录、CRM 登录日志、MT 登录日志、代理关系树。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">5.3 五项提醒口径</div>
+
+              <div class="space-y-4">
+                <div class="bg-white rounded-md border border-gray-200 p-4">
+                  <div class="font-bold text-gray-900">A. 新注册未入金</div>
+                  <div class="mt-3 overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-gray-200">
+                      <tbody class="text-gray-700 divide-y divide-gray-100">
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">最近7天内注册（按注册时间）。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">进入条件</td><td class="py-2 px-3">注册时间在最近7天内，且累计成功真实入金金额=0。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">移出条件</td><td class="py-2 px-3">产生第一笔成功真实入金后移出；若后续仍无交易，可进入“已入金未交易”。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">新注册未入金客户数 = 最近7天注册 且 累计成功真实入金金额=0 的去重客户数。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重维度</td><td class="py-2 px-3">客户ID。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">异常判断</td><td class="py-2 px-3">注册不足24小时的客户也计入。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">明细字段范围</td><td class="py-2 px-3">客户名称、客户邮箱、注册时间、注册地区、KYC状态、MT开户状态、累计真实入金、归属代理、最近联系时间。</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-md border border-gray-200 p-4">
+                  <div class="font-bold text-gray-900">B. 已入金未交易</div>
+                  <div class="mt-3 overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-gray-200">
+                      <tbody class="text-gray-700 divide-y divide-gray-100">
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">最近30天（按首次成功真实入金时间）。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">进入条件</td><td class="py-2 px-3">最近30天完成首次成功真实入金，且累计成功真实入金&gt;0，且所有真实 MT 账户有效交易笔数=0。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">移出条件</td><td class="py-2 px-3">产生第一笔有效交易后移出。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">已入金未交易客户数 = 最近30天完成首次成功真实入金 且 有效交易笔数=0 的去重客户数。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重维度</td><td class="py-2 px-3">客户ID。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td><td class="py-2 px-3">只有赠金/信用金的客户不计入；仅模拟账户交易不计入。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">明细字段范围</td><td class="py-2 px-3">客户名称、客户邮箱、MT账号、首次入金时间、首次入金金额、有效交易笔数、最近登录时间、归属代理。</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-md border border-gray-200 p-4">
+                  <div class="font-bold text-gray-900">C. 7天未交易</div>
+                  <div class="mt-3 overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-gray-200">
+                      <tbody class="text-gray-700 divide-y divide-gray-100">
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">按最后一次有效交易时间判断（距当前7至29天）。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">进入条件</td><td class="py-2 px-3">历史存在有效真实交易，且最后一次有效交易时间距当前≥7天且&lt;30天。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">移出条件</td><td class="py-2 px-3">产生新的有效交易后移出；若距当前≥30天且满足沉默条件则进入“30天未活跃”。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">7天未交易客户数 = 最后有效交易时间在7天前至29天前 的去重客户数。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重维度</td><td class="py-2 px-3">客户ID。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td><td class="py-2 px-3">从未交易的客户不计入；已入金未交易客户不计入。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">明细字段范围</td><td class="py-2 px-3">客户名称、客户邮箱、MT账号、最后交易时间、未交易天数、历史交易量、当前余额、最近登录时间、归属代理。</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-md border border-gray-200 p-4">
+                  <div class="font-bold text-gray-900">D. 30天未活跃</div>
+                  <div class="mt-3 overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-gray-200">
+                      <tbody class="text-gray-700 divide-y divide-gray-100">
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">连续30天（按CRM/MT登录、入金、交易行为综合判断）。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">进入条件</td><td class="py-2 px-3">注册已超过30天，且历史存在真实入金或真实交易；连续30天没有CRM/MT登录、成功真实入金、有效交易。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">移出条件</td><td class="py-2 px-3">出现任一行为：CRM/MT登录、成功真实入金、有效交易。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">30天未活跃客户数 = 连续30天没有登录、真实入金和有效交易行为 的去重客户数。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重维度</td><td class="py-2 px-3">客户ID。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td><td class="py-2 px-3">注册不足30天的新客户不计入；从未入金且从未交易的客户不计入。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">明细字段范围</td><td class="py-2 px-3">客户名称、客户邮箱、MT账号、最后登录时间、最后入金时间、最后交易时间、沉默天数、当前余额、历史净入金、归属代理。</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-md border border-gray-200 p-4">
+                  <div class="font-bold text-gray-900">E. 大额出金客户</div>
+                  <div class="mt-3 overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-gray-200">
+                      <tbody class="text-gray-700 divide-y divide-gray-100">
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">本月1日至当前时间（按出金申请时间）。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">进入条件</td><td class="py-2 px-3">统计周期内触发任意规则：单笔出金≥10,000 USD / 24小时累计出金≥20,000 USD / 出金占比≥80%。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">移出条件</td><td class="py-2 px-3">出金申请被拒绝/取消/冲正后移出；或超出统计周期后不再计入。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">大额出金客户数 = 统计周期内触发任意一条大额出金规则 的去重客户数。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重维度</td><td class="py-2 px-3">客户ID（同一客户多笔触发仍计 1）。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">状态/异常判断</td><td class="py-2 px-3">统计状态包含：待审核/审核中/已通过/已完成；不统计：已拒绝/已取消/已冲正。</td></tr>
+                        <tr><td class="py-2 px-3 font-medium table-cell-nowrap">明细字段范围</td><td class="py-2 px-3">客户名称、客户邮箱、MT账号、申请时间、单笔出金金额、24小时累计出金、当前资金、出金占比、审核状态、触发规则、归属代理。</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">5.4 点击后查看的明细范围</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>点击提醒卡打开明细弹窗，弹窗内查询条件仅影响当前弹窗展示（不影响首页其他模块）。</li>
+                <li>点击“查看客户”进入客户详情页；当客户ID为空时提示“客户详情为演示数据”。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-coins text-[#d1a84f] mr-2"></i>6. 返佣概览</h2>
+
+          <div class="space-y-6 text-sm text-gray-700">
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">6.1 模块展示内容</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>返佣卡：今日返佣、本周返佣、本月返佣、上月返佣。</li>
+                <li>下级代理列表：展示下级代理的客户数、本月净入金、本月交易量、本月返佣。</li>
+              </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">6.2 返佣统计规则</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td><td class="py-2 px-3">返佣结算记录（Commission）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td><td class="py-2 px-3">当前代理本人及伞下产生的返佣；按归属代理树汇总。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">按结算入账时间统计：今日/本周/本月/上月。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td><td class="py-2 px-3">返佣结算与入账记录、返佣冲正记录、返佣多发扣回记录。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">周期返佣 = 周期内已结算返佣 − 返佣冲正 − 返佣多发扣回。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td><td class="py-2 px-3">按返佣结算单ID累计，不按客户去重。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td><td class="py-2 px-3">未结算/未入账记录不计入；冲正数据按冲正记录处理。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">状态/异常判断</td><td class="py-2 px-3">若同一笔返佣发生冲正/扣回，则以冲正/扣回记录作为负向抵扣。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">点击明细范围</td><td class="py-2 px-3">当前页面返佣卡不提供点击明细。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">6.3 下级代理列表统计规则</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td><td class="py-2 px-3">下级代理（Sub Agent）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td><td class="py-2 px-3">当前代理的下级代理列表（仅展示下一级）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">本月1日至当前时间。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td><td class="py-2 px-3">代理关系树、客户归属关系、资金流水、成交记录、返佣结算记录。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">各字段按“该下级代理伞下客户”的本月净入金/交易量/返佣汇总口径统计；客户数按客户ID去重。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td><td class="py-2 px-3">客户数按客户ID去重；净入金/交易量/返佣为事件累计。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td><td class="py-2 px-3">测试、内部、禁用/注销客户不计入；失败、取消、冲正数据不计入；模拟交易不计入。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">状态/异常判断</td><td class="py-2 px-3">若下级代理被禁用，则默认不展示或展示为 0（由权限与配置决定）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">点击明细范围</td><td class="py-2 px-3">当前表格不提供点击跳转（仅展示汇总列表）。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-bullhorn text-[#d1a84f] mr-2"></i>7. 通知公告</h2>
+
+          <div class="space-y-5 text-sm text-gray-700">
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">7.1 模块展示内容</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>展示公告列表：标题 + 日期；支持“最新”标识；提供“查看更多”入口。</li>
+              </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">7.2 统计规则</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">模块展示内容</td><td class="py-2 px-3">展示与代理相关的平台公告摘要（标题、发布日期）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td><td class="py-2 px-3">公告（Notice）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td><td class="py-2 px-3">平台公告范围；可按用户角色/地区/语言等规则过滤（由公告系统决定）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">按公告发布时间倒序展示；当前模块不支持置顶规则；默认展示最新若干条。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td><td class="py-2 px-3">公告服务/内容管理系统（CMS）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">无金额/数量计算公式；仅列表展示。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td><td class="py-2 px-3">按公告ID去重。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td><td class="py-2 px-3">已下线/已撤回公告不展示。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">状态或异常判断</td><td class="py-2 px-3">“最新”标识由公告数据中的标记字段决定；当前模块不体现“已读状态”。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">点击后查看的明细范围</td><td class="py-2 px-3">点击公告进入公告详情；点击“查看更多”进入公告列表页（/news/latest）。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-100 shadow-sm p-6">
+          <h2 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6"><i class="fa-solid fa-share-nodes text-[#d1a84f] mr-2"></i>8. 推广中心</h2>
+
+          <div class="space-y-5 text-sm text-gray-700">
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">8.1 模块展示内容</div>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>邀请类型切换：直客邀请 / 代理邀请。</li>
+                <li>展示邀请码与分享链接；支持复制邀请码、复制链接；支持查看二维码。</li>
+              </ul>
+            </div>
+
+            <div class="bg-gray-50 rounded-md p-4 border border-gray-100">
+              <div class="font-bold text-gray-900 mb-2">8.2 统计规则</div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border border-gray-200 bg-white">
+                  <tbody class="text-gray-700 divide-y divide-gray-100">
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计对象</td><td class="py-2 px-3">邀请码与链接（推广资源）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计范围</td><td class="py-2 px-3">归属于当前登录代理的推广资源；切换仅影响展示的资源类型，不影响其他模块数据。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">统计时间</td><td class="py-2 px-3">非时间统计模块；展示为当前有效邀请码与链接。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">数据来源</td><td class="py-2 px-3">代理账号资料、推广资源配置（邀请码/链接生成规则）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">计算公式</td><td class="py-2 px-3">无金额/数量计算公式；仅展示与复制。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">去重方式</td><td class="py-2 px-3">邀请码按类型（直客/代理）唯一；同一类型仅展示 1 组。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">排除的数据</td><td class="py-2 px-3">失效/冻结的推广资源不展示（由资源状态决定）。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">状态或异常判断</td><td class="py-2 px-3">复制失败时使用降级方案复制到剪贴板；二维码为展示型弹窗。</td></tr>
+                    <tr><td class="py-2 px-3 font-medium table-cell-nowrap">点击后查看的明细范围</td><td class="py-2 px-3">复制按钮仅执行复制；“查看二维码”打开二维码弹窗；不提供邀请明细列表跳转。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

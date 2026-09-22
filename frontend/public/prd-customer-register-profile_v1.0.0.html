@@ -50,44 +50,7 @@
     </div>
 
     <div class="mb-10 print-break-inside-avoid">
-      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">二、页面与入口</h2>
-      <table class="w-full text-sm text-left border border-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="p-3 border-b border-gray-200 font-bold w-1/4">项</th>
-            <th class="p-3 border-b border-gray-200 font-bold">说明</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          <tr>
-            <td class="p-3 font-medium">页面路由</td>
-            <td class="p-3 text-gray-600"><code class="bg-gray-100 px-1.5 py-0.5 rounded">/other/customer-register-profile</code></td>
-          </tr>
-          <tr>
-            <td class="p-3 font-medium">菜单入口</td>
-            <td class="p-3 text-gray-600">左侧菜单：其他页面 / 客户注册资料</td>
-          </tr>
-          <tr>
-            <td class="p-3 font-medium">PRD 入口</td>
-            <td class="p-3 text-gray-600">页面顶部 PRD 按钮通过右侧 Drawer 打开。</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="mb-10 print-break-inside-avoid">
-      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">三、页面结构与布局</h2>
-      <div class="bg-gray-50 p-5 rounded-lg text-sm text-gray-700 leading-relaxed border border-gray-100">
-        <ul class="list-disc pl-5 space-y-2">
-          <li>顶部信息区展示客户头像与邮箱。</li>
-          <li>内容区包含两个 Tab：用户资料、账号安全。</li>
-          <li>页面采用窄版单列布局，字段按顺序纵向填写；证件正反面上传入口在单列内并排。</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="mb-10 print-break-inside-avoid">
-      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">四、本次页面调整对照表</h2>
+      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">二、本次页面调整对照表</h2>
       <table class="w-full text-sm text-left border border-gray-200">
         <thead class="bg-gray-50">
           <tr>
@@ -101,33 +64,21 @@
           <tr>
             <td class="p-3 font-medium">地区字段</td>
             <td class="p-3 text-gray-600">地区</td>
-            <td class="p-3 text-gray-600">注册地区（7 个固定选项）</td>
-            <td class="p-3 text-gray-600">代表申请开户的地区，不等同于常住地区。</td>
-          </tr>
-          <tr>
-            <td class="p-3 font-medium">居住地字段</td>
-            <td class="p-3 text-gray-600">居住地（自由输入）</td>
-            <td class="p-3 text-gray-600">常住国家/地区（必填下拉）</td>
-            <td class="p-3 text-gray-600">选项范围不局限于 7 个注册地区。</td>
+            <td class="p-3 text-gray-600">地区（7 个固定选项）</td>
+            <td class="p-3 text-gray-600">作为居住地址的地区选择。</td>
           </tr>
           <tr>
             <td class="p-3 font-medium">地址补充字段</td>
             <td class="p-3 text-gray-600">无</td>
-            <td class="p-3 text-gray-600">省/州、城市、详细居住地址（选填）</td>
-            <td class="p-3 text-gray-600">用于完善常住地址信息。</td>
-          </tr>
-          <tr>
-            <td class="p-3 font-medium">页面布局</td>
-            <td class="p-3 text-gray-600">多列/宽版展示</td>
-            <td class="p-3 text-gray-600">窄版单列纵向填写</td>
-            <td class="p-3 text-gray-600">提高填写可读性与一致性。</td>
+            <td class="p-3 text-gray-600">省/州、城市、详细居住地址（必填）</td>
+            <td class="p-3 text-gray-600">用于完整填写居住地址信息。</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div class="mb-10 print-break-inside-avoid">
-      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">五、注册资料字段定义</h2>
+      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">三、注册资料字段定义</h2>
 
       <h3 class="font-bold text-gray-800 mb-2 mt-4"><i class="fa-solid fa-table-list mr-2 text-primaryColor"></i> 1. 字段清单</h3>
       <table class="w-full text-sm text-left border border-gray-200 mb-4">
@@ -141,10 +92,10 @@
         </thead>
         <tbody class="divide-y divide-gray-100">
           <tr>
-            <td class="p-3 font-medium">注册地区</td>
+            <td class="p-3 font-medium">地区</td>
             <td class="p-3 text-gray-600">下拉</td>
             <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
-            <td class="p-3 text-gray-600">提示语：请选择申请开户的地区。选项固定：越南、中国、中国香港、韩国、日本、泰国、新加坡。</td>
+            <td class="p-3 text-gray-600">固定选项：越南、中国、中国香港、韩国、日本、泰国、新加坡。</td>
           </tr>
           <tr>
             <td class="p-3 font-medium">手机号</td>
@@ -189,28 +140,22 @@
             <td class="p-3 text-gray-600">证件反面照片。</td>
           </tr>
           <tr>
-            <td class="p-3 font-medium">常住国家/地区</td>
+            <td class="p-3 font-medium">省/州</td>
             <td class="p-3 text-gray-600">下拉</td>
             <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
-            <td class="p-3 text-gray-600">选项范围覆盖常见国家/地区，不限定为注册地区选项集合。</td>
-          </tr>
-          <tr>
-            <td class="p-3 font-medium">省/州</td>
-            <td class="p-3 text-gray-600">输入框</td>
-            <td class="p-3 text-gray-600">否</td>
-            <td class="p-3 text-gray-600">用于补充常住地址信息。</td>
+            <td class="p-3 text-gray-600">必填下拉；选项根据“地区”联动加载；未选择地区时不可选；更换地区后清空省/州与城市。</td>
           </tr>
           <tr>
             <td class="p-3 font-medium">城市</td>
-            <td class="p-3 text-gray-600">输入框</td>
-            <td class="p-3 text-gray-600">否</td>
-            <td class="p-3 text-gray-600">用于补充常住地址信息。</td>
+            <td class="p-3 text-gray-600">下拉</td>
+            <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
+            <td class="p-3 text-gray-600">必填下拉；选项根据“省/州”联动加载；未选择省/州时不可选；更换省/州后清空城市。</td>
           </tr>
           <tr>
             <td class="p-3 font-medium">详细居住地址</td>
             <td class="p-3 text-gray-600">输入框</td>
-            <td class="p-3 text-gray-600">否</td>
-            <td class="p-3 text-gray-600">用于补充常住地址信息。</td>
+            <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
+            <td class="p-3 text-gray-600">必填；客户填写街道、门牌、楼层等详细信息。</td>
           </tr>
         </tbody>
       </table>
@@ -228,39 +173,32 @@
         </thead>
         <tbody class="divide-y divide-gray-100">
           <tr>
-            <td class="p-3 font-medium">注册地区</td>
-            <td class="p-3 text-gray-600">客户申请开户的地区选择</td>
-            <td class="p-3 text-gray-600">固定 7 项；不随常住地址变更而变化。</td>
+            <td class="p-3 font-medium">地区</td>
+            <td class="p-3 text-gray-600">居住地址所属地区</td>
+            <td class="p-3 text-gray-600">必填；固定选项：越南、中国、中国香港、韩国、日本、泰国、新加坡。</td>
             <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
-            <td class="p-3 text-gray-600">保存选择值（如：中国香港）。</td>
-          </tr>
-          <tr>
-            <td class="p-3 font-medium">常住国家/地区</td>
-            <td class="p-3 text-gray-600">客户当前长期居住的国家/地区</td>
-            <td class="p-3 text-gray-600">下拉选项覆盖常见国家/地区；选项集合不限制为注册地区 7 项。</td>
-            <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
-            <td class="p-3 text-gray-600">保存选择值（如：加拿大）。</td>
+            <td class="p-3 text-gray-600">保存：选项代码 + 中文/本地化名称 + 页面显示名称。示例：code=CN_HK，name_zh=中国香港，display=中国香港。</td>
           </tr>
           <tr>
             <td class="p-3 font-medium">省/州</td>
             <td class="p-3 text-gray-600">常住地址的省/州/行政区</td>
-            <td class="p-3 text-gray-600">客户选填输入。</td>
-            <td class="p-3 text-gray-600">否</td>
-            <td class="p-3 text-gray-600">示例：Ontario / 广东省。</td>
+            <td class="p-3 text-gray-600">必填；下拉；选项根据“地区”联动加载；未选择地区时不可选；更换地区后清空省/州与城市。</td>
+            <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
+            <td class="p-3 text-gray-600">保存：选项代码 + 中文/本地化名称 + 页面显示名称。示例：地区=中国，code=GD，name_zh=广东省，display=广东省。</td>
           </tr>
           <tr>
             <td class="p-3 font-medium">城市</td>
             <td class="p-3 text-gray-600">常住地址的城市</td>
-            <td class="p-3 text-gray-600">客户选填输入。</td>
-            <td class="p-3 text-gray-600">否</td>
-            <td class="p-3 text-gray-600">示例：Toronto / 深圳。</td>
+            <td class="p-3 text-gray-600">必填；下拉；选项根据“省/州”联动加载；未选择省/州时不可选；更换省/州后清空城市。</td>
+            <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
+            <td class="p-3 text-gray-600">保存：选项代码 + 中文/本地化名称 + 页面显示名称。示例：省/州=广东省，code=SZ，name_zh=深圳，display=深圳。</td>
           </tr>
           <tr>
             <td class="p-3 font-medium">详细居住地址</td>
             <td class="p-3 text-gray-600">街道、门牌、楼层等详细信息</td>
-            <td class="p-3 text-gray-600">客户选填输入。</td>
-            <td class="p-3 text-gray-600">否</td>
-            <td class="p-3 text-gray-600">示例：No. 88, Queen St. / XX路88号X座。</td>
+            <td class="p-3 text-gray-600">必填；客户输入文本内容。</td>
+            <td class="p-3 text-gray-600"><span class="text-red-600 font-bold">是</span></td>
+            <td class="p-3 text-gray-600">保存：页面填写内容。示例：XX路88号X座。</td>
           </tr>
         </tbody>
       </table>
@@ -268,37 +206,36 @@
       <div class="bg-gray-50 p-5 rounded-lg text-sm text-gray-700 leading-relaxed border border-gray-100 mt-4">
         <div class="font-bold text-gray-800 mb-2">重要说明</div>
         <ul class="list-disc pl-5 space-y-2">
-          <li><strong>注册地区</strong>与<strong>常住国家/地区</strong>为两个独立字段，值可以不同，不得互相覆盖。</li>
+          <li><strong>居住地址字段顺序</strong>：地区 → 省/州 → 城市 → 详细居住地址。</li>
           <li>客户填写的地址信息不等于实际使用地区；注册 IP、后续登录地区不属于本表单字段。</li>
         </ul>
       </div>
     </div>
 
     <div class="mb-10 print-break-inside-avoid">
-      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">六、提交校验与错误提示</h2>
+      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">四、提交校验与错误提示</h2>
       <div class="bg-gray-50 p-5 rounded-lg text-sm text-gray-700 leading-relaxed border border-gray-100">
         <ul class="list-disc pl-5 space-y-2">
           <li>提交按钮位于表单底部，提交前对必填字段进行校验。</li>
-          <li>必填项：注册地区、常住国家/地区、手机号（区号+号码）、真实姓名、出生日期、证件类型、证件号、证件照片（正/反）。</li>
-          <li>错误提示需明确指向缺失项，例如：请先选择注册地区 / 请先选择常住国家/地区。</li>
+          <li>必填项：地区、省/州、城市、详细居住地址、手机号（区号+号码）、真实姓名、出生日期、证件类型、证件号、证件照片（正/反）。</li>
+          <li>错误提示需明确指向缺失项，例如：请先选择地区 / 请先选择省/州 / 请先选择城市 / 请填写详细居住地址。</li>
         </ul>
       </div>
     </div>
 
     <div class="mb-2 print-break-inside-avoid">
-      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">七、验收标准</h2>
+      <h2 class="text-xl font-bold text-gray-800 border-l-4 border-primaryColor pl-3 mb-4">五、验收标准</h2>
       <div class="bg-gray-50 p-5 rounded-lg text-sm text-gray-700 leading-relaxed border border-gray-100">
         <ul class="list-disc pl-5 space-y-2">
           <li>可通过菜单进入页面，并正常展示用户资料/账号安全 Tab。</li>
           <li>页面为窄版单列布局，字段纵向填写；证件正/反面上传入口并排。</li>
-          <li>注册地区字段显示 7 个固定选项，且提示语为“请选择申请开户的地区”。</li>
-          <li>常住国家/地区为必填下拉，选项范围不限制为 7 个注册地区。</li>
+          <li>地区为必填下拉，固定选项为：越南、中国、中国香港、韩国、日本、泰国、新加坡。</li>
+          <li>省/州与城市为必填下拉，且与地区/省/州存在三级联动：更换地区清空省/州与城市；更换省/州清空城市。</li>
+          <li>详细居住地址为必填输入框。</li>
           <li>提交校验覆盖全部必填项，错误提示明确指向具体字段。</li>
-          <li>注册地区与常住国家/地区可选择不同值，且系统不互相覆盖。</li>
         </ul>
       </div>
     </div>
   </div>
 </body>
 </html>
-

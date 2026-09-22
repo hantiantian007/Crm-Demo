@@ -317,17 +317,11 @@
             <label class="block text-[15px] font-medium text-gray-600 mb-3">
               <span class="change-highlight">*</span> 出金类型：
             </label>
-            <select v-model="modalForm.withdrawType" class="modal-input">
-              <option value="真实出金补录">真实出金补录</option>
-              <option value="差额补出">差额补出</option>
-              <option value="活动奖励扣回">活动奖励扣回</option>
-              <option value="返佣多发扣回">返佣多发扣回</option>
-              <option value="账户资金扣减">账户资金扣减</option>
-              <option value="账务调整">账务调整</option>
-              <option value="演示数据">演示数据</option>
+            <select v-model="modalForm.withdrawTypeId" class="modal-input">
+              <option v-for="t in enabledWithdrawTypes" :key="t.id" :value="t.id">{{ t.name }}</option>
             </select>
-            <div class="withdraw-type-hint" :class="withdrawTypeHintClass(modalForm.withdrawType)">
-              <div>是否计入真实出金：{{ withdrawTypeHint(modalForm.withdrawType) }}</div>
+            <div class="withdraw-type-hint" :class="withdrawTypeHintClass">
+              <div>是否计入真实出金：{{ withdrawTypeHintText }}</div>
             </div>
           </div>
           <div>
@@ -377,6 +371,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { findTypeConfig, getEnabledTypeConfigs, pushFundOperationSnapshot } from '@/store/fund-type-config'
 
 const router = useRouter()
 
@@ -393,7 +388,7 @@ const toggleDetail = (id) => {
 const isModalOpen = ref(false)
 const modalForm = ref({
   amount: '',
-  withdrawType: '演示数据',
+  withdrawTypeId: 'wt_demo',
   mtAccount: '',
   confirmAccount: '',
   comment: '',
@@ -427,17 +422,17 @@ const isHighlightHint = computed(() => {
   return !!accountTypeMap[mtAccount]
 })
 
-const withdrawTypeHint = (type) => {
-  if (type === '真实出金补录') return '计入真实出金'
-  if (type === '差额补出') return '计入真实出金'
-  return '不计入真实出金'
-}
+const enabledWithdrawTypes = computed(() => getEnabledTypeConfigs('withdraw'))
 
-const withdrawTypeHintClass = (type) => {
-  if (type === '真实出金补录' || type === '差额补出') return 'withdraw-type-hint--ok'
-  if (type === '账户资金扣减') return 'withdraw-type-hint--special'
-  return 'withdraw-type-hint--warn'
-}
+const currentWithdrawType = computed(() => {
+  const v = findTypeConfig('withdraw', modalForm.value.withdrawTypeId)
+  if (v && v.status === 'enabled') return v
+  return enabledWithdrawTypes.value[0] || null
+})
+
+const withdrawTypeHintText = computed(() => (currentWithdrawType.value?.countAsReal ? '计入真实出金' : '不计入真实出金'))
+
+const withdrawTypeHintClass = computed(() => (currentWithdrawType.value?.countAsReal ? 'withdraw-type-hint--ok' : 'withdraw-type-hint--warn'))
 
 const updateManageWithdrawType = () => {
   if (!modalForm.value.confirmAccount.trim()) {
@@ -446,8 +441,9 @@ const updateManageWithdrawType = () => {
 }
 
 const openManageWithdrawModal = () => {
-  if (!modalForm.value.withdrawType) {
-    modalForm.value.withdrawType = '演示数据'
+  const validIds = new Set(enabledWithdrawTypes.value.map((x) => String(x.id)))
+  if (!validIds.has(String(modalForm.value.withdrawTypeId))) {
+    modalForm.value.withdrawTypeId = enabledWithdrawTypes.value[0]?.id || ''
   }
   isModalOpen.value = true
   updateManageWithdrawType()
@@ -458,7 +454,7 @@ const closeManageWithdrawModal = () => {
   // Reset form
   modalForm.value = {
     amount: '',
-    withdrawType: '演示数据',
+    withdrawTypeId: 'wt_demo',
     mtAccount: '',
     confirmAccount: '',
     comment: '',
@@ -467,10 +463,21 @@ const closeManageWithdrawModal = () => {
 }
 
 const submitManageWithdraw = () => {
-  if (!modalForm.value.withdrawType) {
+  if (!modalForm.value.withdrawTypeId) {
     window.alert('请选择出金类型')
     return
   }
+
+  const type = currentWithdrawType.value
+  pushFundOperationSnapshot({
+    direction: 'withdraw',
+    typeId: type?.id || String(modalForm.value.withdrawTypeId || ''),
+    typeNameSnapshot: type?.name || '',
+    countAsRealSnapshot: !!type?.countAsReal,
+    amount: Number(modalForm.value.amount || 0),
+    status: 'success',
+    settled: true
+  })
 
   closeManageWithdrawModal()
 }

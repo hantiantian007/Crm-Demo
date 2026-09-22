@@ -16,81 +16,137 @@
         </div>
       </div>
 
-      <div v-if="isActivityOngoing" class="w-full">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="p-5">
-            <div class="flex items-start justify-between gap-6">
-              <div class="flex items-start gap-4 min-w-0">
-                <div class="w-12 h-12 rounded-xl bg-[#C19B5E] text-white flex items-center justify-center flex-shrink-0">
-                  <i class="fa-regular fa-credit-card text-xl"></i>
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-4 min-w-0">
+        <div class="min-w-0">
+          <div v-if="isActivityOngoing" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-6">
+                <div class="flex items-start gap-4 min-w-0">
+                  <div class="w-12 h-12 rounded-xl bg-[#C19B5E] text-white flex items-center justify-center flex-shrink-0">
+                    <i class="fa-regular fa-credit-card text-xl"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-3 min-w-0">
+                      <div class="text-base font-bold text-gray-900">{{ activity.name }}</div>
+                      <button
+                        v-if="!activityJoined"
+                        class="h-8 px-4 rounded-md text-white text-xs font-bold transition-colors bg-rose-500 hover:bg-rose-600 flex-shrink-0"
+                        type="button"
+                        @click="handleJoinActivity"
+                      >
+                        立即参与
+                      </button>
+                    </div>
+                    <div class="text-sm text-orange-500 font-medium mt-1">新用户开户即送100USD赠金</div>
+                    <div class="text-xs text-orange-500 font-medium mt-1">单客户达标条件：净入金 ${{ formatMoney(TARGET_NET_DEPOSIT) }} + 交易 {{ formatLots(TARGET_LOTS) }} Lot</div>
+                    <div class="mt-2 text-[11px] text-gray-500 font-mono flex items-center gap-2 flex-wrap">
+                      <span>{{ activity.timeRange }}</span>
+                      <span class="text-gray-300">|</span>
+                      <span class="text-gray-500">剩余 {{ formatInt(activityRemainingDays) }} 天</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="min-w-0">
-                  <div class="flex items-center gap-3 min-w-0">
-                    <div class="text-base font-bold text-gray-900">{{ activity.name }}</div>
-                    <button
-                      v-if="!activityJoined"
-                      class="h-8 px-4 rounded-md text-white text-xs font-bold transition-colors bg-rose-500 hover:bg-rose-600 flex-shrink-0"
-                      type="button"
-                      @click="handleJoinActivity"
-                    >
-                      立即参与
+
+                <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                  <div class="flex items-center gap-2 text-xs font-medium">
+                    <span class="w-1.5 h-1.5 rounded-full" :class="activityJoined ? 'bg-emerald-500' : 'bg-gray-300'"></span>
+                    <span :class="activityJoined ? 'text-emerald-600' : 'text-gray-500'">{{ activityJoined ? '已参与' : '未参加活动' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="activityJoined" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-gray-500">
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-400">参与 MT 账号</span>
+                  <span class="font-medium text-gray-700 font-mono">{{ joinedMtAccount }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-gray-400">参与时间</span>
+                  <span class="font-medium text-gray-700 font-mono">{{ joinedAt }}</span>
+                </div>
+              </div>
+
+              <div class="mt-5 space-y-4">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="text-xs text-emerald-600 font-medium flex items-center gap-2">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    活动净入金
+                  </div>
+                  <div class="text-xs font-bold text-gray-800">${{ formatMoney(activity.netDeposit) }}</div>
+                </div>
+                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-emerald-400 rounded-full" :style="{ width: `${netDepositProgress}%` }"></div>
+                </div>
+
+                <div class="flex items-center justify-between gap-4">
+                  <div class="text-xs text-blue-600 font-medium flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line"></i>
+                    活动交易手数
+                  </div>
+                  <div class="text-xs font-bold text-gray-800">{{ formatLots(activity.tradingLots) }} Lot</div>
+                </div>
+                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-blue-500 rounded-full" :style="{ width: `${tradeLotsProgress}%` }"></div>
+                </div>
+
+                <div class="bg-orange-50 border border-orange-200 text-orange-600 px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-2">
+                  <i class="fa-solid fa-circle-info mt-0.5"></i>
+                  <span>达标口径：按客户维度判断；统计从客户参与成功时间起算。</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-[360px] flex-shrink-0 flex flex-col gap-4">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4">
+            <div class="flex justify-between items-center mb-2">
+              <p class="text-sm text-gray-500 font-medium">通知公告</p>
+              <a href="#" class="text-xs text-gray-400 hover:text-gray-600">查看更多 ></a>
+            </div>
+            <div v-for="n in displayNotices" :key="n.id" class="flex justify-between items-center group cursor-pointer mt-1 py-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" :class="n.isLatest ? 'bg-[#d1a84f]' : 'bg-gray-300'"></span>
+                <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors truncate">{{ n.title }}</p>
+                <span v-if="n.isPinned" class="ml-1 text-[10px] px-1.5 py-0.5 rounded bg-[#d1a84f]/10 border border-[#d1a84f]/25 text-[#b8903f] font-medium flex-shrink-0">置顶</span>
+              </div>
+              <span class="text-xs text-gray-400 flex-shrink-0">{{ n.date }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-100 rounded-lg shadow-sm">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+              <div class="text-sm font-bold text-gray-800">推广中心</div>
+            </div>
+            <div class="p-5 text-xs space-y-3">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="text-gray-500">直客邀请码</div>
+                  <div class="flex items-center gap-2">
+                    <div class="font-mono font-medium text-gray-800">{{ directInviteCode }}</div>
+                    <button class="px-2.5 py-1.5 rounded bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-100 transition-colors" type="button" @click="copyText(directInviteCode, '邀请码')">
+                      复制
                     </button>
                   </div>
-                  <div class="text-sm text-orange-500 font-medium mt-1">新用户开户即送100USD赠金</div>
-                  <div class="text-xs text-orange-500 font-medium mt-1">单客户达标条件：净入金 ${{ formatMoney(TARGET_NET_DEPOSIT) }} + 交易 {{ formatLots(TARGET_LOTS) }} Lot</div>
-                  <div class="mt-2 text-[11px] text-gray-500 font-mono flex items-center gap-2 flex-wrap">
-                    <span>{{ activity.timeRange }}</span>
-                    <span class="text-gray-300">|</span>
-                    <span class="text-gray-500">剩余 {{ formatInt(activityRemainingDays) }} 天</span>
+                </div>
+
+                <div class="space-y-2">
+                  <div class="text-gray-500">直客邀请链接</div>
+                  <div class="flex items-center gap-2">
+                    <input class="flex-1 border border-gray-200 rounded px-3 py-2 text-[11px] font-mono outline-none" :value="directInviteLink" readonly />
+                    <button class="px-3 py-2 rounded bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-100 transition-colors" type="button" @click="copyText(directInviteLink, '邀请链接')">
+                      复制
+                    </button>
                   </div>
                 </div>
-              </div>
 
-              <div class="flex flex-col items-end gap-2 flex-shrink-0">
-                <div class="flex items-center gap-2 text-xs font-medium">
-                  <span class="w-1.5 h-1.5 rounded-full" :class="activityJoined ? 'bg-emerald-500' : 'bg-gray-300'"></span>
-                  <span :class="activityJoined ? 'text-emerald-600' : 'text-gray-500'">{{ activityJoined ? '已参与' : '未参加活动' }}</span>
+                <div class="flex items-center gap-2">
+                  <button class="flex-1 px-3 py-2 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors" type="button" @click="qrVisible = true">查看二维码</button>
                 </div>
               </div>
-            </div>
 
-            <div v-if="activityJoined" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-gray-500">
-              <div class="flex items-center gap-2">
-                <span class="text-gray-400">参与 MT 账号</span>
-                <span class="font-medium text-gray-700 font-mono">{{ joinedMtAccount }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-gray-400">参与时间</span>
-                <span class="font-medium text-gray-700 font-mono">{{ joinedAt }}</span>
-              </div>
-            </div>
-
-            <div class="mt-5 space-y-4">
-              <div class="flex items-center justify-between gap-4">
-                <div class="text-xs text-emerald-600 font-medium flex items-center gap-2">
-                  <i class="fa-solid fa-dollar-sign"></i>
-                  活动净入金
-                </div>
-                <div class="text-xs font-bold text-gray-800">${{ formatMoney(activity.netDeposit) }}</div>
-              </div>
-              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-emerald-400 rounded-full" :style="{ width: `${netDepositProgress}%` }"></div>
-              </div>
-
-              <div class="flex items-center justify-between gap-4">
-                <div class="text-xs text-blue-600 font-medium flex items-center gap-2">
-                  <i class="fa-solid fa-chart-line"></i>
-                  活动交易手数
-                </div>
-                <div class="text-xs font-bold text-gray-800">{{ formatLots(activity.tradingLots) }} Lot</div>
-              </div>
-              <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-blue-500 rounded-full" :style="{ width: `${tradeLotsProgress}%` }"></div>
-              </div>
-
-              <div class="bg-orange-50 border border-orange-200 text-orange-600 px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-2">
-                <i class="fa-solid fa-circle-info mt-0.5"></i>
-                <span>达标口径：按客户维度判断；统计从客户参与成功时间起算。</span>
+              <div class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-[11px] text-gray-600 leading-relaxed">
+                被邀请人注册后客户类型固定为直客；邀请关系不等于代理关系，不会自动产生代理身份、代理权限或返佣关系。
               </div>
             </div>
           </div>
@@ -180,6 +236,7 @@
               <div class="mt-0.5 font-mono font-bold text-base" :class="mtOverviewPrepayRatioClass">
                 {{ mtOverviewPrepayRatioText }}
               </div>
+              <div v-if="mtOverviewPrepayHint" class="mt-1 text-[11px] font-medium" :class="mtOverviewPrepayRatioClass">{{ mtOverviewPrepayHint }}</div>
             </div>
           </div>
         </div>
@@ -255,59 +312,51 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-4 min-w-0">
-        <div class="min-w-0 flex flex-col gap-4">
-          <div class="bg-white border border-gray-100 rounded-lg shadow-sm">
-            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
-              <div class="text-sm font-bold text-gray-800">经营趋势</div>
-              <div class="flex items-center gap-2 text-xs">
-                <button
-                  v-for="t in trendTabs"
-                  :key="t.key"
-                  type="button"
-                  :class="[
-                    'px-3 py-1.5 rounded border transition-colors',
-                    trendKey === t.key ? 'bg-[#d1a84f]/10 border-[#d1a84f]/30 text-[#b8903f] font-medium' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
-                  ]"
-                  @click="trendKey = t.key"
-                >
-                  {{ t.label }}
-                </button>
-              </div>
-            </div>
-            <div class="p-5">
-              <div class="h-[180px] w-full">
-                <svg class="w-full h-full" viewBox="0 0 600 180" preserveAspectRatio="none">
-                  <polyline :points="trendPoints" fill="none" stroke="#d1a84f" stroke-width="2" />
-                  <polyline :points="trendArea" fill="rgba(209,168,79,0.12)" stroke="none" />
-                </svg>
-              </div>
-              <div class="mt-2 flex items-center justify-between text-[11px] text-gray-400 font-mono">
-                <span>近30天</span>
-                <span>{{ trendRangeText }}</span>
-              </div>
-            </div>
+      <div class="bg-white border border-gray-100 rounded-lg shadow-sm">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+          <div class="text-sm font-bold text-gray-800">经营趋势</div>
+          <div class="flex items-center gap-2 text-xs">
+            <button
+              v-for="t in trendTabs"
+              :key="t.key"
+              type="button"
+              :class="[
+                'px-3 py-1.5 rounded border transition-colors',
+                trendKey === t.key ? 'bg-[#d1a84f]/10 border-[#d1a84f]/30 text-[#b8903f] font-medium' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+              ]"
+              @click="trendKey = t.key"
+            >
+              {{ t.label }}
+            </button>
           </div>
         </div>
-
-        <div class="w-full lg:w-[360px] flex-shrink-0 flex flex-col gap-4">
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4">
-            <div class="flex justify-between items-center mb-2">
-              <p class="text-sm text-gray-500 font-medium">通知公告</p>
-              <a href="#" class="text-xs text-gray-400 hover:text-gray-600">查看更多 ></a>
-            </div>
-            <div v-for="n in notices" :key="n.id" class="flex justify-between items-center group cursor-pointer mt-1 py-2">
-              <div class="flex items-center gap-2 min-w-0">
-                <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" :class="n.isLatest ? 'bg-[#d1a84f]' : 'bg-gray-300'"></span>
-                <p class="text-sm text-gray-700 group-hover:text-[#d1a84f] transition-colors truncate">{{ n.title }}</p>
-              </div>
-              <span class="text-xs text-gray-400 flex-shrink-0">{{ n.date }}</span>
-            </div>
+        <div class="p-5">
+          <div class="h-[180px] w-full">
+            <svg class="w-full h-full" viewBox="0 0 600 180" preserveAspectRatio="none">
+              <polyline :points="trendPoints" fill="none" stroke="#d1a84f" stroke-width="2" />
+              <polyline :points="trendArea" fill="rgba(209,168,79,0.12)" stroke="none" />
+            </svg>
+          </div>
+          <div class="mt-2 flex items-center justify-between text-[11px] text-gray-400 font-mono">
+            <span>近30天</span>
+            <span>{{ trendRangeText }}</span>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <el-dialog v-model="qrVisible" title="直客邀请二维码" width="420px">
+    <div class="flex flex-col items-center justify-center py-4 gap-3">
+      <div class="w-[240px] h-[240px] bg-gray-50 border border-gray-200 rounded flex items-center justify-center text-xs text-gray-400">QR Code</div>
+      <div class="text-[11px] text-gray-500 font-mono break-all text-center">{{ directInviteLink }}</div>
+    </div>
+    <template #footer>
+      <div class="flex items-center justify-end gap-2">
+        <button class="px-4 py-2 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors" type="button" @click="qrVisible = false">关闭</button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
@@ -383,16 +432,18 @@ const mtOverviewPrepayRatioClass = computed(() => {
   return 'text-gray-900'
 })
 
+const mtOverviewPrepayHint = computed(() => {
+  const v = Number(mtOverviewSelectedAccount.value?.realtime?.prepayRatio || 0)
+  if (v <= 0.3) return '风险：预付款比例偏低'
+  if (v <= 0.6) return '提示：预付款比例偏低'
+  return ''
+})
+
 const mtOverviewPeriodTitle = computed(() => {
   const map = { today: '今日', week: '本周', month: '本月', lastMonth: '上月', custom: '自定义' }
   const prefix = map[mtTimeKey.value] || mtPeriodLabel.value
   return `${prefix}期间数据`
 })
-
-const mtDemo = {
-  realtime: { balance: 125820.45, positionLots: 18.6, floatingPnl: 520.35 },
-  month: { deposit: 85200.0, withdraw: 32600.0, tradingLots: 185.25, closedPnl: 3200.25 }
-}
 
 const parseYmd = (s) => {
   const m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})$/)
@@ -419,18 +470,6 @@ const mtFactor = computed(() => {
   return Math.min(2, Math.max(0.05, days / 30))
 })
 
-const mtRealtime = computed(() => mtDemo.realtime)
-const mtPeriod = computed(() => {
-  const base = mtDemo.month
-  const f = mtFactor.value
-  return {
-    deposit: base.deposit * f,
-    withdraw: base.withdraw * f,
-    tradingLots: base.tradingLots * f,
-    closedPnl: base.closedPnl * f
-  }
-})
-
 const mtOverviewPeriod = computed(() => {
   const base = mtOverviewSelectedAccount.value?.month || { deposit: 0, withdraw: 0, tradingLots: 0, closedPnl: 0 }
   const f = mtFactor.value
@@ -444,14 +483,12 @@ const mtOverviewPeriod = computed(() => {
 
 const mtOverviewPeriodNetDeposit = computed(() => mtOverviewPeriod.value.deposit - mtOverviewPeriod.value.withdraw)
 
-const netDepositValue = computed(() => mtPeriod.value.deposit - mtPeriod.value.withdraw)
-
 const kpis = computed(() => [
-  { key: 'balance', label: 'MT余额', value: '$ ' + formatMoney(mtRealtime.value.balance) },
-  { key: 'netDeposit', label: '净入金', value: '$ ' + formatMoney(netDepositValue.value) },
-  { key: 'tradingLots', label: '交易量', value: formatLots(mtPeriod.value.tradingLots) + ' Lot' },
-  { key: 'positionLots', label: '持仓量', value: formatLots(mtRealtime.value.positionLots) + ' Lot' },
-  { key: 'floatingPnl', label: '浮动盈亏', value: '$ ' + formatMoney(mtRealtime.value.floatingPnl) }
+  { key: 'balance', label: 'MT余额', value: '$ ' + formatMoney(mtOverviewSelectedAccount.value?.realtime?.balance || 0) },
+  { key: 'netDeposit', label: '净入金', value: '$ ' + formatMoney(mtOverviewPeriodNetDeposit.value) },
+  { key: 'tradingLots', label: '交易量', value: formatLots(mtOverviewPeriod.value.tradingLots) + ' Lot' },
+  { key: 'positionLots', label: '持仓量', value: formatLots(mtOverviewSelectedAccount.value?.realtime?.positionLots || 0) + ' Lot' },
+  { key: 'floatingPnl', label: '浮动盈亏', value: '$ ' + formatMoney(mtOverviewSelectedAccount.value?.realtime?.floatingPnl || 0) }
 ])
 
 const kpiHighlightKeys = new Set(['netDeposit'])
@@ -555,10 +592,42 @@ const handleJoinActivity = () => {
   window.alert('已报名（演示）')
 }
 
-const notices = [
-  { id: 'n1', title: '节假日交易时间调整通知', date: '09-11', isLatest: true },
-  { id: 'n2', title: '产品/交易规则更新说明', date: '09-10', isLatest: false },
-  { id: 'n3', title: '系统维护公告（周末 02:00-04:00）', date: '09-09', isLatest: false },
-  { id: 'n4', title: '重要业务通知：入金通道切换安排', date: '09-08', isLatest: false }
-]
+const notices = ref([
+  { id: 'n1', title: '节假日交易时间调整通知', date: '09-11', isLatest: true, isPinned: true },
+  { id: 'n2', title: '产品/交易规则更新说明', date: '09-10', isLatest: false, isPinned: false },
+  { id: 'n3', title: '系统维护公告（周末 02:00-04:00）', date: '09-09', isLatest: false, isPinned: false },
+  { id: 'n4', title: '重要业务通知：入金通道切换安排', date: '09-08', isLatest: false, isPinned: false }
+])
+
+const displayNotices = computed(() => {
+  const parseMd = (s) => {
+    const [mm, dd] = String(s || '').split('-').map((x) => Number(x))
+    if (!mm || !dd) return 0
+    return mm * 100 + dd
+  }
+  return [...notices.value].sort((a, b) => {
+    const ap = a.isPinned ? 1 : 0
+    const bp = b.isPinned ? 1 : 0
+    if (ap !== bp) return bp - ap
+    return parseMd(b.date) - parseMd(a.date)
+  })
+})
+
+const directInviteCode = ref('D-CLIENT-8300248')
+const directInviteLink = computed(() => `https://crm-demo.example.com/register?ref=${encodeURIComponent(directInviteCode.value)}`)
+const qrVisible = ref(false)
+
+const copyText = async (text, label) => {
+  try {
+    await navigator.clipboard.writeText(String(text || ''))
+  } catch (e) {
+    const input = document.createElement('textarea')
+    input.value = String(text || '')
+    document.body.appendChild(input)
+    input.select()
+    document.execCommand('copy')
+    document.body.removeChild(input)
+  }
+  if (label) window.alert(`${label}已复制（演示）`)
+}
 </script>

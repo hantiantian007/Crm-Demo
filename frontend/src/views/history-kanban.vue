@@ -23,6 +23,128 @@
             <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
               <div class="flex flex-col gap-1">
                 <div class="flex items-center gap-2 flex-wrap">
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">系统管理</span>
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">支付配置</span>
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">已完成</span>
+                  <h3 class="text-base font-bold text-gray-800">支付设置 - 配置记录</h3>
+                  <span class="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded border border-gray-200">完成：2026-09-22</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">包含配置日志与业务汇率记录；仅当真实入金业务实际使用了汇率时才生成汇率记录（查询接口/页面展示/人工查看均不记录）。</p>
+              </div>
+              <div class="flex items-center gap-3 text-gray-400">
+                <span class="text-xs bg-gray-100 px-2 py-1 rounded border border-gray-200">包含 2 个模块</span>
+                <i class="fas fa-chevron-down accordion-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content border-t border-gray-200">
+              <div class="overflow-x-auto no-scrollbar">
+                <table class="min-w-full text-xs text-left">
+                  <thead>
+                    <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+                      <th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+                      <th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+                      <th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+                      <th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100">
+                    <tr class="table-row-hover">
+                      <td class="px-4 py-3 font-bold text-gray-800">配置日志</td>
+                      <td class="px-4 py-3 text-gray-500">记录操作人、时间与配置项修改前后对比，单次多字段变更合并展示。</td>
+                      <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-2 items-center">
+                          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/payment-config-records" target="_blank">原型</a>
+                          <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPaymentConfigRecordsPrd">
+                            <i class="fas fa-file-alt"></i> PRD
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="table-row-hover">
+                      <td class="px-4 py-3 font-bold text-gray-800">业务汇率记录</td>
+                      <td class="px-4 py-3 text-gray-500">只有真实入金业务实际使用了汇率才留痕；查询、展示、人工查看不记录。</td>
+                      <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-2 items-center">
+                          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/payment-config-records" target="_blank">原型</a>
+                          <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPaymentConfigRecordsPrd">
+                            <i class="fas fa-file-alt"></i> PRD
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg border border-gray-200 overflow-hidden accordion-item">
+            <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">系统管理</span>
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">提现配置</span>
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">已完成</span>
+                  <h3 class="text-base font-bold text-gray-800">提现设置 - 配置记录</h3>
+                  <span class="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded border border-gray-200">完成：2026-09-22</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">包含配置日志与业务汇率记录；仅当真实出金业务实际使用了汇率时才生成汇率记录（查询接口/页面展示/人工查看均不记录）。</p>
+              </div>
+              <div class="flex items-center gap-3 text-gray-400">
+                <span class="text-xs bg-gray-100 px-2 py-1 rounded border border-gray-200">包含 2 个模块</span>
+                <i class="fas fa-chevron-down accordion-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content border-t border-gray-200">
+              <div class="overflow-x-auto no-scrollbar">
+                <table class="min-w-full text-xs text-left">
+                  <thead>
+                    <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+                      <th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+                      <th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+                      <th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+                      <th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100">
+                    <tr class="table-row-hover">
+                      <td class="px-4 py-3 font-bold text-gray-800">配置日志</td>
+                      <td class="px-4 py-3 text-gray-500">记录操作人、时间与配置项修改前后对比，单次多字段变更合并展示。</td>
+                      <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-2 items-center">
+                          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/withdraw-config-records" target="_blank">原型</a>
+                          <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openWithdrawConfigRecordsPrd">
+                            <i class="fas fa-file-alt"></i> PRD
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="table-row-hover">
+                      <td class="px-4 py-3 font-bold text-gray-800">业务汇率记录</td>
+                      <td class="px-4 py-3 text-gray-500">只有真实出金业务实际使用了汇率才留痕；查询、展示、人工查看不记录。</td>
+                      <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-2 items-center">
+                          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/withdraw-config-records" target="_blank">原型</a>
+                          <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openWithdrawConfigRecordsPrd">
+                            <i class="fas fa-file-alt"></i> PRD
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg border border-gray-200 overflow-hidden accordion-item">
+            <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2 flex-wrap">
                   <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">数据报表</span>
                   <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">已完成</span>
                   <h3 class="text-base font-bold text-gray-800">报表统计</h3>
@@ -1729,6 +1851,8 @@ import { openPrd } from '@/store/prd'
 const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
 const openReportActivityJoinPrd = () => openPrd('prd-report-activity-join.html', '活动参与报表 - PRD')
 const openAgentHomePrd = () => openPrd('prd-agent-home.html', '代理首页 - PRD')
+const openPaymentConfigRecordsPrd = () => openPrd('prd-payment-management.html', '支付设置 - 配置记录 - PRD')
+const openWithdrawConfigRecordsPrd = () => openPrd('prd-withdraw-settings.html', '提现设置 - 配置记录 - PRD')
 
 const handlePrdAnchors = (e) => {
   const el = e.target?.closest?.('a')
