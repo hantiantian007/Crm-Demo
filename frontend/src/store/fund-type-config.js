@@ -8,33 +8,24 @@ export const nowText = () => {
 
 const genId = (prefix) => `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2, 8)}`
 
-const sortBySortThenName = (a, b) => {
-  const sa = Number(a.sort || 0)
-  const sb = Number(b.sort || 0)
-  if (sa !== sb) return sa - sb
-  return String(a.name || '').localeCompare(String(b.name || ''))
-}
-
 export const depositTypeConfigs = ref([
-  { id: 'dt_real_deposit', name: '真实入金补录', countAsReal: true, status: 'enabled', sort: 10, remark: '' },
-  { id: 'dt_diff_deposit', name: '差额补入', countAsReal: true, status: 'enabled', sort: 20, remark: '' },
-  { id: 'dt_activity_reward', name: '活动奖励', countAsReal: false, status: 'enabled', sort: 30, remark: '' },
-  { id: 'dt_account_compensation', name: '账户补偿', countAsReal: false, status: 'enabled', sort: 40, remark: '' },
-  { id: 'dt_adjustment', name: '账务调整', countAsReal: false, status: 'enabled', sort: 50, remark: '' },
-  { id: 'dt_demo', name: '演示数据', countAsReal: false, status: 'enabled', sort: 999, remark: '演示默认类型' }
+  { id: 'dt_real_deposit', name: '真实入金补录', countAsReal: true, status: 'enabled', remark: '' },
+  { id: 'dt_diff_deposit', name: '差额补入', countAsReal: true, status: 'enabled', remark: '' },
+  { id: 'dt_activity_reward', name: '活动奖励', countAsReal: false, status: 'enabled', remark: '' },
+  { id: 'dt_account_compensation', name: '账户补偿', countAsReal: false, status: 'enabled', remark: '' },
+  { id: 'dt_adjustment', name: '账务调整', countAsReal: false, status: 'enabled', remark: '' },
+  { id: 'dt_demo', name: '演示数据', countAsReal: false, status: 'enabled', remark: '演示默认类型' }
 ])
 
 export const withdrawTypeConfigs = ref([
-  { id: 'wt_real_withdraw', name: '真实出金补录', countAsReal: true, status: 'enabled', sort: 10, remark: '' },
-  { id: 'wt_diff_withdraw', name: '差额补出', countAsReal: true, status: 'enabled', sort: 20, remark: '' },
-  { id: 'wt_activity_reward_revoke', name: '活动奖励扣回', countAsReal: false, status: 'enabled', sort: 30, remark: '' },
-  { id: 'wt_commission_overpaid_recover', name: '返佣多发扣回', countAsReal: false, status: 'enabled', sort: 40, remark: '' },
-  { id: 'wt_account_deduct', name: '账户资金扣减', countAsReal: false, status: 'enabled', sort: 50, remark: '' },
-  { id: 'wt_adjustment', name: '账务调整', countAsReal: false, status: 'enabled', sort: 60, remark: '' },
-  { id: 'wt_demo', name: '演示数据', countAsReal: false, status: 'enabled', sort: 999, remark: '演示默认类型' }
+  { id: 'wt_real_withdraw', name: '真实出金补录', countAsReal: true, status: 'enabled', remark: '' },
+  { id: 'wt_diff_withdraw', name: '差额补出', countAsReal: true, status: 'enabled', remark: '' },
+  { id: 'wt_activity_reward_revoke', name: '活动奖励扣回', countAsReal: false, status: 'enabled', remark: '' },
+  { id: 'wt_commission_overpaid_recover', name: '返佣多发扣回', countAsReal: false, status: 'enabled', remark: '' },
+  { id: 'wt_account_deduct', name: '账户资金扣减', countAsReal: false, status: 'enabled', remark: '' },
+  { id: 'wt_adjustment', name: '账务调整', countAsReal: false, status: 'enabled', remark: '' },
+  { id: 'wt_demo', name: '演示数据', countAsReal: false, status: 'enabled', remark: '演示默认类型' }
 ])
-
-export const fundTypeConfigAuditLogs = ref([])
 
 export const fundOperationSnapshots = ref([])
 
@@ -47,7 +38,7 @@ const listByDirection = (direction) => {
 export const getEnabledTypeConfigs = (direction) => {
   const listRef = listByDirection(direction)
   if (!listRef) return []
-  return listRef.value.filter((x) => x.status === 'enabled').slice().sort(sortBySortThenName)
+  return listRef.value.filter((x) => x.status === 'enabled').slice()
 }
 
 export const findTypeConfig = (direction, typeId) => {
@@ -69,15 +60,10 @@ export const addTypeConfig = (direction, payload) => {
     name,
     countAsReal: !!payload?.countAsReal,
     status: payload?.status === 'disabled' ? 'disabled' : 'enabled',
-    sort: Number.isFinite(Number(payload?.sort)) ? Number(payload?.sort) : 0,
     remark: String(payload?.remark || '')
   }
 
-  listRef.value = [...listRef.value, next].sort(sortBySortThenName)
-  fundTypeConfigAuditLogs.value = [
-    { id: genId('log'), time: nowText(), operator: '管理员（演示）', direction, action: '新增', before: null, after: { ...next } },
-    ...fundTypeConfigAuditLogs.value
-  ]
+  listRef.value = [...listRef.value, next]
   return { ok: true, id: next.id }
 }
 
@@ -97,15 +83,10 @@ export const updateTypeConfig = (direction, id, payload) => {
     name,
     countAsReal: !!payload?.countAsReal,
     status: payload?.status === 'disabled' ? 'disabled' : 'enabled',
-    sort: Number.isFinite(Number(payload?.sort)) ? Number(payload?.sort) : 0,
     remark: String(payload?.remark || '')
   }
 
-  listRef.value = listRef.value.map((x) => (String(x.id) === String(id) ? next : x)).sort(sortBySortThenName)
-  fundTypeConfigAuditLogs.value = [
-    { id: genId('log'), time: nowText(), operator: '管理员（演示）', direction, action: '编辑', before, after: { ...next } },
-    ...fundTypeConfigAuditLogs.value
-  ]
+  listRef.value = listRef.value.map((x) => (String(x.id) === String(id) ? next : x))
   return { ok: true }
 }
 
@@ -114,18 +95,11 @@ export const setTypeConfigStatus = (direction, id, status) => {
   if (!listRef) return { ok: false, message: '未知方向' }
   const row = listRef.value.find((x) => String(x.id) === String(id))
   if (!row) return { ok: false, message: '未找到类型' }
-
-  const before = { ...row }
   const next = { ...row, status: status === 'disabled' ? 'disabled' : 'enabled' }
-  listRef.value = listRef.value.map((x) => (String(x.id) === String(id) ? next : x)).sort(sortBySortThenName)
-  fundTypeConfigAuditLogs.value = [
-    { id: genId('log'), time: nowText(), operator: '管理员（演示）', direction, action: next.status === 'enabled' ? '启用' : '停用', before, after: { ...next } },
-    ...fundTypeConfigAuditLogs.value
-  ]
+  listRef.value = listRef.value.map((x) => (String(x.id) === String(id) ? next : x))
   return { ok: true }
 }
 
 export const pushFundOperationSnapshot = (payload) => {
   fundOperationSnapshots.value = [{ id: genId('fund_op'), time: nowText(), ...payload }, ...fundOperationSnapshots.value]
 }
-

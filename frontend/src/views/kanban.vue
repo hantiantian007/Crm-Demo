@@ -431,34 +431,17 @@
 </div>
 </div>
 </div>
-</div>
-</div>
-<!-- 规划中需求 -->
-<div class="mb-6 bg-purple-50/20 rounded-lg border border-purple-100 overflow-hidden">
-<div class="px-4 py-3 border-b border-purple-100 bg-purple-50/40 flex items-center justify-between">
-<div class="flex items-center gap-2">
-<h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-<i class="fa-solid fa-inbox text-[#8B5CF6]"></i> 规划中需求
-                    </h2>
-<div class="flex items-center gap-2">
-<span class="text-[10px] font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded border border-purple-200/60">规划中</span>
-<span class="text-[10px] font-medium text-purple-700 bg-purple-100/60 px-2 py-0.5 rounded border border-purple-200/40">排期中</span>
-</div>
-</div>
-</div>
-<!-- 需求列表容器 -->
-<div class="p-4 flex flex-col gap-3 bg-purple-50/10">
 <div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
-<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">出入金</span>
-<h3 class="text-base font-bold text-gray-800">管理员入金</h3>
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">出入金</span>
+<h3 class="text-base font-bold text-gray-800">管理员出入金增加类型</h3>
 </div>
-<p class="text-xs text-gray-500 mt-1">增加手动入金类型区分。</p>
+<p class="text-xs text-gray-500 mt-1">支持管理员入金和管理员出金业务类型配置，并设置是否计入真实入金或真实出金。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个任务</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 3 个任务</span>
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
@@ -485,19 +468,56 @@
 </div>
 </td>
 </tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">管理员出金</td>
+<td class="px-4 py-3 text-gray-500">管理出金类型与是否计入真实出金提示。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-withdraw" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/fund/audit-withdraw" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">出入金类型设置</td>
+<td class="px-4 py-3 text-gray-500">配置入金/出金类型及是否计入真实口径。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-fund-type-setting" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/system/fund-type-setting" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
+</div>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+<!-- 规划中需求 -->
+<div class="mb-6 bg-purple-50/20 rounded-lg border border-purple-100 overflow-hidden">
+<div class="px-4 py-3 border-b border-purple-100 bg-purple-50/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+<i class="fa-solid fa-inbox text-[#8B5CF6]"></i> 规划中需求
+                    </h2>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded border border-purple-200/60">规划中</span>
+<span class="text-[10px] font-medium text-purple-700 bg-purple-100/60 px-2 py-0.5 rounded border border-purple-200/40">排期中</span>
+</div>
+</div>
+</div>
+<!-- 需求列表容器 -->
+<div class="p-4 flex flex-col gap-3 bg-purple-50/10">
 <!-- 活动管理 (父级需求) -->
 <div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
-<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
-<div class="flex items-center gap-3 flex-wrap">
-<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">活动管理</span>
+<div class="flex items-center gap-3">
 <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">活动管理</span>
 <h3 class="text-base font-bold text-gray-800">先锋一号 50,000 USD 体验金盈利释放管理</h3>
 </div>
@@ -565,11 +585,11 @@
 </div>
 </div>
 
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
 <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">报表中心</span>
-<h3 class="text-base font-bold text-gray-800">报表关系树筛选</h3>
-</div>
 <h3 class="text-base font-bold text-gray-800">报表关系树筛选</h3>
 </div>
 <p class="text-xs text-gray-500 mt-1">出入金报表、提现报表、现实持仓报表增加左侧关系树按代理/直客筛选。</p>
@@ -972,7 +992,7 @@
 <!-- Buttons will be injected by JS -->
 <!-- 折叠面板交互脚本 -->
 </div>
-  </div>
+</div>
 </template>
 
 

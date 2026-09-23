@@ -29,7 +29,7 @@ const routes = [
 
   // 自动迁移页面
   { path: '/fund/deposit', component: () => import('@/views/fund/deposit.vue'), meta: { title: '入金', breadcrumb: ['出入金', '入金'] } },
-  { path: '/fund/deposit-detail', component: () => import('@/views/fund/deposit-detail.vue'), meta: { title: '入金详情', breadcrumb: ['出入金', '入金', '入金详情'] } },
+  { path: '/fund/deposit-detail', component: () => import('@/views/fund/deposit-detail.vue'), meta: { title: '入金详情', breadcrumb: ['出入金', '入金详情'] } },
   { path: '/fund/withdraw', component: () => import('@/views/fund/withdraw.vue'), meta: { title: '出金', breadcrumb: ['出入金', '出金'] } },
   { path: '/fund/commission-withdraw', component: () => import('@/views/fund/commission-withdraw.vue'), meta: { title: '返佣提现', breadcrumb: ['出入金', '返佣提现'] } },
   { path: '/fund/my-bonus', component: () => import('@/views/fund/my-bonus.vue'), meta: { title: '我的赠金', breadcrumb: ['出入金', '我的赠金'] } },
@@ -92,7 +92,7 @@ const routes = [
   { path: '/system/currency', component: () => import('@/views/system/currency.vue'), meta: { title: '支付币种', breadcrumb: ['系统管理', '支付币种'] } },
   { path: '/system/payment', component: () => import('@/views/fund/payment-management.vue'), meta: { title: '支付设置', breadcrumb: ['系统管理', '支付设置'], prdUrl: 'prd-payment-management.html', prdTitle: '支付管理 - PRD' } },
   { path: '/system/withdraw-settings', component: () => import('@/views/system/withdraw-settings.vue'), meta: { title: '提现设置', breadcrumb: ['系统管理', '提现设置'], prdUrl: 'prd-withdraw-settings.html', prdTitle: '提现设置 - PRD' } },
-  { path: '/system/fund-type-setting', component: () => import('@/views/system/fund-type-settings.vue'), meta: { title: '出入金类型设置', breadcrumb: ['系统管理', '出入金类型设置'] } },
+  { path: '/system/fund-type-setting', component: () => import('@/views/system/fund-type-settings.vue'), meta: { title: '出入金类型设置', breadcrumb: ['系统管理', '出入金类型设置'], prdUrl: 'prd-fund-type-setting.html', prdTitle: '出入金类型设置 - PRD' } },
   { path: '/system/commission-settings', component: () => import('@/views/system/commission-settings.vue'), meta: { title: '返佣设置', breadcrumb: ['系统管理', '返佣设置'] } },
   { path: '/system/sms-logs', component: () => import('@/views/system/sms-logs.vue'), meta: { title: '验证码记录', breadcrumb: ['系统管理', '验证码记录'] } },
   { path: '/system/tags', component: () => import('@/views/system/tags.vue'), meta: { title: '标签管理', breadcrumb: ['系统管理', '标签管理'] } },
@@ -135,7 +135,7 @@ const routes = [
   { path: '/crm/account-mt-open', component: () => import('@/views/crm/account-mt-open.vue'), meta: { title: '申请MT账户', breadcrumb: ['客户管理', '账户管理', '申请MT账户'], prdUrl: 'prd-account-mt-open.html', prdTitle: '申请MT账户 - PRD' } },
   { path: '/crm/account-management-cent-account', redirect: { path: '/crm/account', query: { accountType: 'cent' } } },
   { path: '/crm/sales-add', component: () => import('@/views/crm/sales-add.vue'), meta: { title: '新增销售', breadcrumb: ['客户管理', '销售列表', '新增销售'], prdUrl: 'prd-sales-add.html', prdTitle: '新增销售 - PRD' } },
-  { path: '/crm/withdraw-audit-detail', component: () => import('@/views/crm/withdraw-audit-detail.vue'), meta: { title: '出金审核详情', breadcrumb: ['出入金', '待审核出金', '出金审核详情'], prdUrl: 'prd-cent-account-page-withdraw-audit-detail.html', prdTitle: '出金审核详情 - PRD' } },
+  { path: '/crm/withdraw-audit-detail', component: () => import('@/views/crm/withdraw-audit-detail.vue'), meta: { title: '出金审核详情', breadcrumb: ['出入金', '待审核出金', '出金审核详情'], prdUrl: 'prd-withdraw-detail.html', prdTitle: '出金详情 - PRD' } },
   { path: '/crm/leads-detail', component: () => import('@/views/crm/leads-detail.vue'), meta: { title: '留资详情', breadcrumb: ['客户管理', '留资列表', '留资详情'], prdUrl: 'prd-leads-detail.html', prdTitle: '留资详情 - PRD' } },
   { path: '/activity/bonus-detail', component: () => import('@/views/activity/bonus-detail.vue'), meta: { title: 'HATC CRM - 注册送赠金活动详情', breadcrumb: ['HATC CRM - 注册送赠金活动详情'] } },
   { path: '/report/customer-cent-account', component: () => import('@/views/report/customer-cent-account.vue'), meta: { title: 'HATC CRM - 客户报表', breadcrumb: ['HATC CRM - 客户报表'] } },

@@ -3,17 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>管理员入金 - PRD</title>
+  <title>管理员出入金增加类型 - PRD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    html, body { height: 100%; margin: 0; padding: 0; background: #ffffff; }
-    #prdFrame { width: 100%; height: 100%; border: 0; display: block; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+    th, td { border: 1px solid #e5e7eb; padding: 12px 16px; text-align: left; font-size: 14px; vertical-align: top; }
+    th { background: #f9fafb; color: #374151; font-weight: 600; }
+    td { color: #4b5563; line-height: 1.75; }
+    .highlight { color: #C19B5E; font-weight: 600; }
+    .module-title { border-left: 4px solid #C19B5E; padding-left: 12px; margin: 28px 0 16px; font-size: 18px; font-weight: 700; color: #1f2937; }
   </style>
 </head>
-<body>
-  <iframe id="prdFrame" title="PRD"></iframe>
-  <script>
-    window.__PRD_VERSION_CONFIGS__ = [{"version":"V1.0.1","file":"prd-admin-deposit_v1.0.1.html","isCurrent":true},{"version":"V1.0.0","file":"prd-admin-deposit_v1.0.0.html","isCurrent":false}]
-  </script>
-  <script src="prd-version-tabs.js"></script>
+<body class="bg-gray-50 p-8 font-sans">
+  <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-8">
+    <div class="flex justify-between items-start gap-4 border-b pb-4 mb-6 flex-wrap">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">管理员出入金增加类型</h1>
+        <div class="mt-2 text-sm text-gray-500 space-x-4">
+          <span>版本：<span class="highlight">V1.0.1</span></span>
+          <span>更新时间：<span class="highlight">2026-09-23</span></span>
+        </div>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <a href="#/fund/deposit-pending-review" class="px-4 py-2 rounded bg-[#C19B5E] text-white text-sm">管理员入金原型</a>
+        <a href="#/fund/audit-withdraw" class="px-4 py-2 rounded bg-[#C19B5E] text-white text-sm">管理员出金原型</a>
+        <a href="#/system/fund-type-setting" class="px-4 py-2 rounded bg-[#C19B5E] text-white text-sm">出入金类型设置原型</a>
+      </div>
+    </div>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-sm text-yellow-900">
+      本 PRD 仅描述本次新增内容：管理员入金/出金新增类型字段、类型来源与配置、以及“是否计入真实入金/出金”的统计口径影响。
+    </div>
+
+    <div class="module-title">1. PRD范围（本次新增）</div>
+    <table>
+      <tbody>
+        <tr><td>1）管理员入金新增 <span class="highlight">入金类型</span>。</td></tr>
+        <tr><td>2）管理员出金新增 <span class="highlight">出金类型</span>。</td></tr>
+        <tr><td>3）出入金类型来源与配置：<span class="highlight">系统管理 &gt; 出入金类型设置</span>。</td></tr>
+        <tr><td>4）<span class="highlight">是否计入真实入金/出金</span> 的统计规则与净入金口径。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">2. 管理员入金新增字段：入金类型</div>
+    <table>
+      <tbody>
+        <tr><td width="22%" class="font-medium">字段名称</td><td>入金类型</td></tr>
+        <tr><td class="font-medium">规则</td><td>
+          <div>1）必填。</div>
+          <div>2）下拉选择。</div>
+          <div>3）仅读取已启用的“<span class="highlight">管理入金类型</span>”。</div>
+          <div>4）按类型创建时间正序展示：先创建的类型在前，新创建的类型排列在末尾。</div>
+          <div>5）选择后展示提示：<span class="highlight">是否计入真实入金：是/否</span>。</div>
+          <div>6）操作人员不可在入金页面修改“是否计入真实入金”。</div>
+        </td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">3. 管理员出金新增字段：出金类型</div>
+    <table>
+      <tbody>
+        <tr><td width="22%" class="font-medium">字段名称</td><td>出金类型</td></tr>
+        <tr><td class="font-medium">规则</td><td>
+          <div>1）必填。</div>
+          <div>2）下拉选择。</div>
+          <div>3）仅读取已启用的“<span class="highlight">管理出金类型</span>”。</div>
+          <div>4）按类型创建时间正序展示：先创建的类型在前，新创建的类型排列在末尾。</div>
+          <div>5）选择后展示提示：<span class="highlight">是否计入真实出金：是/否</span>。</div>
+          <div>6）操作人员不可在出金页面修改“是否计入真实出金”。</div>
+        </td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">4. 类型来源与配置</div>
+    <table>
+      <tbody>
+        <tr>
+          <td width="22%" class="font-medium">来源</td>
+          <td>管理员入金与管理员出金的类型均来源于：<span class="highlight">系统管理 &gt; 出入金类型设置</span>。</td>
+        </tr>
+        <tr>
+          <td class="font-medium">说明</td>
+          <td>
+            <div>1）类型不是页面固定选项。</div>
+            <div>2）管理员入金/出金操作时不允许临时新增类型。</div>
+            <div>3）类型配置分为：<span class="highlight">管理入金类型</span> 与 <span class="highlight">管理出金类型</span>。</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">5. 类型字段（配置项）</div>
+    <table>
+      <thead>
+        <tr>
+          <th width="22%">字段</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="font-medium">类型名称</td><td>同一业务方向下不可重名。</td></tr>
+        <tr><td class="font-medium">业务方向</td><td>入金 / 出金。</td></tr>
+        <tr><td class="font-medium">是否计入真实入金/出金</td><td>决定该类型的成功入账记录是否计入真实入金/真实出金统计。</td></tr>
+        <tr><td class="font-medium">启用状态</td><td>启用 / 停用。</td></tr>
+        <tr><td class="font-medium">展示顺序</td><td>按创建时间正序展示：先创建的类型在前，新创建的类型排列在末尾。</td></tr>
+        <tr><td class="font-medium">备注</td><td>选填。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">6. 类型使用规则</div>
+    <table>
+      <tbody>
+        <tr><td>1）入金页面不可读取出金类型；出金页面不可读取入金类型。</td></tr>
+        <tr><td>2）停用类型不可用于新增操作。</td></tr>
+        <tr><td>3）类型在历史记录中以快照方式展示；停用不影响历史展示。</td></tr>
+        <tr><td>4）已产生业务记录的类型不可物理删除，仅可停用。</td></tr>
+        <tr><td>5）修改类型配置（名称/是否计入/状态/备注等）不改变历史记录。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">7. 历史快照（管理员入金/出金创建时）</div>
+    <table>
+      <tbody>
+        <tr><td>每笔管理员入金/出金创建时保存：类型ID、类型名称快照、业务方向、是否计入真实入金/出金快照。</td></tr>
+        <tr><td>后续修改类型名称或“是否计入真实”属性，不重新计算历史记录。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">8. 详情页面字段（新增）</div>
+    <table>
+      <tbody>
+        <tr><td class="font-medium">管理员入金详情</td><td>
+          <div>新增只读字段：入金类型、是否计入真实入金。</div>
+          <div class="mt-2">规则：</div>
+          <div>1）入金类型显示本次管理员入金保存的<span class="highlight">类型名称快照</span>。</div>
+          <div>2）是否计入真实入金显示本次记录保存的<span class="highlight">是否计入真实入金快照</span>。</div>
+          <div>3）类型后续改名、停用或修改统计属性，不改变历史详情。</div>
+          <div>4）没有类型的历史记录显示“-”。</div>
+        </td></tr>
+        <tr><td class="font-medium">管理员出金详情</td><td>
+          <div>新增只读字段：出金类型、是否计入真实出金。</div>
+          <div class="mt-2">规则：</div>
+          <div>1）出金类型显示本次管理员出金保存的<span class="highlight">类型名称快照</span>。</div>
+          <div>2）是否计入真实出金显示本次记录保存的<span class="highlight">是否计入真实出金快照</span>。</div>
+          <div>3）类型后续改名、停用或修改统计属性，不改变历史详情。</div>
+          <div>4）没有类型的历史记录显示“-”。</div>
+        </td></tr>
+        <tr><td class="font-medium">字段来源</td><td>详情页字段来源于每笔管理员入金/出金创建时保存的<span class="highlight">历史快照</span>，不直接读取当前“出入金类型设置”中的最新值。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">9. 统计影响（真实入金/真实出金/净入金）</div>
+    <table>
+      <tbody>
+        <tr><td>只有同时满足以下条件，才计入真实入金或真实出金：</td></tr>
+        <tr><td>
+          <div>1）所选类型配置为“计入”。</div>
+          <div>2）管理员出入金处理成功。</div>
+          <div>3）资金已完成入账或扣款。</div>
+        </td></tr>
+        <tr><td>待处理、失败、取消、冲正记录不计入。</td></tr>
+        <tr><td>净入金口径：<span class="highlight">真实入金－真实出金</span>。</td></tr>
+        <tr><td>“是否计入真实入金/出金”只影响统计口径，不改变原资金增减操作。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">10. 默认数据（存量类型迁移为初始配置）</div>
+    <table>
+      <tbody>
+        <tr><td>1）将页面原有固定类型迁移为初始配置数据，类型名称与原统计属性保持不变。</td></tr>
+        <tr><td>2）“返佣多发扣回”属于管理出金类型，且默认不计入真实出金。</td></tr>
+        <tr><td>3）不增加返佣扣回专属字段。</td></tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

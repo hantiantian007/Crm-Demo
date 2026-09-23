@@ -4,292 +4,253 @@
       <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-mainBg">
         <div class="space-y-4">
           <section class="bg-white rounded-xl border border-gray-200 p-5">
-            <div class="text-sm font-semibold text-gray-700 mb-4">
-              搜索
+            <div class="text-sm font-semibold text-gray-700 mb-4">筛选条件</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">用户类型</label>
+                <select v-model="filters.userType" class="filter-select">
+                  <option value="">请选择</option>
+                  <option value="standard">标准</option>
+                  <option value="agent">代理</option>
+                  <option value="client">普通客户</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">操作人</label>
+                <input v-model="filters.operator" class="filter-input" placeholder="请输入" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">订单号</label>
+                <input v-model="filters.orderNo" class="filter-input" placeholder="请输入" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">MT账号</label>
+                <input v-model="filters.mtAccount" class="filter-input" placeholder="请输入" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">MT类型</label>
+                <select v-model="filters.mtType" class="filter-select">
+                  <option value="">请选择</option>
+                  <option value="standard">标准账户</option>
+                  <option value="cent">美分账户</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">出金方式</label>
+                <select v-model="filters.withdrawMethod" class="filter-select">
+                  <option value="">请选择</option>
+                  <option value="USDT">USDT</option>
+                  <option value="AIPAY">AIPAY</option>
+                  <option value="UGATE">UGATE</option>
+                  <option value="passttopay">passttopay</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">审核状态</label>
+                <select v-model="filters.auditStatus" class="filter-select">
+                  <option value="">请选择</option>
+                  <option value="待审核">待审核</option>
+                  <option value="会签审核">会签审核</option>
+                  <option value="已通过">已通过</option>
+                  <option value="已拒绝">已拒绝</option>
+                  <option value="已取消">已取消</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">时间类型</label>
+                <select v-model="filters.timeType" class="filter-select">
+                  <option value="apply">申请时间</option>
+                  <option value="audit">审核时间</option>
+                  <option value="pay">支付时间</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">开始时间</label>
+                <input v-model="filters.startTime" class="filter-input" placeholder="请选择" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">结束时间</label>
+                <input v-model="filters.endTime" class="filter-input" placeholder="请选择" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-2">支付状态</label>
+                <select v-model="filters.payStatus" class="filter-select">
+                  <option value="">请选择</option>
+                  <option value="待支付">待支付</option>
+                  <option value="支付中">支付中</option>
+                  <option value="支付成功">支付成功</option>
+                  <option value="支付失败">支付失败</option>
+                  <option value="支付取消">支付取消</option>
+                  <option value="已退款">已退款</option>
+                </select>
+              </div>
             </div>
-            <div class="grid grid-cols-6 gap-4">
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  用户类型
-                </label>
-                <select class="filter-select">
-                  <option>标准</option>
-                  <option>代理</option>
-                  <option>普通客户</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  操作人
-                </label>
-                <input class="filter-input" placeholder="请输入操作人姓名" />
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  订单号
-                </label>
-                <input class="filter-input" placeholder="请输入订单号" />
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  MT账号
-                </label>
-                <input class="filter-input" placeholder="请输入出金账户" />
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2 change-highlight">
-                  MT类型
-                </label>
-                <select class="filter-select change-highlight">
-                  <option>-请选择-</option>
-                  <option>标准账户</option>
-                  <option>美分账户</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  出金方式
-                </label>
-                <select class="filter-select">
-                  <option>-请选择-</option>
-                  <option>USDT</option>
-                  <option>AIPAY</option>
-                  <option>UGATE</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  审核状态
-                </label>
-                <select class="filter-select">
-                  <option>-请选择-</option>
-                  <option>会签审核</option>
-                  <option>已下发</option>
-                  <option>已拒绝</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  申请时间
-                </label>
-                <select class="filter-select">
-                  <option>申请时间</option>
-                  <option>操作时间</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  开始日期
-                </label>
-                <input class="filter-input" placeholder="开始日期" />
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  结束日期
-                </label>
-                <input class="filter-input" placeholder="结束日期" />
-              </div>
-              <div>
-                <label class="block text-xs text-gray-500 mb-2">
-                  支付状态
-                </label>
-                <select class="filter-select">
-                  <option>-请选择-</option>
-                  <option>待支付</option>
-                  <option>支付中</option>
-                  <option>支付成功</option>
-                </select>
-              </div>
-              <div class="flex items-end">
-                <button class="h-9 px-4 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-sm font-medium transition-colors">
-                  搜索
-                </button>
-              </div>
+            <div class="pt-4 flex items-center justify-end gap-3">
+              <button type="button" class="h-9 px-5 rounded-md bg-white border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors" @click="resetFilters">
+                重置
+              </button>
+              <button type="button" class="h-9 px-5 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-sm font-medium transition-colors" @click="search">
+                查询
+              </button>
             </div>
           </section>
 
           <section class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-4 flex-wrap">
               <div class="flex items-center gap-3">
                 <button class="inline-flex items-center px-3 py-1.5 rounded-md bg-primaryBtn text-white text-sm font-medium hover:bg-primaryBtnHover transition-colors" @click="openManageWithdrawModal" type="button">
                   管理出金
                 </button>
-                <div class="text-xs text-gray-500">
-                  出金汇总：
-                  <span class="ml-2">笔数：399 笔</span>
-                  <span class="ml-2 text-red-500">出金金额：合计$：200.00（USD：100.00、USC：10000.00）</span>
-                </div>
               </div>
-              <button class="px-4 py-2 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-xs font-medium transition-colors">
+              <div class="flex items-center gap-5 text-xs text-gray-600 flex-wrap">
+                <div>出金笔数：<span class="font-semibold text-gray-800">{{ summary.count }}</span></div>
+                <div>USD出金金额：<span class="font-semibold text-gray-800">{{ summary.usdText }}</span></div>
+                <div>USC出金金额：<span class="font-semibold text-gray-800">{{ summary.uscText }}</span></div>
+              </div>
+              <button class="px-4 py-2 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-xs font-medium transition-colors" type="button">
                 报表导出
               </button>
             </div>
 
-            <div class="list-scroll border-b border-gray-100">
-              <div class="px-5 py-4 text-xs text-gray-500">
-                <div class="list-grid font-medium">
-                  <div></div>
-                  <div>MT账号</div>
-                  <div class="change-highlight">MT类型</div>
-                  <div>订单号</div>
-                  <div>上级信息</div>
-                  <div>联系方式</div>
-                  <div class="change-highlight">出金金额 / 到账金额</div>
-                  <div>审核状态</div>
-                  <div>操作人</div>
-                  <div>操作时间</div>
-                  <div>支付状态</div>
-                </div>
-              </div>
+            <div class="overflow-x-auto border-b border-gray-100">
+              <table class="min-w-[1240px] w-full text-sm text-left">
+                <thead class="bg-gray-50 text-gray-500">
+                  <tr class="border-b border-gray-100">
+                    <th class="px-5 py-3 w-10"></th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">MT账号</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">MT类型</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">订单号</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">客户名称</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">出金金额</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">到账金额</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">审核状态</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">支付状态</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap">申请时间</th>
+                    <th class="px-5 py-3 font-medium whitespace-nowrap text-right">操作</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <template v-for="row in pagedRows" :key="row.id">
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="px-5 py-3 align-top">
+                        <button class="text-gray-400 hover:text-primaryBtn transition-colors" @click="toggleDetail(row.id)" type="button">
+                          <i class="fa-solid fa-chevron-right text-xs transition-transform" :class="{ 'rotate-90': expandedRows.includes(row.id) }"></i>
+                        </button>
+                      </td>
+                      <td class="px-5 py-3 whitespace-nowrap text-gray-700 font-medium">{{ row.mtAccount }}</td>
+                      <td class="px-5 py-3 whitespace-nowrap">
+                        <span class="type-pill" :class="row.mtType === 'cent' ? 'cent' : 'standard'">{{ row.mtTypeLabel }}</span>
+                      </td>
+                      <td class="px-5 py-3 whitespace-nowrap">
+                        <div class="max-w-[220px] truncate text-gray-600" :title="row.orderNo">{{ row.orderNo }}</div>
+                      </td>
+                      <td class="px-5 py-3 whitespace-nowrap text-gray-600">{{ row.clientName }}</td>
+                      <td class="px-5 py-3 whitespace-nowrap text-gray-700 font-semibold">{{ moneyText(row.withdrawAmount, row.withdrawCurrency) }}</td>
+                      <td class="px-5 py-3 whitespace-nowrap text-gray-700">{{ moneyText(row.arrivalAmount, row.arrivalCurrency) }}</td>
+                      <td class="px-5 py-3 whitespace-nowrap">
+                        <span class="status-pill" :class="auditStatusClass(row.auditStatus)">{{ row.auditStatus }}</span>
+                      </td>
+                      <td class="px-5 py-3 whitespace-nowrap">
+                        <span class="status-pill" :class="payStatusClass(row.payStatus)">{{ row.payStatus }}</span>
+                      </td>
+                      <td class="px-5 py-3 whitespace-nowrap text-gray-500">{{ row.applyTime }}</td>
+                      <td class="px-5 py-3 whitespace-nowrap text-right">
+                        <div class="inline-flex items-center gap-2">
+                          <button type="button" class="px-3 py-1.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium transition-colors" @click="goWithdrawAuditDetail(row.mtAccount)">
+                            详情
+                          </button>
+                          <button
+                            v-if="row.auditStatus === '待审核'"
+                            type="button"
+                            class="px-3 py-1.5 rounded bg-primaryBtn hover:bg-primaryBtnHover text-white text-xs font-medium transition-colors"
+                            @click="goWithdrawAuditDetail(row.mtAccount)"
+                          >
+                            审核
+                          </button>
+                          <button
+                            v-if="row.hasPayment"
+                            type="button"
+                            class="px-3 py-1.5 rounded border border-gray-200 bg-white text-gray-600 text-xs font-medium hover:bg-gray-50 transition-colors"
+                            @click="viewPaymentRecord(row)"
+                          >
+                            支付记录
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr v-show="expandedRows.includes(row.id)" class="bg-gray-50/40">
+                      <td class="px-5 py-4" colspan="11">
+                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-3 text-xs">
+                          <div class="flex gap-3">
+                            <div class="text-gray-500 w-28 shrink-0">MT分组</div>
+                            <div class="text-gray-700 font-medium break-all">{{ displayText(row.mtGroup) }}</div>
+                          </div>
+                          <div class="flex gap-3">
+                            <div class="text-gray-500 w-28 shrink-0">手机号</div>
+                            <div class="text-gray-700 font-medium break-all">{{ displayText(row.phone) }}</div>
+                          </div>
+                          <div class="flex gap-3">
+                            <div class="text-gray-500 w-28 shrink-0">上级信息</div>
+                            <div class="text-gray-700 font-medium break-all">{{ displayText(row.parentInfo) }}</div>
+                          </div>
+                          <div class="flex gap-3">
+                            <div class="text-gray-500 w-28 shrink-0">客服审核时间</div>
+                            <div class="text-gray-700 font-medium break-all">{{ displayText(row.csTime) }}</div>
+                          </div>
+                          <div class="flex gap-3">
+                            <div class="text-gray-500 w-28 shrink-0">风控审核时间</div>
+                            <div class="text-gray-700 font-medium break-all">{{ displayText(row.riskTime) }}</div>
+                          </div>
+                          <div class="flex gap-3">
+                            <div class="text-gray-500 w-28 shrink-0">财务审核时间</div>
+                            <div class="text-gray-700 font-medium break-all">{{ displayText(row.financeTime) }}</div>
+                          </div>
+                          <div class="flex gap-3">
+                            <div class="text-gray-500 w-28 shrink-0">操作人</div>
+                            <div class="text-gray-700 font-medium break-all">{{ displayText(row.operator) }}</div>
+                          </div>
+                          <div class="flex gap-3 md:col-span-2 xl:col-span-2">
+                            <div class="text-gray-500 w-28 shrink-0">其他补充信息</div>
+                            <div class="text-gray-700 font-medium break-all">{{ displayText(row.extraInfo) }}</div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+
+                  <tr v-if="!pagedRows.length">
+                    <td class="px-5 py-10 text-center text-gray-400 text-sm" colspan="11">暂无数据</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div class="divide-y divide-gray-100">
-              <!-- Item 1 -->
-              <div>
-                <div class="list-scroll">
-                  <div class="px-5 py-4 hover:bg-gray-50/80">
-                    <div class="list-grid">
-                      <div class="pt-1">
-                        <button class="transition-colors" :class="expandedRows.includes('withdraw-detail-1') ? 'text-red-500' : 'text-gray-400 hover:text-primaryBtn'" @click="toggleDetail('withdraw-detail-1')">
-                          <i class="fa-solid fa-chevron-right text-xs transition-transform" :class="{ 'rotate-90': expandedRows.includes('withdraw-detail-1') }"></i>
-                        </button>
-                      </div>
-                      <div class="text-sm text-gray-700">
-                        <div class="font-medium">8100453</div>
-                        <div class="text-xs text-gray-400 mt-1">MT分组：标准分组XXXXX</div>
-                      </div>
-                      <div class="text-sm">
-                        <span class="type-pill standard change-highlight">标准账户</span>
-                      </div>
-                      <div class="text-sm text-gray-500 break-all">OUT_923832107870979672</div>
-                      <div class="text-sm text-gray-500">test-b4</div>
-                      <div class="text-sm text-gray-500">
-                        <div>姓名：test-b5</div>
-                        <div class="mt-1">手机号：13932282801</div>
-                      </div>
-                      <div class="text-sm text-gray-700">
-                        <div>出金金额：$1,233.00</div>
-                        <div class="mt-1 text-gray-400">到账金额：$1,233.00</div>
-                      </div>
-                      <div class="text-sm text-gray-500">会签审核</div>
-                      <div class="text-sm text-gray-500">财务-A</div>
-                      <div class="text-sm text-gray-500">
-                        <div>申请时间：2026-07-31 15:07:06</div>
-                        <div class="mt-1">审核时间：2026-07-31 15:07:08</div>
-                      </div>
-                      <div class="text-sm text-gray-500">待支付</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="px-8 pb-5 border-t border-gray-100" v-show="expandedRows.includes('withdraw-detail-1')">
-                  <div class="detail-panel">
-                    <div class="detail-row">
-                      <div class="detail-label">支付方式</div>
-                      <div class="detail-value">MAXPAY-USDT</div>
-                    </div>
-                    <div class="detail-row">
-                      <div class="detail-label">时间</div>
-                      <div class="detail-value">
-                        <div>申请时间：2026-07-31 15:07:06</div>
-                        <div>客服审核：2026-07-31 15:07:08</div>
-                      </div>
-                    </div>
-                    <div class="detail-row">
-                      <div class="detail-label">账户余额</div>
-                      <div class="detail-value">10,000.00 USD</div>
-                    </div>
-                    <div class="detail-row">
-                      <div class="detail-label">账户净值</div>
-                      <div class="detail-value">10,000.00 USD</div>
-                    </div>
-                    <div class="detail-row border-b-0">
-                      <div class="detail-label">操作</div>
-                      <div class="flex items-center gap-2">
-                        <button class="px-3 py-1.5 rounded border border-blue-500 bg-white text-blue-500 text-xs font-medium hover:bg-blue-50 transition-colors" type="button" @click="goWithdrawAuditDetail('8100453')">
-                          审核
-                        </button>
-                        <button class="px-3 py-1.5 rounded bg-blue-500 text-white text-xs font-medium hover:bg-blue-600 transition-colors" type="button" @click="goWithdrawAuditDetail('8100453')">
-                          查看
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Item 2 -->
-              <div>
-                <div class="list-scroll">
-                  <div class="px-5 py-4 hover:bg-gray-50/80">
-                    <div class="list-grid">
-                      <div class="pt-1">
-                        <button class="transition-colors" :class="expandedRows.includes('withdraw-detail-2') ? 'text-red-500' : 'text-gray-400 hover:text-primaryBtn'" @click="toggleDetail('withdraw-detail-2')">
-                          <i class="fa-solid fa-chevron-right text-xs transition-transform" :class="{ 'rotate-90': expandedRows.includes('withdraw-detail-2') }"></i>
-                        </button>
-                      </div>
-                      <div class="text-sm text-gray-700">
-                        <div class="font-medium">9900456</div>
-                        <div class="text-xs text-gray-400 mt-1">MT分组：美分分组XXXX</div>
-                      </div>
-                      <div class="text-sm">
-                        <span class="type-pill cent change-highlight">美分账户</span>
-                      </div>
-                      <div class="text-sm text-gray-500 break-all">OUT_919847271934199098</div>
-                      <div class="text-sm text-gray-500">test-测试小组</div>
-                      <div class="text-sm text-gray-500">
-                        <div>姓名：test-小测试</div>
-                        <div class="mt-1">手机号：14578541002</div>
-                      </div>
-                      <div class="text-sm text-gray-700">
-                        <div>出金金额：$120.00</div>
-                        <div class="mt-1 text-gray-400">到账金额：￥861.60</div>
-                      </div>
-                      <div class="text-sm text-amber-600">已下发</div>
-                      <div class="text-sm text-gray-500">财务-B</div>
-                      <div class="text-sm text-gray-500">
-                        <div>客服审核：2026-07-20 15:13:23</div>
-                        <div class="mt-1">风险审核：2026-07-20 15:15:15</div>
-                        <div class="mt-1">财务审核：2026-07-20 15:16:56</div>
-                      </div>
-                      <div class="text-sm text-gray-500">支付中</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="px-8 pb-5 border-t border-gray-100" v-show="expandedRows.includes('withdraw-detail-2')">
-                  <div class="detail-panel">
-                    <div class="detail-row">
-                      <div class="detail-label">支付方式</div>
-                      <div class="detail-value">AIPAY</div>
-                    </div>
-                    <div class="detail-row">
-                      <div class="detail-label">时间</div>
-                      <div class="detail-value">
-                        <div>申请时间：2026-07-20 15:09:10</div>
-                        <div>客服审核：2026-07-20 15:13:23</div>
-                        <div>财务审核：2026-07-20 15:16:56</div>
-                      </div>
-                    </div>
-                    <div class="detail-row">
-                      <div class="detail-label">账户余额</div>
-                      <div class="detail-value">52,450.00 USC</div>
-                    </div>
-                    <div class="detail-row">
-                      <div class="detail-label">账户净值</div>
-                      <div class="detail-value">52,460.00 USC</div>
-                    </div>
-                    <div class="detail-row border-b-0">
-                      <div class="detail-label">操作</div>
-                      <div class="flex items-center gap-2">
-                        <button class="px-3 py-1.5 rounded border border-blue-500 bg-white text-blue-500 text-xs font-medium hover:bg-blue-50 transition-colors" type="button" @click="goWithdrawAuditDetail('9900456')">
-                          审核
-                        </button>
-                        <button class="px-3 py-1.5 rounded bg-blue-500 text-white text-xs font-medium hover:bg-blue-600 transition-colors" type="button" @click="goWithdrawAuditDetail('9900456')">
-                          查看
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div class="px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div class="text-xs text-gray-500">总记录数：{{ filteredRows.length }}</div>
+              <div class="flex items-center justify-end gap-3">
+                <div class="text-xs text-gray-500">每页</div>
+                <select v-model="pageSize" class="h-8 px-2 rounded border border-gray-200 bg-white text-xs text-gray-600">
+                  <option :value="10">10</option>
+                  <option :value="20">20</option>
+                  <option :value="50">50</option>
+                </select>
+                <button
+                  type="button"
+                  class="h-8 w-8 rounded border border-gray-200 text-gray-600 text-xs hover:bg-gray-50 disabled:opacity-40"
+                  :disabled="page <= 1"
+                  @click="page = Math.max(1, page - 1)"
+                >
+                  <i class="fa-solid fa-angle-left text-[10px]"></i>
+                </button>
+                <div class="text-xs text-gray-600 min-w-[64px] text-center">{{ page }}/{{ totalPages }}</div>
+                <button
+                  type="button"
+                  class="h-8 w-8 rounded border border-gray-200 text-gray-600 text-xs hover:bg-gray-50 disabled:opacity-40"
+                  :disabled="page >= totalPages"
+                  @click="page = Math.min(totalPages, page + 1)"
+                >
+                  <i class="fa-solid fa-angle-right text-[10px]"></i>
+                </button>
               </div>
             </div>
           </section>
@@ -383,6 +344,190 @@ const toggleDetail = (id) => {
   } else {
     expandedRows.value.push(id)
   }
+}
+
+const filters = ref({
+  userType: '',
+  operator: '',
+  orderNo: '',
+  mtAccount: '',
+  mtType: '',
+  withdrawMethod: '',
+  auditStatus: '',
+  timeType: 'apply',
+  startTime: '',
+  endTime: '',
+  payStatus: ''
+})
+
+const page = ref(1)
+const pageSize = ref(10)
+
+const resetFilters = () => {
+  filters.value = {
+    userType: '',
+    operator: '',
+    orderNo: '',
+    mtAccount: '',
+    mtType: '',
+    withdrawMethod: '',
+    auditStatus: '',
+    timeType: 'apply',
+    startTime: '',
+    endTime: '',
+    payStatus: ''
+  }
+  page.value = 1
+}
+
+const search = () => {
+  page.value = 1
+}
+
+const displayText = (v) => (v === null || v === undefined || String(v).trim() === '' ? '-' : String(v))
+
+const formatAmount = (v) => {
+  if (v === null || v === undefined || v === '') return '-'
+  const n = Number(v)
+  if (!Number.isFinite(n)) return '-'
+  return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+const moneyText = (amount, currency) => {
+  const a = formatAmount(amount)
+  if (a === '-') return '-'
+  const c = displayText(currency)
+  return `${a} ${c}`
+}
+
+const auditStatusClass = (status) => {
+  if (status === '待审核') return 'pill-gray'
+  if (status === '会签审核' || status === '审核中') return 'pill-amber'
+  if (status === '已通过' || status === '已审核') return 'pill-green'
+  if (status === '已拒绝' || status === '审核拒绝') return 'pill-red'
+  if (status === '已取消') return 'pill-gray'
+  return 'pill-gray'
+}
+
+const payStatusClass = (status) => {
+  if (status === '待支付') return 'pill-gray'
+  if (status === '支付中') return 'pill-amber'
+  if (status === '支付成功') return 'pill-green'
+  if (status === '支付失败') return 'pill-red'
+  if (status === '支付取消') return 'pill-gray'
+  if (status === '已退款') return 'pill-gray'
+  return 'pill-gray'
+}
+
+const tableRows = computed(() => [
+  {
+    id: 'w_1',
+    mtAccount: '8100453',
+    mtType: 'standard',
+    mtTypeLabel: '标准账户',
+    orderNo: 'OUT_923832107870979672',
+    clientName: 'test-b5',
+    withdrawAmount: 1233,
+    withdrawCurrency: 'USD',
+    arrivalAmount: 1233,
+    arrivalCurrency: 'USD',
+    auditStatus: '会签审核',
+    payStatus: '待支付',
+    applyTime: '2026-07-31 15:07:06',
+    mtGroup: '标准分组XXXXX',
+    phone: '13932282801',
+    parentInfo: 'test-b4',
+    csTime: '2026-07-31 15:07:08',
+    riskTime: '-',
+    financeTime: '-',
+    operator: '财务-A',
+    extraInfo: '-',
+    hasPayment: true
+  },
+  {
+    id: 'w_2',
+    mtAccount: '9900456',
+    mtType: 'cent',
+    mtTypeLabel: '美分账户',
+    orderNo: 'OUT_919847271934199098',
+    clientName: 'test-小测试',
+    withdrawAmount: 120,
+    withdrawCurrency: 'USD',
+    arrivalAmount: 861.6,
+    arrivalCurrency: 'CNY',
+    auditStatus: '已通过',
+    payStatus: '支付中',
+    applyTime: '2026-07-20 15:09:10',
+    mtGroup: '美分分组XXXX',
+    phone: '14578541002',
+    parentInfo: 'test-测试小组',
+    csTime: '2026-07-20 15:13:23',
+    riskTime: '2026-07-20 15:15:15',
+    financeTime: '2026-07-20 15:16:56',
+    operator: '财务-B',
+    extraInfo: '-',
+    hasPayment: true
+  },
+  {
+    id: 'w_3',
+    mtAccount: '8110474',
+    mtType: 'cent',
+    mtTypeLabel: '美分账户',
+    orderNo: 'OUT_942623916520637783',
+    clientName: 'test-沈栋晓',
+    withdrawAmount: 10000,
+    withdrawCurrency: 'USC',
+    arrivalAmount: 10000,
+    arrivalCurrency: 'USC',
+    auditStatus: '待审核',
+    payStatus: '待支付',
+    applyTime: '2026-09-21 11:39:02',
+    mtGroup: 'real\\HATC-Inland\\Test\\Stan-Cent',
+    phone: '13832766457',
+    parentInfo: '孙春测试',
+    csTime: '-',
+    riskTime: '-',
+    financeTime: '-',
+    operator: 'test-沈栋晓',
+    extraInfo: '-',
+    hasPayment: false
+  }
+])
+
+const filteredRows = computed(() => {
+  const f = filters.value
+  return tableRows.value.filter((r) => {
+    if (f.mtType && r.mtType !== f.mtType) return false
+    if (f.mtAccount && !String(r.mtAccount).includes(String(f.mtAccount).trim())) return false
+    if (f.orderNo && !String(r.orderNo).includes(String(f.orderNo).trim())) return false
+    if (f.auditStatus && r.auditStatus !== f.auditStatus) return false
+    if (f.payStatus && r.payStatus !== f.payStatus) return false
+    return true
+  })
+})
+
+const summary = computed(() => {
+  const rows = filteredRows.value
+  const usd = rows.filter((x) => x.withdrawCurrency === 'USD').reduce((sum, x) => sum + Number(x.withdrawAmount || 0), 0)
+  const usc = rows.filter((x) => x.withdrawCurrency === 'USC').reduce((sum, x) => sum + Number(x.withdrawAmount || 0), 0)
+  return {
+    count: rows.length,
+    usdText: moneyText(usd, 'USD'),
+    uscText: moneyText(usc, 'USC')
+  }
+})
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredRows.value.length / Number(pageSize.value || 10))))
+
+const pagedRows = computed(() => {
+  if (page.value > totalPages.value) page.value = totalPages.value
+  const start = (page.value - 1) * Number(pageSize.value || 10)
+  return filteredRows.value.slice(start, start + Number(pageSize.value || 10))
+})
+
+const viewPaymentRecord = (row) => {
+  if (!row?.hasPayment) return
+  window.alert('演示：支付记录')
 }
 
 const isModalOpen = ref(false)
@@ -514,62 +659,45 @@ const goWithdrawAuditDetail = (account) => {
   white-space: nowrap;
 }
 .type-pill.standard {
-  color: #475569;
-  background: #F1F5F9;
-  border: 1px solid #CBD5E1;
+  color: #1D4ED8;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
 }
 .type-pill.cent {
-  color: #047857;
-  background: #ECFDF5;
-  border: 1px solid #A7F3D0;
+  color: #7C3AED;
+  background: #F5F3FF;
+  border: 1px solid #DDD6FE;
 }
-.list-scroll {
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-.list-scroll::-webkit-scrollbar {
-  height: 8px;
-}
-.list-scroll::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.45);
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
   border-radius: 999px;
-}
-.list-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-.list-grid {
-  display: grid;
-  grid-template-columns: 28px 126px 92px 170px 112px 170px 188px 100px 120px 152px 96px;
-  align-items: start;
-  min-width: 1366px;
-  column-gap: 16px;
-}
-.detail-panel {
-  width: 430px;
-  max-width: 100%;
-  padding-top: 12px;
-}
-.detail-row {
-  display: grid;
-  grid-template-columns: 84px 1fr;
-  gap: 14px;
-  padding: 10px 0;
-  border-bottom: 1px solid #E5E7EB;
-}
-.detail-label {
-  color: #6B7280;
   font-size: 12px;
-  margin: 0;
   font-weight: 600;
+  line-height: 20px;
+  border: 1px solid transparent;
+  white-space: nowrap;
 }
-.detail-value {
-  color: #374151;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.6;
+.status-pill.pill-gray {
+  background: #F3F4F6;
+  color: #4B5563;
+  border-color: #E5E7EB;
 }
-.change-highlight {
-  color: #DC2626 !important;
+.status-pill.pill-amber {
+  background: #FFF7ED;
+  color: #B45309;
+  border-color: #FED7AA;
+}
+.status-pill.pill-green {
+  background: #ECFDF5;
+  color: #047857;
+  border-color: #A7F3D0;
+}
+.status-pill.pill-red {
+  background: #FEF2F2;
+  color: #B91C1C;
+  border-color: #FECACA;
 }
 .modal-mask {
   position: fixed;

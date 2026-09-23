@@ -35,7 +35,6 @@
                   <th class="px-4 py-4 font-medium whitespace-nowrap w-[260px]">类型名称</th>
                   <th class="px-4 py-4 font-medium whitespace-nowrap w-[180px]">是否计入真实</th>
                   <th class="px-4 py-4 font-medium whitespace-nowrap w-[120px] text-center">状态</th>
-                  <th class="px-4 py-4 font-medium whitespace-nowrap w-[120px] text-right">排序</th>
                   <th class="px-4 py-4 font-medium">备注</th>
                   <th class="px-4 py-4 font-medium whitespace-nowrap w-[140px] text-center">操作</th>
                 </tr>
@@ -61,7 +60,6 @@
                       {{ row.status === 'enabled' ? '启用' : '停用' }}
                     </button>
                   </td>
-                  <td class="px-4 py-3 text-right font-mono text-gray-600 whitespace-nowrap">{{ Number(row.sort || 0) }}</td>
                   <td class="px-4 py-3 text-gray-500 text-xs">{{ row.remark || '-' }}</td>
                   <td class="px-4 py-3 text-center whitespace-nowrap">
                     <button type="button" class="text-blue-500 hover:text-blue-700 text-xs font-medium transition-colors" @click="openEditModal(row)">
@@ -77,43 +75,6 @@
             <div class="text-sm text-gray-500">
               共 <span class="font-medium text-gray-700">{{ currentRows.length }}</span> 条
             </div>
-          </div>
-        </div>
-
-        <div class="mt-4 bg-white rounded-xl card-shadow border border-gray-100 overflow-hidden">
-          <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <div class="text-base font-bold text-gray-800">类型配置审计记录</div>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left min-w-[1100px]">
-              <thead class="bg-tableHeader text-gray-600 border-b border-gray-200">
-                <tr>
-                  <th class="px-4 py-4 font-medium whitespace-nowrap w-[180px]">操作时间</th>
-                  <th class="px-4 py-4 font-medium whitespace-nowrap w-[140px]">操作人</th>
-                  <th class="px-4 py-4 font-medium whitespace-nowrap w-[120px]">方向</th>
-                  <th class="px-4 py-4 font-medium whitespace-nowrap w-[120px]">动作</th>
-                  <th class="px-4 py-4 font-medium">修改前</th>
-                  <th class="px-4 py-4 font-medium">修改后</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-100">
-                <tr v-for="log in fundTypeConfigAuditLogs" :key="log.id" class="hover:bg-gray-50/50 transition-colors">
-                  <td class="px-4 py-3 text-gray-500 font-mono text-xs whitespace-nowrap">{{ log.time }}</td>
-                  <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ log.operator }}</td>
-                  <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ log.direction === 'deposit' ? '入金' : '出金' }}</td>
-                  <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ log.action }}</td>
-                  <td class="px-4 py-3 text-gray-500 text-xs">
-                    <div class="font-mono break-all">{{ renderLogSnapshot(log.before) }}</div>
-                  </td>
-                  <td class="px-4 py-3 text-gray-500 text-xs">
-                    <div class="font-mono break-all">{{ renderLogSnapshot(log.after) }}</div>
-                  </td>
-                </tr>
-                <tr v-if="!fundTypeConfigAuditLogs.length">
-                  <td class="px-4 py-6 text-center text-gray-400 text-sm" colspan="6">暂无记录</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
@@ -145,16 +106,10 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <div class="text-sm text-gray-600 font-medium mb-2">排序</div>
-          <input v-model="form.sort" type="number" class="w-full h-10 px-3 rounded-lg border border-gray-200 outline-none focus:ring-2 focus:ring-primaryBtn/20 focus:border-primaryBtn text-sm" placeholder="数字越小越靠前" />
-        </div>
-        <div>
-          <div class="text-sm text-gray-600 font-medium mb-2">方向</div>
-          <div class="h-10 flex items-center px-3 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-600">
-            {{ activeTab === 'deposit' ? '入金' : '出金' }}
-          </div>
+      <div>
+        <div class="text-sm text-gray-600 font-medium mb-2">方向</div>
+        <div class="h-10 flex items-center px-3 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-600">
+          {{ activeTab === 'deposit' ? '入金' : '出金' }}
         </div>
       </div>
 
@@ -175,7 +130,7 @@
 
 <script setup>
 import { computed, reactive, ref } from 'vue'
-import { addTypeConfig, depositTypeConfigs, fundTypeConfigAuditLogs, setTypeConfigStatus, updateTypeConfig, withdrawTypeConfigs } from '@/store/fund-type-config'
+import { addTypeConfig, depositTypeConfigs, setTypeConfigStatus, updateTypeConfig, withdrawTypeConfigs } from '@/store/fund-type-config'
 
 const activeTab = ref('deposit')
 
@@ -189,7 +144,6 @@ const form = reactive({
   name: '',
   countAsReal: false,
   status: 'enabled',
-  sort: 0,
   remark: ''
 })
 
@@ -199,7 +153,6 @@ const resetForm = () => {
   form.name = ''
   form.countAsReal = false
   form.status = 'enabled'
-  form.sort = 0
   form.remark = ''
 }
 
@@ -216,7 +169,6 @@ const openEditModal = (row) => {
   form.name = String(row.name || '')
   form.countAsReal = !!row.countAsReal
   form.status = row.status === 'disabled' ? 'disabled' : 'enabled'
-  form.sort = Number(row.sort || 0)
   form.remark = String(row.remark || '')
   modalVisible.value = true
 }
@@ -232,7 +184,6 @@ const submitForm = () => {
     name: String(form.name || '').trim(),
     countAsReal: !!form.countAsReal,
     status: form.status,
-    sort: Number(form.sort || 0),
     remark: String(form.remark || '')
   }
 
@@ -247,22 +198,9 @@ const submitForm = () => {
 
   modalVisible.value = false
 }
-
-const renderLogSnapshot = (v) => {
-  if (!v) return '-'
-  const parts = [
-    `name=${v.name}`,
-    `countAsReal=${v.countAsReal ? 'yes' : 'no'}`,
-    `status=${v.status}`,
-    `sort=${Number(v.sort || 0)}`
-  ]
-  if (v.remark) parts.push(`remark=${v.remark}`)
-  return parts.join(' | ')
-}
 </script>
 
 <style scoped>
 :deep(.fund-type-tabs .el-tabs__item.is-active) { color: #d1a84f; }
 :deep(.fund-type-tabs .el-tabs__active-bar) { background-color: #d1a84f; }
 </style>
-

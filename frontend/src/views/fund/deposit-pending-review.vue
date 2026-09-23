@@ -392,8 +392,8 @@ const openAudit = (mtAccount) => {
   openManageDepositModal()
 }
 
-const goDepositDetail = (orderId) => {
-  router.push({ path: '/fund/deposit-detail', query: { orderId: String(orderId || '') } })
+const goDepositDetail = (id) => {
+  router.push({ path: '/fund/deposit-detail', query: { id: String(id || '') } })
 }
 
 const closeManageDepositModal = () => {

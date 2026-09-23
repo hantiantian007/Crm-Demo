@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理员出金新增类型 - PRD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+    th, td { border: 1px solid #e5e7eb; padding: 12px 16px; text-align: left; font-size: 14px; vertical-align: top; }
+    th { background: #f9fafb; color: #374151; font-weight: 600; }
+    td { color: #4b5563; line-height: 1.75; }
+    .highlight { color: #C19B5E; font-weight: 600; }
+    .module-title { border-left: 4px solid #C19B5E; padding-left: 12px; margin: 28px 0 16px; font-size: 18px; font-weight: 700; color: #1f2937; }
+  </style>
+</head>
+<body class="bg-gray-50 p-8 font-sans">
+  <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-8">
+    <div class="flex justify-between items-start gap-4 border-b pb-4 mb-6 flex-wrap">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">管理员出金新增类型 - 需求说明书（PRD）</h1>
+        <div class="mt-2 text-sm text-gray-500 space-x-4">
+          <span>版本：<span class="highlight">V1.0.0</span></span>
+          <span>更新时间：<span class="highlight">2026-09-23</span></span>
+        </div>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <a href="#/fund/audit-withdraw" class="px-4 py-2 rounded bg-[#C19B5E] text-white text-sm">管理员出金原型</a>
+        <a href="#/system/fund-type-setting" class="px-4 py-2 rounded bg-[#C19B5E] text-white text-sm">出入金类型设置原型</a>
+      </div>
+    </div>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-sm text-yellow-900">
+      本 PRD 仅描述本次新增内容：管理员出金新增“出金类型”字段、类型来源与配置、以及“是否计入真实出金”的统计口径与历史快照规则。
+    </div>
+
+    <div class="module-title">1. PRD范围（本次新增）</div>
+    <table>
+      <tbody>
+        <tr><td>1）管理员出金页面新增 <span class="highlight">出金类型</span> 字段。</td></tr>
+        <tr><td>2）出金类型来源与配置：<span class="highlight">系统管理 &gt; 出入金类型设置 &gt; 管理出金类型</span>。</td></tr>
+        <tr><td>3）选择类型后展示 <span class="highlight">是否计入真实出金</span>（只读）。</td></tr>
+        <tr><td>4）管理员出金记录保存 <span class="highlight">类型快照</span>，配置修改/停用不影响历史。</td></tr>
+        <tr><td>5）类型停用后不可用于新增操作，但历史记录仍正常展示。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">2. 管理员出金新增字段：出金类型</div>
+    <table>
+      <tbody>
+        <tr><td width="22%" class="font-medium">字段名称</td><td>出金类型</td></tr>
+        <tr><td class="font-medium">规则</td><td>
+          <div>1）必填。</div>
+          <div>2）下拉选择。</div>
+          <div>3）只显示已启用的“<span class="highlight">管理出金类型</span>”。</div>
+          <div>4）按类型创建时间正序展示：先创建的类型在前，新创建的类型排列在末尾。</div>
+          <div>5）不允许在管理员出金页面临时新增类型。</div>
+          <div>6）选择后展示提示：<span class="highlight">是否计入真实出金：是/否</span>（只读）。</div>
+          <div>7）操作人员不可在出金页面修改“是否计入真实出金”。</div>
+        </td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">3. 类型来源与配置</div>
+    <table>
+      <tbody>
+        <tr>
+          <td width="22%" class="font-medium">来源</td>
+          <td>出金类型来源于：<span class="highlight">系统管理 &gt; 出入金类型设置 &gt; 管理出金类型</span>。</td>
+        </tr>
+        <tr>
+          <td class="font-medium">配置内容</td>
+          <td>
+            <div>1）类型名称。</div>
+            <div>2）业务方向：<span class="highlight">出金</span>。</div>
+            <div>3）是否计入真实出金：是/否。</div>
+            <div>4）启用状态：启用/停用。</div>
+            <div>5）展示顺序：按创建时间正序展示，新创建的类型排列在末尾。</div>
+            <div>6）备注。</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">4. 统计口径（是否计入真实出金）</div>
+    <table>
+      <tbody>
+        <tr><td>
+          <div>只有同时满足以下条件才计入真实出金：</div>
+          <div class="mt-2">1）所选类型配置为 <span class="highlight">计入真实出金</span>。</div>
+          <div>2）管理员出金处理 <span class="highlight">成功</span>。</div>
+          <div>3）资金已经 <span class="highlight">成功扣除</span>。</div>
+          <div class="mt-2">待处理、失败、取消和冲正记录不计入真实出金。</div>
+          <div class="mt-2"><span class="highlight">是否计入真实出金</span> 仅影响统计口径，不影响管理员出金的资金扣减操作。</div>
+        </td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">5. 历史快照</div>
+    <table>
+      <tbody>
+        <tr>
+          <td width="22%" class="font-medium">保存时机</td>
+          <td>每笔管理员出金创建时保存类型快照。</td>
+        </tr>
+        <tr>
+          <td class="font-medium">保存内容</td>
+          <td>
+            <div>1）类型ID。</div>
+            <div>2）类型名称快照。</div>
+            <div>3）业务方向：出金。</div>
+            <div>4）是否计入真实出金快照。</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="font-medium">变更影响</td>
+          <td>修改或停用类型后，不改变历史记录与历史报表（不回溯重算）。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">6. 类型停用与历史展示规则</div>
+    <table>
+      <tbody>
+        <tr><td>
+          <div>1）停用类型不能用于新增管理员出金操作。</div>
+          <div>2）已使用类型停用后，历史记录仍可展示（使用历史快照字段展示名称与统计口径）。</div>
+          <div>3）已产生业务记录的类型不可物理删除。</div>
+        </td></tr>
+      </tbody>
+    </table>
+
+    <div class="module-title">7. 默认数据：返佣多发扣回</div>
+    <table>
+      <tbody>
+        <tr><td>
+          <div>1）“返佣多发扣回”属于 <span class="highlight">管理出金类型</span>。</div>
+          <div>2）默认 <span class="highlight">不计入真实出金</span>。</div>
+          <div>3）与其他出金类型使用相同公共字段，不增加“原返佣记录/原返佣金额/本次扣回金额”等专属字段。</div>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

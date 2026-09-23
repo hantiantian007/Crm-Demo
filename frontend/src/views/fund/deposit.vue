@@ -208,7 +208,7 @@ watch(
 )
 
 const goDepositDetail = (row) => {
-  router.push({ path: '/fund/deposit-detail', query: { orderId: String(row?.orderId || '') } })
+  router.push({ path: '/fund/deposit-detail', query: { id: String(row?.orderId || '') } })
 }
 </script>
 
