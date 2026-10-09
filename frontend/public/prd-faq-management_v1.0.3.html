@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ内容管理 - PRD</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; margin: 0; background: #f9fafb; color: #111827; }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 24px 20px 60px; }
+      h1 { font-size: 20px; margin: 0 0 8px; }
+      h2 { font-size: 14px; margin: 18px 0 8px; color: #374151; }
+      p { margin: 0 0 10px; color: #4b5563; line-height: 1.6; }
+      ul { margin: 8px 0 0 18px; color: #4b5563; line-height: 1.7; }
+      .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 16px; }
+      .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; margin-right: 6px; }
+      .muted { color: #6b7280; }
+      .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="muted">
+          <span class="tag">其他页面</span>
+          <span class="tag">PRD V1.0.3</span>
+        </div>
+        <h1>FAQ内容管理（前台阅读体验优化）</h1>
+        <p class="muted">本版本仅优化官网/CRM 预览阅读体验与排序/热门问题规则，不调整统计采集口径与后台管理结构。</p>
+
+        <h2>范围</h2>
+        <ul>
+          <li>页面：FAQ内容管理（/other/faq-management）</li>
+          <li>保留：摘要录入、分类管理、历史版本、整体发布/下架规则、待更新期间展示上次发布内容、多语言内容与 localStorage 兼容</li>
+        </ul>
+
+        <h2>CRM 预览（阅读体验）</h2>
+        <ul>
+          <li>展开问题后直接展示完整正文，并提供 <span class="code">有帮助 / 未解决</span> 反馈入口</li>
+          <li>移除“查看完整内容”按钮及其冗余帮助抽屉流程</li>
+        </ul>
+
+        <h2>官网预览（阅读体验）</h2>
+        <ul>
+          <li>隐藏 FAQ 编号、适用人群等后台管理信息</li>
+          <li>删除相关文章区域</li>
+          <li>保留：搜索、分类、FAQ 列表、热门问题、语言切换与反馈入口</li>
+        </ul>
+
+        <h2>统一排序规则</h2>
+        <ul>
+          <li>后台 FAQ 列表、官网预览列表、CRM 预览列表统一排序：<span class="code">排序值升序</span>；相同排序值按 <span class="code">更新时间倒序</span></li>
+        </ul>
+
+        <h2>热门问题规则（不新增人工推荐配置）</h2>
+        <ul>
+          <li>先按当前渠道、语言与可见人群筛选可展示 FAQ</li>
+          <li>再按该渠道+语言的阅读次数倒序取前三条；同次数按默认排序</li>
+          <li>没有阅读记录时按默认排序补足至三条</li>
+        </ul>
+
+        <h2>兼容策略</h2>
+        <ul>
+          <li>不修改统计采集口径：继续按既有 <span class="code">views / helpful / notSolved</span> 结构记录</li>
+          <li>不覆盖历史版本快照；数据仍以 localStorage 为准并兼容旧字段</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

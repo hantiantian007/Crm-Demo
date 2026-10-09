@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>先锋一号 50,000 USD 体验金活动详情与盈利释放 - PRD</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; margin: 0; background: #f9fafb; color: #111827; }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 24px 20px 60px; }
+      h1 { font-size: 20px; margin: 0 0 8px; }
+      h2 { font-size: 14px; margin: 18px 0 8px; color: #374151; }
+      p { margin: 0 0 10px; color: #4b5563; line-height: 1.6; }
+      ul, ol { margin: 8px 0 0 18px; color: #4b5563; line-height: 1.7; }
+      .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 16px; }
+      .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; margin-right: 6px; }
+      .muted { color: #6b7280; }
+      .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="muted">
+          <span class="tag">活动管理</span>
+          <span class="tag">PRD V1.0.3</span>
+        </div>
+        <h1>先锋一号 50,000 USD 体验金活动详情与盈利释放</h1>
+        <p class="muted">说明：本版本仅调整“规则口径与流程”，不假设存在 Star API，不新增对 Star 的自动同步能力。</p>
+
+        <h2>一、核心规则调整</h2>
+
+        <h2>1）净入金口径改为“累计净入金”</h2>
+        <p><span class="code">累计净入金 = 活动期间累计成功入金金额 − 活动期间累计成功出金金额</span></p>
+        <ul>
+          <li>仅统计已成功入账的真实入金、已完成的真实出金</li>
+          <li>不计入：信用金、内部转账、以及不计入真实出入金的管理员调整</li>
+        </ul>
+
+        <h2>2）支持多次释放盈利奖励（按累计净入金增量释放）</h2>
+        <ul>
+          <li>客户参加活动后，随着累计净入金提升，可多次获得盈利奖励释放</li>
+          <li>系统每次按最新累计净入金匹配对应档位，并计算“当前累计应得奖励金额”</li>
+          <li><span class="code">本次自动释放金额 = 当前累计应得奖励金额 − 历史累计已释放奖励金额</span></li>
+          <li>仅当本次自动释放金额 &gt; 0 时才发放，避免同一档位重复释放</li>
+          <li>累计释放金额不得超过：后台最终审核通过的 Star 盈利金额、以及活动奖励上限（两者取最小约束）</li>
+          <li>累计净入金下降时，不追回已发放信用金；但客户申请“信用金转真实资金”时，需要按当前累计净入金重新校验释放要求</li>
+        </ul>
+
+        <h2>3）取消“主动申请释放盈利”步骤（改为自动释放）</h2>
+        <ul>
+          <li>客户不再主动提交盈利释放申请</li>
+          <li>客户首次参加活动仍需提交参与申请，填写并上传：</li>
+          <ul>
+            <li>绑定的 MT 账户</li>
+            <li>Star 模拟账号</li>
+            <li>Star 盈利金额</li>
+            <li>盈利证明材料</li>
+          </ul>
+          <li>后台审核活动参与申请与 Star 盈利金额；审核通过后，系统持续监测客户累计净入金</li>
+          <li>当累计净入金首次达到某个档位或提升到更高档位时，系统自动计算增量奖励，并以信用金形式发放到绑定 MT 账户</li>
+        </ul>
+
+        <h2>自动释放记录（每次释放生成独立记录）</h2>
+        <p class="muted">每次自动释放均需生成独立记录，至少包含：</p>
+        <ul>
+          <li>触发时间</li>
+          <li>触发时累计净入金</li>
+          <li>对应档位</li>
+          <li>累计应得奖励</li>
+          <li>历史已释放金额</li>
+          <li>本次释放金额</li>
+          <li>绑定 MT 账户</li>
+          <li>发放状态</li>
+        </ul>
+
+        <h2>4）信用金转真实资金</h2>
+        <p>当信用金达到活动规定的达标交易手数后，由客户主动发起“信用金转真实资金”申请。</p>
+        <p class="muted">申请时系统先校验：</p>
+        <ul>
+          <li>当前累计净入金是否满足对应奖励档位</li>
+          <li>活动达标交易手数是否完成</li>
+          <li>是否存在疑似对冲、无效订单或违规交易</li>
+          <li>当前可释放信用金余额是否大于 0</li>
+          <li>是否存在重复或正在审核的申请</li>
+        </ul>
+        <p class="muted">系统校验通过后进入人工审核：</p>
+        <ol>
+          <li>客服审核</li>
+          <li>风控审核</li>
+          <li>全部通过后，将符合条件的信用金转为真实资金</li>
+        </ol>
+        <ul>
+          <li>任一环节拒绝时：需填写拒绝原因，并在客户活动记录中展示</li>
+          <li>实际转为真实资金金额以审核时剩余的有效信用金金额为准；信用金发生亏损时，仅允许转换剩余信用金</li>
+        </ul>
+
+        <h2>二、交易手数调整</h2>
+        <ul>
+          <li>首页活动模块中的“活动交易手数”统一改名为“活动达标交易手数”</li>
+          <li>页面需同时展示：已完成达标交易手数 / 目标达标交易手数 / 完成进度</li>
+          <li>对冲订单及其他不符合规则的订单不计入活动达标交易手数</li>
+          <li>无效订单需要在活动平仓订单中展示“未计入原因”（例如：疑似对冲订单）</li>
+        </ul>
+
+        <h2>三、活动 Banner 增加活动要求</h2>
+        <p>Banner 仅展示简要要求，并提供“查看活动要求”入口打开完整规则弹窗或活动详情。</p>
+        <ul>
+          <li>完成 Star 模拟交易并提交活动参与资料</li>
+          <li>后台审核通过后方可参与</li>
+          <li>奖励根据活动期间累计净入金自动分档释放</li>
+          <li>累计净入金提升后可多次获得增量释放</li>
+          <li>自动释放的奖励先以信用金发放至绑定 MT 账户</li>
+          <li>完成活动达标交易手数后，客户可申请转为真实资金</li>
+          <li>转真实资金时需要重新校验累计净入金</li>
+          <li>转真实资金申请须经过客服和风控审核</li>
+          <li>疑似对冲及其他违规订单不计入达标交易手数</li>
+          <li>信用金不能直接出金或转账</li>
+        </ul>
+
+        <h2>四、调整后的完整流程</h2>
+        <ol>
+          <li>客户在 Star 完成模拟交易。</li>
+          <li>客户注册或登录 CRM。</li>
+          <li>客户提交活动参与申请，填写 Star 账号、绑定 MT 账户、盈利金额并上传证明。</li>
+          <li>后台审核客户身份、Star 账号及盈利金额。</li>
+          <li>审核通过后，系统开始计算活动期间累计净入金。</li>
+          <li>累计净入金达到奖励档位时，系统自动计算并发放增量信用金。</li>
+          <li>累计净入金提升至更高档位时，可以再次自动释放差额。</li>
+          <li>客户使用绑定 MT 账户继续交易。</li>
+          <li>系统累计活动达标交易手数，并排除对冲及其他无效订单。</li>
+          <li>达到要求后，客户主动申请信用金转真实资金。</li>
+          <li>系统校验当前累计净入金、达标交易手数和风险状态。</li>
+          <li>客服审核后转交风控审核。</li>
+          <li>全部审核通过后，将符合条件的剩余信用金转为真实资金。</li>
+        </ol>
+      </div>
+    </div>
+  </body>
+</html>

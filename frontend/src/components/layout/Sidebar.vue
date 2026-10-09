@@ -175,6 +175,7 @@
         <el-menu-item index="/direct-home">直客首页</el-menu-item>
         <el-menu-item index="/other/customer-register-profile">客户注册资料</el-menu-item>
         <el-menu-item index="/other/new-home">新版首页</el-menu-item>
+        <el-menu-item index="/other/faq-management">FAQ内容管理</el-menu-item>
       </el-sub-menu>
     </el-menu>
     <!-- 底部收起按钮 -->

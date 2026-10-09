@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ内容管理 - PRD</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; margin: 0; background: #f9fafb; color: #111827; }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 24px 20px 60px; }
+      h1 { font-size: 20px; margin: 0 0 8px; }
+      h2 { font-size: 14px; margin: 18px 0 8px; color: #374151; }
+      p { margin: 0 0 10px; color: #4b5563; line-height: 1.6; }
+      ul { margin: 8px 0 0 18px; color: #4b5563; line-height: 1.7; }
+      .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 16px; }
+      .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; margin-right: 6px; }
+      .muted { color: #6b7280; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="muted">
+          <span class="tag">其他页面</span>
+          <span class="tag">PRD V1.0.1</span>
+        </div>
+        <h1>FAQ内容管理</h1>
+        <p class="muted">基础版本：完成 FAQ 管理页面的精简与演示数据建设（作为后续版本迭代的基线）。</p>
+
+        <h2>范围</h2>
+        <ul>
+          <li>页面：FAQ内容管理（/other/faq-management）</li>
+          <li>持久化：localStorage（兼容旧数据并支持可重复迁移）</li>
+        </ul>
+
+        <h2>基线能力</h2>
+        <ul>
+          <li>FAQ 列表字段精简，操作包含编辑/预览/更多（复制、历史、下架）</li>
+          <li>可见人群：代理/直客（必填多选，兼容旧值迁移）</li>
+          <li>分类管理：一级/二级分类，FAQ 必须绑定二级分类（已用分类禁删，仅可停用）</li>
+          <li>官网/CRM 预览：支持身份切换，并按渠道/身份/已发布语言过滤展示</li>
+          <li>演示数据：FAQ-1001 ~ FAQ-1014（简繁英）</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

@@ -68,6 +68,10 @@
                   </div>
                   <div class="text-sm text-orange-500 font-medium mt-1">{{ currentActivity.mainCopy }}</div>
                   <div class="text-xs text-orange-500 font-medium mt-1">{{ currentActivity.conditionText }}</div>
+                  <div v-if="currentActivity.key === 'pioneer-one-50000'" class="mt-1 text-[11px] text-gray-500 flex items-center gap-2 flex-wrap">
+                    <span>活动要求：审核通过后按活动期间累计净入金自动分档释放；完成达标交易手数后可申请转为真实资金。</span>
+                    <button type="button" class="text-[#C19B5E] hover:text-[#A9854B] font-medium" @click="pioneerRuleDialog.open = true">查看活动要求</button>
+                  </div>
 
                   <div class="mt-2 text-[11px] text-gray-500 font-mono flex items-center gap-2 flex-wrap">
                     <span>{{ currentActivity.timeRange }}</span>
@@ -290,14 +294,26 @@
         <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
           <div class="flex items-start gap-2">
             <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
-            <span>请确认参与活动前已准备模拟账户账号和模拟账户截图。</span>
+            <span>请准备绑定 MT 账户、Star 模拟账号、Star 盈利金额，并上传盈利证明材料。</span>
           </div>
         </div>
 
         <div class="space-y-4">
           <div class="space-y-2">
             <div class="text-sm text-gray-700 font-medium">
-              模拟账号 <span class="text-rose-500">*</span>
+              绑定的 MT 账户 <span class="text-rose-500">*</span>
+            </div>
+            <input
+              v-model="pioneerBindMtAccount"
+              class="w-full h-10 px-3 rounded-md border border-gray-200 bg-white text-sm outline-none focus:border-[#d1a84f]"
+              placeholder="请输入绑定的 MT 账户"
+              type="text"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <div class="text-sm text-gray-700 font-medium">
+              Star 模拟账号 <span class="text-rose-500">*</span>
             </div>
             <input
               v-model="pioneerDemoAccount"
@@ -309,7 +325,21 @@
 
           <div class="space-y-2">
             <div class="text-sm text-gray-700 font-medium">
-              上传模拟账户截图 <span class="text-rose-500">*</span>
+              Star 盈利金额 <span class="text-rose-500">*</span>
+            </div>
+            <input
+              v-model="pioneerStarProfitAmount"
+              class="w-full h-10 px-3 rounded-md border border-gray-200 bg-white text-sm outline-none focus:border-[#d1a84f]"
+              placeholder="请输入 Star 盈利金额"
+              type="number"
+              min="0"
+              step="0.01"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <div class="text-sm text-gray-700 font-medium">
+              上传盈利证明材料 <span class="text-rose-500">*</span>
             </div>
             <div class="flex items-center gap-3 flex-wrap">
               <label class="inline-flex items-center gap-2 h-10 px-4 rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">
@@ -345,11 +375,41 @@
       </template>
     </el-dialog>
 
+    <el-dialog v-model="pioneerRuleDialog.open" title="先锋一号 50,000 USD 活动要求" width="92%" :style="{ maxWidth: '720px' }" destroy-on-close>
+      <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
+        <div class="flex items-start gap-2">
+          <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
+          <span>完成 Star 模拟交易并提交活动参与资料，后台审核通过后方可参与。</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
+          <span>奖励根据活动期间累计净入金自动分档释放；累计净入金提升后可多次获得增量释放。</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
+          <span>自动释放的奖励先以信用金发放至绑定 MT 账户；信用金不能直接出金或转账。</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
+          <span>完成活动达标交易手数后可申请转为真实资金；申请时会重新校验当前累计净入金，并需客服与风控审核。</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
+          <span>疑似对冲及其他违规订单不计入活动达标交易手数。</span>
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex items-center justify-end">
+          <button type="button" class="h-9 px-4 rounded-md text-white bg-rose-500 hover:bg-rose-600 transition-colors" @click="pioneerRuleDialog.open = false">我知道了</button>
+        </div>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const homeScrollRef = ref(null)
@@ -391,7 +451,7 @@ const homeActivities = ref([
     stats: { participated: 126, achieved: 43, nearAchieved: 56 },
     progresses: [
       { key: 'net-deposit', label: '活动净入金', icon: 'fa-solid fa-dollar-sign', color: 'emerald', value: 126000.5, target: 1000, format: 'money' },
-      { key: 'trade-lots', label: '活动交易手数', icon: 'fa-solid fa-chart-line', color: 'blue', value: 680.25, target: 10, format: 'lots' }
+      { key: 'trade-lots', label: '活动达标交易手数', icon: 'fa-solid fa-chart-line', color: 'blue', value: 680.25, target: 10, format: 'lots' }
     ],
     footerTip: '达标口径：按客户维度判断；统计从客户参与成功时间起算。'
   },
@@ -407,7 +467,7 @@ const homeActivities = ref([
     stats: { participated: 68, achieved: 19, nearAchieved: 24 },
     progresses: [
       { key: 'net-deposit', label: '活动净入金', icon: 'fa-solid fa-dollar-sign', color: 'emerald', value: 32500, target: 50000, format: 'money' },
-      { key: 'trade-lots', label: '活动交易手数', icon: 'fa-solid fa-chart-line', color: 'blue', value: 318.6, target: 500, format: 'lots' }
+      { key: 'trade-lots', label: '活动达标交易手数', icon: 'fa-solid fa-chart-line', color: 'blue', value: 318.6, target: 500, format: 'lots' }
     ],
     releaseTierPct: 60,
     releasableProfitAmount: 8000,
@@ -415,6 +475,10 @@ const homeActivities = ref([
     footerTip: '达标口径：从审核通过时间起累计净入金；Lot 累计不清零，达到新档位后释放差额。'
   }
 ])
+
+const pioneerRuleDialog = reactive({ open: false })
+const pioneerBindMtAccount = ref('')
+const pioneerStarProfitAmount = ref('')
 
 const activityTabs = computed(() => {
   const list = Array.isArray(homeActivities.value) ? homeActivities.value : []
@@ -508,7 +572,9 @@ const pioneerScreenshotUrl = ref('')
 const pioneerScreenshotName = ref('')
 
 const openPioneerJoinDialog = () => {
+  pioneerBindMtAccount.value = ''
   pioneerDemoAccount.value = ''
+  pioneerStarProfitAmount.value = ''
   pioneerScreenshotUrl.value = ''
   pioneerScreenshotName.value = ''
   pioneerJoinDialogVisible.value = true
@@ -527,12 +593,21 @@ const onPioneerScreenshotChange = (e) => {
 }
 
 const confirmPioneerJoin = () => {
+  if (!pioneerBindMtAccount.value.trim()) {
+    window.alert('请输入绑定的 MT 账户')
+    return
+  }
   if (!pioneerDemoAccount.value.trim()) {
-    window.alert('请输入模拟账号')
+    window.alert('请输入 Star 模拟账号')
+    return
+  }
+  const profit = Number(pioneerStarProfitAmount.value)
+  if (!Number.isFinite(profit) || profit <= 0) {
+    window.alert('请输入 Star 盈利金额')
     return
   }
   if (!pioneerScreenshotUrl.value) {
-    window.alert('请上传模拟账户截图')
+    window.alert('请上传盈利证明材料')
     return
   }
   pioneerJoinDialogVisible.value = false

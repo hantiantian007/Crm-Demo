@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ内容管理 - PRD</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; margin: 0; background: #f9fafb; color: #111827; }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 24px 20px 60px; }
+      h1 { font-size: 20px; margin: 0 0 8px; }
+      h2 { font-size: 14px; margin: 18px 0 8px; color: #374151; }
+      p { margin: 0 0 10px; color: #4b5563; line-height: 1.6; }
+      ul { margin: 8px 0 0 18px; color: #4b5563; line-height: 1.7; }
+      .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 16px; }
+      .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; margin-right: 6px; }
+      .muted { color: #6b7280; }
+      .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="muted">
+          <span class="tag">其他页面</span>
+          <span class="tag">PRD V1.0.2</span>
+        </div>
+        <h1>FAQ内容管理</h1>
+        <p class="muted">本版本聚焦小范围精简与逻辑修正，不改变分类规则、统计口径与列表整体样式。</p>
+
+        <h2>范围</h2>
+        <ul>
+          <li>页面：FAQ内容管理（/other/faq-management）</li>
+          <li>数据：保留现有 FAQ-1001~FAQ-1014、多语言内容、历史记录与 localStorage 存储键</li>
+        </ul>
+
+        <h2>变更点</h2>
+        <ul>
+          <li>移除“根据简体生成繁体/英文草稿”按钮与专属生成逻辑，仅保留手工编辑</li>
+          <li>CRM 预览移除“业务页面选择器”与“业务相关问题区域”，保留搜索、分类与 FAQ 列表</li>
+          <li>下架仅保留一次确认，并明确“三种语言同时下架”</li>
+          <li>编辑区统一展示 FAQ 整体发布状态（草稿/已发布/待更新/已下架），不再展示各语言发布状态</li>
+          <li>统一预览数据源：列表预览=已保存草稿；编辑抽屉预览=当前表单；官网/CRM预览=已发布内容；历史预览=历史快照</li>
+        </ul>
+
+        <h2>整体发布状态规则（摘要）</h2>
+        <ul>
+          <li>任意语言内容发生实际修改并保存后：若该 FAQ 已发布，则整体变为 <span class="code">待更新</span></li>
+          <li>无修改保存：不改变状态（不应产生待更新）</li>
+          <li>待更新期间：官网/CRM 继续展示上次发布的完整三语言内容</li>
+          <li>三语言标题与正文均完整后才允许整体发布，并统一替换三语言发布内容</li>
+          <li>已下架 FAQ 编辑/保存后仍保持已下架，只有重新整体发布才会上线</li>
+          <li>恢复历史版本只恢复草稿：原已发布→待更新；原已下架保持已下架，不得自动上线</li>
+        </ul>
+
+        <h2>预览规则（只读）</h2>
+        <ul>
+          <li>预览只读，不自动保存、不自动发布</li>
+          <li>列表“预览”：查看已保存的最新草稿</li>
+          <li>编辑抽屉“预览”：查看当前表单（含未保存修改），切换语言仍读取当前表单</li>
+          <li>官网/CRM 预览：仅查看已发布内容</li>
+          <li>历史预览：仅查看所选历史快照</li>
+        </ul>
+
+        <h2>兼容策略</h2>
+        <ul>
+          <li>不删除旧字段（存储可继续存在），页面按新规则读写核心字段</li>
+          <li>不重复创建数据：分类/FAQ 迁移逻辑保持可重复执行</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

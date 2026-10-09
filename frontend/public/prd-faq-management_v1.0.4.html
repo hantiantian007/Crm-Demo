@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ内容管理 - PRD</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; margin: 0; background: #f9fafb; color: #111827; }
+      .wrap { max-width: 980px; margin: 0 auto; padding: 24px 20px 60px; }
+      h1 { font-size: 20px; margin: 0 0 8px; }
+      h2 { font-size: 14px; margin: 18px 0 8px; color: #374151; }
+      p { margin: 0 0 10px; color: #4b5563; line-height: 1.6; }
+      ul { margin: 8px 0 0 18px; color: #4b5563; line-height: 1.7; }
+      .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 16px; }
+      .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; margin-right: 6px; }
+      .muted { color: #6b7280; }
+      .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="muted">
+          <span class="tag">其他页面</span>
+          <span class="tag">PRD V1.0.4</span>
+        </div>
+        <h1>FAQ内容管理（数据概览优化）</h1>
+        <p class="muted">保持“四张指标卡＋待优化FAQ＋无结果搜索词＋折叠的更多统计”结构，不新增趋势图/导出/复杂分析。</p>
+
+        <h2>指标卡</h2>
+        <ul>
+          <li>未解决率统一改名为：<span class="code">未解决反馈占比</span></li>
+          <li>公式：<span class="code">未解决次数 ÷（有帮助次数＋未解决次数）</span></li>
+          <li>无反馈（分母=0）时显示：<span class="code">—</span></li>
+        </ul>
+
+        <h2>待优化 FAQ</h2>
+        <ul>
+          <li>仅展示“未解决次数 &gt; 0”的 FAQ</li>
+          <li>列：FAQ标题及编号 / 反馈总数 / 未解决次数 / 未解决反馈占比 / 编辑</li>
+          <li>排序：未解决次数倒序；同次数按占比倒序；取前 5 条</li>
+          <li>标题展示：选定语言时优先显示对应语言标题</li>
+        </ul>
+
+        <h2>无结果搜索词</h2>
+        <ul>
+          <li>改为“搜索词 + 无结果次数”表格，按次数倒序展示前 10 条</li>
+          <li>支持输入框实时筛选（仅过滤展示，不影响统计）</li>
+          <li>仅在点击搜索/回车/点击热门搜索词时记录一次 search；空关键词不计数</li>
+          <li>无结果判断忽略当前分类限制：在“当前渠道 + 语言 + 可见人群”的全部可展示 FAQ 中搜索，避免误判</li>
+        </ul>
+
+        <h2>阅读与反馈采集（Demo 限制）</h2>
+        <ul>
+          <li>同一次预览会话内：同一 FAQ + 渠道 + 语言仅允许反馈一次，提交后显示“已反馈”并禁用重复提交</li>
+          <li>阅读：仅在实际打开正文时计一次；收起与反馈不计数；打开正文期间切换语言且成功展示内容时记该语言一次阅读</li>
+          <li>无内容或无权限时不计数</li>
+          <li>页面标注：演示数据，包含预览操作记录</li>
+        </ul>
+
+        <h2>筛选</h2>
+        <ul>
+          <li>默认：最近 30 天（含今天）、全部渠道、全部语言</li>
+          <li>快捷：最近 7 天 / 最近 30 天 / 全部时间 / 重置</li>
+          <li>按项目统一时区（+08:00）计算自然日；筛选即时作用于全部统计模块</li>
+        </ul>
+
+        <h2>更多统计</h2>
+        <ul>
+          <li>分类统计展示：<span class="code">一级分类 / 二级分类</span></li>
+          <li>口径说明：按 FAQ 当前所属分类归集历史事件（演示）</li>
+        </ul>
+
+        <h2>兼容与约束</h2>
+        <ul>
+          <li>保留现有 FAQ、多语言内容、历史版本、localStorage 存储键与历史统计事件</li>
+          <li>不清空、不伪造去重、不重复补录旧事件；新采集规则仅对后续操作生效</li>
+          <li>各统计模块统一使用同一事件来源（feedbackEvents），避免事件与累计计数重复相加</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

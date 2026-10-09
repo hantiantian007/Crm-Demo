@@ -143,6 +143,7 @@ const routes = [
   { path: '/other/batch-mt-password-reset', component: () => import('@/views/other/batch-mt-password-reset.vue'), meta: { title: 'HATC CRM - 批量修改MT密码', breadcrumb: ['HATC CRM - 批量修改MT密码'] } },
   { path: '/other/customer-register-profile', component: () => import('@/views/other/customer-register-profile.vue'), meta: { title: '客户注册资料', breadcrumb: ['其他页面', '客户注册资料'], prdUrl: 'prd-customer-register-profile.html', prdTitle: '客户注册资料 - PRD' } },
   { path: '/other/new-home', component: () => import('@/views/other/new-home.vue'), meta: { title: '新版首页', breadcrumb: ['其他页面', '新版首页'] } },
+  { path: '/other/faq-management', component: () => import('@/views/other/faq-management.vue'), meta: { title: 'FAQ内容管理', breadcrumb: ['其他页面', 'FAQ内容管理'] } },
   { path: '/product/management', component: () => import('@/views/product/management.vue'), meta: { title: '商品管理列表', breadcrumb: ['商品管理'], prdUrl: 'prd-admin-product-management.html', prdTitle: '智能交易系统 - 后台商品管理列表 - PRD' } },
   { path: '/fund/payment-management', component: () => import('@/views/fund/payment-management.vue'), meta: { title: 'HATC CRM - 支付管理', breadcrumb: ['HATC CRM - 支付管理'] } },
   { path: '/fund/payment-config-records', component: () => import('@/views/fund/payment-config-records.vue'), meta: { title: '支付配置记录', breadcrumb: ['系统管理', '支付设置', '支付配置记录'], prdUrl: 'prd-payment-management.html', prdTitle: '支付设置 - 配置记录 - PRD' } },

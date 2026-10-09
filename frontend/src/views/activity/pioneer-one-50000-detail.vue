@@ -50,7 +50,7 @@
                 <p class="text-sm font-bold text-gray-800 font-mono">{{ activity.createdAt }}</p>
               </div>
               <div>
-                <p class="text-xs text-gray-500 mb-1">累计交易手数</p>
+                <p class="text-xs text-gray-500 mb-1">已完成达标交易手数</p>
                 <p class="text-sm font-bold text-gray-800 font-mono">{{ formatLots(activity.totalLots) }}</p>
               </div>
               <div>
@@ -62,7 +62,7 @@
                 <p class="text-sm font-bold text-gray-800 font-mono">${{ formatMoney(activity.totalReleasedAmount) }}</p>
               </div>
               <div>
-                <p class="text-xs text-gray-500 mb-1">活动净入金</p>
+                <p class="text-xs text-gray-500 mb-1">累计净入金</p>
                 <p class="text-sm font-bold text-gray-800 font-mono">${{ formatMoney(activity.netDeposit) }}</p>
               </div>
             </div>
@@ -393,4 +393,3 @@ const formatLots = (val) => {
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 </style>
-
