@@ -55,7 +55,12 @@
         <div class="bg-white rounded-xl card-shadow border border-gray-100 overflow-hidden">
           <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-3 flex-wrap">
             <div class="text-sm font-bold text-gray-800">配置记录列表</div>
-            <div class="text-xs text-gray-500">历史配置仅支持查看/停用</div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button type="button" class="h-9 px-4 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-sm font-medium transition-colors" @click="openCreateDialog">
+                新增规则
+              </button>
+              <div class="text-xs text-gray-500">历史配置仅支持查看/停用</div>
+            </div>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm text-left min-w-[1260px]">
@@ -265,36 +270,39 @@
         </div>
 
         <div>
+          <div class="text-sm font-semibold text-gray-800">用户提示</div>
+          <div class="mt-2">
+            <textarea
+              v-model="createForm.user_notice"
+              rows="3"
+              class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm outline-none focus:border-primaryBtn resize-none"
+              placeholder="请填写本次强制改密的原因与说明"
+              maxlength="200"
+            ></textarea>
+            <div v-if="createErrors.user_notice" class="mt-2 text-[11px] text-rose-600">{{ createErrors.user_notice }}</div>
+          </div>
+        </div>
+
+        <div>
           <div class="text-sm font-semibold text-gray-800">适用范围</div>
           <div class="mt-2 space-y-3">
             <div class="text-xs text-gray-500 font-medium">账号类型</div>
             <div class="flex flex-wrap gap-3">
               <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                <input v-model="createForm.account_types" class="accent-[#d1a84f]" type="checkbox" value="standard" />
+                <input class="accent-[#d1a84f]" type="checkbox" checked disabled />
                 <span>标准账号</span>
               </label>
-              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                <input v-model="createForm.account_types" class="accent-[#d1a84f]" type="checkbox" value="system" />
-                <span>系统账号</span>
-              </label>
-            </div>
-            <div v-if="createForm.account_types.includes('system')" class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-3 py-2">
-              系统账号属于后台管理账号，建议通过独立管理员安全策略管理。
             </div>
 
             <div class="text-xs text-gray-500 font-medium">业务身份</div>
             <div class="flex flex-wrap gap-3">
               <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                <input v-model="createForm.biz_identities" class="accent-[#d1a84f]" type="checkbox" value="agent" />
+                <input class="accent-[#d1a84f]" type="checkbox" checked disabled />
                 <span>代理</span>
               </label>
               <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                <input v-model="createForm.biz_identities" class="accent-[#d1a84f]" type="checkbox" value="direct" />
+                <input class="accent-[#d1a84f]" type="checkbox" checked disabled />
                 <span>直客</span>
-              </label>
-              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                <input v-model="createForm.biz_identities" class="accent-[#d1a84f]" type="checkbox" value="other" />
-                <span>其他</span>
               </label>
             </div>
 
@@ -307,10 +315,25 @@
         <div>
           <div class="text-sm font-semibold text-gray-800">生效时间</div>
           <div class="mt-2">
-            <select v-model="createForm.effective_time" class="w-full h-10 px-3 rounded-lg border border-gray-200 bg-white text-sm outline-none focus:border-primaryBtn">
-              <option value="下次登录">下次登录</option>
-              <option value="立即生效">立即生效</option>
+            <select v-model="createForm.effective_mode" class="w-full h-10 px-3 rounded-lg border border-gray-200 bg-white text-sm outline-none focus:border-primaryBtn">
+              <option value="next_login">下次登录</option>
+              <option value="scheduled">指定时间</option>
             </select>
+            <input
+              v-if="createForm.effective_mode === 'scheduled'"
+              v-model="createForm.effective_at"
+              type="datetime-local"
+              class="w-full h-10 px-3 rounded-lg border border-gray-200 bg-white text-sm outline-none focus:border-primaryBtn mt-3"
+            />
+            <div v-if="createErrors.effective_at" class="mt-2 text-[11px] text-rose-600">{{ createErrors.effective_at }}</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-sm font-semibold text-gray-800">预计影响客户数量</div>
+          <div class="mt-2 bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 flex items-center justify-between">
+            <div class="text-xs text-gray-500">按当前范围预估</div>
+            <div class="font-mono text-sm text-gray-800">{{ createFormImpactCount }}</div>
           </div>
         </div>
       </div>
@@ -319,11 +342,8 @@
           <button type="button" class="h-9 px-4 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium" @click="createDialog.open = false">
             取消
           </button>
-          <button type="button" class="h-9 px-4 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium" @click="savePolicyDraft">
-            保存为未生效
-          </button>
-          <button type="button" class="h-9 px-4 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-sm font-medium" @click="savePolicyAndContinue">
-            保存并继续
+          <button type="button" class="h-9 px-4 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-sm font-medium" @click="submitCreatePolicy">
+            确认提交
           </button>
         </div>
       </template>
@@ -373,6 +393,10 @@
         <div class="flex items-center justify-between gap-3">
           <span class="text-gray-500">生效时间</span>
           <span class="text-gray-800">{{ viewPolicy.effective_time }}</span>
+        </div>
+        <div class="pt-3 border-t border-gray-100">
+          <div class="text-gray-500">用户提示</div>
+          <div class="mt-2 text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{{ getPolicyUserNotice(viewPolicy) }}</div>
         </div>
         <div class="flex items-center justify-between gap-3">
           <span class="text-gray-500">当前状态</span>
@@ -547,6 +571,7 @@ import {
   disableScopePolicy,
   enableScopePolicy,
   getDemoUserById,
+  getPolicyUserNotice,
   getScopePolicyDefaults,
   getScopePolicyById,
   getScopePolicies,
@@ -576,12 +601,8 @@ const activePolicyCount = computed(() => scopePolicies.value.filter((p) => p.sta
 const summaryPolicy = computed(() => scopePolicies.value[0] || null)
 const summaryDefaults = computed(() => getScopePolicyDefaults())
 
-const formatRangeText = (cfg) => {
-  const ac = Array.isArray(cfg?.account_types) ? cfg.account_types : []
-  const bi = Array.isArray(cfg?.biz_identities) ? cfg.biz_identities : []
-  const left = ac.map(accountTypeLabel).join('、') || '—'
-  const right = bi.map(bizIdentityLabel).join('、') || '—'
-  return `${left} · ${right}`
+const formatRangeText = () => {
+  return '标准账号 · 代理、直客'
 }
 
 const calcImpactCount = (cfg) => passwordSecurityDemoState.users.filter((u) => isForceResetScopeUser(u, cfg)).length
@@ -598,22 +619,27 @@ const createForm = ref({
   title: '',
   account_types: [],
   biz_identities: [],
-  effective_time: '下次登录',
+  user_notice: '',
+  effective_mode: 'next_login',
+  effective_at: '',
 })
-const createErrors = ref({ title: '', scope: '' })
+const createErrors = ref({ title: '', scope: '', user_notice: '', effective_at: '' })
 
 const syncCreateForm = () => {
   const d = summaryDefaults.value || {}
-  createErrors.value = { title: '', scope: '' }
+  createErrors.value = { title: '', scope: '', user_notice: '', effective_at: '' }
   createForm.value = {
     title: String(d.title || '密码安全升级'),
-    account_types: Array.isArray(d.account_types) ? [...d.account_types] : ['standard'],
-    biz_identities: Array.isArray(d.biz_identities) ? [...d.biz_identities] : ['agent', 'direct'],
-    effective_time: String(d.effective_time || '下次登录'),
+    account_types: ['standard'],
+    biz_identities: ['agent', 'direct'],
+    user_notice: '',
+    effective_mode: 'next_login',
+    effective_at: '',
   }
 }
 
 const createFormRangeText = computed(() => formatRangeText(createForm.value))
+const createFormImpactCount = computed(() => passwordSecurityDemoState.users.filter((u) => isForceResetScopeUser(u, createForm.value)).length)
 
 const openCreateDialog = () => {
   syncCreateForm()
@@ -621,13 +647,14 @@ const openCreateDialog = () => {
 }
 
 const validateCreateForm = () => {
-  createErrors.value = { title: '', scope: '' }
+  createErrors.value = { title: '', scope: '', user_notice: '', effective_at: '' }
   const title = String(createForm.value.title || '')
   if (!title.trim()) createErrors.value.title = '请输入策略标题'
-  const accountTypes = Array.isArray(createForm.value.account_types) ? createForm.value.account_types : []
-  const bizIdentities = Array.isArray(createForm.value.biz_identities) ? createForm.value.biz_identities : []
-  if (accountTypes.length === 0 || bizIdentities.length === 0) createErrors.value.scope = '请选择账号类型与业务身份'
-  return !(createErrors.value.title || createErrors.value.scope)
+  if (!String(createForm.value.user_notice || '').trim()) createErrors.value.user_notice = '请输入用户提示'
+  createForm.value.account_types = ['standard']
+  createForm.value.biz_identities = ['agent', 'direct']
+  if (String(createForm.value.effective_mode || '') === 'scheduled' && !String(createForm.value.effective_at || '').trim()) createErrors.value.effective_at = '请选择指定时间'
+  return !(createErrors.value.title || createErrors.value.user_notice || createErrors.value.effective_at)
 }
 
 const enableDialog = ref({ open: false, policyId: '' })
@@ -637,33 +664,29 @@ const openEnableDialog = (policyId) => {
   enableDialog.value.open = true
 }
 
-const savePolicyDraft = () => {
-  if (!validateCreateForm()) return
-  const res = createScopePolicy(
-    {
-      title: createForm.value.title,
-      account_types: createForm.value.account_types,
-      biz_identities: createForm.value.biz_identities,
-      effective_time: createForm.value.effective_time,
-    },
-    '系统管理员（演示）'
-  )
-  if (!res.ok) {
-    createErrors.value.title = res.message || '保存失败'
-    return
-  }
-  createDialog.value.open = false
-  ElMessage.success('已保存配置（未生效）')
+const formatScheduleTime = (v) => {
+  const raw = String(v || '').trim()
+  if (!raw) return ''
+  const [d, t] = raw.split('T')
+  if (!d || !t) return ''
+  const hhmm = t.slice(0, 5)
+  if (!hhmm.includes(':')) return ''
+  return `${d} ${hhmm}:00`
 }
 
-const savePolicyAndContinue = () => {
+const submitCreatePolicy = () => {
   if (!validateCreateForm()) return
+  const mode = String(createForm.value.effective_mode || 'next_login')
+  const scheduledText = mode === 'scheduled' ? formatScheduleTime(createForm.value.effective_at) : ''
+  const effectiveTime = mode === 'scheduled' ? scheduledText : '下次登录'
+
   const res = createScopePolicy(
     {
       title: createForm.value.title,
-      account_types: createForm.value.account_types,
-      biz_identities: createForm.value.biz_identities,
-      effective_time: createForm.value.effective_time,
+      account_types: ['standard'],
+      biz_identities: ['agent', 'direct'],
+      user_notice: createForm.value.user_notice,
+      effective_time: effectiveTime,
     },
     '系统管理员（演示）'
   )
@@ -672,7 +695,24 @@ const savePolicyAndContinue = () => {
     return
   }
   createDialog.value.open = false
-  openEnableDialog(res.policyId)
+
+  let shouldEnable = mode === 'next_login'
+  if (mode === 'scheduled') {
+    const ts = createForm.value.effective_at ? new Date(String(createForm.value.effective_at)).getTime() : NaN
+    shouldEnable = Number.isFinite(ts) && ts <= Date.now()
+  }
+
+  if (!shouldEnable) {
+    ElMessage.success('新增规则成功（未生效）')
+    return
+  }
+
+  const enableRes = enableScopePolicy(res.policyId, '系统管理员（演示）')
+  if (!enableRes.ok) {
+    ElMessage.error(enableRes.message || '启用失败')
+    return
+  }
+  ElMessage.success(`新增规则成功（生效中，影响 ${enableRes.impact} 个账号）`)
 }
 
 const enableTargetPolicy = computed(() => getScopePolicyById(enableDialog.value.policyId))

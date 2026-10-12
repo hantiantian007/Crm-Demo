@@ -9,6 +9,12 @@
         <div class="mt-2 text-[11px] text-gray-400">
           策略：<span class="text-gray-600 font-medium">{{ policyTitle }}</span>
         </div>
+        <div class="mt-3 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-gray-700 leading-relaxed">
+          <div class="font-medium text-gray-800">用户提示</div>
+          <div class="mt-2 space-y-1">
+            <div v-for="(t, idx) in policyNotices" :key="idx">{{ t }}</div>
+          </div>
+        </div>
       </div>
 
       <div v-if="showBlockedTip" class="px-6 pt-5">
@@ -128,6 +134,7 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   completePasswordReset,
   getSessionUser,
+  getUserPendingPolicyNotices,
   getUserPendingPolicyTitles,
   passwordSecurityDemoState,
   requestEmailOtp,
@@ -148,6 +155,15 @@ const policyTitle = computed(() => {
   if (merged.length === 0) return '密码安全升级'
   const uniq = Array.from(new Set(merged))
   return uniq.join('、')
+})
+
+const policyNotices = computed(() => {
+  const uid = user.value?.user_id
+  if (!uid) return ['为保护您的账户安全，请完成密码修改后继续使用 CRM。']
+  const notices = getUserPendingPolicyNotices(uid)
+  const uniq = Array.from(new Set((Array.isArray(notices) ? notices : []).filter(Boolean)))
+  if (uniq.length === 0) return ['为保护您的账户安全，请完成密码修改后继续使用 CRM。']
+  return uniq
 })
 
 const form = reactive({ password: '', confirm: '', otp: '' })

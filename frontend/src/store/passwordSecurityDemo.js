@@ -11,6 +11,7 @@ const nowISO = () => {
 const uid = (prefix) => `${prefix}_${Math.random().toString(16).slice(2, 10)}${Date.now().toString(16).slice(-6)}`
 
 const DEMO_SINGLE_ACTIVE_BATCH_ID = 'single_batch_demo_active_01'
+const DEFAULT_USER_NOTICE = '为保护您的账户安全，请完成密码修改后继续使用 CRM。'
 
 const safeParse = (raw) => {
   try {
@@ -314,16 +315,19 @@ const syncUserPasswordStatus = (user) => {
   }
 }
 
-export const isForceResetScopeUser = (user, cfg = getScopePolicyDefaults()) => {
+export const isForceResetScopeUser = (user, _cfg = getScopePolicyDefaults()) => {
   if (!user) return false
-  const accountTypes = new Set((cfg?.account_types || []).map(String))
-  const bizIdentities = new Set((cfg?.biz_identities || []).map(String))
-  return accountTypes.has(String(user.account_type || '')) && bizIdentities.has(String(user.biz_identity || ''))
+  return String(user.account_type || '') === 'standard' && (String(user.biz_identity || '') === 'agent' || String(user.biz_identity || '') === 'direct')
 }
 
 export const getScopePolicies = () => (Array.isArray(passwordSecurityDemoState.scope_policies) ? passwordSecurityDemoState.scope_policies : [])
 
 export const getScopePolicyById = (policyId) => getScopePolicies().find((p) => p.policy_id === String(policyId || '')) || null
+
+export const getPolicyUserNotice = (policy) => {
+  const text = String(policy?.user_notice || '').trim()
+  return text || DEFAULT_USER_NOTICE
+}
 
 export const createScopePolicy = (payload, operator = '系统管理员（演示）') => {
   const rawTitle = String(payload?.title || '')
@@ -331,12 +335,13 @@ export const createScopePolicy = (payload, operator = '系统管理员（演示�
   if (!title) return { ok: false, message: '策略标题不能为空' }
   if (title.length > 20) return { ok: false, message: '策略标题过长' }
 
-  const accountTypes = Array.isArray(payload?.account_types) ? payload.account_types.map(String) : []
-  const bizIdentities = Array.isArray(payload?.biz_identities) ? payload.biz_identities.map(String) : []
   const effectiveTime = String(payload?.effective_time || '').trim() || '下次登录'
+  const rawNotice = String(payload?.user_notice || '')
+  const userNotice = rawNotice.trim()
+  if (!userNotice) return { ok: false, message: '请输入用户提示' }
 
-  if (accountTypes.length === 0) return { ok: false, message: '请选择账号类型' }
-  if (bizIdentities.length === 0) return { ok: false, message: '请选择业务身份' }
+  const accountTypes = ['standard']
+  const bizIdentities = ['agent', 'direct']
 
   const policyId = uid('policy')
   const createdAt = nowISO()
@@ -346,6 +351,7 @@ export const createScopePolicy = (payload, operator = '系统管理员（演示�
     account_types: Array.from(new Set(accountTypes)),
     biz_identities: Array.from(new Set(bizIdentities)),
     effective_time: effectiveTime,
+    user_notice: userNotice,
     status: 'pending',
     created_at: createdAt,
     operator,
@@ -397,6 +403,14 @@ export const enableScopePolicy = (policyId, operator = '系统管理员（演示
   tryMarkPolicyCompleted(policy)
   persist()
   return { ok: true, impact }
+}
+
+export const getUserPendingPolicyNotices = (userId) => {
+  const user = getDemoUserById(userId)
+  if (!user) return []
+  ensureUserFields(user)
+  const ids = Array.isArray(user.force_reset_policy_ids) ? user.force_reset_policy_ids : []
+  return ids.map((id) => getPolicyUserNotice(getScopePolicyById(id))).filter(Boolean)
 }
 
 export const disableScopePolicy = (policyId, operator = '系统管理员（演示）') => {
