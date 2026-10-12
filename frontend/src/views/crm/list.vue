@@ -268,7 +268,7 @@
        </div>
       </td>
       <td class="py-4 px-4">
-       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('123123')">
+       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('u_agent_01')">
         han111@g.com
        </button>
        <div class="text-gray-500 mt-1">
@@ -394,7 +394,7 @@
           操作
          </span>
          <div class="flex items-center gap-2">
-          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('123123')">
+          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('u_agent_01')">
            查看
           </button>
           <button class="text-blue-500 px-4 py-1 rounded text-xs hover:bg-blue-50 border border-blue-200 bg-white">
@@ -430,7 +430,7 @@
        </div>
       </td>
       <td class="py-4 px-4">
-       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('b13@qq.com')">
+       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('u_direct_01')">
         b13@qq.com
        </button>
        <div class="text-gray-500 mt-1">
@@ -551,7 +551,7 @@
           操作
          </span>
          <div class="flex items-center gap-2">
-          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('b13@qq.com')">
+          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('u_direct_01')">
            查看
           </button>
           <button class="text-blue-500 px-4 py-1 rounded text-xs hover:bg-blue-50 border border-blue-200 bg-white">
@@ -587,7 +587,7 @@
        </div>
       </td>
       <td class="py-4 px-4">
-       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('b12@qq.com')">
+       <button class="text-blue-500 hover:underline block text-left" type="button" @click="goClientDetail('u_other_01')">
         b12@qq.com
        </button>
        <div class="text-gray-500 mt-1">
@@ -682,7 +682,7 @@
           操作
          </span>
          <div class="flex items-center gap-2">
-          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('b12@qq.com')">
+          <button class="bg-[#C4A373] text-white px-4 py-1 rounded text-xs hover:bg-[#b09063] inline-block" type="button" @click="goClientDetail('u_other_01')">
            查看
           </button>
           <button class="text-blue-500 px-4 py-1 rounded text-xs hover:bg-blue-50 border border-blue-200 bg-white">

@@ -42,6 +42,15 @@
 <div class="w-full max-w-[420px] bg-panelDark p-10 rounded-2xl shadow-2xl border border-gray-700/50 relative z-10">
 <h2 class="text-2xl font-bold mb-8 text-white">登录 HATC</h2>
 <form class="space-y-6">
+<div class="space-y-2">
+<label class="block text-sm font-medium text-gray-300">演示账号</label>
+<select v-model="demoUserId" class="w-full bg-inputBg border border-transparent focus:border-brandYellow text-white text-sm rounded-lg px-4 py-3.5 outline-none transition-colors">
+<option value="u_admin_01">系统管理员（演示）</option>
+<option value="u_agent_01">代理 A（演示）</option>
+<option value="u_direct_01">直客 B（演示）</option>
+<option value="u_other_01">标准账号（非代理/直客）（演示）</option>
+</select>
+</div>
 <!-- 邮箱 -->
 <div class="space-y-2">
 <label class="block text-sm font-medium text-gray-300">邮箱</label>
@@ -98,11 +107,15 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { getDemoUserById, isForceResetScopeUser, setSessionUser } from '@/store/passwordSecurityDemo'
+import { setDemoRole } from '@/store/demoRole'
 
 const router = useRouter()
 const route = useRoute()
 
 const isSubmitting = ref(false)
+const demoUserId = ref('u_agent_01')
 
 const normalizeRedirect = (value) => {
   const raw = String(value || '').trim()
@@ -119,7 +132,32 @@ const handleLogin = async () => {
   const redirect = normalizeRedirect(route.query.redirect)
 
   window.setTimeout(() => {
-    router.push(redirect || '/home')
+    const user = getDemoUserById(demoUserId.value)
+    if (!user) {
+      ElMessage.error('请选择演示账号')
+      isSubmitting.value = false
+      return
+    }
+    setSessionUser(user.user_id)
+    if (user.account_type === 'system') setDemoRole('admin')
+    else if (user.biz_identity === 'agent') setDemoRole('agent')
+    else setDemoRole('customer')
+    if (user.force_reset_required && isForceResetScopeUser(user)) {
+      router.push('/security/force-reset')
+      isSubmitting.value = false
+      return
+    }
+    if (redirect) {
+      router.push(redirect)
+    } else if (user.biz_identity === 'agent') {
+      router.push('/agent-home')
+    } else if (user.biz_identity === 'direct') {
+      router.push('/direct-home')
+    } else if (user.account_type === 'system') {
+      router.push('/home')
+    } else {
+      router.push('/home')
+    }
     isSubmitting.value = false
   }, 800)
 }

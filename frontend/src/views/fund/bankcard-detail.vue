@@ -67,7 +67,7 @@ const goBack = () => {
 }
 
 const goAuditList = () => {
-  router.push('/fund/audit-bankcard')
+  const from = typeof route.query.from === 'string' ? route.query.from.trim() : ''
+  router.push(from || '/fund/audit-bankcard')
 }
 </script>
-

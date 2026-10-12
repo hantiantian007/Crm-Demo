@@ -46,7 +46,7 @@
 <p class="text-xs text-gray-500 mt-1">系统资金对账：CRM业务账本与MT底层资金比对，抓取异常。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个页面</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
@@ -113,7 +113,7 @@
 <p class="text-xs text-gray-500 mt-1">支持团队净入金阶梯返佣的默认规则，并可按代理、按 MT 分组配置差异化阶梯。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个页面</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
@@ -285,6 +285,51 @@
 <div class="flex flex-wrap gap-2 items-center">
 <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/other/faq-management" target="_blank">原型</a>
 <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openFaqManagementPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">系统安全</span>
+<h3 class="text-base font-bold text-gray-800">密码安全与强制重置</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">覆盖范围强制改密、单账号强制改密、强制改密全局阻断、风险事件与 Lark 通知（演示）。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">密码安全配置</td>
+<td class="px-4 py-3 text-gray-500">管理员发起范围强制改密、单账号强制改密，查看批次记录、风险事件、Lark 通知与审计记录。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Crm-Group</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/system/password-security">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPasswordSecurityPrd">
 <i class="fas fa-file-alt"></i> PRD
 </button>
 </div>
@@ -476,7 +521,7 @@
 </div>
 </div>
 </div>
-<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div v-if="showMyBankcardKanban" class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
@@ -538,6 +583,64 @@
 </tbody>
 </table>
 </div>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">出入金</span>
+<h3 class="text-base font-bold text-gray-800">我的银行卡</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">右上角头像菜单入口：查看/管理银行卡绑定（演示数据），新增页增加邮箱验证码发送与 60 秒倒计时。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[200px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[200px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr v-if="showMyBankcardChild" class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">我的银行卡</td>
+<td class="px-4 py-3 text-gray-500">用户侧银行卡列表：支持添加银行卡、修改/删除（演示）。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/my-bankcard" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openBankcardAddPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">新增银行卡</td>
+<td class="px-4 py-3 text-gray-500">支持 BANK / USDT / PCard / Planet card 录入（演示），二维码下方增加邮箱验证码发送与校验（演示）。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/bankcard-add" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openBankcardAddPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -1046,6 +1149,8 @@ import { onMounted, onUnmounted } from 'vue'
 import { openPrd } from '@/store/prd'
 
 const showActivityParticipationAnalysis = false
+const showMyBankcardKanban = false
+const showMyBankcardChild = false
 
 const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
 const openReportActivityJoinPrd = () => openPrd('prd-report-activity-join.html', '活动参与报表 - PRD')
@@ -1058,6 +1163,8 @@ const openSalesDifferentialTierRebatePrd = () => openPrd('prd-sales-differential
 const openSalesTradingRewardReportPrd = () => openPrd('prd-sales-trading-reward-report.html', '销售交易奖励报表 - PRD')
 const openCustomerRegisterProfilePrd = () => openPrd('prd-customer-register-profile.html', '客户注册资料 - PRD')
 const openFaqManagementPrd = () => openPrd('prd-faq-management.html', 'FAQ内容管理 - PRD')
+const openPasswordSecurityPrd = () => openPrd('prd-crm-password-security-force-reset.html', 'CRM 密码安全与风险触发强制重置 - PRD')
+const openBankcardAddPrd = () => openPrd('prd-bankcard-add.html', '新增银行卡 - PRD')
 
 const handlePrdAnchors = (e) => {
   const el = e.target?.closest?.('a')

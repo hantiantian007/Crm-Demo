@@ -36,8 +36,25 @@
       </div>
       <div class="absolute right-0 top-[100%] mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50">
         <div class="px-4 py-3 border-b border-gray-100 bg-gray-50/50 rounded-t-lg">
-          <p class="text-sm font-medium text-gray-800">史密斯</p>
-          <p class="text-xs text-gray-500 mt-0.5 truncate">admin@dev.com</p>
+          <p class="text-sm font-medium text-gray-800">{{ userName }}</p>
+          <p class="text-xs text-gray-500 mt-0.5 truncate">{{ userEmail }}</p>
+        </div>
+
+        <div class="py-2">
+          <button type="button" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2" @click="goProfile">
+            <i class="fa-solid fa-user text-gray-400 w-4 text-center"></i>
+            <span>个人信息</span>
+          </button>
+          <button type="button" class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2" @click="goMyBankcard">
+            <i class="fa-solid fa-credit-card text-gray-400 w-4 text-center"></i>
+            <span>我的银行卡</span>
+          </button>
+        </div>
+        <div class="px-2 pb-2">
+          <button type="button" class="w-full px-3 py-2 rounded-md text-left text-sm text-rose-600 hover:bg-rose-50 flex items-center gap-2" @click="handleLogout">
+            <i class="fa-solid fa-arrow-right-from-bracket text-rose-400 w-4 text-center"></i>
+            <span>退出</span>
+          </button>
         </div>
       </div>
       </div>
@@ -46,14 +63,36 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { openPrd } from '@/store/prd'
+import { setDemoRole } from '@/store/demoRole'
+import { clearSessionUser, getSessionUser } from '@/store/passwordSecurityDemo'
 
 const route = useRoute()
+const router = useRouter()
+
+const sessionUser = computed(() => getSessionUser())
+const userName = computed(() => sessionUser.value?.name || '史密斯')
+const userEmail = computed(() => sessionUser.value?.email || 'admin@dev.com')
 
 const handleOpenPrd = () => {
   if (route.meta.prdUrl) {
     openPrd(route.meta.prdUrl, route.meta.prdTitle || 'PRD 文档')
   }
+}
+
+const goProfile = () => {
+  router.push('/profile-fill')
+}
+
+const goMyBankcard = () => {
+  router.push('/fund/my-bankcard')
+}
+
+const handleLogout = () => {
+  clearSessionUser()
+  setDemoRole('customer')
+  router.replace('/login')
 }
 </script>

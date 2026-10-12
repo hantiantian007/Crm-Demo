@@ -11,7 +11,7 @@
      </span>
      <input v-model="filters.account" class="h-9 w-44 rounded border border-gray-200 bg-white px-3 text-sm outline-none focus:border-primary" placeholder="输入MT账号" type="text"/>
     </div>
-    <router-link class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-primary hover:bg-primaryHover text-white text-sm font-medium transition-colors" to="/crm/client-withdraw-cent-account">
+    <router-link class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-sm font-medium transition-colors" to="/crm/client-withdraw-cent-account">
      <i class="fas fa-plus text-xs">
      </i>
      出金申请

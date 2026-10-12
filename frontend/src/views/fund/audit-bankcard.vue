@@ -2,7 +2,16 @@
   <div class="w-full h-full flex flex-col min-w-0 bg-gray-50 p-4">
     <!-- 搜索区域 -->
     <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-4 shrink-0">
-      <div class="flex flex-wrap items-center gap-4 text-sm">
+      <div v-if="isMyBankcardPage" class="flex items-center justify-between gap-4">
+        <button @click="goAddBankcard" class="bg-[#d1a84f] hover:bg-[#b89241] text-white px-6 h-[32px] rounded text-sm font-medium transition-colors">
+          <i class="fa-solid fa-plus mr-2 text-xs"></i>
+          添加银行卡
+        </button>
+        <div class="text-xs text-gray-500">
+          当前账号：<span class="font-medium text-gray-700">{{ sessionUserEmail || '—' }}</span>
+        </div>
+      </div>
+      <div v-else class="flex flex-wrap items-center gap-4 text-sm">
         <div class="flex items-center gap-2">
           <label class="text-gray-600 shrink-0 font-medium">邮箱：</label>
           <el-input v-model="searchForm.email" placeholder="请输入邮箱" class="w-48" clearable />
@@ -38,13 +47,29 @@
       <div class="flex-1 p-5 overflow-auto custom-scrollbar">
         <table class="w-full text-left text-sm text-gray-600">
           <thead class="bg-white text-gray-700 font-medium border-b border-gray-100">
-            <tr>
+            <tr v-if="!isMyBankcardPage">
               <th class="py-4 px-4 font-medium whitespace-nowrap">邮箱</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">类型</th>
               <th class="py-4 px-4 font-medium whitespace-nowrap">银行卡号/钱包地址</th>
               <th class="py-4 px-4 font-medium whitespace-nowrap">开户名</th>
               <th class="py-4 px-4 font-medium whitespace-nowrap">开户行</th>
               <th class="py-4 px-4 font-medium whitespace-nowrap">银行国际代码</th>
               <th class="py-4 px-4 font-medium whitespace-nowrap">卡图片</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">客户编号</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">申请时间</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">状态</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">处理时间</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">备注</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">操作</th>
+            </tr>
+            <tr v-else>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">类型</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">银行卡号/钱包地址</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">开户名</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">开户行</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">银行国际代码</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">卡图片</th>
+              <th class="py-4 px-4 font-medium whitespace-nowrap">客户编号</th>
               <th class="py-4 px-4 font-medium whitespace-nowrap">申请时间</th>
               <th class="py-4 px-4 font-medium whitespace-nowrap">状态</th>
               <th class="py-4 px-4 font-medium whitespace-nowrap">处理时间</th>
@@ -53,35 +78,85 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
-            <tr v-for="(item, index) in tableData" :key="index" class="hover:bg-gray-50/50 transition-colors">
-              <td class="py-4 px-4">
-                <button type="button" class="text-gray-600 hover:text-blue-500 underline decoration-gray-300 underline-offset-2" @click="goDetail(item)">{{ item.email }}</button>
-              </td>
-              <td class="py-4 px-4 break-all">{{ item.bankCard }}</td>
-              <td class="py-4 px-4">{{ item.accountName }}</td>
-              <td class="py-4 px-4">{{ item.bankName }}</td>
-              <td class="py-4 px-4">{{ item.swiftCode }}</td>
-              <td class="py-4 px-4">
-                <div class="flex gap-2">
-                  <template v-if="item.images && item.images.length > 0">
-                    <div v-for="(img, i) in item.images" :key="i" class="w-8 h-8 flex items-center justify-center text-gray-400 text-xs overflow-hidden shrink-0">
-                      <i v-if="img === 'icon'" class="fa-regular fa-image text-green-500 text-lg"></i>
-                      <div v-else class="w-full h-full bg-gray-300 rounded-sm"></div>
-                    </div>
-                  </template>
-                  <span v-else>-</span>
-                </div>
-              </td>
-              <td class="py-4 px-4 whitespace-nowrap">{{ item.applyTime }}</td>
-              <td class="py-4 px-4 text-gray-500 whitespace-nowrap">{{ item.status }}</td>
-              <td class="py-4 px-4 whitespace-nowrap">{{ item.processTime }}</td>
-              <td class="py-4 px-4">{{ item.remark }}</td>
-              <td class="py-4 px-4 whitespace-nowrap">
-                <button @click="handleAudit(item)" class="text-blue-500 border border-blue-200 px-3 py-1 rounded text-xs hover:bg-blue-50 transition-colors bg-white">
-                  审核
-                </button>
-              </td>
-            </tr>
+            <template v-if="!isMyBankcardPage">
+              <tr v-for="(item, index) in displayedTableData" :key="index" class="hover:bg-gray-50/50 transition-colors">
+                <td class="py-4 px-4">
+                  <button type="button" class="text-gray-600 hover:text-blue-500 underline decoration-gray-300 underline-offset-2" @click="goDetail(item)">{{ item.email }}</button>
+                </td>
+                <td class="py-4 px-4 whitespace-nowrap">{{ formatType(item) }}</td>
+                <td class="py-4 px-4 break-all">{{ item.bankCard }}</td>
+                <td class="py-4 px-4">{{ item.accountName }}</td>
+                <td class="py-4 px-4">{{ item.bankName }}</td>
+                <td class="py-4 px-4">{{ item.swiftCode }}</td>
+                <td class="py-4 px-4">
+                  <div class="flex gap-2">
+                    <template v-if="item.images && item.images.length > 0">
+                      <div v-for="(img, i) in item.images" :key="i" class="w-8 h-8 flex items-center justify-center text-gray-400 text-xs overflow-hidden shrink-0">
+                        <i v-if="img === 'icon'" class="fa-regular fa-image text-green-500 text-lg"></i>
+                        <div v-else class="w-full h-full bg-gray-300 rounded-sm"></div>
+                      </div>
+                    </template>
+                    <span v-else>-</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4 whitespace-nowrap text-gray-500 font-mono text-xs">{{ item.clientNo || item.pcardId || '-' }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">{{ item.applyTime }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">
+                  <span class="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-medium border" :class="statusTagClass(item.status)">
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td class="py-4 px-4 whitespace-nowrap">{{ item.processTime }}</td>
+                <td class="py-4 px-4">{{ item.remark }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">
+                  <button @click="handleAudit(item)" class="text-blue-500 border border-blue-200 px-3 py-1 rounded text-xs hover:bg-blue-50 transition-colors bg-white">
+                    审核
+                  </button>
+                </td>
+              </tr>
+            </template>
+            <template v-else>
+              <tr v-for="(item, index) in displayedTableData" :key="index" class="hover:bg-gray-50/50 transition-colors">
+                <td class="py-4 px-4 whitespace-nowrap">{{ formatType(item) }}</td>
+                <td class="py-4 px-4">
+                  <button type="button" class="text-gray-700 hover:text-blue-500 underline decoration-gray-300 underline-offset-2 break-all" @click="goDetail(item)">{{ item.bankCard }}</button>
+                </td>
+                <td class="py-4 px-4">{{ item.accountName }}</td>
+                <td class="py-4 px-4">{{ item.bankName }}</td>
+                <td class="py-4 px-4">{{ item.swiftCode }}</td>
+                <td class="py-4 px-4">
+                  <div class="flex gap-2">
+                    <template v-if="item.images && item.images.length > 0">
+                      <div v-for="(img, i) in item.images" :key="i" class="w-8 h-8 flex items-center justify-center text-gray-400 text-xs overflow-hidden shrink-0">
+                        <i v-if="img === 'icon'" class="fa-regular fa-image text-green-500 text-lg"></i>
+                        <div v-else class="w-full h-full bg-gray-300 rounded-sm"></div>
+                      </div>
+                    </template>
+                    <span v-else>-</span>
+                  </div>
+                </td>
+                <td class="py-4 px-4 whitespace-nowrap text-gray-500 font-mono text-xs">{{ item.clientNo || item.pcardId || '-' }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">{{ item.applyTime }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">
+                  <span class="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-medium border" :class="statusTagClass(item.status)">
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td class="py-4 px-4 whitespace-nowrap">{{ item.processTime }}</td>
+                <td class="py-4 px-4">{{ item.remark }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">
+                  <button type="button" class="text-blue-500 border border-blue-200 px-3 py-1 rounded text-xs hover:bg-blue-50 transition-colors bg-white" @click="handleEdit(item)">
+                    修改
+                  </button>
+                  <button type="button" class="text-rose-500 border border-rose-200 px-3 py-1 rounded text-xs hover:bg-rose-50 transition-colors bg-white ml-2" @click="handleDelete(item)">
+                    删除
+                  </button>
+                </td>
+              </tr>
+              <tr v-if="displayedTableData.length === 0">
+                <td class="py-8 px-4 text-center text-gray-400" colspan="12">暂无银行卡记录</td>
+              </tr>
+            </template>
           </tbody>
         </table>
       </div>
@@ -100,6 +175,7 @@
 
     <!-- 审核弹窗 -->
     <el-dialog
+      v-if="!isMyBankcardPage"
       v-model="auditDialogVisible"
       title="审核"
       width="800px"
@@ -191,10 +267,16 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref, reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { getSessionUser } from '@/store/passwordSecurityDemo'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
+const route = useRoute()
+
+const isMyBankcardPage = computed(() => route.path === '/fund/my-bankcard')
+const sessionUserEmail = computed(() => getSessionUser()?.email || '')
 
 const searchForm = reactive({
   email: '',
@@ -203,10 +285,47 @@ const searchForm = reactive({
   status: ''
 })
 
+const initSearchFormFromQuery = () => {
+  const q = route.query || {}
+  if (typeof q.email === 'string' && q.email.trim()) searchForm.email = q.email.trim()
+  if (typeof q.mtAccount === 'string' && q.mtAccount.trim()) searchForm.mtAccount = q.mtAccount.trim()
+  if (typeof q.bankCard === 'string' && q.bankCard.trim()) searchForm.bankCard = q.bankCard.trim()
+  if (typeof q.status === 'string' && q.status.trim()) searchForm.status = q.status.trim()
+}
+
+initSearchFormFromQuery()
+
 const currentPage = ref(1)
 const pageSize = ref(10)
 
 const tableData = ref([
+  {
+    email: 'agent_a@demo.com',
+    bankCard: '5210 7860 0000 0000',
+    accountName: '-',
+    bankName: '-',
+    swiftCode: '-',
+    bankType: 'Pcard',
+    pcardId: '86004301',
+    images: ['box', 'box'],
+    applyTime: '2026-09-07 10:12:23',
+    status: '已审核',
+    processTime: '2026-09-07 12:11:34',
+    remark: '-'
+  },
+  {
+    email: 'agent_a@demo.com',
+    bankCard: 'TBXGajHnTqdd4Xx...1QJmwHL',
+    accountName: '-',
+    bankName: '-',
+    swiftCode: '-',
+    bankType: 'USDT_TRC20',
+    images: ['icon'],
+    applyTime: '2026-08-20 18:10:06',
+    status: '已审核',
+    processTime: '2026-08-20 18:35:28',
+    remark: '-'
+  },
   {
     email: '15196181790@qq.com',
     bankCard: '6222022703791347101',
@@ -320,6 +439,35 @@ const tableData = ref([
   }
 ])
 
+const statusMap = {
+  pending: '未审核',
+  approved: '已审核',
+  rejected: '已拒绝'
+}
+
+const displayedTableData = computed(() => {
+  let rows = Array.isArray(tableData.value) ? [...tableData.value] : []
+
+  if (isMyBankcardPage.value) {
+    const email = sessionUserEmail.value
+    if (email) rows = rows.filter((r) => r.email === email)
+  } else {
+    const email = String(searchForm.email || '').trim()
+    if (email) rows = rows.filter((r) => String(r.email || '').includes(email))
+  }
+
+  const bankCard = String(searchForm.bankCard || '').trim()
+  if (bankCard) rows = rows.filter((r) => String(r.bankCard || '').includes(bankCard))
+
+  const statusKey = String(searchForm.status || '').trim()
+  if (statusKey) {
+    const label = statusMap[statusKey] || statusKey
+    rows = rows.filter((r) => String(r.status || '') === label)
+  }
+
+  return rows
+})
+
 const handleSearch = () => {
   console.log('Search:', searchForm)
 }
@@ -332,6 +480,7 @@ const auditForm = reactive({
 })
 
 const handleAudit = (item) => {
+  if (isMyBankcardPage.value) return
   currentAuditItem.value = { ...item }
   auditForm.result = 'pass' // 默认选中通过
   auditDialogVisible.value = true
@@ -346,11 +495,42 @@ const submitAudit = () => {
 }
 
 const goDetail = (item) => {
-  router.push({ path: '/fund/bankcard-detail', query: { id: String(item?.bankCard || '') } })
+  router.push({ path: '/fund/bankcard-detail', query: { id: String(item?.bankCard || ''), from: route.path } })
 }
 
 const goAddBankcard = () => {
-  router.push('/fund/bankcard-add')
+  router.push({ path: '/fund/bankcard-add', query: { from: route.path } })
+}
+
+const formatType = (item) => {
+  const raw = String(item?.bankType || item?.cardType || '').trim()
+  if (raw) {
+    if (raw === 'Pcard') return 'pcard'
+    if (raw === 'Bank') return 'bank'
+    if (raw === 'USDT_TRC20') return 'usdt_trc20'
+    if (raw === 'USDT_ERC20') return 'usdt_erc20'
+    return raw.toLowerCase()
+  }
+  const cardNo = String(item?.bankCard || '')
+  if (cardNo.startsWith('T')) return 'usdt_trc20'
+  if (cardNo) return 'bank'
+  return '-'
+}
+
+const statusTagClass = (status) => {
+  if (status === '已审核') return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+  if (status === '已拒绝') return 'bg-rose-50 text-rose-700 border-rose-200'
+  return 'bg-gray-100 text-gray-600 border-gray-200'
+}
+
+const handleEdit = () => {
+  ElMessage.info('修改（演示）')
+}
+
+const handleDelete = async (item) => {
+  await ElMessageBox.confirm('确认删除该银行卡绑定？（演示）', '删除确认', { type: 'warning', confirmButtonText: '删除', cancelButtonText: '取消' })
+  tableData.value = tableData.value.filter((r) => r !== item)
+  ElMessage.success('已删除（演示）')
 }
 </script>
 

@@ -1,8 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { getForceResetBlocked, passwordSecurityDemoState } from '@/store/passwordSecurityDemo'
 
 const routes = [
   { path: '/login', component: () => import('@/views/login.vue'), meta: { layout: 'empty', title: '登录' } },
   { path: '/register', component: () => import('@/views/register.vue'), meta: { layout: 'empty', title: '注册' } },
+  { path: '/security/force-reset', component: () => import('@/views/security/force-password-reset.vue'), meta: { layout: 'empty', title: '强制修改密码' } },
+  { path: '/security/reset-success', component: () => import('@/views/security/password-reset-success.vue'), meta: { layout: 'empty', title: '修改成功' } },
   { path: '/profile-fill', component: () => import('@/views/profile-fill.vue'), meta: { title: '资料补全', breadcrumb: ['资料补全'], prdUrl: 'prd-overseas-id-check.html', prdTitle: '海外身份校验 - PRD' } },
   { path: '/', redirect: '/home' },
   { path: '/home', name: 'Home', component: () => import('@/views/home/index.vue'), meta: { title: '首页', breadcrumb: ['首页'], prdUrl: 'prd-home-pcard-activity-join.html', prdTitle: '首页 - PCard 活动参与弹窗 - PRD' } },
@@ -37,6 +40,7 @@ const routes = [
   { path: '/fund/audit-withdraw', component: () => import('@/views/fund/audit-withdraw.vue'), meta: { title: '待审核出金', breadcrumb: ['出入金', '待审核出金'] } },
   { path: '/fund/audit-bonus', component: () => import('@/views/fund/audit-bonus.vue'), meta: { title: '赠金审核', breadcrumb: ['出入金', '赠金审核'] } },
   { path: '/fund/audit-bankcard', component: () => import('@/views/fund/audit-bankcard.vue'), meta: { title: '待审核银行卡', breadcrumb: ['出入金', '待审核银行卡'] } },
+  { path: '/fund/my-bankcard', component: () => import('@/views/fund/audit-bankcard.vue'), meta: { title: '我的银行卡', breadcrumb: ['我的银行卡'] } },
   { path: '/fund/bankcard-add', component: () => import('@/views/fund/bankcard-add.vue'), meta: { title: '新增银行卡', breadcrumb: ['出入金', '新增银行卡'], prdUrl: 'prd-bankcard-add.html', prdTitle: '新增银行卡 - PRD' } },
   { path: '/fund/bankcard-detail', component: () => import('@/views/fund/bankcard-detail.vue'), meta: { title: '银行卡详情', breadcrumb: ['出入金', '待审核银行卡', '银行卡详情'] } },
   { path: '/fund/internal-transfer', component: () => import('@/views/fund/internal-transfer.vue'), meta: { title: '内部转账', breadcrumb: ['出入金', '内部转账'] } },
@@ -95,6 +99,7 @@ const routes = [
   { path: '/system/fund-type-setting', component: () => import('@/views/system/fund-type-settings.vue'), meta: { title: '出入金类型设置', breadcrumb: ['系统管理', '出入金类型设置'], prdUrl: 'prd-fund-type-setting.html', prdTitle: '出入金类型设置 - PRD' } },
   { path: '/system/commission-settings', component: () => import('@/views/system/commission-settings.vue'), meta: { title: '返佣设置', breadcrumb: ['系统管理', '返佣设置'] } },
   { path: '/system/sms-logs', component: () => import('@/views/system/sms-logs.vue'), meta: { title: '验证码记录', breadcrumb: ['系统管理', '验证码记录'] } },
+  { path: '/system/password-security', component: () => import('@/views/system/password-security.vue'), meta: { title: '密码安全配置', breadcrumb: ['系统管理', '密码安全配置'], prdUrl: 'prd-crm-password-security-force-reset.html', prdTitle: 'CRM 密码安全与风险触发强制重置 - PRD' } },
   { path: '/system/tags', component: () => import('@/views/system/tags.vue'), meta: { title: '标签管理', breadcrumb: ['系统管理', '标签管理'] } },
   { path: '/tools', component: () => import('@/views/tools.vue'), meta: { title: '交易工具', breadcrumb: ['交易工具'] } },
   { path: '/finance-management/report-detail', component: () => import('@/views/finance-management/report-detail.vue'), meta: { title: '财务报表明细', breadcrumb: ['财务管理', '财务报表明细'] } },
@@ -162,6 +167,21 @@ const router = createRouter({
   scrollBehavior() {
     return { left: 0, top: 0 }
   }
+})
+
+router.beforeEach((to) => {
+  const loggedIn = Boolean(passwordSecurityDemoState.session?.logged_in)
+  if (!loggedIn) return true
+
+  const blocked = getForceResetBlocked()
+  const allowPaths = new Set(['/login', '/register', '/security/force-reset', '/security/reset-success'])
+  if (blocked && !allowPaths.has(to.path)) {
+    return { path: '/security/force-reset', query: { blocked: '1', from: to.fullPath } }
+  }
+  if (!blocked && to.path === '/security/force-reset') {
+    return { path: '/home' }
+  }
+  return true
 })
 
 export default router

@@ -6,7 +6,6 @@
           <div class="flex items-start justify-between gap-4">
             <div>
               <div class="text-xl font-bold text-gray-900">新增银行卡</div>
-              <div class="text-sm text-gray-500 mt-1">支持 BANK / USDT / PCard / Planet card 等绑定信息录入（演示数据）</div>
             </div>
             <div class="flex items-center gap-2">
               <button class="h-9 px-4 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors" type="button" @click="goBack">
@@ -83,6 +82,32 @@
                 <span v-if="form.qrFileName" class="ml-3 text-sm text-gray-600">{{ form.qrFileName }}</span>
                 <input ref="qrInput" class="hidden" type="file" accept="image/*" @change="handleQrFile" />
               </div>
+
+              <div class="text-right text-sm font-medium text-gray-700 pt-2">
+                <span class="text-red-500">*</span>邮箱验证码
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <input
+                    v-model.trim="form.emailCode"
+                    type="text"
+                    placeholder="请输入邮箱验证码"
+                    class="flex-1 h-10 px-3 border border-gray-300 rounded outline-none focus:border-[#d1a84f] focus:ring-1 focus:ring-[#d1a84f]/20 text-sm font-mono"
+                  />
+                  <button
+                    type="button"
+                    class="h-10 px-4 rounded text-sm font-medium transition-colors border"
+                    :class="canSendEmailCode ? 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300' : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'"
+                    :disabled="!canSendEmailCode"
+                    @click="sendEmailCode"
+                  >
+                    {{ emailCodeButtonText }}
+                  </button>
+                </div>
+                <div v-if="emailCodeHint" class="mt-2 text-xs text-gray-500">
+                  演示数据：验证码已发送至注册邮箱。<span class="font-mono text-gray-700">{{ emailCodeHint }}</span>
+                </div>
+              </div>
             </div>
 
             <div v-if="formError" class="mt-6 rounded-lg border border-red-200 bg-red-50/60 px-3 py-2 text-xs text-red-600">
@@ -150,9 +175,10 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 
 const cardTypes = [
   { value: 'bank', label: 'BANK' },
@@ -168,7 +194,8 @@ const form = reactive({
   cardType: 'usdt_trc20',
   walletAddress: '',
   clientId: '',
-  qrFileName: ''
+  qrFileName: '',
+  emailCode: ''
 })
 
 const qrInput = ref(null)
@@ -186,6 +213,49 @@ const handleQrFile = (e) => {
   form.qrFileName = f?.name || ''
 }
 
+const emailCodeState = reactive({
+  sentCode: '',
+  cooldownSeconds: 0
+})
+
+let emailCodeTimer = 0
+
+const emailCodeButtonText = computed(() => {
+  if (emailCodeState.cooldownSeconds > 0) return `${emailCodeState.cooldownSeconds}s`
+  return '发送验证码'
+})
+
+const canSendEmailCode = computed(() => emailCodeState.cooldownSeconds === 0)
+
+const emailCodeHint = computed(() => {
+  if (!emailCodeState.sentCode) return ''
+  if (emailCodeState.cooldownSeconds === 0) return ''
+  return emailCodeState.sentCode
+})
+
+const genEmailCode = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let out = ''
+  for (let i = 0; i < 8; i += 1) out += chars[Math.floor(Math.random() * chars.length)]
+  return out
+}
+
+const sendEmailCode = () => {
+  if (!canSendEmailCode.value) return
+  emailCodeState.sentCode = genEmailCode()
+  emailCodeState.cooldownSeconds = 60
+  if (emailCodeTimer) window.clearInterval(emailCodeTimer)
+  emailCodeTimer = window.setInterval(() => {
+    if (emailCodeState.cooldownSeconds <= 1) {
+      emailCodeState.cooldownSeconds = 0
+      window.clearInterval(emailCodeTimer)
+      emailCodeTimer = 0
+      return
+    }
+    emailCodeState.cooldownSeconds -= 1
+  }, 1000)
+}
+
 const submit = () => {
   formError.value = ''
   if (!form.walletAddress) {
@@ -200,6 +270,18 @@ const submit = () => {
     formError.value = '请选择二维码图片'
     return
   }
+  if (!form.emailCode) {
+    formError.value = '请输入邮箱验证码'
+    return
+  }
+  if (!emailCodeState.sentCode) {
+    formError.value = '请先发送邮箱验证码'
+    return
+  }
+  if (form.emailCode !== emailCodeState.sentCode) {
+    formError.value = '邮箱验证码错误'
+    return
+  }
   submitted.value = true
 }
 
@@ -208,17 +290,22 @@ const resetForm = () => {
   form.walletAddress = ''
   form.clientId = ''
   form.qrFileName = ''
+  form.emailCode = ''
+  emailCodeState.sentCode = ''
+  emailCodeState.cooldownSeconds = 0
+  if (emailCodeTimer) window.clearInterval(emailCodeTimer)
+  emailCodeTimer = 0
   formError.value = ''
   submitted.value = false
 }
 
 const goBack = () => {
   if (window.history.length > 1) router.back()
-  else router.push('/fund/audit-bankcard')
+  else router.push(typeof route.query.from === 'string' && route.query.from.trim() ? route.query.from.trim() : '/fund/audit-bankcard')
 }
 
 const goAuditBankcard = () => {
-  router.push('/fund/audit-bankcard')
+  router.push(typeof route.query.from === 'string' && route.query.from.trim() ? route.query.from.trim() : '/fund/audit-bankcard')
 }
 
 const helpVisible = ref(false)

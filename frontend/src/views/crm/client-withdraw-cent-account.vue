@@ -75,7 +75,7 @@
         125.4012 USD/美元
        </td>
        <td class="px-5 py-5 whitespace-nowrap">
-        <button class="inline-flex px-4 py-1.5 rounded-md bg-primary hover:bg-primaryHover text-white text-xs font-medium transition-colors" type="button" @click="goApply('8300251')">
+        <button class="inline-flex px-4 py-1.5 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-xs font-medium transition-colors" type="button" @click="goApply('8300251')">
          出金
         </button>
        </td>
@@ -153,7 +153,7 @@
         </div>
        </td>
        <td class="px-5 py-5 whitespace-nowrap">
-        <button class="inline-flex px-4 py-1.5 rounded-md bg-primary hover:bg-primaryHover text-white text-xs font-medium transition-colors" type="button" @click="goApply('9900456')">
+        <button class="inline-flex px-4 py-1.5 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-xs font-medium transition-colors" type="button" @click="goApply('9900456')">
          出金
         </button>
        </td>

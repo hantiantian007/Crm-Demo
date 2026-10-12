@@ -36,7 +36,7 @@
         <el-menu-item index="/fund/deposit-pending-review">待审核入金</el-menu-item>
         <el-menu-item index="/fund/audit-withdraw">待审核出金</el-menu-item>
         <el-menu-item index="/fund/audit-bonus">赠金审核</el-menu-item>
-        <el-menu-item index="/fund/audit-bankcard">待审核银行卡</el-menu-item>
+        <el-menu-item v-if="canViewBankcardAudit" index="/fund/audit-bankcard">待审核银行卡</el-menu-item>
         <el-menu-item index="/fund/audit-transfer">转账审核</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="reconciliation">
@@ -141,6 +141,7 @@
         <el-menu-item v-if="canViewFundTypeSetting" index="/system/fund-type-setting">出入金类型设置</el-menu-item>
         <el-menu-item index="/system/commission-settings">返佣设置</el-menu-item>
         <el-menu-item index="/system/sms-logs">验证码记录</el-menu-item>
+        <el-menu-item index="/system/password-security">密码安全配置</el-menu-item>
         <el-menu-item index="/system/tags">标签管理</el-menu-item>
       </el-sub-menu>
       <el-menu-item index="/tools">
@@ -198,6 +199,7 @@ const showActivityParticipationAnalysis = ref(false)
 const isClientRole = computed(() => demoRoleState.role === 'customer')
 const isAgentRole = computed(() => demoRoleState.role === 'agent')
 const canViewFundTypeSetting = computed(() => demoRoleState.role === 'admin')
+const canViewBankcardAudit = computed(() => demoRoleState.role === 'admin')
 
 const getSubMenuIndexByPath = (path) => {
   if (typeof path !== 'string') return ''

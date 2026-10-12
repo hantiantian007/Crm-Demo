@@ -54,11 +54,29 @@
       </div>
      </div>
     </div>
-    <!-- 正常 印章 -->
-    <div class="mr-8">
-     <div class="stamp">
-      正常
-     </div>
+    <div class="mr-8 flex items-center gap-3 flex-wrap justify-end">
+      <div v-if="demoUser?.force_reset_required" class="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-medium border bg-amber-50 text-amber-700 border-amber-200">
+        已设置下次登录强制改密
+      </div>
+      <button
+        type="button"
+        class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-700 transition-colors"
+        @click="openPasswordSecurityPrd"
+      >
+        <i class="fa-solid fa-file-lines"></i> PRD
+      </button>
+      <button
+        type="button"
+        class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium border transition-colors"
+        :class="forceResetUnavailableReason ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed' : 'border-primaryBtn bg-primaryBtn text-white hover:bg-primaryBtnHover'"
+        :disabled="Boolean(forceResetUnavailableReason)"
+        @click="openForceResetDialog"
+      >
+        <i class="fa-solid fa-key"></i> 强制修改密码
+      </button>
+      <div class="stamp">
+        正常
+      </div>
     </div>
    </div>
    <!-- 卡片2：账户信息 -->
@@ -863,14 +881,104 @@
 
     </div>
   </div>
+
+  <el-dialog v-model="forceResetDialog.open" title="确认强制修改密码" width="92%" :style="{ maxWidth: '620px' }" destroy-on-close>
+    <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
+          <div class="text-gray-500">客户名称</div>
+          <div class="mt-1 text-gray-800 font-medium">{{ demoUser?.name || '—' }}</div>
+        </div>
+        <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
+          <div class="text-gray-500">客户类型</div>
+          <div class="mt-1 text-gray-800 font-medium">{{ demoUser?.biz_identity_label || '—' }}</div>
+        </div>
+        <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
+          <div class="text-gray-500">账号类型</div>
+          <div class="mt-1 text-gray-800 font-medium">{{ demoUser?.account_type_label || '—' }}</div>
+        </div>
+        <div class="bg-gray-50 border border-gray-100 rounded-lg p-3">
+          <div class="text-gray-500">当前密码状态</div>
+          <div class="mt-1 text-gray-800 font-medium">{{ demoUser?.password_status || '—' }}</div>
+        </div>
+      </div>
+      <div class="flex items-start gap-2">
+        <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
+        <span>确认后该账号下次登录必须修改密码，修改完成前无法访问 CRM。</span>
+      </div>
+      <div v-if="forceResetUnavailableReason" class="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        {{ forceResetUnavailableReason }}
+      </div>
+    </div>
+    <template #footer>
+      <div class="flex items-center justify-end gap-2">
+        <button type="button" class="h-9 px-4 rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium" @click="forceResetDialog.open = false">
+          取消
+        </button>
+        <button
+          type="button"
+          class="h-9 px-4 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-sm font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+          :disabled="Boolean(forceResetUnavailableReason)"
+          @click="confirmForceReset"
+        >
+          确认执行
+        </button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { openPrd } from '@/store/prd'
+import { forceSingleAccountReset, getDemoUserById, getForceResetUnavailableReason } from '@/store/passwordSecurityDemo'
 
 const router = useRouter()
 const route = useRoute()
+
+const demoUser = computed(() => {
+  const id = String(route.query.id || '').trim()
+  const hit = getDemoUserById(id)
+  if (hit) {
+    return {
+      ...hit,
+      biz_identity_label: hit.biz_identity === 'agent' ? '代理' : hit.biz_identity === 'direct' ? '直客' : '其他',
+      account_type_label: hit.account_type === 'system' ? '系统' : '标准',
+    }
+  }
+  const fallback = getDemoUserById('u_agent_01')
+  return fallback
+    ? {
+        ...fallback,
+        biz_identity_label: fallback.biz_identity === 'agent' ? '代理' : fallback.biz_identity === 'direct' ? '直客' : '其他',
+        account_type_label: fallback.account_type === 'system' ? '系统' : '标准',
+      }
+    : null
+})
+
+const forceResetUnavailableReason = computed(() => getForceResetUnavailableReason(demoUser.value))
+const forceResetDialog = ref({ open: false })
+
+const openPasswordSecurityPrd = () => openPrd('prd-crm-password-security-force-reset.html', 'CRM 密码安全与风险触发强制重置 - PRD')
+
+const openForceResetDialog = () => {
+  forceResetDialog.value.open = true
+}
+
+const confirmForceReset = () => {
+  const u = demoUser.value
+  if (!u) return
+  const res = forceSingleAccountReset(u.user_id, '系统管理员（演示）')
+  if (!res.ok) {
+    ElMessage.error(res.message || '操作失败')
+    return
+  }
+  forceResetDialog.value.open = false
+  ElMessage.success('已设置下次登录强制改密')
+}
+
 
 const goLeadsTrace = () => {
   router.push({ path: '/crm/leads-detail', query: { fromClientId: String(route.query.id || '') } })

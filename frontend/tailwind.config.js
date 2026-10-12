@@ -12,6 +12,8 @@ export default {
         menuText: '#A1A5B7',
         topBarBg: '#FFFFFF',
         mainBg: '#F3F4F6',
+        primary: '#d1a84f',
+        primaryHover: '#b89241',
         primaryBtn: '#d1a84f',
         primaryBtnHover: '#b89241',
         tableHeader: '#f9fafb',
