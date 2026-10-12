@@ -63,10 +63,9 @@
             </div>
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left min-w-[1260px]">
+            <table class="w-full text-sm text-left min-w-[1140px]">
               <thead class="bg-tableHeader text-gray-600 border-b border-gray-200">
                 <tr>
-                  <th class="px-4 py-3 font-medium whitespace-nowrap">配置 ID</th>
                   <th class="px-4 py-3 font-medium whitespace-nowrap">配置标题</th>
                   <th class="px-4 py-3 font-medium whitespace-nowrap">适用范围</th>
                   <th class="px-4 py-3 font-medium whitespace-nowrap">生效时间</th>
@@ -80,7 +79,6 @@
               </thead>
               <tbody class="divide-y divide-gray-100">
                 <tr v-for="row in scopePolicies" :key="row.policy_id" class="hover:bg-gray-50/50 transition-colors">
-                  <td class="px-4 py-3 font-mono text-xs text-gray-700">{{ row.policy_id }}</td>
                   <td class="px-4 py-3 text-gray-800 font-medium whitespace-nowrap">{{ row.title }}</td>
                   <td class="px-4 py-3 text-gray-600 text-xs whitespace-nowrap">{{ formatRangeText(row) }}</td>
                   <td class="px-4 py-3 text-gray-600 whitespace-nowrap">{{ row.effective_time }}</td>
@@ -119,7 +117,7 @@
                   </td>
                 </tr>
                 <tr v-if="scopePolicies.length === 0">
-                  <td class="px-4 py-6 text-center text-sm text-gray-400" colspan="10">暂无配置记录</td>
+                  <td class="px-4 py-6 text-center text-sm text-gray-400" colspan="9">暂无配置记录</td>
                 </tr>
               </tbody>
             </table>
@@ -156,13 +154,11 @@
             </div>
 
             <div v-if="selectedUsers.length > 0" class="overflow-x-auto">
-              <table class="w-full text-sm text-left min-w-[980px]">
+              <table class="w-full text-sm text-left min-w-[820px]">
                 <thead class="bg-tableHeader text-gray-600 border-b border-gray-200">
                   <tr>
                     <th class="px-4 py-3 font-medium whitespace-nowrap">客户</th>
                     <th class="px-4 py-3 font-medium whitespace-nowrap">邮箱</th>
-                    <th class="px-4 py-3 font-medium whitespace-nowrap">客户 ID</th>
-                    <th class="px-4 py-3 font-medium whitespace-nowrap">账号类型</th>
                     <th class="px-4 py-3 font-medium whitespace-nowrap">业务身份</th>
                     <th class="px-4 py-3 font-medium whitespace-nowrap">密码状态</th>
                     <th class="px-4 py-3 font-medium whitespace-nowrap text-center w-24">强制标记</th>
@@ -173,8 +169,6 @@
                   <tr v-for="u in selectedUsers" :key="u.user_id" class="hover:bg-gray-50/50 transition-colors">
                     <td class="px-4 py-3 text-gray-800 font-medium whitespace-nowrap">{{ u.name }}</td>
                     <td class="px-4 py-3 font-mono text-xs text-gray-600 whitespace-nowrap">{{ u.email }}</td>
-                    <td class="px-4 py-3 font-mono text-xs text-gray-700 whitespace-nowrap">{{ u.user_id }}</td>
-                    <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ accountTypeLabel(u.account_type) }}</td>
                     <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ bizIdentityLabel(u.biz_identity) }}</td>
                     <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ u.password_status }}</td>
                     <td class="px-4 py-3 text-center">
@@ -194,10 +188,9 @@
                 <div class="text-xs text-gray-500">每次提交会生成独立批次 ID</div>
               </div>
               <div class="mt-3 overflow-x-auto">
-                <table class="w-full text-sm text-left min-w-[980px]">
+                <table class="w-full text-sm text-left min-w-[860px]">
                   <thead class="bg-tableHeader text-gray-600 border-b border-gray-200">
                     <tr>
-                      <th class="px-4 py-3 font-medium whitespace-nowrap">批次 ID</th>
                       <th class="px-4 py-3 font-medium whitespace-nowrap">提交时间</th>
                       <th class="px-4 py-3 font-medium whitespace-nowrap">操作人</th>
                       <th class="px-4 py-3 font-medium whitespace-nowrap">生效时间</th>
@@ -212,7 +205,6 @@
                   </thead>
                   <tbody class="divide-y divide-gray-100">
                     <tr v-for="r in singleBatches" :key="r.batch_id" class="hover:bg-gray-50/50 transition-colors">
-                      <td class="px-4 py-3 font-mono text-xs text-gray-700">{{ r.batch_id }}</td>
                       <td class="px-4 py-3 font-mono text-xs text-gray-500 whitespace-nowrap">{{ r.submitted_at }}</td>
                       <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ r.operator }}</td>
                       <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ r.effective_time }}</td>
@@ -242,7 +234,7 @@
                       </td>
                     </tr>
                     <tr v-if="singleBatches.length === 0">
-                      <td class="px-4 py-6 text-center text-sm text-gray-400" colspan="11">暂无批次记录</td>
+                      <td class="px-4 py-6 text-center text-sm text-gray-400" colspan="10">暂无批次记录</td>
                     </tr>
                   </tbody>
                 </table>
