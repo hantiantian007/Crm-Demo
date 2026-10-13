@@ -142,6 +142,7 @@
         <el-menu-item index="/system/commission-settings">返佣设置</el-menu-item>
         <el-menu-item index="/system/sms-logs">验证码记录</el-menu-item>
         <el-menu-item index="/system/password-security">密码安全配置</el-menu-item>
+        <el-menu-item index="/system/operation-audit">操作审计</el-menu-item>
         <el-menu-item index="/system/tags">标签管理</el-menu-item>
       </el-sub-menu>
       <el-menu-item index="/tools">

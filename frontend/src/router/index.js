@@ -100,6 +100,7 @@ const routes = [
   { path: '/system/commission-settings', component: () => import('@/views/system/commission-settings.vue'), meta: { title: '返佣设置', breadcrumb: ['系统管理', '返佣设置'] } },
   { path: '/system/sms-logs', component: () => import('@/views/system/sms-logs.vue'), meta: { title: '验证码记录', breadcrumb: ['系统管理', '验证码记录'] } },
   { path: '/system/password-security', component: () => import('@/views/system/password-security.vue'), meta: { title: '密码安全配置', breadcrumb: ['系统管理', '密码安全配置'], prdUrl: 'prd-crm-password-security-force-reset.html', prdTitle: 'CRM 密码安全与风险触发强制重置 - PRD' } },
+  { path: '/system/operation-audit', component: () => import('@/views/system/operation-audit.vue'), meta: { title: '操作审计', breadcrumb: ['系统管理', '操作审计'], prdUrl: 'prd-system-operation-audit.html', prdTitle: '后台操作审计记录 - PRD' } },
   { path: '/system/tags', component: () => import('@/views/system/tags.vue'), meta: { title: '标签管理', breadcrumb: ['系统管理', '标签管理'] } },
   { path: '/tools', component: () => import('@/views/tools.vue'), meta: { title: '交易工具', breadcrumb: ['交易工具'] } },
   { path: '/finance-management/report-detail', component: () => import('@/views/finance-management/report-detail.vue'), meta: { title: '财务报表明细', breadcrumb: ['财务管理', '财务报表明细'] } },
