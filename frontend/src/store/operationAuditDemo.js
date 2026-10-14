@@ -15,36 +15,7 @@ const now = () => {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
 }
 
-const DEMO_IP_POOL = [
-  { ip: '203.0.113.8', country: '中国', city: '香港' },
-  { ip: '198.51.100.23', country: '新加坡', city: '新加坡' },
-  { ip: '192.0.2.14', country: '英国', city: '伦敦' },
-  { ip: '203.0.113.98', country: '日本', city: '东京' },
-]
-
-const formatIpLocation = ({ country, city }) => {
-  const c = String(country || '').trim()
-  const t = String(city || '').trim()
-  if (!c && !t) return ''
-  if (!c) return t
-  if (!t) return c
-  return `${c} · ${t}`
-}
-
-const hashKey = (v) => {
-  const s = String(v || '')
-  let n = 0
-  for (let i = 0; i < s.length; i += 1) n = (n * 31 + s.charCodeAt(i)) >>> 0
-  return n
-}
-
-const pickDemoIp = (key) => {
-  const list = DEMO_IP_POOL
-  if (list.length === 0) return { ip: '203.0.113.8', label: '暂无法解析' }
-  const idx = hashKey(key) % list.length
-  const item = list[idx]
-  return { ...item, label: formatIpLocation(item) }
-}
+const getDefaultIp = () => '127.0.0.1'
 
 const getBrowserUa = () => {
   try {
@@ -71,93 +42,21 @@ const getOperatorSnapshot = () => {
   }
 }
 
-const baseRecord = () => {
-  const audit_id = uid()
-  const net = pickDemoIp(audit_id)
-  return {
-    audit_id,
-    operator: getOperatorSnapshot(),
-    at: now(),
-    ip: net.ip,
-    ip_location: net.label,
-    ua: getBrowserUa(),
-    page: '',
-    target_name: '',
-    target_id: '',
-    customerEmail: '',
-    target_email: '',
-    target_type: '',
-    export_conditions: null,
-    export_count: 0,
-    result: 'success',
-    fail_reason: '',
-  }
-}
-
-const normalizeDemoEmail = (raw) => {
-  const v = String(raw || '').trim()
-  if (!v) return ''
-  if (/@/.test(v)) return v
-  const safe = v
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '.')
-    .replace(/^\.+|\.+$/g, '')
-    .slice(0, 32)
-  if (!safe) return ''
-  return `${safe}@demo.com`
-}
-
-const ensureCustomerEmail = (records) => {
-  if (!Array.isArray(records)) return []
-  const pool = ['agent@example.com', 'direct@example.com', 'user@example.com']
-  let cursor = 0
-
-  return records.map((raw) => {
-    const r = raw && typeof raw === 'object' ? { ...raw } : {}
-    const isClient = r.type === 'view_client_detail' || r.target_type === 'client'
-    if (!isClient) return r
-
-    const current = String(r.customerEmail || r.target_email || '').trim()
-    const normalized = normalizeDemoEmail(current)
-    if (normalized) {
-      r.customerEmail = normalized
-      r.target_email = r.target_email || normalized
-      return r
-    }
-
-    const next = pool[cursor] || `user${cursor + 1}@demo.com`
-    cursor += 1
-    r.customerEmail = next
-    r.target_email = r.target_email || next
-    return r
-  })
-}
-
-const ensureNetworkInfo = (records) => {
-  if (!Array.isArray(records)) return []
-
-  const normalizeLocation = (raw, ip) => {
-    const label = String(raw || '').trim()
-    const normalized = label.replace(/\s*·\s*/g, ' · ')
-    if (/^[^·]+ · [^·]+$/.test(normalized)) return normalized
-    const matched = DEMO_IP_POOL.find((x) => x.ip === ip)
-    if (matched) return formatIpLocation(matched)
-    if (label && label !== '解析中') return normalized
-    return '暂无法解析'
-  }
-
-  return records.map((raw) => {
-    const r = raw && typeof raw === 'object' ? { ...raw } : {}
-    const snapshot = pickDemoIp(r.audit_id || r.target_id || r.page || '')
-
-    const ip = String(r.ip || '').trim()
-    const normalizedIp = ip && ip !== '127.0.0.1' ? ip : snapshot.ip
-    r.ip = normalizedIp
-
-    r.ip_location = normalizeLocation(r.ip_location, normalizedIp)
-    return r
-  })
-}
+const baseRecord = () => ({
+  audit_id: uid(),
+  operator: getOperatorSnapshot(),
+  at: now(),
+  ip: getDefaultIp(),
+  ua: getBrowserUa(),
+  page: '',
+  target_name: '',
+  target_id: '',
+  target_type: '',
+  export_conditions: null,
+  export_count: 0,
+  result: 'success',
+  fail_reason: '',
+})
 
 const createInitialRecords = () => [
   {
@@ -168,12 +67,8 @@ const createInitialRecords = () => [
     operator: { name: '系统管理员（演示）', account: 'admin@demo.com', role: '系统管理员' },
     target_name: '代理 A（演示）',
     target_id: 'u_agent_01',
-    customerEmail: 'agent@example.com',
-    target_email: 'agent@example.com',
     target_type: 'client',
     page: '/#/crm/client-detail?id=u_agent_01',
-    ip: '203.0.113.8',
-    ip_location: '中国 · 香港',
   },
   {
     ...baseRecord(),
@@ -187,8 +82,6 @@ const createInitialRecords = () => [
     export_conditions: { time_range: '2026-09-01 ~ 2026-09-30', filters: { userType: 'all' }, data_scope: '全部' },
     export_count: 23,
     page: '/#/report/deposit-withdraw',
-    ip: '198.51.100.23',
-    ip_location: '新加坡 · 新加坡',
   },
 ]
 
@@ -209,8 +102,7 @@ export const initOperationAuditDemo = () => {
     if (raw) {
       const parsed = JSON.parse(raw)
       if (Array.isArray(parsed?.records)) {
-        operationAuditDemoState.records = ensureNetworkInfo(ensureCustomerEmail(parsed.records))
-        persist()
+        operationAuditDemoState.records = parsed.records
         return
       }
     }
@@ -235,14 +127,11 @@ const pushRecord = (record) => {
 }
 
 export const recordViewClientDetail = ({ clientId, clientName, page, ok, reason }) => {
-  const email = normalizeDemoEmail(clientId)
   const record = {
     ...baseRecord(),
     type: 'view_client_detail',
     target_name: String(clientName || '').trim() || '客户详情',
     target_id: String(clientId || '').trim(),
-    customerEmail: email,
-    target_email: email,
     target_type: 'client',
     page: String(page || '').trim(),
     result: ok ? 'success' : 'fail',
@@ -269,35 +158,6 @@ export const recordExportReport = ({ reportName, reportType, conditions, count, 
 
 export const exportAuditRecordsAsCsv = (rows) => {
   const list = Array.isArray(rows) ? rows : []
-  const reportTypeLabel = (r) => {
-    const id = String(r?.target_id || '').trim()
-    if (id === 'deposit_withdraw_detail') return '出入金报表（明细导出）'
-    if (id === 'withdraw_report') return '出金报表'
-    if (id === 'trading_report') return '交易报表'
-    if (id === 'sales_trading_report') return '销售交易报表'
-    const name = String(r?.target_name || '').trim()
-    return name || ''
-  }
-  const targetMetaLabel = (r) => {
-    if (r?.type === 'view_client_detail' || r?.target_type === 'client') return r?.customerEmail || r?.target_email || ''
-    if (r?.type === 'export_report' || r?.target_type === 'report') return reportTypeLabel(r)
-    return ''
-  }
-  const displayPrimary = (r) => {
-    if (r?.type === 'view_client_detail' || r?.target_type === 'client') return r?.customerEmail || r?.target_email || ''
-    if (r?.type === 'export_report' || r?.target_type === 'report') return reportTypeLabel(r)
-    return r?.target_name || ''
-  }
-  const ipLocationLabel = (r) => {
-    const ip = String(r?.ip || '').trim()
-    const label = String(r?.ip_location || '').trim()
-    const normalized = label.replace(/\s*·\s*/g, ' · ')
-    if (/^[^·]+ · [^·]+$/.test(normalized)) return normalized
-    const matched = DEMO_IP_POOL.find((x) => x.ip === ip)
-    if (matched) return formatIpLocation(matched)
-    if (label && label !== '解析中') return normalized
-    return ip ? '暂无法解析' : '暂无法解析'
-  }
   const mapped = list.map((r) => ({
     操作记录ID: r.audit_id,
     操作类型: r.type === 'view_client_detail' ? '查看客户详情' : '导出报表',
@@ -305,14 +165,13 @@ export const exportAuditRecordsAsCsv = (rows) => {
     操作账号: r.operator?.account || '',
     操作角色: r.operator?.role || '',
     操作时间: r.at || '',
-    客户或报表名称: displayPrimary(r),
-    客户邮箱或报表类型: targetMetaLabel(r),
+    客户或报表名称: r.target_name || '',
+    客户ID或报表类型: r.target_id || '',
     导出条件: r.export_conditions ? JSON.stringify(r.export_conditions) : '',
     导出条数: Number(r.export_count || 0),
     操作结果: r.result === 'success' ? '成功' : '失败',
     失败原因: r.fail_reason || '',
-    "操作人 IP 地址": r.ip || '',
-    IP归属地: ipLocationLabel(r),
+    IP地址: r.ip || '',
     设备信息: r.ua || '',
     关联页面: r.page || '',
   }))
