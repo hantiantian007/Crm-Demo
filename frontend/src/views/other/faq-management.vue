@@ -46,7 +46,7 @@
             <el-tabs v-model="activeTab" class="faq-mgmt-tabs">
               <el-tab-pane label="FAQ管理" name="faq"></el-tab-pane>
               <el-tab-pane label="分类管理" name="category"></el-tab-pane>
-              <el-tab-pane label="数据概览" name="overview"></el-tab-pane>
+              <el-tab-pane v-if="showDataOverview" label="数据概览" name="overview"></el-tab-pane>
             </el-tabs>
           </div>
 
@@ -332,7 +332,7 @@
             </div>
           </div>
 
-          <div v-else-if="activeTab === 'overview'" class="px-6 pb-6">
+          <div v-else-if="showDataOverview && activeTab === 'overview'" class="px-6 pb-6">
             <div class="mt-2 bg-gray-50 border border-gray-200 rounded-lg p-4">
               <el-form :model="statsFilters" label-width="88px">
                 <el-row :gutter="12">
@@ -1159,6 +1159,11 @@ const STORAGE_KEY = 'crm_faq_management_v1'
 const PREVIEW_LANG_KEY = 'crm_faq_preview_lang_v1'
 
 const activeTab = ref('faq')
+const showDataOverview = false
+
+watch(activeTab, (v) => {
+  if (!showDataOverview && v === 'overview') activeTab.value = 'faq'
+})
 
 const audienceOptions = [
   { label: '代理', value: 'agent' },

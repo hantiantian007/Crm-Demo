@@ -1,15 +1,14 @@
 <template>
-  <div class="flex-1 overflow-y-auto p-4 md:p-6 relative custom-scrollbar bg-gray-50 w-full text-sm">
-    <div class="max-w-screen-2xl mx-auto">
+  <div class="kb-page flex-1 overflow-y-auto p-4 md:p-6 relative custom-scrollbar bg-gray-50 w-full text-sm">
       <!-- 页面头部 -->
-      <div class="mb-4 flex justify-between items-end">
+      <div class="kb-section mb-4 flex justify-between items-end">
         <div>
           <h1 class="text-xl font-bold text-gray-800 mb-1">历史需求记录</h1>
           <p class="text-xs text-gray-500">已上线或归档的历史需求 (Completed)</p>
         </div>
       </div>
 
-      <div class="mb-6 bg-gray-100/60 rounded-lg border border-gray-200 overflow-hidden">
+      <div class="kb-section mb-6 bg-gray-100/60 rounded-lg border border-gray-200 overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
           <div class="flex items-center gap-2">
             <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
@@ -1837,7 +1836,6 @@
 
     </div>
   </div>
-</div>
 </div>
 </div>
 </div>

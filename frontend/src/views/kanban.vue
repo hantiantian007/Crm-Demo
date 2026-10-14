@@ -1,9 +1,7 @@
 <template>
-  <div class="flex-1 overflow-y-auto p-4 md:p-4 relative custom-scrollbar bg-gray-50 w-full text-xs">
-    
-<div class="max-w-screen-2xl mx-auto">
+  <div class="kb-page flex-1 overflow-y-auto p-4 md:p-4 relative custom-scrollbar bg-gray-50 w-full text-xs">
 <!-- 页面头部 -->
-<div class="mb-4 flex justify-between items-end">
+<div class="kb-section mb-4 flex justify-between items-end">
 <div>
 <h1 class="text-xl font-bold text-gray-800 mb-1">CRM 需求总看板 (活文档)</h1>
 <p class="text-xs text-gray-500">唯一事实来源 (SSOT) - 按需求层级化管理</p>
@@ -21,7 +19,7 @@
 </div>
 </div>
 <!-- 研发中需求 -->
-<div class="mb-6 bg-orange-50/20 rounded-lg border border-orange-100 overflow-hidden">
+<div class="kb-section mb-6 bg-orange-50/20 rounded-lg border border-orange-100 overflow-hidden">
 <div class="px-4 py-3 border-b border-orange-100 bg-orange-50/40 flex items-center justify-between">
 <div class="flex items-center gap-2">
 <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
@@ -35,221 +33,6 @@
 </div>
 <!-- 需求列表容器 -->
 <div class="p-4 flex flex-col gap-3 bg-orange-50/10">
-<!-- 对账（新增父级菜单） -->
-<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">财务对账</span>
-<h3 class="text-base font-bold text-gray-800">对账</h3>
-</div>
-<p class="text-xs text-gray-500 mt-1">系统资金对账：CRM业务账本与MT底层资金比对，抓取异常。</p>
-</div>
-<div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
-<i class="fas fa-chevron-down accordion-icon"></i>
-</div>
-</div>
-<div class="accordion-content border-t border-gray-100">
-<div class="overflow-x-auto no-scrollbar">
-<table class="min-w-full text-xs text-left">
-<thead>
-<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
-<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-gray-100">
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">对账管理 - 每日对账日志</td>
-<td class="px-4 py-3 text-gray-500">
-                                            记录每天 (T-1) 系统全局资金对账的结果（总入金、总出金、总差异笔数及状态）。对于异常批次可添加异常说明。
-                                        </td>
-<td class="px-4 py-3">
-<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/other/reconciliation-daily-record" target="_blank">
-                                                    原型
-                                                </a>
-<a class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-reconciliation-daily-record" target="_blank">
-                                                    PRD
-                                                </a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">对账管理 - 异常看板</td>
-<td class="px-4 py-3 text-gray-500">
-                                            按 T+1 维度比对 CRM 成功记录与 MT 底层流水，仅罗列差异账号，供财务排查使用（无修改操作）。
-                                        </td>
-<td class="px-4 py-3">
-<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/other/reconciliation-internal" target="_blank">
-                                                    原型
-                                                </a>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">佣金管理</span>
-<h3 class="text-base font-bold text-gray-800">销售差异化阶梯返佣配置</h3>
-</div>
-<p class="text-xs text-gray-500 mt-1">支持团队净入金阶梯返佣的默认规则，并可按代理、按 MT 分组配置差异化阶梯。</p>
-</div>
-<div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
-<i class="fas fa-chevron-down accordion-icon"></i>
-</div>
-</div>
-<div class="accordion-content border-t border-gray-100">
-<div class="overflow-x-auto no-scrollbar">
-<table class="min-w-full text-xs text-left">
-<thead>
-<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
-<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-gray-100">
-<tr class="table-row-hover" style="display:none;">
-<td class="px-4 py-3 font-bold text-gray-800">销售列表（佣金管理）</td>
-<td class="px-4 py-3 text-gray-500">展示销售配置列表，并通过顶部 PRD 按钮查看需求文档。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/commission/sales-list" target="_blank">原型</a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openSalesDifferentialTierRebatePrd">
-<i class="fas fa-file-alt"></i> PRD
-</button>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">新增销售（阶梯返佣配置）</td>
-<td class="px-4 py-3 text-gray-500">配置默认阶梯与差异化代理/MT 分组阶梯规则（演示交互）。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/commission/sales-list/create" target="_blank">原型</a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openSalesDifferentialTierRebatePrd">
-<i class="fas fa-file-alt"></i> PRD
-</button>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">佣金管理</span>
-<h3 class="text-base font-bold text-gray-800">销售交易奖励报表</h3>
-</div>
-<p class="text-xs text-gray-500 mt-1">展示销售交易奖励记录，并支持查看奖励计算依据与计算快照。</p>
-</div>
-<div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
-<i class="fas fa-chevron-down accordion-icon"></i>
-</div>
-</div>
-<div class="accordion-content border-t border-gray-100">
-<div class="overflow-x-auto no-scrollbar">
-<table class="min-w-full text-xs text-left">
-<thead>
-<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
-<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-gray-100">
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">销售交易奖励报表</td>
-<td class="px-4 py-3 text-gray-500">支持筛选、主表展示、导出与详情 Drawer。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/report/sales-trading" target="_blank">原型</a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openSalesTradingRewardReportPrd">
-<i class="fas fa-file-alt"></i> PRD
-</button>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">其他页面</span>
-<h3 class="text-base font-bold text-gray-800">客户注册资料</h3>
-</div>
-<p class="text-xs text-gray-500 mt-1">客户开户注册资料填写与身份信息提交。</p>
-</div>
-<div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
-<i class="fas fa-chevron-down accordion-icon"></i>
-</div>
-</div>
-<div class="accordion-content border-t border-gray-100">
-<div class="overflow-x-auto no-scrollbar">
-<table class="min-w-full text-xs text-left">
-<thead>
-<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
-<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-gray-100">
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">客户注册资料</td>
-<td class="px-4 py-3 text-gray-500">支持客户资料填写、证件上传与提交校验。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/other/customer-register-profile" target="_blank">原型</a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openCustomerRegisterProfilePrd">
-<i class="fas fa-file-alt"></i> PRD
-</button>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
 
 <div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
@@ -258,7 +41,7 @@
 <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">其他页面</span>
 <h3 class="text-base font-bold text-gray-800">FAQ内容管理</h3>
 </div>
-<p class="text-xs text-gray-500 mt-1">FAQ 内容管理与前台体验（官网/CRM 预览、热门问题、反馈、数据概览）。</p>
+<p class="text-xs text-gray-500 mt-1">FAQ 内容管理与前台体验（官网/CRM 预览、热门问题、反馈；数据概览已隐藏）。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
 <span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
@@ -279,7 +62,7 @@
 <tbody class="divide-y divide-gray-100">
 <tr class="table-row-hover">
 <td class="px-4 py-3 font-bold text-gray-800">FAQ内容管理</td>
-<td class="px-4 py-3 text-gray-500">支持 FAQ 管理、三语言内容维护、整体发布状态、官网/CRM 预览阅读体验与数据概览。</td>
+<td class="px-4 py-3 text-gray-500">支持 FAQ 管理、三语言内容维护、整体发布状态、官网/CRM 预览阅读体验（数据概览已隐藏）。</td>
 <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
 <td class="px-4 py-3">
 <div class="flex flex-wrap gap-2 items-center">
@@ -332,6 +115,51 @@
 <button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPasswordSecurityPrd">
 <i class="fas fa-file-alt"></i> PRD
 </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">系统管理</span>
+<h3 class="text-base font-bold text-gray-800">后台操作审计记录</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">用于记录后台人员查看客户详情、导出报表数据的关键操作行为，支持筛选、查看详情与导出审计数据（导出行为本身也会被记录）。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">后台操作审计记录</td>
+<td class="px-4 py-3 text-gray-500">用于记录后台人员查看客户详情、导出报表数据的关键操作行为，支持筛选、查看详情与导出审计数据（导出行为本身也会被记录）。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Crm-Group</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/system/operation-audit" target="_blank">原型</a>
+<a class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-system-operation-audit" target="_blank">
+<i class="fas fa-file-alt"></i> PRD
+</a>
 </div>
 </td>
 </tr>
@@ -399,120 +227,6 @@
 <a class="kb-btn kb-btn-prd inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-bonus-detail" target="_blank">
 <i class="fas fa-file-alt"></i> PRD
                                                 </a>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
-<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">智能交易系统</span>
-<h3 class="text-base font-bold text-gray-800">商品销售流程</h3>
-</div>
-<p class="text-xs text-gray-500 mt-1">支持未登录/未注册用户通过官网导流，强关联 CRM 登录/注册环节实现购买闭环，并包含后台商品配置及订单审核管理。</p>
-</div>
-<div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 7 个页面</span>
-<i class="fas fa-chevron-down accordion-icon"></i>
-</div>
-</div>
-<div class="accordion-content border-t border-gray-100">
-<div class="overflow-x-auto no-scrollbar">
-<table class="min-w-full text-xs text-left">
-<thead>
-<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[200px]">页面名称</th>
-<th class="px-4 py-2 font-medium min-w-[200px]">页面概述</th>
-<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
-<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-gray-100">
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">官网导流入口</td>
-<td class="px-4 py-3 text-gray-500">官网双端新增“商品购买”按钮，支持重定向至CRM登录页，并在登录后自动跳转至商品列表。</td>
-<td class="px-4 py-3">
-<div class="flex flex-col gap-1">
-<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group-only w-max">Group</span>
-<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-hk w-max">CRM-HK</span>
-</div>
-</td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/index" target="_blank"><i class="fas fa-globe"></i> Group 官网</a>
-<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/index" target="_blank"><i class="fas fa-globe"></i> HK 官网</a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">C端商品列表页</td>
-<td class="px-4 py-3 text-gray-500">展示在售增值商品卡片、商品类型标签及金额等基础信息，并提供购买入口。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-product-list" target="_blank"><i class="fas fa-file-alt"></i> 列表 PRD</a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/client-product-list" target="_blank"><i class="fas fa-desktop"></i> 列表原型</a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">C端商品详情页</td>
-<td class="px-4 py-3 text-gray-500">承载商品轮播详情介绍、套餐选择，以及余额扣款校验和下单支付弹窗流转。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium rounded transition-colors flex items-center gap-1 border border-gray-200 text-white bg-blue-500 hover:bg-blue-600 border-blue-500" href="#/other/prd-product-detail" target="_blank"><i class="fas fa-file-alt"></i> 详情 PRD</a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border text-blue-500 hover:text-blue-700" href="#/product/detail" target="_blank"><i class="fas fa-desktop"></i> 详情原型</a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">后台商品管理列表</td>
-<td class="px-4 py-3 text-gray-500">增值商品的后台管理列表，支持状态筛选、上架管理及浏览量（PV/UV）数据展示。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-management" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/management" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">新增/编辑商品</td>
-<td class="px-4 py-3 text-gray-500">增值商品的独立配置页面，支持基本信息填写、图片上传及多套餐价格与库存数量设定。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-edit" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/edit" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">客户端我的订单</td>
-<td class="px-4 py-3 text-gray-500">C 端用户查看已购买商品的订单列表及状态。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-client-my-orders" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/client-my-orders" target="_blank"><i class="fas fa-desktop"></i> 客户端订单原型</a>
-</div>
-</td>
-</tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">后台订单管理</td>
-<td class="px-4 py-3 text-gray-500">后台商品订单审核，包含审核通过/拒绝流转及资金归集至运营 MT 账号的逻辑。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-orders" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/orders" target="_blank"><i class="fas fa-desktop"></i> 后台订单原型</a>
 </div>
 </td>
 </tr>
@@ -646,21 +360,203 @@
 </div>
 </div>
 </div>
-<!-- 规划中需求 -->
-<div class="mb-6 bg-purple-50/20 rounded-lg border border-purple-100 overflow-hidden">
+<!-- 待研发需求 -->
+<div class="kb-section mb-6 bg-purple-50/20 rounded-lg border border-purple-100 overflow-hidden">
 <div class="px-4 py-3 border-b border-purple-100 bg-purple-50/40 flex items-center justify-between">
 <div class="flex items-center gap-2">
 <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-<i class="fa-solid fa-inbox text-[#8B5CF6]"></i> 规划中需求
+<i class="fa-solid fa-inbox text-[#8B5CF6]"></i> 待研发需求
                     </h2>
 <div class="flex items-center gap-2">
-<span class="text-[10px] font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded border border-purple-200/60">规划中</span>
+<span class="text-[10px] font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded border border-purple-200/60">待研发</span>
 <span class="text-[10px] font-medium text-purple-700 bg-purple-100/60 px-2 py-0.5 rounded border border-purple-200/40">排期中</span>
 </div>
 </div>
 </div>
 <!-- 需求列表容器 -->
 <div class="p-4 flex flex-col gap-3 bg-purple-50/10">
+<!-- 对账（迁移至待研发） -->
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">财务对账</span>
+<h3 class="text-base font-bold text-gray-800">对账</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">系统资金对账：CRM业务账本与MT底层资金比对，抓取异常。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 2 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">对账管理 - 每日对账日志</td>
+<td class="px-4 py-3 text-gray-500">
+                                            记录每天 (T-1) 系统全局资金对账的结果（总入金、总出金、总差异笔数及状态）。对于异常批次可添加异常说明。
+                                        </td>
+<td class="px-4 py-3">
+<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span>
+</td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/other/reconciliation-daily-record" target="_blank">
+                                                    原型
+                                                </a>
+<a class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-reconciliation-daily-record" target="_blank">
+                                                    PRD
+                                                </a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">对账管理 - 异常看板</td>
+<td class="px-4 py-3 text-gray-500">
+                                            按 T+1 维度比对 CRM 成功记录与 MT 底层流水，仅罗列差异账号，供财务排查使用（无修改操作）。
+                                        </td>
+<td class="px-4 py-3">
+<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span>
+</td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/other/reconciliation-internal" target="_blank">
+                                                    原型
+                                                </a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- 商品销售流程（迁移至待研发） -->
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">智能交易系统</span>
+<h3 class="text-base font-bold text-gray-800">商品销售流程</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">支持未登录/未注册用户通过官网导流，强关联 CRM 登录/注册环节实现购买闭环，并包含后台商品配置及订单审核管理。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 7 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[200px]">页面名称</th>
+<th class="px-4 py-2 font-medium min-w-[200px]">页面概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">官网导流入口</td>
+<td class="px-4 py-3 text-gray-500">官网双端新增“商品购买”按钮，支持重定向至CRM登录页，并在登录后自动跳转至商品列表。</td>
+<td class="px-4 py-3">
+<div class="flex flex-col gap-1">
+<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group-only w-max">Group</span>
+<span class="inline-block px-2 py-0.5 text-[11px] rounded tag-hk w-max">CRM-HK</span>
+</div>
+</td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/index" target="_blank"><i class="fas fa-globe"></i> Group 官网</a>
+<a class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded transition-colors flex items-center gap-1 border border-blue-200" href="#/other/index" target="_blank"><i class="fas fa-globe"></i> HK 官网</a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">C端商品列表页</td>
+<td class="px-4 py-3 text-gray-500">展示在售增值商品卡片、商品类型标签及金额等基础信息，并提供购买入口。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-product-list" target="_blank"><i class="fas fa-file-alt"></i> 列表 PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/client-product-list" target="_blank"><i class="fas fa-desktop"></i> 列表原型</a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">C端商品详情页</td>
+<td class="px-4 py-3 text-gray-500">承载商品轮播详情介绍、套餐选择，以及余额扣款校验和下单支付弹窗流转。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium rounded transition-colors flex items-center gap-1 border border-gray-200 text-white bg-blue-500 hover:bg-blue-600 border-blue-500" href="#/other/prd-product-detail" target="_blank"><i class="fas fa-file-alt"></i> 详情 PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border text-blue-500 hover:text-blue-700" href="#/product/detail" target="_blank"><i class="fas fa-desktop"></i> 详情原型</a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">后台商品管理列表</td>
+<td class="px-4 py-3 text-gray-500">增值商品的后台管理列表，支持状态筛选、上架管理及浏览量（PV/UV）数据展示。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-management" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/management" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">新增/编辑商品</td>
+<td class="px-4 py-3 text-gray-500">增值商品的独立配置页面，支持基本信息填写、图片上传及多套餐价格与库存数量设定。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-edit" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/edit" target="_blank"><i class="fas fa-desktop"></i> 原型</a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">客户端我的订单</td>
+<td class="px-4 py-3 text-gray-500">C 端用户查看已购买商品的订单列表及状态。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-client-my-orders" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/client-my-orders" target="_blank"><i class="fas fa-desktop"></i> 客户端订单原型</a>
+</div>
+</td>
+</tr>
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">后台订单管理</td>
+<td class="px-4 py-3 text-gray-500">后台商品订单审核，包含审核通过/拒绝流转及资金归集至运营 MT 账号的逻辑。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+<td class="px-4 py-3">
+<div class="flex flex-wrap gap-2 items-center">
+<a class="kb-btn kb-btn-prd px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-admin-product-orders" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
+<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/product/orders" target="_blank"><i class="fas fa-desktop"></i> 后台订单原型</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 <!-- 活动管理 (父级需求) -->
 <div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
@@ -1139,7 +1035,6 @@
 </div>
 <!-- Buttons will be injected by JS -->
 <!-- 折叠面板交互脚本 -->
-</div>
 </div>
 </template>
 

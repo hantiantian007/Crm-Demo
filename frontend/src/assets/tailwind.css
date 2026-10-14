@@ -15,3 +15,9 @@
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@layer components {
+  .kb-page { @apply w-full box-border; }
+  .kb-section { @apply max-w-screen-2xl mx-auto w-full box-border; }
+  .accordion-item { @apply w-full box-border; }
+}
