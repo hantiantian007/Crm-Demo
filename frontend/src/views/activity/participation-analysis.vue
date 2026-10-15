@@ -231,7 +231,7 @@ const activities = ref([
   },
   {
     id: 'pioneer1',
-    name: '先锋一号 50,000 USD 体验金活动',
+    name: '先锋一号 50,000 USD 活动',
     status: '已结束',
     startAt: '2026-06-01',
     endAt: '2026-08-15',

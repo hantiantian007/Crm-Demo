@@ -26,10 +26,6 @@
                 <p class="text-sm font-bold text-gray-800">{{ activity.name }}</p>
               </div>
               <div>
-                <p class="text-xs text-gray-500 mb-1">活动编号</p>
-                <p class="text-sm font-bold text-gray-800 font-mono">{{ activity.code }}</p>
-              </div>
-              <div>
                 <p class="text-xs text-gray-500 mb-1">活动状态</p>
                 <p class="text-sm font-bold text-gray-800">{{ activity.status }}</p>
               </div>
@@ -94,26 +90,16 @@
               <div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50">
                 <div class="flex flex-wrap items-center gap-4 text-xs">
                   <div class="flex items-center gap-2">
-                    <span class="text-gray-500">客户名称/邮箱:</span>
-                    <el-input v-model="signupSearch.keyword" placeholder="搜索客户" clearable class="w-56" size="small" />
+                    <span class="text-gray-500">客户姓名:</span>
+                    <el-input v-model="signupSearch.customerName" placeholder="客户姓名" clearable class="w-40" size="small" />
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-gray-500">MT账号(模拟):</span>
-                    <el-input v-model="signupSearch.demoMt" placeholder="模拟 MT 账号" clearable class="w-40" size="small" />
+                    <span class="text-gray-500">客户邮箱:</span>
+                    <el-input v-model="signupSearch.customerEmail" placeholder="客户邮箱" clearable class="w-56" size="small" />
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-gray-500">MT类型:</span>
-                    <el-select v-model="signupSearch.mtType" placeholder="全部" clearable class="w-28" size="small">
-                      <el-option label="MT4" value="MT4" />
-                      <el-option label="MT5" value="MT5" />
-                    </el-select>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="text-gray-500">是否结束体验:</span>
-                    <el-select v-model="signupSearch.ended" placeholder="全部" clearable class="w-28" size="small">
-                      <el-option label="是" value="是" />
-                      <el-option label="否" value="否" />
-                    </el-select>
+                    <span class="text-gray-500">MT账号:</span>
+                    <el-input v-model="signupSearch.mtAccount" placeholder="MT账号" clearable class="w-40" size="small" />
                   </div>
                   <button class="bg-[#d1a84f] hover:bg-[#b89241] text-white px-4 py-1.5 rounded text-xs font-medium transition-colors" type="button">
                     搜索
@@ -136,7 +122,7 @@
                       <span class="text-gray-600">{{ row.customerEmail }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="MT账号(模拟)" min-width="120">
+                  <el-table-column label="MT账号" min-width="120">
                     <template #default="{ row }">
                       <span class="font-mono font-medium text-gray-800">{{ row.demoMtAccount }}</span>
                     </template>
@@ -151,22 +137,22 @@
                       <span class="font-mono text-gray-600">{{ row.registeredAt }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="是否结束体验" min-width="120">
+                  <el-table-column label="是否结束活动" min-width="120">
                     <template #default="{ row }">
                       <span class="text-gray-700">{{ row.endedExperience }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="账户余额(体验)" min-width="130" align="right">
+                  <el-table-column label="账户余额（$）" min-width="130" align="right">
                     <template #default="{ row }">
                       <span class="font-mono text-gray-700">${{ formatMoney(row.experienceBalance) }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="交易手数(体验)" min-width="130" align="right">
+                  <el-table-column label="交易手数" min-width="130" align="right">
                     <template #default="{ row }">
                       <span class="font-mono text-gray-700">{{ formatLots(row.experienceLots) }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="盈利金额(体验)" min-width="130" align="right">
+                  <el-table-column label="盈利金额（$）" min-width="130" align="right">
                     <template #default="{ row }">
                       <span class="font-mono text-gray-700">${{ formatMoney(row.experienceProfit) }}</span>
                     </template>
@@ -184,16 +170,16 @@
               <div class="px-5 py-3 border-b border-gray-100 bg-gray-50/50">
                 <div class="flex flex-wrap items-center gap-4 text-xs">
                   <div class="flex items-center gap-2">
-                    <span class="text-gray-500">客户名称/邮箱:</span>
-                    <el-input v-model="orderSearch.keyword" placeholder="搜索客户" clearable class="w-56" size="small" />
+                    <span class="text-gray-500">客户姓名:</span>
+                    <el-input v-model="orderSearch.customerName" placeholder="客户姓名" clearable class="w-40" size="small" />
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-gray-500">订单状态:</span>
-                    <el-select v-model="orderSearch.status" placeholder="全部" clearable class="w-28" size="small">
-                      <el-option label="已发放" value="已发放" />
-                      <el-option label="待发放" value="待发放" />
-                      <el-option label="已取消" value="已取消" />
-                    </el-select>
+                    <span class="text-gray-500">客户邮箱:</span>
+                    <el-input v-model="orderSearch.customerEmail" placeholder="客户邮箱" clearable class="w-56" size="small" />
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-gray-500">MT账号:</span>
+                    <el-input v-model="orderSearch.mtAccount" placeholder="MT账号" clearable class="w-40" size="small" />
                   </div>
                   <button class="bg-[#d1a84f] hover:bg-[#b89241] text-white px-4 py-1.5 rounded text-xs font-medium transition-colors" type="button">
                     搜索
@@ -206,12 +192,7 @@
 
               <div class="flex-1 p-0 overflow-hidden min-h-[320px]">
                 <DataTable :data="filteredOrderRows" :total="filteredOrderRows.length" v-model:page="orderPage" v-model:limit="orderLimit">
-                  <el-table-column label="订单号" min-width="160" fixed="left">
-                    <template #default="{ row }">
-                      <span class="font-mono text-gray-700">{{ row.orderNo }}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="客户姓名" min-width="120">
+                  <el-table-column label="客户姓名" min-width="120" fixed="left">
                     <template #default="{ row }">
                       <span class="font-medium text-gray-800">{{ row.customerName }}</span>
                     </template>
@@ -221,19 +202,54 @@
                       <span class="text-gray-600">{{ row.customerEmail }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="下单时间" min-width="160">
+                  <el-table-column label="MT账号" min-width="120">
                     <template #default="{ row }">
-                      <span class="font-mono text-gray-600">{{ row.orderedAt }}</span>
+                      <span class="font-mono font-medium text-gray-800">{{ row.mtAccount }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="盈利金额" min-width="120" align="right">
+                    <template #default="{ row }">
+                      <span class="font-mono text-gray-700">${{ formatUsd4(row.profitAmount) }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column label="奖励金额" min-width="120" align="right">
                     <template #default="{ row }">
-                      <span class="font-mono text-gray-700">${{ formatMoney(row.rewardAmount) }}</span>
+                      <span class="font-mono text-gray-700">${{ formatUsd4(row.rewardAmount) }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="订单状态" min-width="120">
+                  <el-table-column label="交易手数" min-width="120" align="right">
                     <template #default="{ row }">
-                      <span class="text-gray-700">{{ row.status }}</span>
+                      <span class="font-mono text-gray-700">{{ formatLots(row.tradeLots) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="总入金" min-width="120" align="right">
+                    <template #default="{ row }">
+                      <span class="font-mono text-gray-700">${{ formatUsd4(row.totalDeposit) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="总出金" min-width="120" align="right">
+                    <template #default="{ row }">
+                      <span class="font-mono text-gray-700">${{ formatUsd4(row.totalWithdraw) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="净入金" min-width="120" align="right">
+                    <template #default="{ row }">
+                      <span class="font-mono text-gray-700">${{ formatUsd4(row.netDeposit) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="释放比例" min-width="110" align="right">
+                    <template #default="{ row }">
+                      <span class="font-mono text-gray-700">{{ formatPercent(row.releaseRatio) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="是否释放" min-width="110">
+                    <template #default="{ row }">
+                      <span class="text-gray-700">{{ row.released ? '是' : '否' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="释放时间" min-width="160">
+                    <template #default="{ row }">
+                      <span class="font-mono text-gray-600">{{ row.released ? row.releasedAt : '-' }}</span>
                     </template>
                   </el-table-column>
                 </DataTable>
@@ -247,30 +263,64 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import DataTable from '@/components/DataTable.vue'
 
-const activity = reactive({
-  name: '先锋一号 50,000 USD 体验金活动',
-  code: 'PIONEER-ONE-50000',
-  status: '进行中',
-  startAt: '2026-09-01 00:00:00',
-  endAt: '2026-12-31 23:59:59',
-  creator: '系统管理员',
-  createdAt: '2026-08-28 16:20:00',
-  totalLots: 1268.35,
-  totalRewardAmount: 6200,
-  totalReleasedAmount: 5200,
-  netDeposit: 182350.2
+const route = useRoute()
+const activityId = computed(() => {
+  const raw = Array.isArray(route.query.activity) ? route.query.activity[0] : route.query.activity
+  return String(raw || 'pioneer-one-50000')
 })
+
+const getActivityById = (id) => {
+  if (id === 'pioneer-one-50000') {
+    return {
+      id,
+      name: '先锋一号 50,000 USD 活动',
+      code: 'PIONEER-ONE-50000',
+      status: '进行中',
+      startAt: '2026-09-01 00:00:00',
+      endAt: '2026-12-31 23:59:59',
+      creator: '系统管理员',
+      createdAt: '2026-08-28 16:20:00',
+      totalLots: 1268.35,
+      totalRewardAmount: 6200,
+      totalReleasedAmount: 5200,
+      netDeposit: 182350.2
+    }
+  }
+  return {
+    id,
+    name: '先锋一号 50,000 USD 活动',
+    code: String(id || ''),
+    status: '进行中',
+    startAt: '2026-09-01 00:00:00',
+    endAt: '2026-12-31 23:59:59',
+    creator: '系统管理员',
+    createdAt: '2026-08-28 16:20:00',
+    totalLots: 0,
+    totalRewardAmount: 0,
+    totalReleasedAmount: 0,
+    netDeposit: 0
+  }
+}
+
+const activity = reactive(getActivityById(activityId.value))
+
+watch(
+  () => activityId.value,
+  (id) => {
+    Object.assign(activity, getActivityById(id))
+  }
+)
 
 const activeTab = ref('signup')
 
 const signupSearch = reactive({
-  keyword: '',
-  demoMt: '',
-  mtType: '',
-  ended: ''
+  customerName: '',
+  customerEmail: '',
+  mtAccount: ''
 })
 const signupPage = ref(1)
 const signupLimit = ref(20)
@@ -311,75 +361,139 @@ const signupRows = ref([
     experienceLots: 0,
     experienceProfit: -120.78,
     openedRealAccount: '否'
+  },
+  {
+    customerName: '赵子涵',
+    customerEmail: 'zhaozihan@example.com',
+    demoMtAccount: 'DMT-8001120',
+    mtType: 'MT5',
+    registeredAt: '2026-09-15 14:05:31',
+    endedExperience: '否',
+    experienceBalance: 49820.66,
+    experienceLots: 12.5,
+    experienceProfit: 86.42,
+    openedRealAccount: '是'
   }
 ])
 
 const filteredSignupRows = computed(() => {
-  const keyword = signupSearch.keyword.trim()
-  const demoMt = signupSearch.demoMt.trim()
-  const mtType = signupSearch.mtType
-  const ended = signupSearch.ended
+  const customerName = signupSearch.customerName.trim()
+  const customerEmail = signupSearch.customerEmail.trim()
+  const mtAccount = signupSearch.mtAccount.trim()
 
   return signupRows.value.filter(r => {
-    const matchKeyword = !keyword || r.customerName.includes(keyword) || r.customerEmail.includes(keyword)
-    const matchMt = !demoMt || r.demoMtAccount.includes(demoMt)
-    const matchType = !mtType || r.mtType === mtType
-    const matchEnded = !ended || r.endedExperience === ended
-    return matchKeyword && matchMt && matchType && matchEnded
+    const matchName = !customerName || r.customerName.includes(customerName)
+    const matchEmail = !customerEmail || r.customerEmail.includes(customerEmail)
+    const matchMt = !mtAccount || r.demoMtAccount.includes(mtAccount)
+    return matchName && matchEmail && matchMt
   })
 })
 
 const orderSearch = reactive({
-  keyword: '',
-  status: ''
+  customerName: '',
+  customerEmail: '',
+  mtAccount: ''
 })
 const orderPage = ref(1)
-const orderLimit = ref(20)
+const orderLimit = ref(15)
 
 const orderRows = ref([
   {
-    orderNo: 'PO-50000-000012',
     customerName: '王建国',
     customerEmail: 'wangjianguo@example.com',
-    orderedAt: '2026-09-09 10:35:12',
+    mtAccount: '8001023',
+    profitAmount: 1234.5,
     rewardAmount: 500,
-    status: '已发放'
+    tradeLots: 12.5,
+    totalDeposit: 8200,
+    totalWithdraw: 0,
+    netDeposit: 8200,
+    releaseRatio: 0.2,
+    released: true,
+    releasedAt: '2026-10-09 10:35:12'
   },
   {
-    orderNo: 'PO-50000-000023',
+    customerName: '王建国',
+    customerEmail: 'wangjianguo@example.com',
+    mtAccount: '8001023',
+    profitAmount: 320.1256,
+    rewardAmount: 200,
+    tradeLots: 8.75,
+    totalDeposit: 5200,
+    totalWithdraw: 0,
+    netDeposit: 5200,
+    releaseRatio: 0.1,
+    released: false,
+    releasedAt: ''
+  },
+  {
     customerName: '李雪',
     customerEmail: 'lixue88@example.com',
-    orderedAt: '2026-09-12 16:22:40',
+    mtAccount: '8001055',
+    profitAmount: 512.2,
     rewardAmount: 300,
-    status: '待发放'
+    tradeLots: 6.0,
+    totalDeposit: 6000,
+    totalWithdraw: 500,
+    netDeposit: 5500,
+    releaseRatio: 0.15,
+    released: true,
+    releasedAt: '2026-10-12 16:22:40'
+  },
+  {
+    customerName: '赵子涵',
+    customerEmail: 'zhaozihan@example.com',
+    mtAccount: '8001120',
+    profitAmount: 86.42,
+    rewardAmount: 50,
+    tradeLots: 2.5,
+    totalDeposit: 2100,
+    totalWithdraw: 0,
+    netDeposit: 2100,
+    releaseRatio: 0.05,
+    released: false,
+    releasedAt: ''
   }
 ])
 
 const filteredOrderRows = computed(() => {
-  const keyword = orderSearch.keyword.trim()
-  const status = orderSearch.status
+  const customerName = orderSearch.customerName.trim()
+  const customerEmail = orderSearch.customerEmail.trim()
+  const mtAccount = orderSearch.mtAccount.trim()
   return orderRows.value.filter(r => {
-    const matchKeyword = !keyword || r.customerName.includes(keyword) || r.customerEmail.includes(keyword)
-    const matchStatus = !status || r.status === status
-    return matchKeyword && matchStatus
+    const matchName = !customerName || r.customerName.includes(customerName)
+    const matchEmail = !customerEmail || r.customerEmail.includes(customerEmail)
+    const matchMt = !mtAccount || r.mtAccount.includes(mtAccount)
+    return matchName && matchEmail && matchMt
   })
 })
 
 const resetSignupSearch = () => {
-  signupSearch.keyword = ''
-  signupSearch.demoMt = ''
-  signupSearch.mtType = ''
-  signupSearch.ended = ''
+  signupSearch.customerName = ''
+  signupSearch.customerEmail = ''
+  signupSearch.mtAccount = ''
 }
 
 const resetOrderSearch = () => {
-  orderSearch.keyword = ''
-  orderSearch.status = ''
+  orderSearch.customerName = ''
+  orderSearch.customerEmail = ''
+  orderSearch.mtAccount = ''
 }
 
 const formatMoney = (val) => {
   const num = Number(val) || 0
   return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+const formatUsd4 = (val) => {
+  const num = Number(val) || 0
+  return num.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })
+}
+
+const formatPercent = (ratio) => {
+  const num = Number(ratio)
+  if (!Number.isFinite(num)) return '-'
+  return `${Math.round(num * 100)}%`
 }
 
 const formatLots = (val) => {

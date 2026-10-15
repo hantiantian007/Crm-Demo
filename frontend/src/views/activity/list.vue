@@ -242,7 +242,7 @@
       </tr>
       <tr class="table-row border-b border-gray-100">
        <td class="py-3.5 px-5 text-gray-700">
-        先锋一号 50,000 USD 体验金活动
+        先锋一号 50,000 USD 活动
        </td>
        <td class="py-3.5 px-4 text-gray-500">
         2026-09-01 00:00:00

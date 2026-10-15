@@ -6,51 +6,47 @@
     <div class="w-full grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px] gap-6">
       <div class="min-w-0 flex flex-col gap-6">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div v-if="joinedActivityCount === 0" class="p-5">
-            <div class="flex items-start justify-between gap-6">
-              <div class="flex items-start gap-4 min-w-0">
-                <div class="w-12 h-12 rounded-xl bg-[#C19B5E] text-white flex items-center justify-center flex-shrink-0">
-                  <i class="fa-regular fa-calendar-check text-xl"></i>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-base font-bold text-gray-900">暂无已参加活动</div>
-                  <div class="text-xs text-gray-500 mt-1">您当前没有已参加的活动，可前往查看更多活动。</div>
-                </div>
-              </div>
-              <button
-                class="h-8 px-4 rounded-md text-white text-xs font-bold transition-colors bg-rose-500 hover:bg-rose-600 flex-shrink-0"
-                type="button"
-                @click="handleViewActivities"
-              >
-                查看活动
-              </button>
-            </div>
-          </div>
-
-          <div v-else class="p-5">
-            <div class="-mt-1 mb-4">
+          <div class="p-5">
+            <div class="-mt-1 mb-4 flex items-center justify-between gap-3 flex-wrap">
               <div class="overflow-x-auto no-scrollbar">
                 <div class="inline-flex min-w-max bg-gray-100/60 p-1 rounded-lg border border-gray-200/60">
-                <button
-                  v-for="(t, idx) in activityTabs"
-                  :key="t.key"
-                  type="button"
-                  class="h-8 px-3 text-xs font-medium whitespace-nowrap transition-colors flex-shrink-0 max-w-[180px] truncate"
-                  :class="[
-                    idx === 0 ? 'rounded-l-md' : idx === activityTabs.length - 1 ? 'rounded-r-md' : 'rounded-none',
-                    idx !== activityTabs.length - 1 ? 'border-r border-gray-200/60' : '',
-                    activeActivityKey === t.key ? 'bg-white text-gray-800 shadow-sm' : 'bg-transparent text-gray-500 hover:text-gray-700'
-                  ]"
-                  @click="activeActivityKey = t.key"
-                  :title="t.title"
-                >
-                  {{ t.tabLabel }}
-                </button>
+                  <button
+                    v-for="(t, idx) in activityTabs"
+                    :key="t.key"
+                    type="button"
+                    class="h-8 px-3 text-xs font-medium whitespace-nowrap transition-colors flex-shrink-0 max-w-[180px] truncate"
+                    :class="[
+                      idx === 0 ? 'rounded-l-md' : idx === activityTabs.length - 1 ? 'rounded-r-md' : 'rounded-none',
+                      idx !== activityTabs.length - 1 ? 'border-r border-gray-200/60' : '',
+                      activeActivityKey === t.key ? 'bg-white text-gray-800 shadow-sm' : 'bg-transparent text-gray-500 hover:text-gray-700'
+                    ]"
+                    @click="activeActivityKey = t.key"
+                    :title="t.title"
+                  >
+                    {{ t.tabLabel }}
+                  </button>
                 </div>
+              </div>
+
+              <div v-if="currentActivity.key === 'pioneer-one-50000'" class="flex items-center gap-2">
+                <div class="text-[11px] text-gray-500 whitespace-nowrap">状态切换演示</div>
+                <el-select v-model="pioneerDemoMode" size="small" class="w-44">
+                  <el-option label="未参与" value="not_joined" />
+                  <el-option label="已参与部分达标" value="joined_partial" />
+                  <el-option label="已参与全部达标" value="joined_full" />
+                </el-select>
+                <button
+                  v-if="pioneerDemoMode === 'joined_full'"
+                  type="button"
+                  class="h-7 px-3 rounded-md border border-gray-200 bg-white text-gray-700 text-xs font-medium hover:bg-gray-50 transition-colors"
+                  @click="resetPioneerHomeApplyState"
+                >
+                  重置申请状态
+                </button>
               </div>
             </div>
 
-            <div class="flex items-start justify-between gap-6">
+            <div class="flex items-start gap-6">
               <div class="flex items-start gap-4 min-w-0">
                 <div class="w-12 h-12 rounded-xl bg-[#C19B5E] text-white flex items-center justify-center flex-shrink-0">
                   <i class="fa-regular fa-credit-card text-xl"></i>
@@ -59,19 +55,68 @@
                   <div class="flex items-center gap-3 min-w-0 flex-wrap">
                     <div class="text-base font-bold text-gray-900 truncate">{{ currentActivity.title }}</div>
                     <button
+                      v-if="currentActivity.key !== 'pioneer-one-50000'"
                       class="h-8 px-4 rounded-md text-white text-xs font-bold transition-colors bg-rose-500 hover:bg-rose-600 flex-shrink-0"
                       type="button"
                       @click="handlePrimaryAction(currentActivity.key)"
                     >
                       {{ primaryActionText(currentActivity) }}
                     </button>
+                    <button
+                      v-else-if="!uiJoined"
+                      class="h-8 px-4 rounded-md text-white text-xs font-bold transition-colors bg-rose-500 hover:bg-rose-600 flex-shrink-0"
+                      type="button"
+                      @click="openPioneerJoinDialog"
+                    >
+                      参与活动
+                    </button>
+                    <button
+                      v-if="currentActivity.key === 'pioneer-one-50000'"
+                      type="button"
+                      class="h-8 px-4 rounded-md bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold transition-colors flex items-center gap-2 flex-shrink-0"
+                      @click="pioneerRuleDialog.open = true"
+                    >
+                      <i class="fa-solid fa-list-check"></i>
+                      查看活动要求
+                    </button>
+                    <span
+                      v-if="uiJoined"
+                      class="inline-flex items-center gap-2 h-8 px-3 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold flex-shrink-0"
+                    >
+                      <i class="fa-solid fa-circle-check"></i>
+                      已参加活动
+                    </span>
+                    <span
+                      v-else-if="currentParticipationStatus === 'ended'"
+                      class="inline-flex items-center gap-2 h-8 px-3 rounded-md bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold flex-shrink-0"
+                    >
+                      <i class="fa-regular fa-circle"></i>
+                      已结束活动
+                    </span>
+                    <span
+                      v-else
+                      class="inline-flex items-center gap-2 h-8 px-3 rounded-md bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold flex-shrink-0"
+                    >
+                      <i class="fa-regular fa-circle"></i>
+                      未参加活动
+                    </span>
+                    <span
+                      v-if="currentActivity.key === 'pioneer-one-50000' && uiAchieved"
+                      class="inline-flex items-center gap-2 h-8 px-3 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold flex-shrink-0"
+                    >
+                      <i class="fa-solid fa-award"></i>
+                      已达标
+                    </span>
+                    <span
+                      v-if="currentActivity.key === 'pioneer-one-50000' && uiJoined && !uiAchieved"
+                      class="inline-flex items-center gap-2 h-8 px-3 rounded-md bg-gray-50 border border-gray-200 text-gray-700 text-xs font-semibold flex-shrink-0"
+                    >
+                      <i class="fa-regular fa-circle"></i>
+                      未达标
+                    </span>
                   </div>
                   <div class="text-sm text-orange-500 font-medium mt-1">{{ currentActivity.mainCopy }}</div>
-                  <div class="text-xs text-orange-500 font-medium mt-1">{{ currentActivity.conditionText }}</div>
-                  <div v-if="currentActivity.key === 'pioneer-one-50000'" class="mt-1 text-[11px] text-gray-500 flex items-center gap-2 flex-wrap">
-                    <span>活动要求：审核通过后按活动期间累计净入金自动分档释放；完成达标交易手数后可申请转为真实资金。</span>
-                    <button type="button" class="text-[#C19B5E] hover:text-[#A9854B] font-medium" @click="pioneerRuleDialog.open = true">查看活动要求</button>
-                  </div>
+                  <div v-if="currentActivity.conditionText" class="text-xs text-orange-500 font-medium mt-1">{{ currentActivity.conditionText }}</div>
 
                   <div class="mt-2 text-[11px] text-gray-500 font-mono flex items-center gap-2 flex-wrap">
                     <span>{{ currentActivity.timeRange }}</span>
@@ -80,24 +125,14 @@
                   </div>
                 </div>
               </div>
-
-              <div class="flex flex-col items-end gap-2 flex-shrink-0">
-                <div class="flex items-center gap-2 text-xs font-medium">
-                  <span
-                    class="w-1.5 h-1.5 rounded-full"
-                    :class="currentActivity.status === 'joined' ? 'bg-emerald-500' : currentActivity.status === 'ended' ? 'bg-gray-400' : 'bg-gray-300'"
-                  ></span>
-                  <span
-                    :class="currentActivity.status === 'joined' ? 'text-emerald-600' : currentActivity.status === 'ended' ? 'text-gray-600' : 'text-gray-500'"
-                  >
-                    {{ statusText(currentActivity) }}
-                  </span>
-                </div>
-              </div>
             </div>
 
             <div class="mt-5 space-y-4">
-              <div v-for="p in currentActivity.progresses" :key="p.key" class="space-y-2">
+              <div v-if="!uiJoined" class="bg-orange-50 border border-orange-200 text-orange-600 px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-2">
+                <i class="fa-solid fa-circle-info mt-0.5"></i>
+                <span>当前未参与该活动，点击“参与活动”完成报名后可查看活动进度与释放信息。</span>
+              </div>
+              <div v-else v-for="p in currentProgresses" :key="p.key" class="space-y-2">
                 <div class="flex items-center justify-between gap-4">
                   <div
                     class="text-xs font-medium flex items-center gap-2"
@@ -116,6 +151,18 @@
                       <span v-else-if="p.format === 'lots'">{{ formatLots(p.target) }} Lot</span>
                       <span v-else>{{ formatInt(p.target) }}</span>
                     </span>
+                    <span
+                      v-if="currentActivity.key === 'pioneer-one-50000' && uiJoined && p.key === 'net-deposit'"
+                      class="text-[11px] text-gray-500 font-medium ml-1"
+                    >
+                      ｜ 当前释放档位：{{ uiReleaseTierPct }}%
+                    </span>
+                    <span
+                      v-if="currentActivity.key === 'pioneer-one-50000' && uiJoined && p.key === 'trade-lots'"
+                      class="text-[11px] text-gray-500 font-medium ml-1"
+                    >
+                      ｜ 已释放金额：${{ formatMoney(uiReleasedAmount) }}
+                    </span>
                   </div>
                 </div>
                 <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -125,33 +172,76 @@
                     :style="{ width: `${percent(p.value, p.target)}%` }"
                   ></div>
                 </div>
-              </div>
-
-              <div
-                v-if="currentActivity.key === 'pioneer-one-50000'"
-                class="grid grid-cols-1 sm:grid-cols-2 gap-3"
-              >
-                <div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 flex items-start justify-between gap-4">
-                  <div class="min-w-0">
-                    <div class="text-[11px] text-amber-700 font-medium">当前释放档位</div>
-                    <div class="mt-1 text-lg font-bold text-amber-800 font-mono">{{ currentActivity.releaseTierPct }}%</div>
-                  </div>
-                  <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fa-solid fa-bolt text-sm"></i>
-                  </div>
+                <div
+                  v-if="currentActivity.key === 'pioneer-one-50000' && uiJoined && !uiAchieved && p.key === 'net-deposit'"
+                  class="text-[11px] text-gray-500"
+                >
+                  还差 <span class="font-mono">${{ formatMoney(uiNetDepositGap) }}</span>
                 </div>
-                <div class="bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 flex items-start justify-between gap-4">
-                  <div class="min-w-0">
-                    <div class="text-[11px] text-orange-700 font-medium">当前已释放金额</div>
-                    <div class="mt-1 text-lg font-bold text-orange-700 font-mono">${{ formatMoney(currentActivity.releasedAmount) }}</div>
-                  </div>
-                  <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center flex-shrink-0">
-                    <i class="fa-solid fa-sack-dollar text-sm"></i>
-                  </div>
+                <div
+                  v-if="currentActivity.key === 'pioneer-one-50000' && uiJoined && !uiAchieved && p.key === 'trade-lots'"
+                  class="text-[11px] text-gray-500"
+                >
+                  还差 <span class="font-mono">{{ formatLots(uiTradeLotsGap) }} Lot</span>
                 </div>
               </div>
 
-              <div class="bg-orange-50 border border-orange-200 text-orange-600 px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-2">
+              <div v-if="currentActivity.key === 'pioneer-one-50000' && uiJoined" class="space-y-3">
+                <div class="bg-white rounded-lg border border-gray-200 px-4 py-3 flex items-start justify-between gap-4 flex-wrap">
+                  <div class="min-w-0">
+                    <div v-if="pioneerApplyUiState === 'pending'" class="text-xs font-semibold text-gray-800">
+                      审核中
+                      <span class="text-gray-400 font-medium">｜</span>
+                      申请金额 <span class="font-mono">{{ formatUsd4(pioneerLatestRequest?.amount) }}</span>
+                      <span class="text-gray-400 font-medium">｜</span>
+                      申请时间 <span class="font-mono">{{ pioneerLatestRequest?.appliedAt }}</span>
+                    </div>
+                    <div v-else-if="pioneerApplyUiState === 'rejected'" class="text-xs font-semibold text-rose-600">
+                      申请已拒绝
+                      <span class="text-gray-400 font-medium">｜</span>
+                      驳回原因：<span class="text-gray-700 font-medium">{{ pioneerLatestRequest?.rejectReason || '-' }}</span>
+                    </div>
+                    <div v-else-if="pioneerApplyUiState === 'done'" class="text-xs font-semibold text-emerald-700">
+                      转换已完成
+                      <span class="text-gray-400 font-medium">｜</span>
+                      完成时间 <span class="font-mono text-gray-700">{{ pioneerLatestRequest?.completedAt }}</span>
+                      <span class="text-gray-400 font-medium">｜</span>
+                      目标 MT 账户 <span class="text-gray-700">{{ pioneerLatestRequest?.targetAccountLabel }}</span>
+                      <span class="text-gray-400 font-medium">｜</span>
+                      入账金额 <span class="font-mono text-gray-700">{{ formatUsd4(pioneerLatestRequest?.amount) }}</span>
+                    </div>
+                    <div v-else-if="uiAchieved" class="text-xs font-semibold text-emerald-700">
+                      已满足活动条件，可发起赠金转真实资金申请
+                    </div>
+                    <div v-else class="text-xs font-semibold text-gray-600">未达标，暂不可申请转真实资金</div>
+
+                    <div v-if="pioneerApplyHint" class="mt-1 text-[11px] text-gray-500">{{ pioneerApplyHint }}</div>
+                    <div v-if="pioneerApplyBlockReason" class="mt-1 text-[11px] text-rose-500">{{ pioneerApplyBlockReason }}</div>
+                  </div>
+
+                  <div class="flex items-center gap-2 flex-shrink-0">
+                    <button
+                      v-if="pioneerApplyUiState === 'rejected' && uiAchieved"
+                      type="button"
+                      class="h-8 px-3 rounded-md bg-[#d1a84f] hover:bg-[#b89241] text-white text-xs font-medium transition-colors"
+                      @click="openApplyDrawer()"
+                    >
+                      重新申请
+                    </button>
+                    <button
+                      v-else-if="uiAchieved && pioneerApplyUiState === ''"
+                      type="button"
+                      class="h-8 px-3 rounded-md bg-[#d1a84f] hover:bg-[#b89241] text-white text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      :disabled="!!pioneerApplyBlockReason"
+                      @click="openApplyDrawer()"
+                    >
+                      申请转真实资金
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="uiJoined && currentActivity.footerTip" class="bg-orange-50 border border-orange-200 text-orange-600 px-4 py-3 rounded-lg text-xs font-medium flex items-start gap-2">
                 <i class="fa-solid fa-circle-info mt-0.5"></i>
                 <span>{{ currentActivity.footerTip }}</span>
               </div>
@@ -233,29 +323,20 @@
           <div class="flex items-start justify-between gap-4">
             <div class="min-w-0">
               <p class="text-sm text-gray-500 font-medium">活动信息</p>
-              <div class="mt-2 flex items-center gap-2 min-w-0">
-                <span class="w-2 h-2 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
-                <p class="text-sm font-medium text-gray-800 truncate">先锋一号 50,000 USD 体验金活动</p>
+              <div class="mt-3 space-y-2">
+                <button
+                  v-for="a in activityTabs"
+                  :key="a.key"
+                  type="button"
+                  class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-md border text-xs transition-colors"
+                  :class="activeActivityKey === a.key ? 'border-amber-200 bg-amber-50 text-amber-800' : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'"
+                  @click="activeActivityKey = a.key"
+                >
+                  <span class="min-w-0 truncate font-medium">{{ a.title }}</span>
+                  <i class="fa-solid fa-chevron-right text-[10px] text-gray-400 flex-shrink-0"></i>
+                </button>
               </div>
             </div>
-            <button
-              class="mt-[22px] h-7 px-3 rounded-md text-white text-xs font-bold transition-colors flex-shrink-0 bg-rose-500 hover:bg-rose-600"
-              type="button"
-              @click="openPioneerJoinDialog"
-            >
-              未参与
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4">
-          <div class="flex items-center justify-between text-sm">
-            <span class="text-gray-500">先锋盈利金额：</span>
-            <span class="text-gray-700 font-medium">-</span>
-          </div>
-          <div class="mt-3 flex items-center justify-between text-sm">
-            <span class="text-gray-500">先锋活动奖励：</span>
-            <span class="text-gray-700 font-medium">-</span>
           </div>
         </div>
 
@@ -284,7 +365,7 @@
 
     <el-dialog
       v-model="pioneerJoinDialogVisible"
-      title="参与先锋一号 50,000 USD 体验金活动"
+      title="参与先锋一号 50,000 USD 活动"
       width="92%"
       :style="{ maxWidth: '560px' }"
       :close-on-click-modal="false"
@@ -294,7 +375,7 @@
         <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
           <div class="flex items-start gap-2">
             <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
-            <span>请准备绑定 MT 账户、Star 模拟账号、Star 盈利金额，并上传盈利证明材料。</span>
+            <span>请准备绑定 MT 账户、Star 账号、Star 盈利金额，并上传盈利证明材料。</span>
           </div>
         </div>
 
@@ -303,22 +384,26 @@
             <div class="text-sm text-gray-700 font-medium">
               绑定的 MT 账户 <span class="text-rose-500">*</span>
             </div>
-            <input
-              v-model="pioneerBindMtAccount"
-              class="w-full h-10 px-3 rounded-md border border-gray-200 bg-white text-sm outline-none focus:border-[#d1a84f]"
-              placeholder="请输入绑定的 MT 账户"
-              type="text"
-            />
+              <el-select
+                v-model="pioneerBindMtAccountId"
+                size="large"
+                class="w-full"
+                :disabled="!hasAvailableMtAccounts"
+                :placeholder="hasAvailableMtAccounts ? '请选择已有 MT 账户' : '暂无可用 MT 账户'"
+              >
+                <el-option v-for="opt in mtAccountOptions" :key="opt.value" :label="opt.label" :value="opt.value" />
+              </el-select>
+              <div v-if="!hasAvailableMtAccounts" class="text-xs text-rose-500">暂无可用 MT 账户，请先开通 MT 账户</div>
           </div>
 
           <div class="space-y-2">
             <div class="text-sm text-gray-700 font-medium">
-              Star 模拟账号 <span class="text-rose-500">*</span>
+              Star 账号 <span class="text-rose-500">*</span>
             </div>
             <input
               v-model="pioneerDemoAccount"
               class="w-full h-10 px-3 rounded-md border border-gray-200 bg-white text-sm outline-none focus:border-[#d1a84f]"
-              placeholder="请输入 Star 模拟账号"
+              placeholder="请输入 Star 账号"
               type="text"
             />
           </div>
@@ -354,6 +439,8 @@
             </div>
           </div>
         </div>
+
+        <div v-if="pioneerJoinError" class="text-xs text-rose-500">{{ pioneerJoinError }}</div>
       </div>
       <template #footer>
         <div class="flex items-center justify-end gap-2">
@@ -366,7 +453,8 @@
           </button>
           <button
             type="button"
-            class="h-9 px-4 rounded-md text-white bg-rose-500 hover:bg-rose-600 transition-colors"
+            class="h-9 px-4 rounded-md text-white bg-rose-500 hover:bg-rose-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="!hasAvailableMtAccounts"
             @click="confirmPioneerJoin"
           >
             确认参与
@@ -379,7 +467,7 @@
       <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
         <div class="flex items-start gap-2">
           <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
-          <span>完成 Star 模拟交易并提交活动参与资料，后台审核通过后方可参与。</span>
+          <span>完成 Star 交易并提交活动参与资料，后台审核通过后方可参与。</span>
         </div>
         <div class="flex items-start gap-2">
           <span class="mt-1 w-1.5 h-1.5 rounded-full bg-[#d1a84f] flex-shrink-0"></span>
@@ -405,15 +493,84 @@
       </template>
     </el-dialog>
 
+    <el-drawer v-model="pioneerApplyDrawerOpen" :with-header="false" size="520px">
+      <div class="h-full flex flex-col">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+          <div class="text-sm font-bold text-gray-800">申请转真实资金</div>
+          <button class="text-gray-400 hover:text-gray-600" type="button" @click="pioneerApplyDrawerOpen = false">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+          <div class="space-y-2">
+            <div class="text-xs text-gray-500">可转换信用金（一次性全部转换）</div>
+            <div class="h-9 px-3 rounded-md border border-gray-200 bg-gray-50 text-xs text-gray-700 flex items-center font-mono">
+              {{ formatUsd4(pioneerViewCreditSummary?.convertibleCredit) }}
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="text-xs text-gray-500">目标 MT 账户</div>
+            <el-select v-model="pioneerApplyForm.targetAccountId" placeholder="选择目标账户" class="w-full" size="small">
+              <el-option v-for="o in pioneerAccountOptions" :key="o.value" :label="o.label" :value="o.value" />
+            </el-select>
+          </div>
+
+          <div class="space-y-2">
+            <div class="text-xs text-gray-500">邮箱验证码</div>
+            <div class="flex items-center gap-2">
+              <el-input v-model="pioneerApplyForm.otp" placeholder="请输入验证码" size="small" class="flex-1" />
+              <button
+                class="h-8 px-3 rounded-md border border-gray-200 bg-white text-gray-700 text-xs hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                type="button"
+                :disabled="pioneerOtpCooldownLeft > 0"
+                @click="handleSendPioneerOtp"
+              >
+                {{ pioneerOtpCooldownLeft > 0 ? `${pioneerOtpCooldownLeft}s` : '发送验证码' }}
+              </button>
+            </div>
+            <div v-if="pioneerOtpTip" class="text-[11px] text-gray-500">{{ pioneerOtpTip }}</div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="flex items-start gap-2 text-xs text-gray-600">
+              <input v-model="pioneerApplyForm.agreed" type="checkbox" class="mt-0.5" />
+              <span>我已确认：不支持部分转换，本次提交将一次性转换全部可转换信用金；同一活动仅允许存在一笔处理中申请。</span>
+            </label>
+            <div v-if="pioneerApplySubmitError" class="text-xs text-rose-500">{{ pioneerApplySubmitError }}</div>
+          </div>
+        </div>
+        <div class="px-5 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
+          <button class="h-9 px-4 rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors text-sm font-medium" type="button" @click="pioneerApplyDrawerOpen = false">
+            取消
+          </button>
+          <button class="h-9 px-4 rounded-md bg-[#d1a84f] hover:bg-[#b89241] text-white transition-colors text-sm font-medium" type="button" @click="handleSubmitPioneerApply">
+            确认提交
+          </button>
+        </div>
+      </div>
+    </el-drawer>
+
   </div>
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { getParticipation, isJoined, markJoined, getDemoMode, setDemoMode } from '@/store/activityParticipationDemo'
+import { getSessionUser } from '@/store/passwordSecurityDemo'
+import { getMtAccountById, getMyAvailableMtAccounts, getMtStatusLabel, getMtTypeLabel } from '@/store/mtAccountDemo'
+import {
+  creditConversionState,
+  getAccountsForSelect,
+  getCreditSummary,
+  sendEmailOtp,
+  verifyEmailOtp,
+} from '@/store/creditConversionDemo'
 
 const homeScrollRef = ref(null)
 const route = useRoute()
+const router = useRouter()
 
 const formatInt = (n) => {
   const v = Number(n || 0)
@@ -430,6 +587,12 @@ const formatLots = (n) => {
   return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
+const formatUsd4 = (n) => {
+  const v = Number(n || 0)
+  const val = Number.isFinite(v) ? v : 0
+  return `${val.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })} USD`
+}
+
 const percent = (value, target) => {
   const v = Number(value || 0)
   const t = Number(target || 0)
@@ -443,57 +606,39 @@ const homeActivities = ref([
     key: 'free-card',
     tabLabel: '星际起航免费开卡',
     title: '星际起航免费开卡',
-    status: 'joined',
     mainCopy: '新用户开户即送100USD赠金',
     conditionText: `单客户达标条件：净入金 $${formatMoney(1000)} + 交易 ${formatLots(10)} Lot`,
     timeRange: '2026-09-01 ~ 2026-09-28',
     remainingDays: 13,
     stats: { participated: 126, achieved: 43, nearAchieved: 56 },
-    progresses: [
-      { key: 'net-deposit', label: '活动净入金', icon: 'fa-solid fa-dollar-sign', color: 'emerald', value: 126000.5, target: 1000, format: 'money' },
-      { key: 'trade-lots', label: '活动达标交易手数', icon: 'fa-solid fa-chart-line', color: 'blue', value: 680.25, target: 10, format: 'lots' }
-    ],
     footerTip: '达标口径：按客户维度判断；统计从客户参与成功时间起算。'
   },
   {
     key: 'pioneer-one-50000',
     tabLabel: '先锋一号 50,000 USD',
-    title: '先锋一号 50,000 USD 体验金活动',
-    status: 'joined',
-    mainCopy: '完成净入金与交易手数目标，可按档位释放体验金盈利',
-    conditionText: `最高净入金 $${formatMoney(50000)} + 交易 ${formatLots(500)} Lot`,
+    title: '先锋一号 50,000 USD 活动',
+    mainCopy: '完成净入金与交易手数目标，可按档位释放活动盈利',
+    conditionText: '',
     timeRange: '2026-09-01 ~ 2026-10-31',
     remainingDays: 45,
     stats: { participated: 68, achieved: 19, nearAchieved: 24 },
-    progresses: [
-      { key: 'net-deposit', label: '活动净入金', icon: 'fa-solid fa-dollar-sign', color: 'emerald', value: 32500, target: 50000, format: 'money' },
-      { key: 'trade-lots', label: '活动达标交易手数', icon: 'fa-solid fa-chart-line', color: 'blue', value: 318.6, target: 500, format: 'lots' }
-    ],
-    releaseTierPct: 60,
-    releasableProfitAmount: 8000,
-    releasedAmount: 4800,
-    footerTip: '达标口径：从审核通过时间起累计净入金；Lot 累计不清零，达到新档位后释放差额。'
+    footerTip: ''
   }
 ])
 
 const pioneerRuleDialog = reactive({ open: false })
-const pioneerBindMtAccount = ref('')
+const pioneerBindMtAccountId = ref('')
 const pioneerStarProfitAmount = ref('')
+const pioneerJoinError = ref('')
 
 const activityTabs = computed(() => {
   const list = Array.isArray(homeActivities.value) ? homeActivities.value : []
-  const weight = (a) => (a.status === 'joined' || a.status === 'ended' ? 0 : 1)
-  return [...list].sort((a, b) => weight(a) - weight(b))
-})
-
-const joinedActivityCount = computed(() => {
-  const list = Array.isArray(homeActivities.value) ? homeActivities.value : []
-  return list.filter((a) => a.status === 'joined' || a.status === 'ended').length
+  return [...list]
 })
 
 const findDefaultActivityKey = () => {
   const list = Array.isArray(activityTabs.value) ? activityTabs.value : []
-  const firstJoined = list.find((a) => a.status === 'joined' || a.status === 'ended')
+  const firstJoined = list.find((a) => isJoined(a.key))
   return firstJoined?.key || list[0]?.key || ''
 }
 
@@ -513,37 +658,101 @@ const currentActivity = computed(() => {
   return list.find((a) => a.key === activeActivityKey.value) || list[0]
 })
 
-const statusText = (activity) => {
-  if (activity?.status === 'joined') return '已参加活动'
-  if (activity?.status === 'ended') return '已结束活动'
+const currentParticipation = computed(() => getParticipation(currentActivity.value?.key) || { status: 'not_joined' })
+const currentParticipationStatus = computed(() => String(currentParticipation.value?.status || 'not_joined'))
+const currentJoined = computed(() => isJoined(currentActivity.value?.key))
+
+const pioneerDemoMode = computed({
+  get: () => getDemoMode('pioneer-one-50000'),
+  set: (v) => setDemoMode('pioneer-one-50000', v),
+})
+
+const uiJoined = computed(() => {
+  const key = String(currentActivity.value?.key || '')
+  if (key === 'pioneer-one-50000') return pioneerDemoMode.value !== 'not_joined'
+  return currentJoined.value
+})
+
+const uiAchieved = computed(() => {
+  const key = String(currentActivity.value?.key || '')
+  if (key === 'pioneer-one-50000') return pioneerDemoMode.value === 'joined_full'
+  return false
+})
+
+const statusText = (status) => {
+  if (status === 'joined') return '已参加活动'
+  if (status === 'ended') return '已结束活动'
   return '未参加活动'
 }
 
 const primaryActionText = (activity) => {
-  if (activity?.status === 'ended') return '查看结果'
-  if (activity?.status === 'joined') return '查看进度'
-  return '立即参与'
+  const key = String(activity?.key || '')
+  const joined = key === 'pioneer-one-50000' ? getDemoMode(key) !== 'not_joined' : isJoined(key)
+  if (joined) return '查看详情'
+  return '参与活动'
+}
+
+const HOME_STATE_KEY = 'crm_home_state_v1'
+
+const saveHomeState = () => {
+  try {
+    const el = homeScrollRef.value
+    const payload = {
+      scrollTop: Number(el?.scrollTop || 0),
+      activeActivityKey: String(activeActivityKey.value || '')
+    }
+    sessionStorage.setItem(HOME_STATE_KEY, JSON.stringify(payload))
+  } catch {}
+}
+
+const restoreHomeState = async () => {
+  try {
+    const raw = sessionStorage.getItem(HOME_STATE_KEY)
+    if (!raw) return false
+    const data = JSON.parse(raw)
+    if (data?.activeActivityKey) activeActivityKey.value = String(data.activeActivityKey)
+    await nextTick()
+    const el = homeScrollRef.value
+    if (el && Number.isFinite(Number(data?.scrollTop))) el.scrollTop = Number(data.scrollTop)
+    sessionStorage.removeItem(HOME_STATE_KEY)
+    return true
+  } catch {
+    return false
+  }
+}
+
+const activityDetailPath = (activity) => {
+  const key = String(activity?.key || '')
+  if (key === 'free-card') return '/activity/bonus-detail'
+  return ''
 }
 
 const handlePrimaryAction = (key) => {
   const list = Array.isArray(homeActivities.value) ? homeActivities.value : []
-  const idx = list.findIndex((a) => a.key === key)
-  const activity = idx >= 0 ? list[idx] : null
+  const activity = list.find((a) => a.key === key) || null
   if (!activity) return
 
-  if (activity.status === 'not_joined') {
-    activity.status = 'joined'
-    homeActivities.value = [...list]
-    window.alert('已报名（演示）')
+  const uiJoined = activity.key === 'pioneer-one-50000' ? getDemoMode(activity.key) !== 'not_joined' : isJoined(activity.key)
+
+  if (!uiJoined) {
+    if (activity.key === 'pioneer-one-50000') {
+      openPioneerJoinDialog()
+      return
+    }
+    markJoined(activity.key, {
+      progresses: {
+        netDeposit: { value: 0, target: 1000 },
+        tradeLots: { value: 0, target: 10 },
+      },
+    })
+    window.alert('参与申请已提交')
     return
   }
 
-  if (activity.status === 'ended') {
-    window.alert('查看结果（演示）')
-    return
-  }
-
-  window.alert('查看进度（演示）')
+  const path = activityDetailPath(activity)
+  if (!path) return
+  saveHomeState()
+  router.push({ path })
 }
 
 const handleViewActivities = () => {
@@ -556,8 +765,7 @@ const pioneerActivity = computed(() => {
 })
 
 const pioneerJoined = computed(() => {
-  const s = pioneerActivity.value?.status
-  return s === 'joined' || s === 'ended'
+  return getDemoMode(pioneerActivity.value?.key) !== 'not_joined'
 })
 
 const handleJoinActivity = () => {
@@ -571,12 +779,258 @@ const pioneerDemoAccount = ref('')
 const pioneerScreenshotUrl = ref('')
 const pioneerScreenshotName = ref('')
 
+const sessionUser = computed(() => getSessionUser())
+const myMtAccounts = computed(() => getMyAvailableMtAccounts(sessionUser.value?.user_id))
+const mtAccountOptions = computed(() =>
+  myMtAccounts.value.map((a) => ({
+    value: a.id,
+    label: `${a.mtAccount} · ${getMtTypeLabel(a.mtType)} · ${getMtStatusLabel(a.status)}`,
+  }))
+)
+const selectedMtAccount = computed(() => getMtAccountById(pioneerBindMtAccountId.value))
+const hasAvailableMtAccounts = computed(() => mtAccountOptions.value.length > 0)
+
+const pioneerActivityId = 'pioneer-one-50000'
+
+const pioneerCurrentCustomerId = computed(() => {
+  const userId = String(sessionUser.value?.user_id || '')
+  const mapped = {
+    u_agent_01: 'CUST-lixue',
+    u_direct_01: 'CUST-wangjianguo',
+    u_other_01: 'CUST-chendawen',
+  }[userId]
+  return String(mapped || '')
+})
+
+const pioneerFallbackCustomerId = computed(() => {
+  const key = pioneerActivityId
+  const rows = Array.isArray(creditConversionState.customerActivityCredits) ? creditConversionState.customerActivityCredits : []
+  const matches = rows.filter((r) => r.activityId === key && !r.accountAbnormal)
+  const noReq = (cid) => !creditConversionState.conversionRequests.some((r) => r.customerId === cid && r.activityId === key)
+  const noPending = (cid) =>
+    !creditConversionState.conversionRequests.some((r) => r.customerId === cid && r.activityId === key && r.status === '审核中')
+  const preferred = matches.find((r) => noReq(r.customerId) && noPending(r.customerId)) || matches.find((r) => noPending(r.customerId)) || matches[0]
+  return String(preferred?.customerId || '')
+})
+
+const pioneerEffectiveCustomerId = computed(() => String(pioneerCurrentCustomerId.value || pioneerFallbackCustomerId.value || ''))
+
+const PIONEER_HOME_APPLY_KEY = 'crm_pioneer_home_apply_state_v1'
+
+const pioneerHomeApplyStorageKey = computed(() => `${PIONEER_HOME_APPLY_KEY}:${pioneerActivityId}:${pioneerEffectiveCustomerId.value}`)
+
+const pioneerHomeApplyRequest = ref(null)
+
+const loadPioneerHomeApplyState = () => {
+  try {
+    const key = pioneerHomeApplyStorageKey.value
+    const raw = localStorage.getItem(key)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== 'object') return null
+    return parsed
+  } catch {
+    return null
+  }
+}
+
+const persistPioneerHomeApplyState = () => {
+  try {
+    const key = pioneerHomeApplyStorageKey.value
+    if (!pioneerHomeApplyRequest.value) {
+      localStorage.removeItem(key)
+      return
+    }
+    localStorage.setItem(key, JSON.stringify(pioneerHomeApplyRequest.value))
+  } catch {}
+}
+
+const resetPioneerHomeApplyState = () => {
+  pioneerHomeApplyRequest.value = null
+  persistPioneerHomeApplyState()
+}
+
+watch(
+  () => pioneerDemoMode.value,
+  () => {
+    resetPioneerHomeApplyState()
+  }
+)
+
+watch(
+  () => pioneerEffectiveCustomerId.value,
+  () => {
+    pioneerHomeApplyRequest.value = loadPioneerHomeApplyState()
+  },
+  { immediate: true }
+)
+
+const pioneerConversionSummary = computed(() => getCreditSummary({ customerId: pioneerEffectiveCustomerId.value, activityId: pioneerActivityId }))
+
+const pioneerViewCreditSummary = computed(() => {
+  if (!uiJoined.value) return null
+  if (pioneerDemoMode.value === 'joined_partial') {
+    return {
+      issuedCredit: 300,
+      consumedCredit: 80,
+      occupiedNow: 60,
+      convertibleCredit: 0,
+      convertedCredit: 0,
+    }
+  }
+  if (pioneerDemoMode.value === 'joined_full' && !pioneerHomeApplyRequest.value) {
+    const rows = Array.isArray(creditConversionState.customerActivityCredits) ? creditConversionState.customerActivityCredits : []
+    const row = rows.find((r) => r.customerId === pioneerEffectiveCustomerId.value && r.activityId === pioneerActivityId) || null
+    if (row) {
+      const issuedCredit = Number(row.issuedCredit || 0)
+      const consumedCredit = Number(row.consumedCredit || 0)
+      const occupiedCredit = Number(row.occupiedCredit || 0)
+      const convertedCredit = Number(row.convertedCredit || 0)
+      const available = Math.max(0, issuedCredit - consumedCredit - occupiedCredit - convertedCredit)
+      const convertible = row.achieved && !row.accountAbnormal ? available : 0
+      return {
+        ...row,
+        availableCredit: available,
+        convertibleCredit: convertible,
+        occupiedNow: occupiedCredit,
+      }
+    }
+  }
+  return (
+    pioneerConversionSummary.value || {
+      issuedCredit: 5000,
+      consumedCredit: 500,
+      occupiedNow: 0,
+      convertibleCredit: 4500,
+      convertedCredit: 0,
+    }
+  )
+})
+
+const pioneerApplyBlockReason = computed(() => {
+  if (String(currentActivity.value?.key || '') !== pioneerActivityId) return ''
+  if (!uiJoined.value) return ''
+  if (pioneerDemoMode.value !== 'joined_full') return ''
+  const s = pioneerViewCreditSummary.value
+  if (!s) return '活动信息不存在'
+  if (pioneerHomeApplyRequest.value) return '存在处理中申请，暂不可重复提交'
+  if (s.accountAbnormal) return '账户异常，暂不可申请'
+  if (!s.achieved) return '活动未达标，暂不可申请'
+  if (Number(s.convertibleCredit || 0) <= 0) return '可转换金额为 0，暂不可申请'
+  if (Number(s.occupiedCredit || 0) > 0) return '赠金被占用，暂不可申请'
+  return ''
+})
+
+const pioneerLatestRequest = computed(() => {
+  if (String(currentActivity.value?.key || '') !== pioneerActivityId) return null
+  if (!uiJoined.value) return null
+  if (pioneerDemoMode.value !== 'joined_full') return null
+  return pioneerHomeApplyRequest.value || null
+})
+
+const pioneerApplyUiState = computed(() => {
+  if (String(currentActivity.value?.key || '') !== pioneerActivityId) return ''
+  if (!uiJoined.value) return ''
+  if (pioneerDemoMode.value !== 'joined_full') return ''
+  const req = pioneerHomeApplyRequest.value
+  if (req?.status === '审核中') return 'pending'
+  const latest = pioneerLatestRequest.value
+  if (!latest) return ''
+  if (latest.status === '审核拒绝') return 'rejected'
+  if (latest.status === '已完成') return 'done'
+  return ''
+})
+
+const pioneerApplyHint = computed(() => {
+  if (String(currentActivity.value?.key || '') !== pioneerActivityId) return ''
+  if (!uiJoined.value) return ''
+  if (pioneerDemoMode.value === 'joined_partial') {
+    return `未达标原因：净入金还差 ${formatUsd4(uiNetDepositGap.value)}；交易手数还差 ${formatLots(uiTradeLotsGap.value)} Lot`
+  }
+  return ''
+})
+
+const pioneerApplyDrawerOpen = ref(false)
+const pioneerApplyForm = reactive({
+  targetAccountId: '',
+  otp: '',
+  agreed: false,
+})
+const pioneerApplySubmitError = ref('')
+const pioneerOtpTip = ref('')
+const pioneerOtpCooldownLeft = ref(0)
+let pioneerOtpTimer = null
+
+const tickPioneerOtp = () => {
+  const left = Math.max(0, Math.ceil((creditConversionState.emailOtp.cooldownUntil - Date.now()) / 1000))
+  pioneerOtpCooldownLeft.value = left
+}
+
+const pioneerAccountOptions = computed(() => getAccountsForSelect().map((a) => ({ value: a.id, label: a.label })))
+
+const openApplyDrawer = () => {
+  if (String(currentActivity.value?.key || '') !== pioneerActivityId) return
+  if (!uiAchieved.value) return
+  if (pioneerApplyUiState.value === 'pending' || pioneerApplyUiState.value === 'done') return
+  if (pioneerApplyBlockReason.value) return
+  pioneerApplyForm.targetAccountId = ''
+  pioneerApplyForm.otp = ''
+  pioneerApplyForm.agreed = false
+  pioneerApplySubmitError.value = ''
+  pioneerOtpTip.value = ''
+  pioneerApplyDrawerOpen.value = true
+}
+
+const handleSendPioneerOtp = () => {
+  const res = sendEmailOtp()
+  if (!res.ok) {
+    pioneerOtpTip.value = res.message
+    tickPioneerOtp()
+    return
+  }
+  pioneerOtpTip.value = `演示码：${res.code}（有效期 100 分钟）`
+  tickPioneerOtp()
+}
+
+const handleSubmitPioneerApply = () => {
+  pioneerApplySubmitError.value = ''
+  if (pioneerApplyBlockReason.value) {
+    pioneerApplySubmitError.value = pioneerApplyBlockReason.value
+    return
+  }
+  if (!pioneerApplyForm.targetAccountId) {
+    pioneerApplySubmitError.value = '请选择目标 MT 账户'
+    return
+  }
+  if (!pioneerApplyForm.agreed) {
+    pioneerApplySubmitError.value = '请确认一次性转换声明'
+    return
+  }
+  const otpRes = verifyEmailOtp(pioneerApplyForm.otp)
+  if (!otpRes.ok) {
+    pioneerApplySubmitError.value = otpRes.message
+    return
+  }
+  const now = new Date().toISOString().slice(0, 19).replace('T', ' ')
+  const target = pioneerAccountOptions.value.find((o) => o.value === pioneerApplyForm.targetAccountId) || null
+  pioneerHomeApplyRequest.value = {
+    status: '审核中',
+    amount: Number(pioneerViewCreditSummary.value?.convertibleCredit || 0),
+    appliedAt: now,
+    targetAccountId: pioneerApplyForm.targetAccountId,
+    targetAccountLabel: target?.label || '',
+  }
+  persistPioneerHomeApplyState()
+  pioneerApplyDrawerOpen.value = false
+}
+
 const openPioneerJoinDialog = () => {
-  pioneerBindMtAccount.value = ''
+  pioneerBindMtAccountId.value = ''
   pioneerDemoAccount.value = ''
   pioneerStarProfitAmount.value = ''
   pioneerScreenshotUrl.value = ''
   pioneerScreenshotName.value = ''
+  pioneerJoinError.value = ''
   pioneerJoinDialogVisible.value = true
 }
 
@@ -593,26 +1047,99 @@ const onPioneerScreenshotChange = (e) => {
 }
 
 const confirmPioneerJoin = () => {
-  if (!pioneerBindMtAccount.value.trim()) {
-    window.alert('请输入绑定的 MT 账户')
+  pioneerJoinError.value = ''
+  if (!hasAvailableMtAccounts.value) {
+    pioneerJoinError.value = '暂无可用 MT 账户，请先开通 MT 账户'
+    return
+  }
+  if (!pioneerBindMtAccountId.value) {
+    pioneerJoinError.value = '请选择绑定的 MT 账户'
+    return
+  }
+  const mtRow = selectedMtAccount.value
+  if (!mtRow || mtRow.status !== 'normal') {
+    pioneerJoinError.value = '绑定的 MT 账户不可用'
     return
   }
   if (!pioneerDemoAccount.value.trim()) {
-    window.alert('请输入 Star 模拟账号')
+    pioneerJoinError.value = '请输入 Star 账号'
     return
   }
   const profit = Number(pioneerStarProfitAmount.value)
   if (!Number.isFinite(profit) || profit <= 0) {
-    window.alert('请输入 Star 盈利金额')
+    pioneerJoinError.value = '请输入 Star 盈利金额'
     return
   }
   if (!pioneerScreenshotUrl.value) {
-    window.alert('请上传盈利证明材料')
+    pioneerJoinError.value = '请上传盈利证明材料'
     return
   }
   pioneerJoinDialogVisible.value = false
+  markJoined('pioneer-one-50000', {
+    progresses: {
+      netDeposit: { value: 0, target: 50000 },
+      tradeLots: { value: 0, target: 500 },
+    },
+    releaseTierPct: 0,
+    releasedAmount: 0,
+    bindMtAccountId: mtRow.id,
+    bindMtAccount: mtRow.mtAccount,
+    bindMtType: mtRow.mtType,
+  })
   window.alert('参与申请已提交')
 }
+
+const currentProgresses = computed(() => {
+  const key = String(currentActivity.value?.key || '')
+  const p = currentParticipation.value?.progresses || {}
+  if (key === 'pioneer-one-50000') {
+    const mode = pioneerDemoMode.value
+    const netTarget = Number(p.netDeposit?.target ?? 50000)
+    const lotsTarget = Number(p.tradeLots?.target ?? 500)
+    const netValue =
+      mode === 'joined_partial' ? 8200 : mode === 'joined_full' ? netTarget : Number(p.netDeposit?.value ?? 0)
+    const lotsValue =
+      mode === 'joined_partial' ? 98.75 : mode === 'joined_full' ? lotsTarget : Number(p.tradeLots?.value ?? 0)
+    return [
+      { key: 'net-deposit', label: '活动净入金', icon: 'fa-solid fa-dollar-sign', color: 'emerald', value: netValue, target: netTarget, format: 'money' },
+      { key: 'trade-lots', label: '活动达标交易手数', icon: 'fa-solid fa-chart-line', color: mode === 'joined_full' ? 'emerald' : 'blue', value: lotsValue, target: lotsTarget, format: 'lots' },
+    ]
+  }
+  return [
+    { key: 'net-deposit', label: '活动净入金', icon: 'fa-solid fa-dollar-sign', color: 'emerald', value: p.netDeposit?.value ?? 0, target: p.netDeposit?.target ?? 1000, format: 'money' },
+    { key: 'trade-lots', label: '活动达标交易手数', icon: 'fa-solid fa-chart-line', color: 'blue', value: p.tradeLots?.value ?? 0, target: p.tradeLots?.target ?? 10, format: 'lots' },
+  ]
+})
+
+const uiReleaseTierPct = computed(() => {
+  if (String(currentActivity.value?.key || '') !== 'pioneer-one-50000') return 0
+  if (!uiJoined.value) return 0
+  const ratio = pioneerDemoMode.value === 'joined_partial' ? 0.1 : Number(currentParticipation.value?.releaseTierPct || 0)
+  return Math.round(ratio * 100)
+})
+
+const uiReleasedAmount = computed(() => {
+  if (String(currentActivity.value?.key || '') !== 'pioneer-one-50000') return 0
+  if (!uiJoined.value) return 0
+  if (pioneerDemoMode.value === 'joined_partial') return 0
+  return Number(currentParticipation.value?.releasedAmount || 0)
+})
+
+const uiNetDepositGap = computed(() => {
+  if (String(currentActivity.value?.key || '') !== 'pioneer-one-50000') return 0
+  const rows = currentProgresses.value
+  const net = rows.find((r) => r.key === 'net-deposit')
+  if (!net) return 0
+  return Math.max(0, Number(net.target || 0) - Number(net.value || 0))
+})
+
+const uiTradeLotsGap = computed(() => {
+  if (String(currentActivity.value?.key || '') !== 'pioneer-one-50000') return 0
+  const rows = currentProgresses.value
+  const lots = rows.find((r) => r.key === 'trade-lots')
+  if (!lots) return 0
+  return Math.max(0, Number(lots.target || 0) - Number(lots.value || 0))
+})
 
 const scrollToTop = () => {
   const el = homeScrollRef.value
@@ -632,10 +1159,22 @@ watch(
 )
 
 onMounted(async () => {
+  if (!pioneerOtpTimer) {
+    pioneerOtpTimer = setInterval(tickPioneerOtp, 500)
+    tickPioneerOtp()
+  }
+  const restored = await restoreHomeState()
+  if (restored) return
   await nextTick()
-  scrollToTop()
-  requestAnimationFrame(scrollToTop)
-  setTimeout(scrollToTop, 50)
+  if (route.query.join) {
+    scrollToTop()
+    requestAnimationFrame(scrollToTop)
+    setTimeout(scrollToTop, 50)
+  }
+})
+
+onUnmounted(() => {
+  if (pioneerOtpTimer) clearInterval(pioneerOtpTimer)
 })
 </script>
 

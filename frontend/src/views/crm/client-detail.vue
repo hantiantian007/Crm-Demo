@@ -665,6 +665,72 @@
    </div>
   </div>
  </div>
+<!-- 活动赠金 -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 mt-4 w-full">
+ <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+  <div>
+   <div class="text-base font-bold text-gray-800">活动赠金</div>
+   <div class="text-xs text-gray-500 mt-1">按活动独立记账：已发放 / 可用 / 已占用 / 已释放 / 已消耗 / 已转换 / 已失效。</div>
+  </div>
+ </div>
+ <div class="p-0 sm:p-6 overflow-x-auto">
+  <table class="w-full text-sm text-left whitespace-nowrap min-w-[980px]">
+   <thead class="text-gray-500 border-b border-gray-100">
+    <tr>
+     <th class="font-medium py-4 px-4">活动名称</th>
+     <th class="font-medium py-4 px-4 text-right">原始赠金</th>
+     <th class="font-medium py-4 px-4 text-right">当前可用</th>
+     <th class="font-medium py-4 px-4 text-right">当前占用</th>
+     <th class="font-medium py-4 px-4 text-right">已消耗</th>
+     <th class="font-medium py-4 px-4 text-right">已转换</th>
+     <th class="font-medium py-4 px-4 text-right">可转换金额</th>
+    </tr>
+   </thead>
+   <tbody class="text-gray-700">
+    <tr v-for="r in activityCreditRows" :key="r.activityId" class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+     <td class="py-4 px-4 font-medium text-gray-800">{{ r.activityName }}</td>
+     <td class="py-4 px-4 text-right font-mono">${{ formatUsd4(r.issuedCredit) }}</td>
+     <td class="py-4 px-4 text-right font-mono">${{ formatUsd4(r.availableCredit) }}</td>
+     <td class="py-4 px-4 text-right font-mono">${{ formatUsd4(r.occupiedNow) }}</td>
+     <td class="py-4 px-4 text-right font-mono">${{ formatUsd4(r.consumedCredit) }}</td>
+     <td class="py-4 px-4 text-right font-mono">${{ formatUsd4(r.convertedCredit) }}</td>
+     <td class="py-4 px-4 text-right font-mono">${{ formatUsd4(r.convertibleCredit) }}</td>
+    </tr>
+    <tr v-if="activityCreditRows.length === 0">
+     <td class="py-10 px-4 text-gray-400" colspan="7">无可用数据</td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <div class="px-4 sm:px-6 py-4 border-t border-gray-100">
+  <div class="text-sm font-bold text-gray-800 mb-3">赠金流水</div>
+  <div class="overflow-x-auto">
+   <table class="w-full text-sm text-left whitespace-nowrap min-w-[980px]">
+    <thead class="text-gray-500 border-b border-gray-100">
+     <tr>
+      <th class="font-medium py-4 px-4">时间</th>
+      <th class="font-medium py-4 px-4">活动名称</th>
+      <th class="font-medium py-4 px-4">类型</th>
+      <th class="font-medium py-4 px-4 text-right">金额</th>
+      <th class="font-medium py-4 px-4">备注</th>
+     </tr>
+    </thead>
+    <tbody class="text-gray-700">
+     <tr v-for="l in ledgerRows" :key="l.id" class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+      <td class="py-4 px-4 font-mono text-gray-600">{{ l.at }}</td>
+      <td class="py-4 px-4">{{ l.activityName }}</td>
+      <td class="py-4 px-4">{{ l.type }}</td>
+      <td class="py-4 px-4 text-right font-mono">${{ formatUsd4(l.amount) }}</td>
+      <td class="py-4 px-4 text-gray-600">{{ l.remark }}</td>
+     </tr>
+     <tr v-if="ledgerRows.length === 0">
+      <td class="py-10 px-4 text-gray-400" colspan="5">无可用数据</td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+ </div>
+</div>
  <!-- 下半部分：多 Tab 表格区域 -->
  <div class="bg-white rounded-lg shadow-sm border border-gray-100 flex flex-col w-full">
   <!-- Tabs 导航 -->
@@ -934,6 +1000,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { openPrd } from '@/store/prd'
 import { forceSingleAccountReset, getDemoUserById, getForceResetUnavailableReason } from '@/store/passwordSecurityDemo'
+import { creditConversionState, getCreditSummary, getLedgerRows } from '@/store/creditConversionDemo'
 
 const router = useRouter()
 const route = useRoute()
@@ -1000,6 +1067,21 @@ const displayOrDash = (v) => {
   const s = String(v ?? '').trim()
   return s ? s : '-'
 }
+
+const formatUsd4 = (n) => {
+  const v = Number(n || 0)
+  return v.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })
+}
+
+const demoCustomerId = computed(() => 'CUST-wangjianguo')
+
+const activityCreditRows = computed(() => {
+  const customerId = demoCustomerId.value
+  const rows = creditConversionState.customerActivityCredits.filter((r) => r.customerId === customerId)
+  return rows.map((r) => getCreditSummary({ customerId: r.customerId, activityId: r.activityId }) || r)
+})
+
+const ledgerRows = computed(() => getLedgerRows({ customerId: demoCustomerId.value }))
 
 const identityResidence = computed(() => ({
   certNo: '210102196808159167',
