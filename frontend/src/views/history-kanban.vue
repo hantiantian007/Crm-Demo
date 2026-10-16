@@ -22,6 +22,105 @@
             <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
               <div class="flex flex-col gap-1">
                 <div class="flex items-center gap-2 flex-wrap">
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">系统安全</span>
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">已完成</span>
+                  <h3 class="text-base font-bold text-gray-800">密码安全与强制重置</h3>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">覆盖范围强制改密、单账号强制改密、强制改密全局阻断、风险事件与 Lark 通知（演示）。</p>
+              </div>
+              <div class="flex items-center gap-3 text-gray-400">
+                <span class="text-xs bg-gray-100 px-2 py-1 rounded border border-gray-200">包含 1 个页面</span>
+                <i class="fas fa-chevron-down accordion-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content border-t border-gray-200">
+              <div class="overflow-x-auto no-scrollbar">
+                <table class="min-w-full text-xs text-left">
+                  <thead>
+                    <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+                      <th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+                      <th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+                      <th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+                      <th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100">
+                    <tr class="table-row-hover">
+                      <td class="px-4 py-3 font-bold text-gray-800">密码安全配置</td>
+                      <td class="px-4 py-3 text-gray-500">管理员发起范围强制改密、单账号强制改密，查看批次记录、风险事件、Lark 通知与审计记录。</td>
+                      <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Crm-Group</span></td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-2 items-center">
+                          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/system/password-security" target="_blank">原型</a>
+                          <a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-crm-password-security-force-reset" target="_blank">PRD</a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg border border-gray-200 overflow-hidden accordion-item">
+            <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">出入金</span>
+                  <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">已完成</span>
+                  <h3 class="text-base font-bold text-gray-800">我的银行卡</h3>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">右上角头像菜单入口：查看/管理银行卡绑定（演示数据），新增页增加邮箱验证码发送与 60 秒倒计时。</p>
+              </div>
+              <div class="flex items-center gap-3 text-gray-400">
+                <span class="text-xs bg-gray-100 px-2 py-1 rounded border border-gray-200">包含 2 个页面</span>
+                <i class="fas fa-chevron-down accordion-icon"></i>
+              </div>
+            </div>
+            <div class="accordion-content border-t border-gray-200">
+              <div class="overflow-x-auto no-scrollbar">
+                <table class="min-w-full text-xs text-left">
+                  <thead>
+                    <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+                      <th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+                      <th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+                      <th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+                      <th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100">
+                    <tr class="table-row-hover">
+                      <td class="px-4 py-3 font-bold text-gray-800">我的银行卡</td>
+                      <td class="px-4 py-3 text-gray-500">用户侧银行卡列表：支持添加银行卡、修改/删除（演示）。</td>
+                      <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-2 items-center">
+                          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/my-bankcard" target="_blank">原型</a>
+                          <a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-bankcard-add" target="_blank">PRD</a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="table-row-hover">
+                      <td class="px-4 py-3 font-bold text-gray-800">新增银行卡</td>
+                      <td class="px-4 py-3 text-gray-500">支持 BANK / USDT / PCard / Planet card 录入（演示），二维码下方增加邮箱验证码发送与校验（演示）。</td>
+                      <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-wrap gap-2 items-center">
+                          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/fund/bankcard-add" target="_blank">原型</a>
+                          <a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-bankcard-add" target="_blank">PRD</a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg border border-gray-200 overflow-hidden accordion-item">
+            <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2 flex-wrap">
                   <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">系统管理</span>
                   <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">支付配置</span>
                   <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">已完成</span>

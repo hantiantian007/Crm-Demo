@@ -208,6 +208,17 @@
       正常
      </option>
     </select>
+    <select v-model="processingStatusFilter" class="custom-select w-[130px]">
+     <option value="all">
+      处理状态（全部）
+     </option>
+     <option value="未处理">
+      未处理
+     </option>
+     <option value="已处理">
+      已处理
+     </option>
+    </select>
    </div>
    <div class="flex items-center gap-3">
     <button class="bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 px-5 py-2 rounded text-[13px] transition-colors shadow-sm flex items-center gap-2">
@@ -223,7 +234,7 @@
    </div>
   </div>
   <div class="reconciliation-detail-table-scroll overflow-x-auto no-scrollbar">
-   <table class="commission-detail-table custom-table w-full min-w-[1500px]">
+   <table class="commission-detail-table custom-table w-full min-w-[1650px]">
     <thead>
      <tr>
       <th>
@@ -248,6 +259,9 @@
        对账结果
       </th>
       <th>
+       处理状态
+      </th>
+      <th>
        金额差额($)
       </th>
       <th>
@@ -259,7 +273,7 @@
      </tr>
     </thead>
     <tbody>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50892', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50892
       </td>
@@ -299,6 +313,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50892', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50892', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        +$58.20
       </td>
@@ -311,12 +330,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50892')">
-         异常处理
+         {{ getProcessingStatus('CL-50892', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50881', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50881
       </td>
@@ -353,6 +372,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50881', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50881', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        +$1.40
       </td>
@@ -365,12 +389,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50881')">
-         异常处理
+         {{ getProcessingStatus('CL-50881', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50878', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50878
       </td>
@@ -407,6 +431,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50878', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50878', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        +$59.80
       </td>
@@ -419,12 +448,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50878')">
-         异常处理
+         {{ getProcessingStatus('CL-50878', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50870', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50870
       </td>
@@ -461,6 +490,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50870', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50870', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        +$0.30
       </td>
@@ -473,12 +507,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50870')">
-         异常处理
+         {{ getProcessingStatus('CL-50870', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50855', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50855
       </td>
@@ -518,6 +552,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50855', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50855', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        -$5.00
       </td>
@@ -530,12 +569,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50855')">
-         异常处理
+         {{ getProcessingStatus('CL-50855', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50847', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50847
       </td>
@@ -572,6 +611,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50847', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50847', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        +$0.50
       </td>
@@ -584,12 +628,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50847')">
-         异常处理
+         {{ getProcessingStatus('CL-50847', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50812', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50812
       </td>
@@ -629,6 +673,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50812', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50812', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        +$35.00
       </td>
@@ -641,12 +690,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50812')">
-         异常处理
+         {{ getProcessingStatus('CL-50812', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50808', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50808
       </td>
@@ -683,6 +732,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50808', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50808', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        +$0.50
       </td>
@@ -695,12 +749,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50808')">
-         异常处理
+         {{ getProcessingStatus('CL-50808', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50804', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50804
       </td>
@@ -740,6 +794,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50804', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50804', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        -$30.00
       </td>
@@ -752,12 +811,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50804')">
-         异常处理
+         {{ getProcessingStatus('CL-50804', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr class="diff-row">
+     <tr v-show="matchesProcessingStatus('CL-50796', '异常')" class="diff-row">
       <td class="font-mono text-gray-700">
        #CL-50796
       </td>
@@ -797,6 +856,11 @@
         异常
        </span>
       </td>
+      <td>
+       <span :class="getProcessingStatus('CL-50796', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
+        {{ getProcessingStatus('CL-50796', '异常') }}
+       </span>
+      </td>
       <td class="font-semibold text-red-600">
        +$28.80
       </td>
@@ -809,12 +873,12 @@
          查看详情
         </button>
         <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50796')">
-         异常处理
+         {{ getProcessingStatus('CL-50796', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
         </button>
        </div>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50891', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50891
       </td>
@@ -848,6 +912,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -860,7 +929,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50885', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50885
       </td>
@@ -894,6 +963,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -906,7 +980,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50890', '正常')">
       <td class="font-mono text-gray-500">
        #CL-50890
       </td>
@@ -940,6 +1014,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -952,7 +1031,7 @@
        </span>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50840', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50840
       </td>
@@ -986,6 +1065,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -998,7 +1082,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50836', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50836
       </td>
@@ -1032,6 +1116,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -1044,7 +1133,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50831', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50831
       </td>
@@ -1078,6 +1167,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -1090,7 +1184,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50828', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50828
       </td>
@@ -1124,6 +1218,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -1136,7 +1235,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50825', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50825
       </td>
@@ -1170,6 +1269,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -1182,7 +1286,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50819', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50819
       </td>
@@ -1216,6 +1320,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -1228,7 +1337,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50816', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50816
       </td>
@@ -1262,6 +1371,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -1274,7 +1388,7 @@
        </button>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50801', '正常')">
       <td class="font-mono text-gray-500">
        #CL-50801
       </td>
@@ -1308,6 +1422,11 @@
         正常
        </span>
       </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
+       </span>
+      </td>
       <td class="text-emerald-600 font-semibold">
        $0.00
       </td>
@@ -1320,7 +1439,7 @@
        </span>
       </td>
      </tr>
-     <tr>
+     <tr v-show="matchesProcessingStatus('CL-50798', '正常')">
       <td class="font-mono text-gray-700">
        #CL-50798
       </td>
@@ -1352,6 +1471,11 @@
       <td>
        <span class="pill pill-green">
         正常
+       </span>
+      </td>
+      <td>
+       <span class="font-medium text-blue-600">
+        已处理
        </span>
       </td>
       <td class="text-emerald-600 font-semibold">
@@ -1514,6 +1638,7 @@ import { ElMessage } from 'element-plus'
 
 const exceptionDrawerOpen = ref(false)
 const selectedException = ref(null)
+const processingStatusFilter = ref('all')
 const exceptionRecords = reactive({
   'CL-50881': {
     reason: '返佣金额不一致',
@@ -1546,6 +1671,15 @@ const exceptionRows = {
   'CL-50808': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50808', accountType: '标准账户', customerName: '冯杰', mtAccount: '10028910', lots: '0.10 标准手', expectedPeople: '2 人', actualPeople: '2 人', expectedAmount: '$3.00', actualAmount: '$3.50', amountDifference: '+$0.50', rebateDifference: '0 条' },
   'CL-50804': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50804', accountType: '标准账户', customerName: '褚敏', mtAccount: '10022884', lots: '1.50 标准手', expectedPeople: '4 人', actualPeople: '3 人', expectedAmount: '$60.00', actualAmount: '$30.00', amountDifference: '-$30.00', rebateDifference: '-1 条' },
   'CL-50796': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50796', accountType: '标准账户', customerName: '蒋晨', mtAccount: '10025040', lots: '0.60 标准手', expectedPeople: '3 人', actualPeople: '7 人', expectedAmount: '$7.20', actualAmount: '$36.00', amountDifference: '+$28.80', rebateDifference: '+4 条' }
+}
+
+const getProcessingStatus = (id, reconciliationResult) => {
+  if (reconciliationResult === '正常') return '已处理'
+  return exceptionRecords[id]?.status || '未处理'
+}
+
+const matchesProcessingStatus = (id, reconciliationResult) => {
+  return processingStatusFilter.value === 'all' || getProcessingStatus(id, reconciliationResult) === processingStatusFilter.value
 }
 
 const openExceptionDrawer = (id) => {
@@ -1645,12 +1779,13 @@ const saveExceptionRecord = () => {
 .commission-detail-table tbody td:nth-child(4),
 .commission-detail-table tbody td:nth-child(5),
 .commission-detail-table tbody td:nth-child(7),
-.commission-detail-table tbody td:nth-child(9) {
+.commission-detail-table tbody td:nth-child(8),
+.commission-detail-table tbody td:nth-child(10) {
   text-align: center;
 }
 
 .commission-detail-table tbody td:nth-child(6),
-.commission-detail-table tbody td:nth-child(8) {
+.commission-detail-table tbody td:nth-child(9) {
   text-align: right;
 }
 
