@@ -57,6 +57,7 @@
         <el-menu-item index="/commission/basic-config">基础分佣配置</el-menu-item>
         <el-menu-item index="/commission/markup-config">加点分佣配置</el-menu-item>
         <el-menu-item index="/commission/sales-list">销售列表</el-menu-item>
+        <el-menu-item index="/crm/commission-audit-log">对账记录</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="activity">
         <template #title>
@@ -206,6 +207,7 @@ const getSubMenuIndexByPath = (path) => {
   if (typeof path !== 'string') return ''
   if (path.startsWith('/fund/')) return 'fund'
   if (path.startsWith('/reconciliation/')) return 'reconciliation'
+  if (path === '/crm/commission-audit-log') return 'commission'
   if (path.startsWith('/commission/')) return 'commission'
   if (path.startsWith('/activity/')) return 'activity'
   if (path.startsWith('/news/')) return 'news'

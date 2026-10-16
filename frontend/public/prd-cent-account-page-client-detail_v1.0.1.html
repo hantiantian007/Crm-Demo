@@ -45,7 +45,30 @@
             </tbody>
         </table>
 
-        <div class="module-title">2. 数据口径</div>
+        <div class="module-title">2. 风险标签自动打标与多账户关联（本期新增）</div>
+        <div class="bg-rose-50 border-l-4 border-rose-500 p-4 text-sm text-rose-800 leading-7 mb-4">
+            <strong>核心边界：</strong>本期仅使用前端模拟数据演示系统自动打标，不连接 MT5、支付、钱包或外部风控服务；标签只做风险提示，不自动限制客户操作。
+        </div>
+        <table>
+            <thead><tr><th width="22%">自动标签</th><th width="45%">触发条件、时间范围与阈值</th><th width="33%">关联依据与自动处理</th></tr></thead>
+            <tbody>
+                <tr><td class="font-medium">疑似多账户</td><td>相同钱包或银行卡关联账户数 ≥ <span class="highlight">2</span>；或相同设备指纹关联账户数 ≥ <span class="highlight">2</span>；或 <span class="highlight">7 天</span>内相同 IP 登录账户数 ≥ <span class="highlight">3</span>。</td><td>记录账户编号及钱包/银行卡、设备指纹或 IP 依据；命中后自动添加标签并展示触发时间、关联账户和状态。</td></tr>
+                <tr><td class="font-medium">疑似对冲</td><td>关联订单同一品种、方向相反，开仓时间差 ≤ <span class="highlight">5 分钟</span>，手数差 ≤ <span class="highlight">10%</span>，平仓时间差 ≤ <span class="highlight">10 分钟</span>；<span class="highlight">24 小时</span>内匹配 ≥ <span class="highlight">2 组</span>订单。</td><td>记录匹配订单编号、账户、品种、方向、开平仓时间和手数差；自动添加标签，仅提示人工查看。</td></tr>
+                <tr><td class="font-medium">疑似刷量</td><td>满足任一条件：<span class="highlight">24 小时</span>内平仓订单 ≥ <span class="highlight">50 笔</span>；有效平仓手数 ≥ <span class="highlight">100 手</span>；或 <span class="highlight">1 小时</span>内订单 ≥ <span class="highlight">20 笔</span>且平均持仓 ≤ <span class="highlight">60 秒</span>。</td><td>记录订单集合、订单数、有效手数和平均持仓；自动添加标签，不拦截交易。</td></tr>
+                <tr><td class="font-medium">安全信息近期变更</td><td>钱包或银行卡修改后 <span class="highlight">48 小时</span>内申请出金；或手机号、邮箱、密码修改后 <span class="highlight">24 小时</span>内申请出金。</td><td>关联安全信息变更记录与出金申请，展示变更类型、时间和间隔；自动添加标签提醒人工复核。</td></tr>
+                <tr><td class="font-medium">短期大额出金</td><td><span class="highlight">24 小时</span>内入金后申请出金，且出金金额 ≥ <span class="highlight">5,000 USD</span>，或 ≥ 近 24 小时入金总额的 <span class="highlight">50%</span>。</td><td>关联入金记录、出金申请、金额和时间窗口；自动添加标签并展示比较结果。</td></tr>
+            </tbody>
+        </table>
+        <table>
+            <thead><tr><th width="22%">页面字段 / 操作</th><th width="45%">展示与交互规则</th><th width="33%">处理口径</th></tr></thead>
+            <tbody>
+                <tr><td class="font-medium">标签详情</td><td>展示标签名称、风险等级、来源、当前状态、触发时间、添加人、关联账户/订单和具体触发依据。</td><td>系统自动标签来源为“系统自动”，状态初始为“生效”。</td></tr>
+                <tr><td class="font-medium">人工处理</td><td>支持人工添加标签、补充说明和解除标签；解除时必须填写解除原因。</td><td>确认解除后即时从有效标签列表移除；人工添加记录添加人和添加时间。自动规则再次命中时，生产实现应重新生成标签。</td></tr>
+                <tr><td class="font-medium">多账户关联</td><td>展示账户编号、客户姓名、关联类型（姓名、手机号、邮箱、证件、银行卡、钱包、IP、设备、代理关系）、关联强度、最近登录、反向交易、共享收款账户和风险状态。</td><td>关联关系和交易信息均为模拟数据；支持查看关联原因、模拟交易、标记待风控复核，并从详情添加“疑似多账户”。</td></tr>
+            </tbody>
+        </table>
+
+        <div class="module-title">3. 数据口径</div>
         <table>
             <tbody>
                 <tr><td class="font-medium">客户级信息</td><td>顶部资金信息为客户级汇总视图，其中 <span class="highlight">累计入金 / 累计出金 / 累计净入金</span> 统一按 <span class="highlight">USD/美元</span> 展示；<span class="highlight">累计入金</span> 主值需展示折算后的客户级汇总结果。</td></tr>
@@ -55,7 +78,7 @@
             </tbody>
         </table>
 
-        <div class="module-title">3. 测试重点</div>
+        <div class="module-title">4. 测试重点</div>
         <table>
             <tbody>
                 <tr><td>1. 页面内是否正确展示标准账户 + 美分账户的混合状态，且 MT账号数量已按“总数 + 构成”方式展示。</td></tr>

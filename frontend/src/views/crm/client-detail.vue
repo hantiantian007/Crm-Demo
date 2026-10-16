@@ -25,31 +25,15 @@
         代理
        </span>
       </div>
-      <!-- 客户标签展示区 -->
+      <!-- 风险标签摘要 -->
       <div class="flex flex-wrap items-center gap-2 mt-3" id="clientTagsContainer">
-       <span class="inline-flex items-center bg-amber-50 text-amber-600 border border-amber-200 text-xs px-2 py-0.5 rounded" title="该客户名下有MT账号正在参与联名活动">
-        <i class="fa-solid fa-gift mr-1">
-        </i>
-        先锋联名活动
+       <span v-for="tag in riskTags" :key="tag.id" class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded border" :class="riskLevelTagClass(tag.level)">
+        <span class="w-1.5 h-1.5 rounded-full" :class="riskLevelDotClass(tag.level)"></span>
+        {{ tag.name }}
        </span>
-       <span class="inline-flex items-center bg-red-50 text-red-600 border border-red-200 text-xs px-2 py-0.5 rounded">
-        高净值客户
-        <button class="ml-1 text-red-400 hover:text-red-600">
-         <i class="fa-solid fa-times text-[10px]">
-         </i>
-        </button>
-       </span>
-       <span class="inline-flex items-center bg-blue-50 text-blue-600 border border-blue-200 text-xs px-2 py-0.5 rounded">
-        偏好黄金
-        <button class="ml-1 text-blue-400 hover:text-blue-600">
-         <i class="fa-solid fa-times text-[10px]">
-         </i>
-        </button>
-       </span>
-       <button class="inline-flex items-center bg-gray-50 text-gray-500 border border-dashed border-gray-300 hover:border-blue-400 hover:text-blue-500 text-xs px-2 py-0.5 rounded cursor-pointer transition-colors">
-        <i class="fa-solid fa-plus mr-1">
-        </i>
-        添加标签
+       <button class="inline-flex items-center bg-gray-50 text-gray-500 border border-dashed border-gray-300 hover:border-blue-400 hover:text-blue-500 text-xs px-2 py-0.5 rounded cursor-pointer transition-colors" type="button" @click="openAddRiskTag">
+        <i class="fa-solid fa-plus mr-1"></i>
+        添加风险标签
        </button>
       </div>
      </div>
@@ -58,13 +42,6 @@
       <div v-if="demoUser?.force_reset_required" class="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-medium border bg-amber-50 text-amber-700 border-amber-200">
         已设置下次登录强制改密
       </div>
-      <button
-        type="button"
-        class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-700 transition-colors"
-        @click="openPasswordSecurityPrd"
-      >
-        <i class="fa-solid fa-file-lines"></i> PRD
-      </button>
       <button
         type="button"
         class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium border transition-colors"
@@ -173,6 +150,59 @@
        0
       </div>
      </div>
+    </div>
+   </div>
+   <!-- 卡片3：资金信息 -->
+   <!-- 风险标签 -->
+   <div class="bg-emerald-50/20 rounded-lg p-4 sm:p-6 shadow-sm border border-emerald-200/70">
+    <div class="flex items-start justify-between gap-3 mb-4">
+     <div>
+      <div class="flex items-center gap-2"><h3 class="text-base font-bold text-gray-800">风险标签</h3><span class="rounded border border-emerald-200 bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">新增</span></div>
+      <p class="text-xs text-gray-500 mt-1">系统自动打标 Demo：规则由前端模拟数据驱动，仅用于风险提示，不触发自动限制。</p>
+     </div>
+     <button type="button" class="inline-flex items-center gap-1 rounded border border-[#C4A373] px-3 py-1.5 text-xs text-[#9b7844] hover:bg-[#fbf7ef] transition-colors" @click="openAddRiskTag">
+      <i class="fa-solid fa-plus"></i> 添加标签
+     </button>
+    </div>
+    <div class="overflow-x-auto">
+     <table class="w-full min-w-[1180px] text-sm text-left whitespace-nowrap">
+      <thead class="border-b border-gray-100 text-gray-500">
+       <tr><th class="py-3 px-2 font-medium">标签名称</th><th class="py-3 px-2 font-medium">风险等级</th><th class="py-3 px-2 font-medium">来源 / 状态</th><th class="py-3 px-2 font-medium">触发时间</th><th class="py-3 px-2 font-medium">添加人</th><th class="py-3 px-2 font-medium">关联账户 / 订单</th><th class="py-3 px-2 font-medium">触发依据 / 风险说明</th><th class="py-3 px-2 font-medium">操作</th></tr>
+      </thead>
+      <tbody>
+       <tr v-for="tag in riskTags" :key="tag.id" class="border-b border-gray-50 hover:bg-gray-50">
+        <td class="py-3 px-2 font-medium text-gray-800">{{ tag.name }}</td>
+        <td class="py-3 px-2"><span class="inline-flex items-center gap-1 rounded border px-2 py-1 text-xs" :class="riskLevelTagClass(tag.level)"><span class="w-1.5 h-1.5 rounded-full" :class="riskLevelDotClass(tag.level)"></span>{{ tag.level }}</span></td>
+        <td class="py-3 px-2"><div class="flex flex-col gap-1"><span class="rounded border px-2 py-1 text-xs" :class="tag.source === '系统自动' ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-gray-200 bg-gray-50 text-gray-600'">{{ tag.source }}</span><span class="text-xs text-emerald-600">{{ tag.status }}</span></div></td>
+        <td class="py-3 px-2 text-gray-600">{{ tag.triggeredAt || tag.addedAt }}</td>
+        <td class="py-3 px-2 text-gray-600">{{ tag.addedBy }}</td>
+        <td class="py-3 px-2 text-gray-600 whitespace-normal min-w-[220px]">{{ tag.relatedObjects || '—' }}</td>
+        <td class="py-3 px-2 text-gray-600 whitespace-normal min-w-[360px]">{{ tag.description || '未填写' }}</td>
+        <td class="py-3 px-2"><div class="flex items-center gap-2"><button type="button" class="text-blue-600 hover:text-blue-800 text-xs" @click="openEditRiskTag(tag)">补充说明</button><button type="button" class="text-rose-600 hover:text-rose-800 text-xs" @click="openRemoveRiskTag(tag)">解除</button></div></td>
+       </tr>
+       <tr v-if="riskTags.length === 0"><td colspan="8" class="py-8 text-center text-gray-400">暂无风险标签</td></tr>
+      </tbody>
+     </table>
+    </div>
+   </div>
+   <!-- 多账户关联 -->
+   <div class="bg-emerald-50/20 rounded-lg p-4 sm:p-6 shadow-sm border border-emerald-200/70">
+    <div class="flex items-start justify-between gap-3 mb-4">
+     <div><div class="flex items-center gap-2"><h3 class="text-base font-bold text-gray-800">关联账户</h3><span class="rounded border border-emerald-200 bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">新增</span></div><p class="text-xs text-gray-500 mt-1">基于模拟数据展示客户之间的关联关系。</p></div>
+     <span class="rounded-full bg-blue-50 px-2.5 py-1 text-xs text-blue-600">{{ relatedAccounts.length }} 个关联账户</span>
+    </div>
+    <div class="overflow-x-auto">
+     <table class="w-full min-w-[1180px] text-sm text-left whitespace-nowrap">
+      <thead class="border-b border-gray-100 text-gray-500"><tr><th class="py-3 px-2 font-medium">账户编号</th><th class="py-3 px-2 font-medium">客户姓名</th><th class="py-3 px-2 font-medium">关联类型</th><th class="py-3 px-2 font-medium">关联强度</th><th class="py-3 px-2 font-medium">最近登录时间</th><th class="py-3 px-2 font-medium">反向交易</th><th class="py-3 px-2 font-medium">共享收款账户</th><th class="py-3 px-2 font-medium">当前风险状态</th><th class="py-3 px-2 font-medium">操作</th></tr></thead>
+      <tbody>
+       <tr v-for="account in relatedAccounts" :key="account.accountId" class="border-b border-gray-50 hover:bg-gray-50">
+        <td class="py-3 px-2 font-medium text-blue-600">{{ account.accountId }}</td><td class="py-3 px-2">{{ account.name }}</td><td class="py-3 px-2">{{ account.relationType }}</td>
+        <td class="py-3 px-2"><span class="rounded border px-2 py-1 text-xs" :class="relationStrengthClass(account.strength)">{{ account.strength }}</span></td><td class="py-3 px-2 text-gray-600">{{ account.lastLoginAt }}</td><td class="py-3 px-2">{{ account.reverseTrade ? '是' : '否' }}</td><td class="py-3 px-2">{{ account.sharedPayee ? '是' : '否' }}</td>
+        <td class="py-3 px-2"><span class="rounded border px-2 py-1 text-xs" :class="riskStatusClass(account.riskStatus)">{{ account.riskStatus }}</span></td>
+        <td class="py-3 px-2"><div class="flex items-center gap-2"><button type="button" class="text-blue-600 hover:text-blue-800 text-xs" @click="openRelatedAccount(account)">查看关联</button><button type="button" class="text-[#9b7844] hover:text-[#7f6037] text-xs" @click="markRelationReview(account)">{{ reviewIds.includes(account.accountId) ? '已待复核' : '待风控复核' }}</button></div></td>
+       </tr>
+      </tbody>
+     </table>
     </div>
    </div>
    <!-- 卡片3：资金信息 -->
@@ -666,7 +696,7 @@
   </div>
  </div>
 <!-- 活动赠金 -->
-<div class="bg-white rounded-lg shadow-sm border border-gray-100 mt-4 w-full">
+<div v-if="false" class="bg-white rounded-lg shadow-sm border border-gray-100 mt-4 w-full">
  <div class="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
   <div>
    <div class="text-base font-bold text-gray-800">活动赠金</div>
@@ -948,6 +978,29 @@
     </div>
   </div>
 
+  <el-dialog v-model="riskTagDialog.open" :title="riskTagDialog.mode === 'add' ? '添加风险标签' : '补充风险说明'" width="92%" :style="{ maxWidth: '620px' }" destroy-on-close>
+    <div class="space-y-4 text-sm">
+      <div v-if="riskTagDialog.mode === 'add'"><label class="mb-1 block text-gray-600">标签名称</label><select v-model="riskTagForm.name" class="w-full rounded border border-gray-300 px-3 py-2 outline-none"><option value="" disabled>请选择风险标签</option><option v-for="name in availableRiskTagNames" :key="name" :value="name">{{ name }}</option></select></div>
+      <div v-else class="rounded-lg bg-gray-50 px-3 py-2 text-gray-700">当前标签：<span class="font-medium">{{ riskTagDialog.tag?.name }}</span></div>
+      <div v-if="riskTagDialog.mode === 'add'"><label class="mb-1 block text-gray-600">风险等级</label><select v-model="riskTagForm.level" class="w-full rounded border border-gray-300 px-3 py-2 outline-none"><option>低风险</option><option>中风险</option><option>高风险</option><option>待处理</option></select></div>
+      <div><label class="mb-1 block text-gray-600">风险说明</label><textarea v-model="riskTagForm.description" rows="3" class="w-full rounded border border-gray-300 px-3 py-2 outline-none" placeholder="请输入说明"></textarea></div>
+    </div>
+    <template #footer><div class="flex justify-end gap-2"><button type="button" class="h-9 rounded-md border border-gray-200 px-4 text-sm text-gray-700 hover:bg-gray-50" @click="riskTagDialog.open = false">取消</button><button type="button" class="h-9 rounded-md bg-primaryBtn px-4 text-sm font-medium text-white hover:bg-primaryBtnHover" @click="saveRiskTag">保存</button></div></template>
+  </el-dialog>
+
+  <el-dialog v-model="removeRiskDialog.open" title="解除风险标签" width="92%" :style="{ maxWidth: '520px' }" destroy-on-close>
+    <div class="space-y-3 text-sm"><div class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700">将解除标签：{{ removeRiskDialog.tag?.name }}</div><label class="block text-gray-600">解除原因<span class="ml-1 text-rose-500">*</span></label><textarea v-model="removeRiskDialog.reason" rows="3" class="w-full rounded border border-gray-300 px-3 py-2 outline-none" placeholder="请填写解除原因"></textarea></div>
+    <template #footer><div class="flex justify-end gap-2"><button type="button" class="h-9 rounded-md border border-gray-200 px-4 text-sm text-gray-700 hover:bg-gray-50" @click="removeRiskDialog.open = false">取消</button><button type="button" class="h-9 rounded-md bg-rose-600 px-4 text-sm font-medium text-white hover:bg-rose-700" @click="confirmRemoveRiskTag">确认解除</button></div></template>
+  </el-dialog>
+
+  <el-dialog v-model="relatedAccountDialog.open" title="关联账户详情" width="92%" :style="{ maxWidth: '680px' }" destroy-on-close>
+    <div v-if="relatedAccountDialog.account" class="space-y-4 text-sm text-gray-700">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2"><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">关联账户</div><div class="mt-1 font-medium">{{ relatedAccountDialog.account.accountId }} / {{ relatedAccountDialog.account.name }}</div></div><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">关联原因</div><div class="mt-1 font-medium">{{ relatedAccountDialog.account.reason }}</div></div><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">风险状态</div><div class="mt-1"><span class="rounded border px-2 py-1 text-xs" :class="riskStatusClass(relatedAccountDialog.account.riskStatus)">{{ relatedAccountDialog.account.riskStatus }}</span></div></div><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">关联交易（模拟）</div><div class="mt-1 font-medium">{{ relatedAccountDialog.account.tradeInfo }}</div></div></div>
+      <div class="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs leading-5 text-blue-700">演示说明：关联关系、交易信息和风险状态均为前端模拟数据，不执行真实计算或外部查询。</div>
+    </div>
+    <template #footer><div class="flex justify-end gap-2"><button type="button" class="h-9 rounded-md border border-rose-200 bg-rose-50 px-4 text-sm font-medium text-rose-700 hover:bg-rose-100" @click="addMultiAccountRisk">添加“疑似多账户”标签</button><button type="button" class="h-9 rounded-md border border-gray-200 px-4 text-sm text-gray-700 hover:bg-gray-50" @click="relatedAccountDialog.open = false">关闭</button></div></template>
+  </el-dialog>
+
   <el-dialog v-model="forceResetDialog.open" title="确认强制修改密码" width="92%" :style="{ maxWidth: '620px' }" destroy-on-close>
     <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -998,9 +1051,9 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { openPrd } from '@/store/prd'
 import { forceSingleAccountReset, getDemoUserById, getForceResetUnavailableReason } from '@/store/passwordSecurityDemo'
 import { creditConversionState, getCreditSummary, getLedgerRows } from '@/store/creditConversionDemo'
+import { buildAutoRiskTags, riskTagCatalog } from '@/store/risk-tag-demo'
 
 const router = useRouter()
 const route = useRoute()
@@ -1027,8 +1080,6 @@ const demoUser = computed(() => {
 
 const forceResetUnavailableReason = computed(() => getForceResetUnavailableReason(demoUser.value))
 const forceResetDialog = ref({ open: false })
-
-const openPasswordSecurityPrd = () => openPrd('prd-crm-password-security-force-reset.html', 'CRM 密码安全与风险触发强制重置 - PRD')
 
 const openForceResetDialog = () => {
   forceResetDialog.value.open = true
@@ -1115,6 +1166,97 @@ const loginRisk = computed(() => ({
     crmVsMt5: { status: '不一致' }
   }
 }))
+
+const riskTags = ref(buildAutoRiskTags())
+
+const availableRiskTagNames = computed(() => riskTagCatalog.filter((item) => !riskTags.value.some((tag) => tag.name === item.name)).map((item) => item.name))
+const riskTagDialog = ref({ open: false, mode: 'add', tag: null })
+const riskTagForm = ref({ name: '', level: '中风险', description: '' })
+const removeRiskDialog = ref({ open: false, tag: null, reason: '' })
+
+const relatedAccounts = ref([
+  { accountId: '8100457', name: 'test-褚必', relationType: '相同证件', strength: '高关联', lastLoginAt: '2026-10-14 19:26:10', reverseTrade: true, sharedPayee: true, riskStatus: '中风险', reason: '证件号码一致，且共享同一收款银行卡。', tradeInfo: '近 30 天存在 6 笔反向交易（模拟）' },
+  { accountId: '8300255', name: 'test-杨均', relationType: '相同代理关系', strength: '中关联', lastLoginAt: '2026-10-14 10:05:31', reverseTrade: false, sharedPayee: false, riskStatus: '待处理', reason: '与当前客户属于同一代理关系。', tradeInfo: '近 30 天交易 12 笔，未发现反向交易（模拟）' },
+  { accountId: '9900456', name: '王建国', relationType: '相同 IP', strength: '低关联', lastLoginAt: '2026-10-13 08:42:17', reverseTrade: false, sharedPayee: false, riskStatus: '正常', reason: '近 30 天存在相同登录 IP。', tradeInfo: '最近一次交易为 EURUSD 0.15 手（模拟）' }
+  ,{ accountId: '7700188', name: '李雪', relationType: '相同手机号', strength: '高关联', lastLoginAt: '2026-10-12 16:18:24', reverseTrade: false, sharedPayee: false, riskStatus: '正常', reason: '预留手机号一致。', tradeInfo: '近 30 天交易 4 笔（模拟）' }
+  ,{ accountId: '6600219', name: '赵子涵', relationType: '相同邮箱', strength: '高关联', lastLoginAt: '2026-10-11 12:04:09', reverseTrade: false, sharedPayee: false, riskStatus: '待处理', reason: '注册邮箱一致。', tradeInfo: '近 30 天无交易（模拟）' }
+  ,{ accountId: '5500142', name: '陈大文', relationType: '相同银行卡', strength: '高关联', lastLoginAt: '2026-10-10 09:36:45', reverseTrade: true, sharedPayee: true, riskStatus: '中风险', reason: '收款银行卡后四位一致。', tradeInfo: '存在 2 笔同向资金流（模拟）' }
+  ,{ accountId: '4400321', name: '周明', relationType: '相同钱包', strength: '高关联', lastLoginAt: '2026-10-09 18:22:11', reverseTrade: false, sharedPayee: true, riskStatus: '中风险', reason: '数字钱包地址一致。', tradeInfo: '最近一次出金 1,200 USD（模拟）' }
+  ,{ accountId: '3300287', name: '孙晨', relationType: '相同设备', strength: '中关联', lastLoginAt: '2026-10-08 20:13:36', reverseTrade: false, sharedPayee: false, riskStatus: '正常', reason: '设备指纹一致。', tradeInfo: '近 30 天交易 8 笔（模拟）' }
+  ,{ accountId: '2200165', name: '刘洋', relationType: '相同代理关系', strength: '中关联', lastLoginAt: '2026-10-07 11:48:52', reverseTrade: false, sharedPayee: false, riskStatus: '正常', reason: '归属于同一代理。', tradeInfo: '近 30 天交易 3 笔（模拟）' }
+])
+const reviewIds = ref([])
+const relatedAccountDialog = ref({ open: false, account: null })
+
+const openAddRiskTag = () => {
+  riskTagForm.value = { name: availableRiskTagNames.value[0] || '', level: '中风险', description: '' }
+  riskTagDialog.value = { open: true, mode: 'add', tag: null }
+}
+
+const openEditRiskTag = (tag) => {
+  riskTagForm.value = { name: tag.name, level: tag.level, description: tag.description || '' }
+  riskTagDialog.value = { open: true, mode: 'edit', tag }
+}
+
+const saveRiskTag = () => {
+  const form = riskTagForm.value
+  if (!form.name) return ElMessage.warning('请选择风险标签')
+  if (!String(form.description || '').trim()) return ElMessage.warning('请填写风险说明')
+  if (riskTagDialog.value.mode === 'edit') {
+    riskTagDialog.value.tag.description = form.description.trim()
+    riskTagDialog.value.tag.level = form.level
+    ElMessage.success('风险说明已更新')
+  } else {
+    riskTags.value.push({ id: `risk-${Date.now()}`, name: form.name, level: form.level, source: '人工添加', status: '生效', addedAt: '2026-10-15 10:00', triggeredAt: '2026-10-15 10:00', addedBy: '当前操作人（演示）', relatedObjects: '—', description: form.description.trim() })
+    ElMessage.success('风险标签已添加')
+  }
+  riskTagDialog.value.open = false
+}
+
+const openRemoveRiskTag = (tag) => {
+  removeRiskDialog.value = { open: true, tag, reason: '' }
+}
+
+const confirmRemoveRiskTag = () => {
+  const dialog = removeRiskDialog.value
+  if (!String(dialog.reason || '').trim()) return ElMessage.warning('请填写解除原因')
+  riskTags.value = riskTags.value.filter((tag) => tag.id !== dialog.tag.id)
+  removeRiskDialog.value.open = false
+  ElMessage.success('风险标签已解除')
+}
+
+const openRelatedAccount = (account) => {
+  relatedAccountDialog.value = { open: true, account }
+}
+
+const markRelationReview = (account) => {
+  if (!reviewIds.value.includes(account.accountId)) {
+    reviewIds.value.push(account.accountId)
+    ElMessage.success(`关联账户 ${account.accountId} 已标记为待风控复核`)
+  }
+}
+
+const addMultiAccountRisk = () => {
+  if (riskTags.value.some((tag) => tag.name === '疑似多账户')) {
+    ElMessage.info('当前客户已有“疑似多账户”标签')
+    return
+  }
+  riskTags.value.push({ id: `risk-${Date.now()}`, name: '疑似多账户', level: '高风险', source: '人工添加', status: '生效', addedAt: '2026-10-15 10:00', triggeredAt: '2026-10-15 10:00', addedBy: '当前操作人（演示）', relatedObjects: '关联账户模拟关系', description: '根据关联账户模拟关系添加，待人工复核。' })
+  ElMessage.success('已添加“疑似多账户”风险标签')
+}
+
+const relationStrengthClass = (strength) => {
+  if (strength === '高关联') return 'border-rose-200 bg-rose-50 text-rose-700'
+  if (strength === '中关联') return 'border-orange-200 bg-orange-50 text-orange-700'
+  return 'border-blue-200 bg-blue-50 text-blue-700'
+}
+
+const riskStatusClass = (status) => {
+  if (status === '高风险') return 'border-rose-200 bg-rose-50 text-rose-700'
+  if (status === '中风险') return 'border-orange-200 bg-orange-50 text-orange-700'
+  if (status === '待处理') return 'border-blue-200 bg-blue-50 text-blue-700'
+  return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+}
 
 const riskLevelTagClass = (level) => {
   if (level === '高风险') return 'border-rose-200 bg-rose-50 text-rose-700'

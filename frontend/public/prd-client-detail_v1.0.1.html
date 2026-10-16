@@ -114,7 +114,42 @@
             </tbody>
         </table>
 
-        <h2 class="text-lg font-bold text-gray-800 mb-4 mt-8 pb-2 border-b-2 border-blue-500 inline-block">3. 留资溯源信息内容及字段</h2>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 mt-8 pb-2 border-b-2 border-blue-500 inline-block">3. 风险标签自动打标与人工处理（本期新增）</h2>
+        <div class="bg-rose-50 border-l-4 border-rose-500 p-4 mb-4">
+            <p class="text-sm text-rose-800 font-medium">核心边界：本期仅使用前端模拟数据演示系统自动打标，不连接 MT5、支付、钱包或外部风控服务；标签只做风险提示，不自动限制客户操作。</p>
+        </div>
+        <table>
+            <thead><tr><th width="20%">自动标签</th><th width="45%">触发条件、时间范围与阈值</th><th width="35%">关联依据与处理方式</th></tr></thead>
+            <tbody>
+                <tr><td class="font-medium">疑似多账户</td><td>满足任一条件：相同钱包或银行卡关联账户数 ≥ <span class="highlight">2</span>；相同设备指纹关联账户数 ≥ <span class="highlight">2</span>；<span class="highlight">7 天</span>内相同 IP 登录账户数 ≥ <span class="highlight">3</span>。</td><td>关联对象记录账户编号、钱包/银行卡标识、设备指纹或 IP。命中后由系统自动添加“疑似多账户”，展示触发时间、关联账户和当前状态。</td></tr>
+                <tr><td class="font-medium">疑似对冲</td><td>关联账户订单需同时满足：同一交易品种、交易方向相反、开仓时间差 ≤ <span class="highlight">5 分钟</span>、交易手数差 ≤ <span class="highlight">10%</span>、平仓时间差 ≤ <span class="highlight">10 分钟</span>；<span class="highlight">24 小时</span>内匹配订单 ≥ <span class="highlight">2 组</span>。</td><td>记录匹配订单编号、账户、品种、方向、开平仓时间和手数差。系统自动添加标签，页面仅提示并支持人工查看关联订单。</td></tr>
+                <tr><td class="font-medium">疑似刷量</td><td>满足任一条件：<span class="highlight">24 小时</span>内平仓订单 ≥ <span class="highlight">50 笔</span>；24 小时内有效平仓手数 ≥ <span class="highlight">100 手</span>；<span class="highlight">1 小时</span>内订单 ≥ <span class="highlight">20 笔</span>且平均持仓时间 ≤ <span class="highlight">60 秒</span>。</td><td>关联对象记录触发时间范围内的订单集合、订单数量、有效手数和平均持仓时间。系统自动添加标签，不自动拦截交易。</td></tr>
+                <tr><td class="font-medium">安全信息近期变更</td><td>钱包或银行卡修改后 <span class="highlight">48 小时</span>内申请出金；或手机号、邮箱、密码修改后 <span class="highlight">24 小时</span>内申请出金。</td><td>关联变更记录与出金申请编号，展示变更类型、变更时间、申请时间和间隔。系统自动添加标签，仅用于提醒人工复核。</td></tr>
+                <tr><td class="font-medium">短期大额出金</td><td><span class="highlight">24 小时</span>内入金后申请出金，且满足任一条件：出金金额 ≥ <span class="highlight">5,000 USD</span>；或出金金额 ≥ 近 24 小时入金总额的 <span class="highlight">50%</span>。</td><td>关联入金记录、出金申请、金额和时间窗口。系统自动添加标签，展示金额比较结果和当前标签状态。</td></tr>
+            </tbody>
+        </table>
+        <table>
+            <thead><tr><th width="20%">页面字段 / 操作</th><th width="45%">展示与交互规则</th><th width="35%">处理口径</th></tr></thead>
+            <tbody>
+                <tr><td class="font-medium">标签详情</td><td>每条标签展示标签名称、风险等级、来源（系统自动/人工添加）、当前状态、触发时间、添加人、关联账户/订单及具体触发依据。</td><td>系统自动标签来源固定为“系统自动”，当前状态为“生效”；触发依据来自前端模拟规则计算结果。</td></tr>
+                <tr><td class="font-medium">自动打标后的处理</td><td>命中规则后即时出现在客户详情页标签列表和顶部标签摘要；页面仅提供风险提示及关联信息查看，不自动冻结、拒绝出金或限制交易。</td><td>Demo 使用前端常量和模拟数据，后续可将规则配置替换为后端风控结果。</td></tr>
+                <tr><td class="font-medium">人工添加与说明</td><td>授权人员可添加风险标签并填写风险说明，也可对自动标签补充说明；添加后页面立即更新，记录添加人和添加时间。</td><td>人工添加标签来源为“人工添加”，不改变系统自动规则配置。</td></tr>
+                <tr><td class="font-medium">人工解除标签</td><td>点击“解除”必须填写解除原因，确认后从当前有效标签列表移除并即时更新页面。</td><td>解除仅代表当前 Demo 页面状态变化；不得通过清空说明代替解除原因。系统自动规则再次命中时，生产实现应重新生成标签。</td></tr>
+            </tbody>
+        </table>
+
+        <h2 class="text-lg font-bold text-gray-800 mb-4 mt-8 pb-2 border-b-2 border-blue-500 inline-block">4. 多账户关联展示</h2>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4"><p class="text-sm text-blue-800 font-medium">关联关系用于支撑“疑似多账户”和“疑似对冲”等风险标签的说明展示。本期全部使用模拟数据，不真实计算钱包、银行卡、设备、IP或交易关系。</p></div>
+        <table>
+            <thead><tr><th width="20%">功能模块</th><th width="45%">展示字段与判断依据</th><th width="35%">交互</th></tr></thead>
+            <tbody>
+                <tr><td class="font-medium">关联账户列表</td><td>展示账户编号、客户姓名、关联类型（姓名、手机号、邮箱、证件、银行卡、钱包、IP、设备、代理关系）、关联强度、最近登录时间、反向交易、共享收款账户和当前风险状态。</td><td>支持查看关联详情、关联原因和模拟交易信息。</td></tr>
+                <tr><td class="font-medium">关联判断依据</td><td>多账户规则使用相同钱包/银行卡、设备指纹和 7 天 IP 登录账户数；对冲规则使用关联账户订单的品种、方向、开平仓时间、手数差及 24 小时匹配组数。</td><td>详情中展示具体账户或订单编号，便于人工复核。</td></tr>
+                <tr><td class="font-medium">风控复核</td><td>关联关系可标记为“待风控复核”，仅改变前端模拟状态。</td><td>关联详情支持添加“疑似多账户”风险标签，标签添加后即时更新。</td></tr>
+            </tbody>
+        </table>
+
+        <h2 class="text-lg font-bold text-gray-800 mb-4 mt-8 pb-2 border-b-2 border-blue-500 inline-block">5. 留资溯源信息内容及字段</h2>
         <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
             <p class="text-sm text-blue-800 font-medium">业务目标：打通“售前线索 (Leads)”与“售后资产 (Client)”的数据壁垒，在一张卡片内展示客户从点击广告到完成首充交易的全生命周期旅程。</p>
         </div>
@@ -167,7 +202,7 @@
             </tbody>
         </table>
 
-        <h2 class="text-lg font-bold text-gray-800 mb-4 mt-8 pb-2 border-b-2 border-blue-500 inline-block">4. 归属代理 (IB) 关系维护</h2>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 mt-8 pb-2 border-b-2 border-blue-500 inline-block">6. 归属代理 (IB) 关系维护</h2>
         <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
             <p class="text-sm text-blue-800 font-medium">业务目标：允许管理层或授权人员在客户详情（留资溯源卡片内）动态调整客户的归属代理，以支持业务架构调整和客诉处理。</p>
         </div>

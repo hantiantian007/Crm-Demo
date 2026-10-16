@@ -2,8 +2,35 @@
   <div class="flex h-full bg-mainBg overflow-hidden">
     <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto">
       <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-mainBg">
+        <section class="mb-5 rounded-xl border border-emerald-200 bg-emerald-50/30 p-5">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2"><h2 class="text-base font-bold text-gray-800">风险概览</h2><span class="rounded border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700">系统模拟</span></div>
+              <p class="mt-1 text-xs text-gray-500">复用客户详情页风险标签模拟数据，仅用于出金审核辅助提示，不自动执行真实风控动作。</p>
+            </div>
+            <div class="flex flex-wrap gap-2"><button type="button" class="rounded border border-[#C4A373] bg-white px-3 py-1.5 text-xs text-[#9b7844] hover:bg-[#fbf7ef]" @click="openAddWithdrawRiskTag">添加人工风险标签</button><button type="button" class="rounded border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50" @click="openReviewNote">添加审核备注</button></div>
+          </div>
+          <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <div class="rounded-lg border border-white bg-white/80 p-3"><div class="text-xs text-gray-500">当前风险等级</div><div class="mt-2"><span class="inline-flex items-center gap-1 rounded border px-2 py-1 text-xs font-medium" :class="riskLevelTagClass(withdrawRiskLevel)"><span class="h-1.5 w-1.5 rounded-full" :class="riskLevelDotClass(withdrawRiskLevel)"></span>{{ withdrawRiskLevel }}</span></div></div>
+            <div class="rounded-lg border border-white bg-white/80 p-3"><div class="text-xs text-gray-500">客户风险标签</div><div class="mt-2 flex flex-wrap gap-1.5"><span v-for="tag in withdrawRiskTags" :key="tag.id" class="rounded border px-2 py-1 text-[11px]" :class="riskLevelTagClass(tag.level)">{{ tag.name }}</span></div></div>
+            <div class="rounded-lg border border-white bg-white/80 p-3"><div class="text-xs text-gray-500">系统审核建议</div><div class="mt-2 text-sm font-semibold" :class="withdrawSuggestion === '建议暂停出金' ? 'text-rose-700' : 'text-amber-700'">{{ withdrawSuggestion }}</div></div>
+            <div class="rounded-lg border border-white bg-white/80 p-3"><div class="text-xs text-gray-500">命中风险规则数量</div><div class="mt-2 text-xl font-bold text-gray-800">{{ withdrawRiskTags.length }} <span class="text-xs font-normal text-gray-500">项</span></div></div>
+          </div>
+        </section>
         <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-5">
           <div class="space-y-4">
+            <section class="rounded-xl border border-emerald-200 bg-white p-5 shadow-sm">
+              <div class="flex flex-wrap items-start justify-between gap-3 mb-4"><div><div class="text-sm font-semibold text-gray-700">本次出金命中的风险标签</div><div class="mt-1 text-xs text-gray-500">标签依据、触发时间及关联对象均来自共享前端模拟数据。</div></div><span class="rounded-full bg-rose-50 px-2.5 py-1 text-xs text-rose-700">{{ withdrawRiskTags.length }} 项命中</span></div>
+              <div class="space-y-3">
+                <article v-for="tag in withdrawRiskTags" :key="tag.id" class="rounded-lg border border-gray-100 bg-gray-50/70 p-4">
+                  <div class="flex flex-wrap items-start justify-between gap-3"><div class="flex items-center gap-2"><span class="font-semibold text-gray-800">{{ tag.name }}</span><span class="rounded border px-2 py-0.5 text-[11px]" :class="riskLevelTagClass(tag.level)">{{ tag.level }}</span><span class="rounded border border-blue-200 bg-blue-50 px-2 py-0.5 text-[11px] text-blue-700">{{ tag.source }}</span></div><span class="text-xs text-emerald-600">{{ tag.status }}</span></div>
+                  <div class="mt-3 grid grid-cols-1 gap-2 text-xs text-gray-600 md:grid-cols-2"><div><span class="text-gray-400">触发时间：</span>{{ tag.triggeredAt }}</div><div><span class="text-gray-400">关联账户/订单：</span>{{ tag.relatedObjects }}</div></div>
+                  <div class="mt-2 rounded border border-amber-100 bg-amber-50/70 px-3 py-2 text-xs leading-5 text-amber-800"><span class="font-medium">触发原因：</span>{{ tag.description }}</div>
+                  <div class="mt-3 flex flex-wrap items-center gap-3"><button type="button" class="text-xs text-blue-600 hover:text-blue-800" @click="openWithdrawRiskDetail(tag)">查看标签详情</button><button type="button" class="text-xs text-blue-600 hover:text-blue-800" @click="openRelatedRiskData(tag, 'account')">查看关联账户</button><button type="button" class="text-xs text-blue-600 hover:text-blue-800" @click="openRelatedRiskData(tag, 'order')">查看关联订单</button><button type="button" class="text-xs text-rose-600 hover:text-rose-800" @click="openRemoveWithdrawRiskTag(tag)">解除风险标签</button></div>
+                </article>
+                <div v-if="!withdrawRiskTags.length" class="rounded-lg border border-gray-100 bg-gray-50 p-6 text-center text-sm text-gray-400">暂无命中风险标签</div>
+              </div>
+            </section>
             <section class="bg-white rounded-xl border border-gray-200 p-5">
               <div class="text-sm font-semibold text-gray-700 mb-4">出金详情</div>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-4 text-sm">
@@ -164,11 +191,41 @@
 
     </div>
   </div>
+
+  <el-dialog v-model="withdrawRiskDetailDialog.open" title="风险标签详情" width="92%" :style="{ maxWidth: '680px' }" destroy-on-close>
+    <div v-if="withdrawRiskDetailDialog.tag" class="space-y-4 text-sm text-gray-700">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2"><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">标签名称 / 风险等级</div><div class="mt-1 font-medium">{{ withdrawRiskDetailDialog.tag.name }} / {{ withdrawRiskDetailDialog.tag.level }}</div></div><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">当前状态</div><div class="mt-1 text-emerald-700">{{ withdrawRiskDetailDialog.tag.status }}</div></div><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">触发时间</div><div class="mt-1">{{ withdrawRiskDetailDialog.tag.triggeredAt }}</div></div><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">标签来源</div><div class="mt-1">{{ withdrawRiskDetailDialog.tag.source }} / {{ withdrawRiskDetailDialog.tag.addedBy }}</div></div></div>
+      <div class="rounded-lg border border-amber-100 bg-amber-50 px-3 py-3 text-xs leading-5 text-amber-800"><span class="font-medium">触发原因：</span>{{ withdrawRiskDetailDialog.tag.description }}</div>
+      <div class="rounded-lg border border-blue-100 bg-blue-50 px-3 py-3 text-xs leading-5 text-blue-700"><span class="font-medium">关联对象：</span>{{ withdrawRiskDetailDialog.tag.relatedObjects }}</div>
+    </div>
+  </el-dialog>
+
+  <el-dialog v-model="relatedRiskDialog.open" :title="relatedRiskDialog.kind === 'account' ? '关联账户' : '关联订单'" width="92%" :style="{ maxWidth: '680px' }" destroy-on-close>
+    <div v-if="relatedRiskDialog.tag" class="space-y-4 text-sm text-gray-700"><div class="rounded-lg bg-gray-50 p-3"><div class="text-xs text-gray-500">风险标签</div><div class="mt-1 font-medium">{{ relatedRiskDialog.tag.name }}</div></div><div class="rounded-lg border border-blue-100 bg-blue-50 px-3 py-3 text-xs leading-5 text-blue-700"><span class="font-medium">{{ relatedRiskDialog.kind === 'account' ? '关联账户' : '关联订单' }}（模拟）：</span>{{ relatedRiskDialog.tag.relatedObjects }}</div><div class="rounded-lg border border-gray-100 p-3 text-xs leading-5 text-gray-600">本页面仅展示前端模拟关联信息，不执行真实账户、订单或交易关系计算。</div></div>
+  </el-dialog>
+
+  <el-dialog v-model="withdrawRiskTagDialog.open" :title="withdrawRiskTagDialog.mode === 'add' ? '添加人工风险标签' : '补充风险说明'" width="92%" :style="{ maxWidth: '620px' }" destroy-on-close>
+    <div class="space-y-4 text-sm"><div v-if="withdrawRiskTagDialog.mode === 'add'"><label class="mb-1 block text-gray-600">标签名称</label><select v-model="withdrawRiskForm.name" class="w-full rounded border border-gray-300 px-3 py-2 outline-none"><option value="" disabled>请选择风险标签</option><option v-for="name in availableWithdrawRiskTagNames" :key="name" :value="name">{{ name }}</option></select></div><div v-else class="rounded-lg bg-gray-50 px-3 py-2 text-gray-700">当前标签：<span class="font-medium">{{ withdrawRiskTagDialog.tag?.name }}</span></div><div v-if="withdrawRiskTagDialog.mode === 'add'"><label class="mb-1 block text-gray-600">风险等级</label><select v-model="withdrawRiskForm.level" class="w-full rounded border border-gray-300 px-3 py-2 outline-none"><option>低风险</option><option>中风险</option><option>高风险</option><option>待处理</option></select></div><div><label class="mb-1 block text-gray-600">风险说明</label><textarea v-model="withdrawRiskForm.description" rows="3" class="w-full rounded border border-gray-300 px-3 py-2 outline-none" placeholder="请输入说明"></textarea></div></div>
+    <template #footer><div class="flex justify-end gap-2"><button type="button" class="h-9 rounded-md border border-gray-200 px-4 text-sm text-gray-700 hover:bg-gray-50" @click="withdrawRiskTagDialog.open = false">取消</button><button type="button" class="h-9 rounded-md bg-primaryBtn px-4 text-sm font-medium text-white hover:bg-primaryBtnHover" @click="saveWithdrawRiskTag">保存</button></div></template>
+  </el-dialog>
+
+  <el-dialog v-model="removeWithdrawRiskDialog.open" title="解除风险标签" width="92%" :style="{ maxWidth: '520px' }" destroy-on-close>
+    <div class="space-y-3 text-sm"><div class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700">将解除标签：{{ removeWithdrawRiskDialog.tag?.name }}</div><label class="block text-gray-600">解除原因<span class="ml-1 text-rose-500">*</span></label><textarea v-model="removeWithdrawRiskDialog.reason" rows="3" class="w-full rounded border border-gray-300 px-3 py-2 outline-none" placeholder="请填写解除原因"></textarea></div>
+    <template #footer><div class="flex justify-end gap-2"><button type="button" class="h-9 rounded-md border border-gray-200 px-4 text-sm text-gray-700 hover:bg-gray-50" @click="removeWithdrawRiskDialog.open = false">取消</button><button type="button" class="h-9 rounded-md bg-rose-600 px-4 text-sm font-medium text-white hover:bg-rose-700" @click="confirmRemoveWithdrawRiskTag">确认解除</button></div></template>
+  </el-dialog>
+
+  <el-dialog v-model="reviewNoteDialog.open" title="添加审核备注" width="92%" :style="{ maxWidth: '620px' }" destroy-on-close>
+    <textarea v-model="reviewNoteDialog.note" rows="4" class="w-full rounded border border-gray-300 px-3 py-2 text-sm outline-none" placeholder="请输入本次出金审核备注"></textarea>
+    <div v-if="reviewNotes.length" class="mt-3 space-y-2"><div v-for="note in reviewNotes" :key="note.id" class="rounded bg-gray-50 px-3 py-2 text-xs text-gray-600">{{ note.time }} · {{ note.text }}</div></div>
+    <template #footer><div class="flex justify-end gap-2"><button type="button" class="h-9 rounded-md border border-gray-200 px-4 text-sm text-gray-700 hover:bg-gray-50" @click="reviewNoteDialog.open = false">取消</button><button type="button" class="h-9 rounded-md bg-primaryBtn px-4 text-sm font-medium text-white hover:bg-primaryBtnHover" @click="saveReviewNote">保存备注</button></div></template>
+  </el-dialog>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { buildAutoRiskTags, riskTagCatalog } from '@/store/risk-tag-demo'
 
 const route = useRoute()
 
@@ -433,6 +490,92 @@ const stampText = computed(() => {
   if (detail.value.auditStatus === '审核拒绝') return '已拒绝'
   return '已审核'
 })
+
+const withdrawRiskTags = ref(buildAutoRiskTags().map((tag) => ({ ...tag, relatedObjects: String(tag.relatedObjects || '').replaceAll('8100457', account.value) })))
+const withdrawRiskLevel = computed(() => {
+  if (withdrawRiskTags.value.some((tag) => tag.level === '高风险')) return '高风险'
+  if (withdrawRiskTags.value.some((tag) => tag.level === '中风险')) return '中风险'
+  return withdrawRiskTags.value.length ? '低风险' : '正常'
+})
+const withdrawSuggestion = computed(() => {
+  if (withdrawRiskTags.value.some((tag) => ['疑似多账户', '疑似对冲', '疑似刷量'].includes(tag.name))) return '建议暂停出金'
+  if (withdrawRiskTags.value.length) return '建议人工复核'
+  return '正常审核'
+})
+const availableWithdrawRiskTagNames = computed(() => riskTagCatalog.filter((item) => !withdrawRiskTags.value.some((tag) => tag.name === item.name)).map((item) => item.name))
+const withdrawRiskDetailDialog = ref({ open: false, tag: null })
+const relatedRiskDialog = ref({ open: false, tag: null, kind: 'account' })
+const withdrawRiskTagDialog = ref({ open: false, mode: 'add', tag: null })
+const withdrawRiskForm = ref({ name: '', level: '中风险', description: '' })
+const removeWithdrawRiskDialog = ref({ open: false, tag: null, reason: '' })
+const reviewNoteDialog = ref({ open: false, note: '' })
+const reviewNotes = ref([])
+
+const riskLevelTagClass = (level) => {
+  if (level === '高风险') return 'border-rose-200 bg-rose-50 text-rose-700'
+  if (level === '中风险') return 'border-orange-200 bg-orange-50 text-orange-700'
+  if (level === '待处理') return 'border-blue-200 bg-blue-50 text-blue-700'
+  return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+}
+
+const riskLevelDotClass = (level) => {
+  if (level === '高风险') return 'bg-rose-500'
+  if (level === '中风险') return 'bg-orange-400'
+  if (level === '待处理') return 'bg-blue-500'
+  return 'bg-emerald-500'
+}
+
+const openWithdrawRiskDetail = (tag) => {
+  withdrawRiskDetailDialog.value = { open: true, tag }
+}
+
+const openRelatedRiskData = (tag, kind) => {
+  relatedRiskDialog.value = { open: true, tag, kind }
+}
+
+const openAddWithdrawRiskTag = () => {
+  withdrawRiskForm.value = { name: availableWithdrawRiskTagNames.value[0] || '', level: '中风险', description: '' }
+  withdrawRiskTagDialog.value = { open: true, mode: 'add', tag: null }
+}
+
+const saveWithdrawRiskTag = () => {
+  const form = withdrawRiskForm.value
+  if (!form.name) return ElMessage.warning('请选择风险标签')
+  if (!String(form.description || '').trim()) return ElMessage.warning('请填写风险说明')
+  if (withdrawRiskTagDialog.value.mode === 'edit') {
+    withdrawRiskTagDialog.value.tag.description = form.description.trim()
+    withdrawRiskTagDialog.value.tag.level = form.level
+    ElMessage.success('风险说明已更新')
+  } else {
+    withdrawRiskTags.value.push({ id: `withdraw-risk-${Date.now()}`, name: form.name, level: form.level, source: '人工添加', status: '生效', addedAt: '2026-10-15 10:00', triggeredAt: '2026-10-15 10:00', addedBy: '当前操作人（演示）', relatedObjects: '—', description: form.description.trim() })
+    ElMessage.success('人工风险标签已添加')
+  }
+  withdrawRiskTagDialog.value.open = false
+}
+
+const openRemoveWithdrawRiskTag = (tag) => {
+  removeWithdrawRiskDialog.value = { open: true, tag, reason: '' }
+}
+
+const confirmRemoveWithdrawRiskTag = () => {
+  const dialog = removeWithdrawRiskDialog.value
+  if (!String(dialog.reason || '').trim()) return ElMessage.warning('请填写解除原因')
+  withdrawRiskTags.value = withdrawRiskTags.value.filter((tag) => tag.id !== dialog.tag.id)
+  removeWithdrawRiskDialog.value.open = false
+  ElMessage.success('风险标签已解除')
+}
+
+const openReviewNote = () => {
+  reviewNoteDialog.value = { open: true, note: '' }
+}
+
+const saveReviewNote = () => {
+  const note = String(reviewNoteDialog.value.note || '').trim()
+  if (!note) return ElMessage.warning('请填写审核备注')
+  reviewNotes.value.unshift({ id: `note-${Date.now()}`, time: '2026-10-15 10:00', text: note })
+  reviewNoteDialog.value.open = false
+  ElMessage.success('审核备注已添加')
+}
 
 const riskText = computed(() => displayText(detail.value.riskText))
 </script>

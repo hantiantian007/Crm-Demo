@@ -516,6 +516,66 @@
 </div>
 </div>
 
+<!-- 客户详情页 - 风险标签 -->
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3 flex-wrap">
+<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">客户管理</span>
+<h3 class="text-base font-bold text-gray-800">客户详情页 - 风险标签</h3>
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">新增</span>
+<span class="text-[10px] font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded border border-purple-200/60">待研发</span>
+<span class="text-[10px] font-medium text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">高优先级</span>
+</div>
+<p class="text-xs text-gray-500 mt-1">在客户详情页展示和管理客户风险状态，支持标签添加、说明补充、解除及处理信息记录。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead><tr class="bg-gray-50 text-gray-600 border-b border-gray-200"><th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th><th class="px-4 py-2 font-medium min-w-[420px]">需求描述与主要内容</th><th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属页面</th><th class="px-4 py-2 font-medium whitespace-nowrap w-[120px]">状态</th><th class="px-4 py-2 font-medium whitespace-nowrap w-[120px]">优先级</th><th class="px-4 py-2 font-medium min-w-[220px]">交付物导航 (直达链接)</th></tr></thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover"><td class="px-4 py-3 font-bold text-gray-800">客户详情页 - 风险标签</td><td class="px-4 py-3 text-gray-500 whitespace-normal leading-5">展示客户风险标签，支持高风险、疑似多账户、疑似对冲、疑似刷量、短期大额出金等标签；支持添加标签、补充风险说明、解除标签；解除时必须填写解除原因，并记录添加人、添加时间和处理说明，状态变化后即时更新页面。</td><td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">客户详情页</span></td><td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded bg-purple-100 text-purple-700 border border-purple-200">待研发</span></td><td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded bg-rose-50 text-rose-700 border border-rose-200">高</span></td><td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center"><a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/crm/client-detail?id=u_agent_01" target="_blank">原型</a><a class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-cent-account-page-client-detail" target="_blank"><i class="fas fa-file-alt"></i> PRD</a></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- 客户详情页 - 多账户关联 -->
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3 flex-wrap">
+<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold">客户管理</span>
+<h3 class="text-base font-bold text-gray-800">客户详情页 - 多账户关联</h3>
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">新增</span>
+<span class="text-[10px] font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded border border-purple-200/60">待研发</span>
+<span class="text-[10px] font-medium text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">高优先级</span>
+</div>
+<p class="text-xs text-gray-500 mt-1">在客户详情页展示客户与其他账户的模拟关联关系，支持查看关联原因、交易信息及标记待风控复核。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead><tr class="bg-gray-50 text-gray-600 border-b border-gray-200"><th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th><th class="px-4 py-2 font-medium min-w-[420px]">需求描述与主要内容</th><th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属页面</th><th class="px-4 py-2 font-medium whitespace-nowrap w-[120px]">状态</th><th class="px-4 py-2 font-medium whitespace-nowrap w-[120px]">优先级</th><th class="px-4 py-2 font-medium min-w-[220px]">交付物导航 (直达链接)</th></tr></thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover"><td class="px-4 py-3 font-bold text-gray-800">客户详情页 - 多账户关联</td><td class="px-4 py-3 text-gray-500 whitespace-normal leading-5">展示关联账户列表及相同姓名、手机号、邮箱、证件、银行卡、钱包、IP、设备、代理关系等关联类型；展示关联强度、反向交易、共享收款账户和当前风险状态；支持查看关联原因与模拟交易信息，标记待风控复核，并从关联详情添加“疑似多账户”风险标签。</td><td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">客户详情页</span></td><td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded bg-purple-100 text-purple-700 border border-purple-200">待研发</span></td><td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded bg-rose-50 text-rose-700 border border-rose-200">高</span></td><td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center"><a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/crm/client-detail?id=u_agent_01" target="_blank">原型</a><a class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" href="#/other/prd-cent-account-page-client-detail" target="_blank"><i class="fas fa-file-alt"></i> PRD</a></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
 <!-- 商品销售流程（迁移至待研发） -->
 <div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-purple-50/40 transition-colors flex justify-between items-center">

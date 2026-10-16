@@ -10,30 +10,34 @@
      <label class="text-[13px] text-gray-600 font-medium whitespace-nowrap">
       对账日期范围:
      </label>
-     <input class="custom-input w-[160px]" type="date" value="2026-07-13"/>
+     <input v-model="filters.start" class="custom-input w-[160px]" type="date" />
      <span class="text-gray-400">
       至
      </span>
-     <input class="custom-input w-[160px]" type="date" value="2026-08-11"/>
+     <input v-model="filters.end" class="custom-input w-[160px]" type="date" />
     </div>
     <div class="flex items-center gap-2">
-     <select class="custom-select w-[140px]">
-      <option>
-       对账状态: 全部
+     <select v-model="filters.status" class="custom-select w-[140px]">
+      <option value="all">
+       请选择
       </option>
-      <option>
+      <option value="normal">
        正常
       </option>
-      <option>
+      <option value="abnormal">
        异常
       </option>
      </select>
+    </div>
+    <div class="flex items-center gap-2">
+     <button class="rounded-md bg-[#C19B5E] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-[#B28B52]" type="button" @click="handleSearch">搜索</button>
+     <button class="rounded-md border border-gray-300 bg-white px-4 py-2 text-[13px] font-medium text-gray-600 transition-colors hover:bg-gray-50" type="button" @click="handleReset">重置</button>
     </div>
    </div>
   </div>
  </div>
  <!-- 对账批次宽表（横向 nowrap 滚动） -->
- <div class="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
+ <div class="reconciliation-list-table-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col">
   <div class="flex items-center justify-between p-5 border-b border-gray-100">
    <div class="flex items-center gap-3">
     <h3 class="font-bold text-gray-800 text-[15px]">
@@ -44,8 +48,8 @@
     </span>
    </div>
   </div>
-  <div class="overflow-x-auto no-scrollbar">
-   <table class="custom-table w-full min-w-[880px]">
+  <div class="reconciliation-list-table-scroll overflow-x-auto no-scrollbar">
+   <table class="commission-list-table custom-table w-full min-w-[880px]">
     <thead class="bg-tableHeader sticky top-0">
      <tr>
       <th>
@@ -91,7 +95,7 @@
       </td>
       <td>
        <span class="pill pill-red">
-        🔴 异常
+        异常
        </span>
       </td>
       <td class="font-bold text-red-600">
@@ -102,7 +106,7 @@
       </td>
       <td>
        <div class="flex items-center justify-center">
-        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700" href="#">
+        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors" href="#/crm/commission-daily-audit">
          查看详情
         </a>
        </div>
@@ -124,7 +128,7 @@
       </td>
       <td>
        <span class="pill pill-red">
-        🔴 异常
+        异常
        </span>
       </td>
       <td class="font-bold text-red-600">
@@ -135,7 +139,7 @@
       </td>
       <td>
        <div class="flex items-center justify-center">
-        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700" href="#">
+        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors" href="#/crm/commission-daily-audit">
          查看详情
         </a>
        </div>
@@ -157,7 +161,7 @@
       </td>
       <td>
        <span class="pill pill-green">
-        ✅ 正常
+        正常
        </span>
       </td>
       <td class="font-semibold text-emerald-700">
@@ -168,7 +172,7 @@
       </td>
       <td>
        <div class="flex items-center justify-center">
-        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700" href="#">
+        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors" href="#/crm/commission-daily-audit">
          查看详情
         </a>
        </div>
@@ -190,7 +194,7 @@
       </td>
       <td>
        <span class="pill pill-green">
-        ✅ 正常
+        正常
        </span>
       </td>
       <td class="font-semibold text-emerald-700">
@@ -201,7 +205,7 @@
       </td>
       <td>
        <div class="flex items-center justify-center">
-        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700" href="#">
+        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors" href="#/crm/commission-daily-audit">
          查看详情
         </a>
        </div>
@@ -223,7 +227,7 @@
       </td>
       <td>
        <span class="pill pill-green">
-        ✅ 正常
+        正常
        </span>
       </td>
       <td class="font-semibold text-emerald-700">
@@ -234,7 +238,7 @@
       </td>
       <td>
        <div class="flex items-center justify-center">
-        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700" href="#">
+        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors" href="#/crm/commission-daily-audit">
          查看详情
         </a>
        </div>
@@ -256,7 +260,7 @@
       </td>
       <td>
        <span class="pill pill-green">
-        ✅ 正常
+        正常
        </span>
       </td>
       <td class="font-semibold text-emerald-700">
@@ -267,7 +271,7 @@
       </td>
       <td>
        <div class="flex items-center justify-center">
-        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700" href="#">
+        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors" href="#/crm/commission-daily-audit">
          查看详情
         </a>
        </div>
@@ -289,7 +293,7 @@
       </td>
       <td>
        <span class="pill pill-green">
-        ✅ 正常
+        正常
        </span>
       </td>
       <td class="font-semibold text-emerald-700">
@@ -300,7 +304,7 @@
       </td>
       <td>
        <div class="flex items-center justify-center">
-        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700" href="#">
+        <a class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors" href="#/crm/commission-daily-audit">
          查看详情
         </a>
        </div>
@@ -309,7 +313,7 @@
     </tbody>
    </table>
   </div>
-  <div class="flex items-center justify-between p-4 border-t border-gray-100 text-xs text-gray-500">
+  <div class="reconciliation-list-pagination flex items-center justify-between px-5 py-4 border-t border-gray-100 text-xs text-gray-500">
    <div>
     共 31 条记录，当前显示前 7 条
    </div>
@@ -356,4 +360,87 @@
 
 <script setup>
 import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+
+const filters = ref({
+  start: '2026-07-13',
+  end: '2026-08-11',
+  status: 'all'
+})
+
+const handleSearch = () => {
+  ElMessage.success('已按当前条件查询')
+}
+
+const handleReset = () => {
+  filters.value = { start: '2026-07-13', end: '2026-08-11', status: 'all' }
+  ElMessage.success('筛选条件已重置')
+}
 </script>
+
+<style scoped>
+.reconciliation-list-table-card {
+  overflow: visible;
+}
+
+.reconciliation-list-table-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.commission-list-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #374151;
+  font-size: 13px;
+}
+
+.commission-list-table thead th {
+  height: 56px;
+  padding: 0 16px;
+  background: #fbfcfd;
+  border-bottom: 1px solid #edf0f2;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.commission-list-table tbody td {
+  height: 58px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f3f5;
+  line-height: 20px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.commission-list-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.commission-list-table tbody td:nth-child(2),
+.commission-list-table tbody td:nth-child(3),
+.commission-list-table tbody td:nth-child(4),
+.commission-list-table tbody td:nth-child(6),
+.commission-list-table tbody td:nth-child(7) {
+  text-align: right;
+}
+
+.commission-list-table tbody td:nth-child(5),
+.commission-list-table tbody td:nth-child(8) {
+  text-align: center;
+}
+
+.commission-list-table tbody td:last-child > .flex {
+  min-width: 100px;
+}
+
+.reconciliation-list-pagination {
+  min-height: 64px;
+  background: #fff;
+}
+</style>

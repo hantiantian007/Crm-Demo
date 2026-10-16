@@ -177,7 +177,7 @@
   </div>
  </div>
  <!-- 核心对照表：对账明细（宽表横向滚动 nowrap） -->
- <div class="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
+ <div class="reconciliation-detail-table-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col overflow-visible">
   <div class="flex items-center justify-between p-5 border-b border-gray-100">
    <div class="flex items-center gap-3">
     <h3 class="font-bold text-gray-800 text-[15px]">
@@ -222,8 +222,8 @@
     </div>
    </div>
   </div>
-  <div class="overflow-x-auto no-scrollbar">
-   <table class="custom-table w-full min-w-[1500px]">
+  <div class="reconciliation-detail-table-scroll overflow-x-auto no-scrollbar">
+   <table class="commission-detail-table custom-table w-full min-w-[1500px]">
     <thead>
      <tr>
       <th>
@@ -242,13 +242,13 @@
        应/实返佣人数
       </th>
       <th>
-       应/实返佣金额
+       应/实返佣金额($)
       </th>
       <th>
        对账结果
       </th>
       <th>
-       金额差额
+       金额差额($)
       </th>
       <th>
        返佣条数差
@@ -269,8 +269,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        李强（MT: 10028571）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">李强</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10028571</div>
        </div>
       </td>
       <td>
@@ -305,9 +306,14 @@
        +1 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50892')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -320,8 +326,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        张敏（MT: USC20234）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">张敏</div>
+        <div class="text-xs leading-4 text-gray-400">MT: USC20234</div>
        </div>
       </td>
       <td>
@@ -353,9 +360,14 @@
        0 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50881')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -368,8 +380,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        孙佳（MT: USC21088）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">孙佳</div>
+        <div class="text-xs leading-4 text-gray-400">MT: USC21088</div>
        </div>
       </td>
       <td>
@@ -401,9 +414,14 @@
        0 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50878')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -416,8 +434,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        王磊（MT: 10029310）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">王磊</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10029310</div>
        </div>
       </td>
       <td>
@@ -449,9 +468,14 @@
        0 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50870')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -464,8 +488,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        陈宇（MT: 10024718）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">陈宇</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10024718</div>
        </div>
       </td>
       <td>
@@ -500,9 +525,14 @@
        -1 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50855')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -515,8 +545,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        何思雨（MT: 10023391）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">何思雨</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10023391</div>
        </div>
       </td>
       <td>
@@ -548,9 +579,14 @@
        0 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50847')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -563,8 +599,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        郑凯（MT: 10030578）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">郑凯</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10030578</div>
        </div>
       </td>
       <td>
@@ -599,9 +636,14 @@
        +2 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50812')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -614,8 +656,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        冯杰（MT: 10028910）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">冯杰</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10028910</div>
        </div>
       </td>
       <td>
@@ -647,9 +690,14 @@
        0 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50808')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -662,8 +710,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        褚敏（MT: 10022884）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">褚敏</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10022884</div>
        </div>
       </td>
       <td>
@@ -698,9 +747,14 @@
        -1 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50804')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr class="diff-row">
@@ -713,8 +767,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        蒋晨（MT: 10025040）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">蒋晨</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10025040</div>
        </div>
       </td>
       <td>
@@ -749,9 +804,14 @@
        +4 条
       </td>
       <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
+       <div class="flex items-center justify-center gap-1">
+        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
+         查看详情
+        </button>
+        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50796')">
+         异常处理
+        </button>
+       </div>
       </td>
      </tr>
      <tr>
@@ -764,8 +824,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        赵磊（MT: 10027483）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">赵磊</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10027483</div>
        </div>
       </td>
       <td>
@@ -809,8 +870,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        林小（MT: USC21530）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">林小</div>
+        <div class="text-xs leading-4 text-gray-400">MT: USC21530</div>
        </div>
       </td>
       <td>
@@ -854,8 +916,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium text-gray-600">
-        吴丹（MT: 10031205）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5 text-gray-600">吴丹</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10031205</div>
        </div>
       </td>
       <td>
@@ -899,8 +962,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        刘洋（MT: 10026187）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">刘洋</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10026187</div>
        </div>
       </td>
       <td>
@@ -944,8 +1008,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        张伟（MT: 10019088）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">张伟</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10019088</div>
        </div>
       </td>
       <td>
@@ -989,8 +1054,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        黄涛（MT: 10030122）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">黄涛</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10030122</div>
        </div>
       </td>
       <td>
@@ -1034,8 +1100,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        吴佳（MT: 10027136）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">吴佳</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10027136</div>
        </div>
       </td>
       <td>
@@ -1079,8 +1146,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        周明（MT: USC20881）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">周明</div>
+        <div class="text-xs leading-4 text-gray-400">MT: USC20881</div>
        </div>
       </td>
       <td>
@@ -1124,8 +1192,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        徐磊（MT: USC21977）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">徐磊</div>
+        <div class="text-xs leading-4 text-gray-400">MT: USC21977</div>
        </div>
       </td>
       <td>
@@ -1169,8 +1238,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        孙浩（MT: 10024558）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">孙浩</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10024558</div>
        </div>
       </td>
       <td>
@@ -1214,8 +1284,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium text-gray-600">
-        韩冰（MT: 10032016）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5 text-gray-600">韩冰</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10032016</div>
        </div>
       </td>
       <td>
@@ -1259,8 +1330,9 @@
        </span>
       </td>
       <td>
-       <div class="font-medium">
-        董雪（MT: 10021166）
+       <div class="reconciliation-customer">
+        <div class="font-medium leading-5">董雪</div>
+        <div class="text-xs leading-4 text-gray-400">MT: 10021166</div>
        </div>
       </td>
       <td>
@@ -1297,7 +1369,7 @@
     </tbody>
    </table>
   </div>
-  <div class="flex items-center justify-between p-4 border-t border-gray-100 text-xs text-gray-500">
+  <div class="reconciliation-detail-pagination flex items-center justify-between p-4 border-t border-gray-100 text-xs text-gray-500">
    <div>
     共 328 条记录，当前显示前 20 条（异常已置顶）
    </div>
@@ -1338,10 +1410,313 @@
  </div>
 </div>
 
+    <el-drawer v-model="exceptionDrawerOpen" :with-header="false" size="640px">
+      <div class="flex h-full min-h-0 flex-col">
+        <div class="flex shrink-0 items-start justify-between border-b border-gray-200/80 pb-5">
+          <div class="flex items-start gap-3">
+            <div class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600">
+              <i class="fas fa-triangle-exclamation text-sm"></i>
+            </div>
+            <div>
+              <div class="text-base font-bold leading-5 text-gray-800">异常处理</div>
+              <div class="mt-1.5 text-xs leading-4 text-gray-400">记录当前异常对账明细的处理信息</div>
+            </div>
+          </div>
+          <button class="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600" type="button" @click="exceptionDrawerOpen = false">
+            <i class="fas fa-times text-sm"></i>
+          </button>
+        </div>
+
+        <div v-if="selectedException" class="min-h-0 flex-1 overflow-y-auto py-5 pr-1">
+          <section class="mb-5 rounded-xl bg-gray-50/80 px-4 py-3.5">
+            <div class="mb-3 flex items-center justify-between">
+              <div class="text-sm font-semibold text-gray-800">异常记录基础信息</div>
+              <span class="pill pill-red">{{ selectedException.closeOrderNo }}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-x-8 gap-y-3">
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">对账日期</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.reconciliationDate }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">平仓单号</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.closeOrderNo }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">账户类型</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.accountType }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">客户姓名</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.customerName }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">MT账号</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.mtAccount }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">交易手数</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.lots }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">应返佣人数</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.expectedPeople }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">实返佣人数</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.actualPeople }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">应返佣金额</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.expectedAmount }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">实际返佣金额</div><div class="mt-0.5 truncate text-[13px] font-medium text-gray-700">{{ selectedException.actualAmount }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">金额差额</div><div class="mt-0.5 truncate text-[13px] font-semibold text-red-600">{{ selectedException.amountDifference }}</div></div>
+              <div class="min-w-0"><div class="text-[11px] leading-4 text-gray-400">返佣条数差</div><div class="mt-0.5 truncate text-[13px] font-semibold text-red-600">{{ selectedException.rebateDifference }}</div></div>
+            </div>
+          </section>
+
+          <section class="exception-processing-card mb-5 rounded-xl bg-gray-50/80 px-4 py-4">
+            <div class="mb-4 flex items-center justify-between">
+              <div class="text-sm font-semibold text-gray-800">异常处理信息</div>
+            </div>
+            <div class="space-y-5">
+              <div>
+                <label class="mb-2 block text-[13px] font-medium text-gray-600"><span class="text-red-500">*</span> 异常原因</label>
+                <select v-model="exceptionForm.reason" :class="['custom-select', 'exception-form-select', 'w-full', !exceptionForm.reason ? 'text-gray-400' : 'text-gray-700']">
+                  <option value="">请选择异常原因</option>
+                  <option v-for="item in exceptionReasons" :key="item" :value="item">{{ item }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="mb-2 block text-[13px] font-medium text-gray-600"><span class="text-red-500">*</span> 处理方式</label>
+                <select v-model="exceptionForm.method" :class="['custom-select', 'exception-form-select', 'w-full', !exceptionForm.method ? 'text-gray-400' : 'text-gray-700']">
+                  <option value="">请选择处理方式</option>
+                  <option v-for="item in handlingMethods" :key="item" :value="item">{{ item }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="mb-2 block text-[13px] font-medium text-gray-600"><span class="text-red-500">*</span> 处理说明</label>
+                <textarea v-model="exceptionForm.note" class="custom-input exception-form-textarea h-28 min-h-[112px] w-full resize-y rounded-md" placeholder="请说明异常原因、实际处理过程和最终处理结果"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <section v-if="exceptionForm.status === '已处理' || exceptionForm.processor || exceptionForm.processedAt" class="rounded-xl bg-gray-50/80 px-4 py-3.5">
+            <div class="mb-3 flex items-center gap-2">
+              <i class="fas fa-clock-rotate-left text-xs text-gray-400"></i>
+              <div class="text-sm font-semibold text-gray-800">处理信息</div>
+            </div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+              <div>
+                <div class="text-[11px] leading-4 text-gray-400">处理状态</div>
+                <div class="mt-1.5"><span :class="exceptionForm.status === '已处理' ? 'pill pill-green' : 'pill pill-orange'">{{ exceptionForm.status }}</span></div>
+              </div>
+              <div>
+                <div class="text-[11px] leading-4 text-gray-400">处理人</div>
+                <div class="mt-1 text-[13px] font-medium leading-5 text-gray-700">{{ exceptionForm.processor || '保存后自动记录' }}</div>
+              </div>
+              <div>
+                <div class="text-[11px] leading-4 text-gray-400">处理时间</div>
+                <div class="mt-1 text-[13px] font-medium leading-5 text-gray-700">{{ exceptionForm.processedAt || '保存后自动记录' }}</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="flex shrink-0 items-center justify-end gap-3 border-t border-gray-200/80 bg-white pt-4">
+          <button class="h-9 rounded-md border border-gray-200 bg-white px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50" type="button" @click="exceptionDrawerOpen = false">取消</button>
+          <button class="h-9 rounded-md bg-[#C19B5E] px-4 text-sm font-medium text-white transition-colors hover:bg-[#B28B52]" type="button" @click="saveExceptionRecord">确认处理</button>
+        </div>
+      </div>
+    </el-drawer>
+
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+
+const exceptionDrawerOpen = ref(false)
+const selectedException = ref(null)
+const exceptionRecords = reactive({
+  'CL-50881': {
+    reason: '返佣金额不一致',
+    method: '重新同步',
+    note: '确认该美分账户的返佣金额与系统同步结果不一致，已重新同步返佣数据，最终金额已恢复一致。',
+    status: '已处理',
+    processor: '审核员-王浩',
+    processedAt: '2026-08-11 09:20:18'
+  }
+})
+const exceptionForm = reactive({
+  reason: '',
+  method: '',
+  note: '',
+  status: '待处理',
+  processor: '',
+  processedAt: ''
+})
+
+const exceptionReasons = ['返佣金额不一致', '返佣人数不一致', 'MT数据异常', '数据同步异常', '其他']
+const handlingMethods = ['重新同步', '人工核对', '人工调整', '补发返佣', '其他']
+const exceptionRows = {
+  'CL-50892': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50892', accountType: '标准账户', customerName: '李强', mtAccount: '10028571', lots: '0.50 标准手', expectedPeople: '2 人', actualPeople: '3 人', expectedAmount: '$14.00', actualAmount: '$72.20', amountDifference: '+$58.20', rebateDifference: '+1 条' },
+  'CL-50881': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50881', accountType: '美分账户', customerName: '张敏', mtAccount: 'USC20234', lots: '2.50 美分手', expectedPeople: '1 人', actualPeople: '1 人', expectedAmount: '$0.0035', actualAmount: '$1.4035', amountDifference: '+$1.40', rebateDifference: '0 条' },
+  'CL-50878': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50878', accountType: '美分账户', customerName: '孙佳', mtAccount: 'USC21088', lots: '12.50 美分手', expectedPeople: '2 人', actualPeople: '2 人', expectedAmount: '$0.0280', actualAmount: '$59.8280', amountDifference: '+$59.80', rebateDifference: '0 条' },
+  'CL-50870': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50870', accountType: '标准账户', customerName: '王磊', mtAccount: '10029310', lots: '0.20 标准手', expectedPeople: '3 人', actualPeople: '3 人', expectedAmount: '$2.40', actualAmount: '$2.70', amountDifference: '+$0.30', rebateDifference: '0 条' },
+  'CL-50855': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50855', accountType: '标准账户', customerName: '陈宇', mtAccount: '10024718', lots: '1.00 标准手', expectedPeople: '3 人', actualPeople: '2 人', expectedAmount: '$15.00', actualAmount: '$10.00', amountDifference: '-$5.00', rebateDifference: '-1 条' },
+  'CL-50847': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50847', accountType: '标准账户', customerName: '何思雨', mtAccount: '10023391', lots: '0.30 标准手', expectedPeople: '2 人', actualPeople: '2 人', expectedAmount: '$1.80', actualAmount: '$2.30', amountDifference: '+$0.50', rebateDifference: '0 条' },
+  'CL-50812': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50812', accountType: '标准账户', customerName: '郑凯', mtAccount: '10030578', lots: '0.70 标准手', expectedPeople: '3 人', actualPeople: '5 人', expectedAmount: '$10.50', actualAmount: '$45.50', amountDifference: '+$35.00', rebateDifference: '+2 条' },
+  'CL-50808': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50808', accountType: '标准账户', customerName: '冯杰', mtAccount: '10028910', lots: '0.10 标准手', expectedPeople: '2 人', actualPeople: '2 人', expectedAmount: '$3.00', actualAmount: '$3.50', amountDifference: '+$0.50', rebateDifference: '0 条' },
+  'CL-50804': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50804', accountType: '标准账户', customerName: '褚敏', mtAccount: '10022884', lots: '1.50 标准手', expectedPeople: '4 人', actualPeople: '3 人', expectedAmount: '$60.00', actualAmount: '$30.00', amountDifference: '-$30.00', rebateDifference: '-1 条' },
+  'CL-50796': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50796', accountType: '标准账户', customerName: '蒋晨', mtAccount: '10025040', lots: '0.60 标准手', expectedPeople: '3 人', actualPeople: '7 人', expectedAmount: '$7.20', actualAmount: '$36.00', amountDifference: '+$28.80', rebateDifference: '+4 条' }
+}
+
+const openExceptionDrawer = (id) => {
+  const row = exceptionRows[id]
+  if (!row) return
+  selectedException.value = row
+  Object.assign(exceptionForm, exceptionRecords[id] || {
+    reason: '',
+    method: '',
+    note: '',
+    status: '待处理',
+    processor: '',
+    processedAt: ''
+  })
+  exceptionDrawerOpen.value = true
+}
+
+const formatCurrentTime = () => {
+  const now = new Date()
+  const pad = (value) => String(value).padStart(2, '0')
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
+}
+
+const saveExceptionRecord = () => {
+  if (!selectedException.value) return
+  if (!exceptionForm.reason) {
+    ElMessage.warning('请选择异常原因')
+    return
+  }
+  if (!exceptionForm.method) {
+    ElMessage.warning('请选择处理方式')
+    return
+  }
+  if (!exceptionForm.note.trim()) {
+    ElMessage.warning('请填写处理说明')
+    return
+  }
+  const id = selectedException.value.closeOrderNo.replace('#', '')
+  const record = {
+    reason: exceptionForm.reason,
+    method: exceptionForm.method,
+    note: exceptionForm.note.trim(),
+    status: '已处理',
+    processor: '当前操作人',
+    processedAt: formatCurrentTime()
+  }
+  exceptionRecords[id] = record
+  Object.assign(exceptionForm, record)
+  ElMessage.success('异常处理已确认')
+}
 </script>
+
+<style scoped>
+.reconciliation-detail-table-card {
+  overflow: visible;
+}
+
+.reconciliation-detail-table-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.commission-detail-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #374151;
+  font-size: 13px;
+}
+
+.commission-detail-table thead th {
+  height: 56px;
+  padding: 0 16px;
+  background: #fbfcfd;
+  border-bottom: 1px solid #edf0f2;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.commission-detail-table tbody td {
+  height: 60px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f3f5;
+  line-height: 20px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.commission-detail-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.commission-detail-table tbody td:nth-child(4),
+.commission-detail-table tbody td:nth-child(5),
+.commission-detail-table tbody td:nth-child(7),
+.commission-detail-table tbody td:nth-child(9) {
+  text-align: center;
+}
+
+.commission-detail-table tbody td:nth-child(6),
+.commission-detail-table tbody td:nth-child(8) {
+  text-align: right;
+}
+
+.commission-detail-table tbody td:last-child > .flex {
+  gap: 12px;
+  min-width: 142px;
+}
+
+.commission-detail-table tbody tr:not(.diff-row) td:nth-child(4) span {
+  color: #374151 !important;
+}
+
+.reconciliation-customer {
+  min-width: 150px;
+  line-height: 20px;
+}
+
+.exception-processing-card {
+  border: 1px solid #f1f3f5;
+}
+
+.exception-form-select {
+  height: 40px;
+  padding: 0 38px 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 14px 14px;
+  color: #374151;
+  font-size: 13px;
+  line-height: 20px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  appearance: none;
+}
+
+.exception-form-select:focus {
+  border-color: #c19b5e;
+  box-shadow: 0 0 0 3px rgba(193, 155, 94, 0.12);
+}
+
+.exception-form-textarea {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  padding: 10px 12px;
+  color: #374151;
+  font-size: 13px;
+  line-height: 20px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.exception-form-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.exception-form-textarea:focus {
+  border-color: #c19b5e;
+  box-shadow: 0 0 0 3px rgba(193, 155, 94, 0.12);
+}
+
+.reconciliation-detail-pagination {
+  min-height: 64px;
+  background: #fff;
+}
+</style>
