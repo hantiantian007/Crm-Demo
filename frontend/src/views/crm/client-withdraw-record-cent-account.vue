@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col min-w-0 w-full h-full">
-    <div class="flex-1 min-w-0 overflow-y-auto custom-scrollbar">
+    <div class="flex-1 min-w-0 overflow-y-auto custom-scrollbar p-4 md:p-6">
       <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
           <div class="text-sm font-semibold text-gray-900">出金记录</div>

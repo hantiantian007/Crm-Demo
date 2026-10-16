@@ -39,6 +39,175 @@
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">风控管理</span>
+<h3 class="text-base font-bold text-gray-800">Lark 通知中心</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">建设 CRM 一对一 Lark 通知功能，包含通知记录、通知配置、Lark 人员三个 Tab。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">Lark 通知中心</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5"><ul class="list-disc pl-4 space-y-1"><li>建设 CRM 一对一 Lark 通知功能。</li><li>包含通知记录、通知配置、Lark 人员三个 Tab，统一管理通知记录、业务配置及人员关联。</li></ul></td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center"><a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/risk/lark-notifications" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openLarkCenterPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">风控管理</span>
+<h3 class="text-base font-bold text-gray-800">Lark 业务通知规则</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">增加 10 个核心业务通知规则，覆盖风控、审核、数据同步、支付、活动及客户活跃度场景。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">Lark 业务通知规则</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5"><ul class="list-disc pl-4 space-y-1"><li>增加 10 个核心业务通知规则：高风险出金、跨账户对冲、多账户关联、出金审核超时、MT5 数据同步异常、支付通道异常、活动参与、活动达标、活动疑似对冲、高价值客户活跃度下降。</li><li>作为后续研发对接对应业务模块的统一通知规则清单。</li></ul></td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center"><a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/risk/lark-notifications" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openLarkRulesPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">风控管理</span>
+<h3 class="text-base font-bold text-gray-800">Lark 人员绑定</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">支持 CRM 管理人员绑定 Lark User ID，提供绑定、编辑、解除绑定，用于后续通知人员配置。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">Lark 人员绑定</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5"><ul class="list-disc pl-4 space-y-1"><li>支持 CRM 管理人员绑定 Lark User ID。</li><li>支持绑定、编辑、解除绑定。</li><li>用于后续通知人员配置，建立 CRM 管理人员与 Lark 用户之间的关联。</li></ul></td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center"><a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/risk/lark-notifications" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openLarkPersonnelPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">系统管理</span>
+<h3 class="text-base font-bold text-gray-800">CRM 客户登录异常通知</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">在系统管理 → 系统设置 → 用户管理的用户列表中配置 CRM 登录通知，针对指定客户开启并通知指定管理人员。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">CRM 客户登录异常通知</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5"><ul class="list-disc pl-4 space-y-1"><li>在「系统管理 → 系统设置 → 用户管理」的用户列表中增加登录通知配置。</li><li>可针对指定客户开启 CRM 登录通知；客户登录 CRM 后，通知指定管理人员。</li><li>用于解决客户账号被非本人登录后无法及时发现的问题。</li><li>研发目标为通知指定管理人员；当前原型仍为通知客户本人，后续研发需按本需求对齐。</li></ul></td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center"><a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/system/settings/users" target="_blank">原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openCrmLoginNotificationPrd">
+<i class="fas fa-file-alt"></i> PRD
+</button>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
 <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">其他页面</span>
 <h3 class="text-base font-bold text-gray-800">FAQ内容管理</h3>
 </div>
@@ -1057,6 +1226,10 @@ const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCa
 const openReportActivityJoinPrd = () => openPrd('prd-report-activity-join.html', '活动参与报表 - PRD')
 const openAgentHomePrd = () => openPrd('prd-agent-home.html', '代理首页 - PRD')
 const openPioneerOnePrd = () => openPrd('prd-activity-pioneer-one-50000-release.html', '先锋一号 50,000 USD 活动详情与盈利释放 - PRD')
+const openLarkCenterPrd = () => openPrd('prd-lark-notification-records.html', 'Lark 通知 PRD')
+const openLarkRulesPrd = () => openPrd('prd-lark-notification-config.html', '通知配置 PRD')
+const openLarkPersonnelPrd = () => openPrd('prd-lark-personnel.html', 'Lark 人员 PRD')
+const openCrmLoginNotificationPrd = () => openPrd('prd-crm-login-notification.html', 'CRM 登录通知配置 PRD')
 const openPioneerOneAuditPrd = () => openPrd('prd-activity-audit.html', '活动管理 - 活动审核（含先锋一号 50,000 USD 活动）- PRD')
 const openPaymentConfigRecordsPrd = () => openPrd('prd-payment-management.html', '支付设置 - 配置记录 - PRD')
 const openWithdrawConfigRecordsPrd = () => openPrd('prd-withdraw-settings.html', '提现设置 - 配置记录 - PRD')

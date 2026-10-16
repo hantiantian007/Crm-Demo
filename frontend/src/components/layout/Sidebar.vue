@@ -130,21 +130,16 @@
           <i class="fa-solid fa-gear w-6 text-center text-lg mr-2"></i>
           <span>系统管理</span>
         </template>
-        <el-menu-item index="/system/settings">系统设置</el-menu-item>
-        <el-menu-item index="/system/mt-settings">MT设置</el-menu-item>
-        <el-menu-item index="/system/mass-msg">群发管理</el-menu-item>
-        <el-menu-item index="/system/msg">消息管理</el-menu-item>
-        <el-menu-item index="/system/logs">日志管理</el-menu-item>
-        <el-menu-item index="/system/params">配置参数</el-menu-item>
-        <el-menu-item index="/system/currency">支付币种</el-menu-item>
-        <el-menu-item index="/system/payment">支付管理</el-menu-item>
-        <el-menu-item index="/system/withdraw-settings">提现设置</el-menu-item>
-        <el-menu-item v-if="canViewFundTypeSetting" index="/system/fund-type-setting">出入金类型设置</el-menu-item>
-        <el-menu-item index="/system/commission-settings">返佣设置</el-menu-item>
-        <el-menu-item index="/system/sms-logs">验证码记录</el-menu-item>
-        <el-menu-item index="/system/password-security">密码安全配置</el-menu-item>
-        <el-menu-item index="/system/operation-audit">操作审计</el-menu-item>
-        <el-menu-item index="/system/tags">标签管理</el-menu-item>
+        <el-sub-menu index="system-settings" class="system-settings-menu">
+          <template #title>系统设置</template>
+          <el-menu-item index="/system/settings/users">用户管理</el-menu-item>
+          <el-menu-item index="/system/msg">消息管理</el-menu-item>
+          <el-menu-item index="/system/payment">支付管理</el-menu-item>
+          <el-menu-item index="/system/withdraw-settings">提现设置</el-menu-item>
+          <el-menu-item index="/system/tags">标签管理</el-menu-item>
+          <el-menu-item v-if="canViewFundTypeSetting" index="/system/fund-type-setting">出入金类型设置</el-menu-item>
+          <el-menu-item index="/system/password-security">密码安全配置</el-menu-item>
+        </el-sub-menu>
       </el-sub-menu>
       <el-menu-item index="/tools">
         <i class="fa-solid fa-wrench w-6 text-center text-lg mr-2"></i>
@@ -167,6 +162,7 @@
         <el-menu-item index="/risk/ip-alert">登录 IP 一致性比对</el-menu-item>
         <el-menu-item index="/risk/blacklist">黑名单管理</el-menu-item>
         <el-menu-item index="/risk/close-interval">平仓间隔统计</el-menu-item>
+        <el-menu-item index="/risk/lark-notifications">Lark 通知</el-menu-item>
       </el-sub-menu>
 
       <el-sub-menu index="other-pages">
@@ -189,7 +185,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { demoRoleState } from '@/store/demoRole'
 
@@ -238,9 +234,16 @@ const subMenuIndexes = [
 
 const defaultOpeneds = computed(() => {
   if (isCollapse.value) return []
+  if (route.path.startsWith('/system/')) return ['system', 'system-settings']
   const idx = getSubMenuIndexByPath(route.path)
   return idx ? [idx] : []
 })
+
+// default-openeds 仅负责初始展开，路由切换及侧栏恢复展开时同步系统菜单层级。
+watch(defaultOpeneds, (indexes) => {
+  if (isCollapse.value || !route.path.startsWith('/system/')) return
+  indexes.forEach((index) => menuRef.value?.open?.(index))
+}, { flush: 'post' })
 
 const handleMenuSelect = (_, indexPath) => {
   if (isCollapse.value) return
@@ -251,6 +254,9 @@ const handleMenuSelect = (_, indexPath) => {
     if (k !== parent) menuRef.value?.close?.(k)
   }
   menuRef.value?.open?.(parent)
+  if (parent === 'system') {
+    indexPath.slice(1, -1).forEach((index) => menuRef.value?.open?.(index))
+  }
 }
 
 const toggleCollapse = () => {
@@ -263,4 +269,27 @@ const toggleCollapse = () => {
 .el-menu-vertical:not(.el-menu--collapse) { width: 240px; }
 :deep(.el-menu-item:hover), :deep(.el-sub-menu__title:hover) { background-color: #373D4E !important; color: white !important; }
 :deep(.el-menu-item.is-active) { background-color: #373D4E !important; }
+
+/* 只规范系统设置的内联层级，收起侧栏后的弹出菜单仍使用组件默认样式。 */
+.el-menu-vertical:not(.el-menu--collapse) :deep(.system-settings-menu > .el-sub-menu__title) {
+  padding-left: 40px;
+  padding-right: 40px;
+  height: 48px;
+  line-height: 48px;
+}
+.el-menu-vertical:not(.el-menu--collapse) :deep(.system-settings-menu > .el-menu > .el-menu-item) {
+  padding-left: 60px;
+  padding-right: 40px;
+  height: 44px;
+  line-height: 44px;
+}
+.el-menu-vertical:not(.el-menu--collapse) :deep(.system-settings-menu .el-sub-menu__icon-arrow) {
+  right: 16px;
+  width: 12px;
+  font-size: 12px;
+}
+.el-menu-vertical:not(.el-menu--collapse) :deep(.system-settings-menu .el-menu-item.is-active) {
+  color: var(--el-menu-active-color) !important;
+  font-weight: 500;
+}
 </style>

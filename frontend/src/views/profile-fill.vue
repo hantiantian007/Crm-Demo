@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col min-w-0 w-full">
-    <div class="flex-1 min-w-0 overflow-y-auto custom-scrollbar">
+    <div class="flex-1 min-w-0 overflow-y-auto custom-scrollbar p-4 md:p-6">
       <div class="space-y-4">
         <section class="bg-white rounded-xl border border-gray-200 p-5">
           <div class="flex items-center gap-4">

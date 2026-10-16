@@ -2,19 +2,560 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 覆盖 Element Plus 主题色为原型中的金色 */
+/* CRM 全局设计令牌 */
 :root {
-  --el-color-primary: #d1a84f;
+  --crm-primary: #d1a84f;
+  --crm-primary-hover: #b89241;
+  --crm-primary-soft: #f8f6e8;
+  --crm-border: #e5e7eb;
+  --crm-text: #374151;
+  --crm-muted: #6b7280;
+  --crm-surface: #ffffff;
+  --crm-page-bg: #f3f4f6;
+  --crm-table-head: #f9fafb;
+  --crm-table-hover: #fcfbf8;
+  --crm-control-height: 36px;
+  --crm-control-radius: 6px;
+
+  /* Element Plus 使用同一组 CRM 令牌 */
+  --el-color-primary: var(--crm-primary);
   --el-color-primary-light-3: #dfc284;
   --el-color-primary-light-5: #e8d3a6;
   --el-color-primary-light-7: #f0e5c9;
   --el-color-primary-light-8: #f4eece;
   --el-color-primary-light-9: #f8f6e8;
-  --el-color-primary-dark-2: #b89241;
+  --el-color-primary-dark-2: var(--crm-primary-hover);
+  --el-border-color: var(--crm-border);
+  --el-border-radius-base: var(--crm-control-radius);
+  --el-text-color-regular: var(--crm-text);
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.app-page-host {
+  min-height: 0;
+  overscroll-behavior-y: contain;
+}
+
+/* 旧页面中使用的近似金色 utility 统一映射到 CRM 主色 */
+:is(main, .el-overlay) [class*="bg-[#C19B5E]"],
+:is(main, .el-overlay) [class*="bg-[#C4A373]"],
+:is(main, .el-overlay) [class*="bg-[#D3A771]"],
+:is(main, .el-overlay) [class*="bg-[#c19b5e]"] {
+  background-color: var(--crm-primary);
+}
+
+:is(main, .el-overlay) [class*="hover:bg-[#B28B52]"]:hover,
+:is(main, .el-overlay) [class*="hover:bg-[#b09063]"]:hover,
+:is(main, .el-overlay) [class*="hover:bg-[#b28f5d]"]:hover,
+:is(main, .el-overlay) [class*="hover:bg-[#b28747]"]:hover,
+:is(main, .el-overlay) [class*="hover:bg-[#a88651]"]:hover {
+  background-color: var(--crm-primary-hover);
+}
+
+:is(main, .el-overlay) [class*="text-[#C19B5E]"],
+:is(main, .el-overlay) [class*="text-[#C4A373]"],
+:is(main, .el-overlay) [class*="text-[#c19b5e]"] {
+  color: var(--crm-primary);
+}
+
+:is(main, .el-overlay) [class*="border-[#C19B5E]"],
+:is(main, .el-overlay) [class*="border-[#C4A373]"],
+:is(main, .el-overlay) [class*="border-[#c19b5e]"] {
+  border-color: var(--crm-primary);
+}
+
+/* 页面级表单控件：统一尺寸、边框与焦点反馈，保留复合日期输入的拼接边 */
+:is(main, .el-overlay) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]),
+:is(main, .el-overlay) select,
+:is(main, .el-overlay) textarea {
+  box-sizing: border-box;
+  border: 1px solid var(--crm-border);
+  border-radius: var(--crm-control-radius);
+  color: var(--crm-text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+:is(main, .el-overlay) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]),
+:is(main, .el-overlay) select {
+  height: var(--crm-control-height);
+  padding: 0 12px;
+  background-color: var(--crm-surface);
+}
+
+:is(main, .el-overlay) select {
+  appearance: none;
+  padding-right: 34px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  background-size: 14px 14px;
+  cursor: pointer;
+}
+
+:is(main, .el-overlay) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]):focus,
+:is(main, .el-overlay) select:focus,
+:is(main, .el-overlay) textarea:focus {
+  border-color: var(--crm-primary);
+  box-shadow: 0 0 0 3px rgb(209 168 79 / 14%);
+}
+
+:is(main, .el-overlay) input:disabled,
+:is(main, .el-overlay) select:disabled,
+:is(main, .el-overlay) textarea:disabled {
+  color: #9ca3af;
+  background-color: #f9fafb;
+  cursor: not-allowed;
+}
+
+:is(main, .el-overlay) textarea {
+  min-height: 88px;
+  padding: 9px 12px;
+  line-height: 20px;
+  resize: vertical;
+}
+
+:is(main, .el-overlay) input::placeholder,
+:is(main, .el-overlay) textarea::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+:is(main, .el-overlay) input[class*="border-red-200"],
+:is(main, .el-overlay) select[class*="border-red-200"] {
+  border-color: #fecaca !important;
+}
+
+:is(main, .el-overlay) input[class*="border-red-300"],
+:is(main, .el-overlay) select[class*="border-red-300"] {
+  border-color: #fca5a5 !important;
+}
+
+:is(main, .el-overlay) select[class*="text-red-"] {
+  color: #dc2626 !important;
+}
+
+:is(main, .el-overlay) select[class*="text-gray-400"] {
+  color: #9ca3af !important;
+}
+
+:is(main, .el-overlay) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]):is(.border-r-0) {
+  border-right-width: 0;
+}
+
+:is(main, .el-overlay) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]):is(.border-l-0) {
+  border-left-width: 0;
+}
+
+:is(main, .el-overlay) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]):is(.rounded-r-none) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+:is(main, .el-overlay) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]):is(.rounded-l-none) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+:is(main, .el-overlay) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]):is(.rounded-none) {
+  border-radius: 0;
+}
+
+:is(main, .el-overlay) .filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+:is(main, .el-overlay) .filter-label {
+  flex: 0 0 auto;
+  color: var(--crm-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Element Plus 控件与原生控件保持同一高度和焦点状态 */
+.el-input__wrapper,
+.el-select__wrapper {
+  min-height: var(--crm-control-height);
+  border-radius: var(--crm-control-radius);
+  padding: 1px 11px;
+  box-shadow: 0 0 0 1px var(--crm-border) inset;
+  transition: box-shadow 0.15s ease;
+}
+
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focused,
+.el-input__wrapper:focus-within,
+.el-select__wrapper:focus-within {
+  box-shadow: 0 0 0 1px var(--crm-primary) inset, 0 0 0 3px rgb(209 168 79 / 12%);
+}
+
+.el-input__inner,
+.el-select__placeholder,
+.el-select__selected-item,
+.el-date-editor .el-range-input {
+  color: var(--crm-text);
+  font-size: 13px;
+}
+
+.el-textarea__inner {
+  border-radius: var(--crm-control-radius);
+  border-color: var(--crm-border);
+  color: var(--crm-text);
+  font-size: 13px;
+  line-height: 20px;
+  box-shadow: none;
+}
+
+.el-textarea__inner:focus {
+  border-color: var(--crm-primary);
+  box-shadow: 0 0 0 3px rgb(209 168 79 / 12%);
+}
+
+/* 常用状态徽标：异常、待处理等状态保持克制且有统一对比度 */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.pill-gray {
+  color: #475569;
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.pill-green {
+  color: #166534;
+  background: #dcfce7;
+  border-color: #bbf7d0;
+}
+
+.pill-red {
+  color: #991b1b;
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
+.pill-blue {
+  color: #1e40af;
+  background: #dbeafe;
+  border-color: #bfdbfe;
+}
+
+.pill-orange,
+.pill-amber {
+  color: #9a3412;
+  background: #ffedd5;
+  border-color: #fed7aa;
+}
+
+.pill-standard {
+  color: #1e40af;
+  background: #dbeafe;
+  border-color: #bfdbfe;
+}
+
+.pill-cent {
+  color: #6d28d9;
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+}
+
+.pill-qualified {
+  color: #166534;
+  background: #dcfce7;
+  border-color: #bbf7d0;
+}
+
+/* 被多个页面复用的原生操作按钮 */
+.btn-golden,
+.btn-primary,
+.action-primary {
+  border: 1px solid var(--crm-primary);
+  border-radius: var(--crm-control-radius);
+  background: var(--crm-primary);
+  color: #fff;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-golden:hover,
+.btn-primary:hover,
+.action-primary:hover {
+  border-color: var(--crm-primary-hover);
+  background: var(--crm-primary-hover);
+}
+
+.btn-outline {
+  border: 1px solid var(--crm-border);
+  border-radius: var(--crm-control-radius);
+  background: #fff;
+  color: var(--crm-text);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-outline:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+/* Element Plus 状态标签与页面内 pill 统一语义色 */
+.el-tag {
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.el-tag--success {
+  --el-tag-bg-color: #ecfdf5;
+  --el-tag-border-color: #a7f3d0;
+  --el-tag-text-color: #047857;
+}
+
+.el-tag--danger {
+  --el-tag-bg-color: #fef2f2;
+  --el-tag-border-color: #fecaca;
+  --el-tag-text-color: #b91c1c;
+}
+
+.el-tag--warning {
+  --el-tag-bg-color: #fff7ed;
+  --el-tag-border-color: #fed7aa;
+  --el-tag-text-color: #b45309;
+}
+
+.el-tag--info {
+  --el-tag-bg-color: #f1f5f9;
+  --el-tag-border-color: #e2e8f0;
+  --el-tag-text-color: #475569;
+}
+
+/* 原生数据表格基线；紧凑型 text-xs 表格和 Element Plus 表格保留各自密度 */
+main table:not(.text-xs):not(.custom-table):not(.record-table):not(.el-table__header):not(.el-table__body):has(> thead) {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+main table:not(.text-xs):not(.custom-table):not(.record-table):not(.el-table__header):not(.el-table__body):has(> thead) > thead > tr > th {
+  height: 48px;
+  padding: 12px 14px;
+  color: var(--crm-muted);
+  background: var(--crm-table-head);
+  border-bottom: 1px solid var(--crm-border);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+main table:not(.text-xs):not(.custom-table):not(.record-table):not(.el-table__header):not(.el-table__body):has(> thead) > tbody > tr > td {
+  min-height: 52px;
+  padding: 14px;
+  color: var(--crm-text);
+  border-bottom: 1px solid #f1f3f5;
+  line-height: 20px;
+  vertical-align: middle;
+}
+
+main table:not(.text-xs):not(.custom-table):not(.record-table):not(.el-table__header):not(.el-table__body):has(> thead) > tbody > tr:hover > td {
+  background-color: var(--crm-table-hover);
+}
+
+main table:not(.text-xs):not(.custom-table):not(.record-table):not(.el-table__header):not(.el-table__body):has(> thead) > tbody > tr:last-child > td {
+  border-bottom: 0;
+}
+
+/* Element Plus 表格保持统一表头、行高、分隔线与悬停反馈 */
+main .el-table th.el-table__cell {
+  height: 48px;
+  padding: 12px 0;
+  color: var(--crm-muted);
+  background: var(--crm-table-head);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+main .el-table th.el-table__cell .cell {
+  line-height: 20px;
+}
+
+main .el-table td.el-table__cell {
+  padding: 14px 0;
+  color: var(--crm-text);
+  border-bottom-color: #f1f3f5;
+}
+
+main .el-table .cell {
+  line-height: 20px;
+}
+
+main .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
+  background-color: var(--crm-table-hover);
+}
+
+/* Drawer / Dialog 使用一致的标题、正文和操作区节奏；保留各自显式宽度 */
+.el-dialog {
+  max-width: calc(100vw - 32px);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.el-dialog__header {
+  margin-right: 0;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.el-dialog__title,
+.el-drawer__title {
+  color: var(--crm-text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.el-dialog__body {
+  padding: 20px;
+}
+
+.el-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 20px 18px;
+  border-top: 1px solid #f1f3f5;
+}
+
+.el-drawer__header {
+  margin-bottom: 0;
+  padding: 18px 20px;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.el-drawer {
+  max-width: calc(100vw - 24px);
+}
+
+.el-drawer:has(> .el-drawer__header) > .el-drawer__body {
+  padding: 20px;
+}
+
+.el-drawer__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 20px 18px;
+  border-top: 1px solid #f1f3f5;
+}
+
+.el-button {
+  border-radius: var(--crm-control-radius);
+  font-family: inherit;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+/* 常用固定高度按钮统一为控件高度，排除方形分页按钮 */
+:is(main, .el-overlay) button[class~="h-8"]:not([class~="w-8"]),
+:is(main, .el-overlay) button[class~="h-9"],
+:is(main, .el-overlay) button[class~="h-10"],
+:is(main, .el-overlay) button[class~="px-6"][class~="py-1.5"],
+:is(main, .el-overlay) button[class~="px-6"][class~="py-2"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--crm-control-height);
+  height: var(--crm-control-height);
+  padding: 0 14px;
+  border-radius: var(--crm-control-radius);
+  font-size: 13px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+:is(main, .el-overlay) button.search-btn {
+  min-height: var(--crm-control-height);
+  height: var(--crm-control-height);
+  border-radius: var(--crm-control-radius);
+  font-size: 13px;
+}
+
+main .reconciliation-list-pagination button,
+main .reconciliation-detail-pagination button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--crm-control-radius);
+  line-height: 1;
+}
+
+main .reconciliation-list-pagination button.bg-blue-600,
+main .reconciliation-detail-pagination button.bg-blue-600 {
+  background-color: var(--crm-primary);
+  color: #fff;
+}
+
+.el-pagination {
+  --el-pagination-button-width: 30px;
+  --el-pagination-button-height: 30px;
+  color: var(--crm-muted);
+  gap: 6px;
+}
+
+.el-pagination .btn-prev,
+.el-pagination .btn-next,
+.el-pagination .el-pager li {
+  min-width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  line-height: 30px;
+}
+
+.el-pagination.is-background .el-pager li.is-active {
+  background-color: var(--crm-primary);
+  color: #fff;
+}
+
+.el-pagination .el-select__wrapper {
+  min-height: 30px;
+  padding: 1px 8px;
+}
+
+.crm-btn {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--crm-control-radius);
+  font-size: 13px;
+}
+
+.crm-btn-primary {
+  background: var(--crm-primary);
+}
+
+.crm-btn-primary:hover {
+  background: var(--crm-primary-hover);
+}
+
+@media (max-width: 640px) {
+  .el-drawer {
+    max-width: 100vw;
+  }
+}
 
 @layer components {
   .kb-page { @apply w-full box-border; }

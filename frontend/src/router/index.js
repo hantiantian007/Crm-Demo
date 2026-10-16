@@ -88,6 +88,7 @@ const routes = [
   { path: '/trust/account', component: () => import('@/views/trust/account.vue'), meta: { title: '委托交易账户管理', breadcrumb: ['委托交易', '委托交易账户管理'] } },
   { path: '/trust/rule-config', component: () => import('@/views/trust/rule-config.vue'), meta: { title: '查看规则配置', breadcrumb: ['委托交易', '查看规则配置'] } },
   { path: '/system/settings', component: () => import('@/views/system/settings.vue'), meta: { title: '系统设置', breadcrumb: ['系统管理', '系统设置'] } },
+  { path: '/system/settings/users', component: () => import('@/views/system/user-list.vue'), meta: { title: '用户列表', breadcrumb: ['系统管理', '系统设置', '用户管理', '用户列表'], prdUrl: 'prd-crm-user-list.html', prdTitle: 'CRM 用户列表 PRD' } },
   { path: '/system/mt-settings', component: () => import('@/views/system/mt-settings.vue'), meta: { title: 'MT设置', breadcrumb: ['系统管理', 'MT设置'] } },
   { path: '/system/mass-msg', component: () => import('@/views/system/mass-msg.vue'), meta: { title: '群发管理', breadcrumb: ['系统管理', '群发管理'] } },
   { path: '/system/msg', component: () => import('@/views/system/msg.vue'), meta: { title: '消息管理', breadcrumb: ['系统管理', '消息管理'] } },
@@ -105,10 +106,11 @@ const routes = [
   { path: '/tools', component: () => import('@/views/tools.vue'), meta: { title: '交易工具', breadcrumb: ['交易工具'] } },
   { path: '/finance-management/report-detail', component: () => import('@/views/finance-management/report-detail.vue'), meta: { title: '财务报表明细', breadcrumb: ['财务管理', '财务报表明细'] } },
   { path: '/finance-management/client-info', component: () => import('@/views/finance-management/client-info.vue'), meta: { title: '客户信息表', breadcrumb: ['财务管理', '客户信息表'] } },
-  { path: '/risk/login-logs', component: () => import('@/views/risk/login-logs.vue'), meta: { title: '客户登录日志', breadcrumb: ['风控管理', '客户登录日志'] } },
+  { path: '/risk/login-logs', component: () => import('@/views/risk/login-logs.vue'), meta: { title: '客户登录日志', breadcrumb: ['风险管理', '客户登录日志'] } },
   { path: '/risk/ip-alert', component: () => import('@/views/risk/ip-alert.vue'), meta: { title: '登录 IP 一致性比对', breadcrumb: ['风控管理', '登录 IP 一致性比对'] } },
   { path: '/risk/blacklist', component: () => import('@/views/risk/blacklist.vue'), meta: { title: '黑名单管理', breadcrumb: ['风控管理', '黑名单管理'] } },
   { path: '/risk/close-interval', component: () => import('@/views/risk/close-interval.vue'), meta: { title: '平仓间隔统计', breadcrumb: ['风控管理', '平仓间隔统计'] } },
+  { path: '/risk/lark-notifications', component: () => import('@/views/risk/lark-notifications.vue'), meta: { title: 'Lark 通知', breadcrumb: ['风控管理', 'Lark 通知'] } },
 
 
   // 补充遗漏的子页面

@@ -564,8 +564,8 @@ const handleExport = () => {
 }
 
 .crm-input:focus {
-  border-color: rgba(193, 155, 94, 0.6);
-  box-shadow: 0 0 0 3px rgba(193, 155, 94, 0.12);
+  border-color: var(--crm-primary);
+  box-shadow: 0 0 0 3px rgb(209 168 79 / 12%);
 }
 
 .crm-select {
@@ -592,12 +592,12 @@ const handleExport = () => {
 }
 
 .crm-btn-primary {
-  background: #c19b5e;
+  background: var(--crm-primary);
   color: #ffffff;
 }
 
 .crm-btn-primary:hover {
-  background: #b28747;
+  background: var(--crm-primary-hover);
 }
 
 .crm-btn-outline {
@@ -740,10 +740,10 @@ const handleExport = () => {
 
 .crm-page-btn,
 .crm-page-num {
-  height: 30px;
-  min-width: 30px;
+  height: 32px;
+  min-width: 32px;
   padding: 0 10px;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #e5e7eb;
   background: #fff;
   font-size: 12px;
@@ -756,9 +756,9 @@ const handleExport = () => {
 }
 
 .crm-page-num.is-active {
-  border-color: rgba(193, 155, 94, 0.6);
-  background: rgba(193, 155, 94, 0.12);
-  color: #c19b5e;
+  border-color: var(--crm-primary);
+  background: var(--crm-primary-soft);
+  color: var(--crm-primary-hover);
   font-weight: 600;
 }
 

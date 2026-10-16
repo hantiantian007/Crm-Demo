@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CRM 用户列表 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style></head>
+<body><main class="wrap"><article class="card"><span class="tag">页面独立 PRD · 字段定义版</span><h1>CRM 用户列表 - PRD</h1>
+<section><h2>1. 页面名称</h2>
+<p>系统管理 → 系统设置 → 用户管理。直接打开现有用户列表，不新增“用户列表”菜单。本 PRD 聚焦列表中的 CRM 登录通知配置入口及状态。</p></section>
+<section><h2>2. 页面目的</h2>
+<p>在用户列表为指定 CRM 用户开启或关闭登录提醒，并明确通知哪些管理人员。</p></section>
+<section><h2>3. 页面功能</h2>
+<ul><li>保留原有用户字段、搜索、筛选、查看和分页。</li><li>显示 CRM 登录通知开关及配置状态；提供按用户配置接收人的入口。</li><li>新增配置相关信息在现有列表/设置中展示，不改变用户账号本身。</li></ul></section>
+<section><h2>4. 核心字段定义</h2>
+<p class="note">定义口径：数据来源指业务来源，不指定数据库表或接口。带“建议”的长度为待确认约束，现有原型未见对应限制；沿用 CRM 主数据的字段不在本页截断或重写。String[] 表示去重的人员标识列表，空列表为 []，不以逗号拼接姓名代替标识。DateTime 统一展示 YYYY-MM-DD HH:mm:ss（19 字符）；正式时区沿用 CRM 统一口径，具体时区待确认，原型使用本机时间。显示“—”表示缺失，不作为实际字段值。</p><div class="table-wrap"><table class="fields"><thead><tr><th>字段名称</th><th>字段含义</th><th>数据来源</th><th>数据类型</th><th>字符/格式要求</th><th>状态/枚举</th><th>默认值</th><th>是否必填</th><th>是否可编辑</th><th>业务规则 / 何时变化</th></tr></thead><tbody><tr><td>CRM 用户 ID</td><td>本行配置所属的唯一 CRM 用户</td><td>CRM 用户数据中的稳定标识</td><td>String</td><td>不可空；保留来源标识及长度，前导零不可丢失；不是 MT5 账号</td><td>无</td><td>当前行用户 ID</td><td>是，来源提供</td><td>否</td><td>所有通知配置按此用户关联，不能以姓名匹配或改到其他用户。</td></tr>
+<tr><td>用户名称</td><td>被配置登录通知的用户名称</td><td>CRM 用户数据</td><td>String</td><td>沿用来源字符长度；不可空；长文本可省略展示但保留全文</td><td>无</td><td>当前用户名称</td><td>是，来源提供</td><td>否，本功能不编辑</td><td>名称更新随 CRM 主数据展示，不改变用户身份或配置归属。</td></tr>
+<tr><td>用户邮箱/账号</td><td>用户识别和登录账号信息</td><td>CRM 用户数据；现原型 email 为账号邮箱</td><td>String</td><td>邮箱/账号格式及最大长度沿用 CRM；邮箱缺失显示“—”；不得推造地址</td><td>无</td><td>来源原值</td><td>用户账号必有；邮箱按 CRM 数据是否存在</td><td>否</td><td>选择行后只读展示；不在本功能改邮箱或登录账号。</td></tr>
+<tr><td>CRM 登录通知 / 是否开启</td><td>该用户成功登录时是否需要通知</td><td>该用户已保存的登录通知配置</td><td>Boolean</td><td>true / false；不可空</td><td>true＝开启（列表已开启）；false＝关闭（列表未开启）</td><td>未配置用户 false；已有值回填</td><td>是</td><td>通过配置弹窗编辑</td><td>保存后更新当前行；关闭不发送，不等同登录状态禁用；不改演示中已有开启值。</td></tr>
+<tr><td>通知对象</td><td>接收该用户登录提醒的管理人员</td><td>用户登录通知配置中的人员标识；Lark 人员数据提供绑定资格和姓名</td><td>String[]</td><td>去重标识列表；支持 1 人或多人；允许 []；姓名按 CRM 展示</td><td>仅已绑定管理人员可选</td><td>未配置 []；已有值回填</td><td>保存可空；实际发送至少 1 人</td><td>通过配置弹窗编辑</td><td>空名单不发送；解绑人员被移除；不默认通知登录用户本人。</td></tr>
+<tr><td>配置状态</td><td>开关与有效接收人是否具备发送条件</td><td>系统根据已保存开关和绑定人员推导</td><td>String</td><td>固定 3 字符；不可空</td><td>已关闭 / 待配置 / 已配置</td><td>已关闭</td><td>是，系统生成</td><td>否</td><td>开关和名单变化后即时计算；不得当作消息发送结果。</td></tr>
+<tr><td>操作入口</td><td>打开当前用户的登录通知设置</td><td>系统针对当前用户行提供</td><td>UI 操作（非业务数据输入）</td><td>显示 CRM 登录通知配置；现有登录通知状态点击也进入同一设置</td><td>查看/配置入口，不是数据状态</td><td>当前行可用入口</td><td>系统提供</td><td>否</td><td>不能串行配置其他用户；不新增菜单，用户管理仍直达列表。</td></tr>
+<tr><td>更新时间</td><td>该用户登录通知配置最近成功变更时间</td><td>配置保存或解绑联动时系统生成</td><td>DateTime / null</td><td>19 字符；未配置或历史未记录可空</td><td>无</td><td>null</td><td>有成功变更时系统生成</td><td>否</td><td>与最近登录时间不同；修改配置才更新，不因只读查看刷新。</td></tr></tbody></table></div></section>
+<section><h2>5. 核心业务规则</h2>
+<ul><li>默认关闭仅适用于尚无配置的用户；读取已有配置时不得覆盖历史开关或人员。</li><li>指定 CRM 用户成功登录 CRM 后，开关开启且存在有效接收人时，才通知其配置的管理人员。不是 MT5 登录，也不限于管理人员账号登录。</li><li>未开启或未配置有效人员不发送；配置状态按开关和有效人员即时推导。</li><li>配置与用户身份绑定，不能通过改名、排序或翻页串到其他行。</li><li>原有用户类型、MT账户数量、登录状态、双重验证、最近登录信息等业务字段保持来源和现有规则不变。</li></ul></section>
+<section><h2>6. 操作说明</h2>
+<p>点击当前行“CRM 登录通知配置”或登录通知状态打开同一设置弹窗；保存成功更新该行状态，取消不改动。名单、开关与更新时间同步保存，失败不能提示为已保存；原有查看、搜索、重置和分页继续保留。</p></section>
+<section><h2>7. 状态说明</h2>
+<div class="table-wrap"><table class=""><thead><tr><th>配置状态</th><th>判断规则</th><th>何时变化</th></tr></thead><tbody><tr><td>已关闭</td><td>登录通知开关为 false，与名单是否为空无关</td><td>关闭并成功保存后进入；保留原名单但不发送。</td></tr>
+<tr><td>待配置</td><td>开关为 true，但有效已绑定接收人为 0</td><td>开启且保存空名单，或最后一位有效接收人解绑后进入；不发送。</td></tr>
+<tr><td>已配置</td><td>开关为 true，且有至少 1 位有效已绑定管理人员</td><td>成功保存有效名单后进入；仅在指定用户成功登录 CRM 时发送，不表示已发送成功。</td></tr></tbody></table></div><p class="note">配置状态是本版明确的产品定义。现原型只有开关及客户本人 Lark ID，尚无管理人员多选、配置状态或更新时间；这些内容需要后续研发，本轮不改原型。</p></section>
+<section><h2>8. 验收标准</h2>
+<ol><li>每行通知配置关联正确 CRM 用户 ID，原有字段和功能不变。</li><li>未配置默认关闭；已保存开关、接收人刷新后保持，不被默认值覆盖。</li><li>可为用户设置多个已绑定管理人员；保存只更新当前用户。</li><li>三种配置状态按规则显示；解绑导致无人时变为待配置，不发送。</li><li>取消/保存失败不冒充成功；成功变更更新时间正确。</li></ol></section>
+<p class="note">本轮仅维护本页 PRD，不修改原型业务功能、数据或查看入口；研发目标不代表原型已实现。不设计 API 或数据库表结构。</p>
+</article></main></body></html>
+

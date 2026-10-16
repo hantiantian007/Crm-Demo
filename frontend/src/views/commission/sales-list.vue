@@ -335,12 +335,12 @@ const handleNotReady = () => {
 }
 
 .sales-btn-primary {
-  background: #d1a84f;
+  background: var(--crm-primary);
   color: #ffffff;
 }
 
 .sales-btn-primary:hover {
-  background: #b89241;
+  background: var(--crm-primary-hover);
 }
 
 .sales-btn-outline {
@@ -357,7 +357,7 @@ const handleNotReady = () => {
   height: 28px;
   padding: 0 12px;
   border-radius: 6px;
-  background: #d1a84f;
+  background: var(--crm-primary);
   color: #ffffff;
   font-size: 12px;
   font-weight: 600;
@@ -365,7 +365,7 @@ const handleNotReady = () => {
 }
 
 .sales-btn-small:hover {
-  background: #b89241;
+  background: var(--crm-primary-hover);
 }
 
 .sales-op-col {
@@ -373,7 +373,7 @@ const handleNotReady = () => {
 }
 
 .sales-page-current {
-  background: #d1a84f;
+  background: var(--crm-primary);
   color: #ffffff;
   font-weight: 600;
 }

@@ -9,7 +9,7 @@
       <Sidebar />
       <main class="flex-1 flex flex-col min-w-0">
         <Header />
-        <div class="flex-1 p-4 bg-gray-50 relative overflow-y-auto min-w-0">
+        <div class="app-page-host flex-1 min-h-0 bg-gray-50 relative overflow-y-auto min-w-0">
           <router-view class="w-full min-w-0 min-h-full"></router-view>
         </div>
       </main>

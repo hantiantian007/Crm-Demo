@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full min-w-0">
+  <div class="w-full min-w-0 p-4 md:p-6">
     <div class="flex flex-col gap-4 min-w-0">
       <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
         <div

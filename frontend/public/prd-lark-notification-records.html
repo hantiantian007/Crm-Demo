@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lark 通知 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style></head>
+<body><main class="wrap"><article class="card">
+<span class="tag">页面独立 PRD · 字段定义版</span><h1>Lark 通知 - PRD</h1>
+<section><h2>1. 页面名称</h2>
+<p>风控管理 → Lark 通知 → 通知记录（默认 Tab）。页面含通知记录、通知配置、Lark 人员三个 Tab，本 PRD 仅定义通知记录。</p></section>
+<section><h2>2. 页面目的</h2>
+<p>说明什么时候、因为什么事情、通知了谁、是否成功。</p></section>
+<section><h2>3. 页面功能</h2>
+<ul><li>展示历史通知，分页查看。</li><li>查看完整内容、失败原因及关联业务；有可用入口时跳转。</li><li>保留现有模拟发送，结果明确为演示，不承诺真实消息投递。</li></ul></section>
+<section><h2>4. 核心字段定义</h2>
+<p class="note">定义口径：数据来源指业务来源，不指定数据库表或接口。带“建议”的长度为待确认约束，现有原型未见对应限制；沿用 CRM 主数据的字段不在本页截断或重写。String[] 表示去重的人员标识列表，空列表为 []，不以逗号拼接姓名代替标识。DateTime 统一展示 YYYY-MM-DD HH:mm:ss（19 字符）；正式时区沿用 CRM 统一口径，具体时区待确认，原型使用本机时间。显示“—”表示缺失，不作为实际字段值。</p><div class="table-wrap"><table class="fields"><thead><tr><th>字段名称</th><th>字段含义</th><th>数据来源</th><th>数据类型</th><th>字符/格式要求</th><th>状态/枚举</th><th>默认值</th><th>是否必填</th><th>是否可编辑</th><th>业务规则 / 何时变化</th></tr></thead><tbody><tr><td>通知时间</td><td>本次通知生成的时间</td><td>业务事件触发后由系统自动生成；原型为手动模拟时生成</td><td>DateTime</td><td>YYYY-MM-DD HH:mm:ss，19 字符；新记录不可空</td><td>无</td><td>生成时刻</td><td>是，系统生成</td><td>否</td><td>生成后不因发送状态或配置变化改写；不是用户登录时间或已读时间。</td></tr>
+<tr><td>通知名称</td><td>本次通知对应规则/事件的名称</td><td>通知配置数据；登录通知使用登录事件类型；历史为名称快照</td><td>String</td><td>不可空；建议≤100 字符；列表现称“通知类型”</td><td>配置的 10 条业务规则名称；历史事件名原样保留</td><td>来源名称快照</td><td>是</td><td>否</td><td>创建时确定；规则改名不覆盖历史。历史旧名称不作为新增规则。</td></tr>
+<tr><td>通知对象</td><td>本次实际接收的管理人员</td><td>业务通知取该规则接收人；登录通知取该用户配置人员；绑定数据提供发送身份</td><td>String[] + 姓名快照</td><td>标识去重列表，如 ["alex","winnie"]；显示 Alex、Winnie；身份/姓名长度沿用 CRM；异常尝试可为 []</td><td>仅已绑定管理人员；接收名单本身无状态枚举</td><td>生成时的有效人员列表</td><td>有效发送至少 1 人；无对象的失败演示记录可为空</td><td>否</td><td>按生成/发送时身份留存；解绑或改名不改历史。无有效人员时不发送真实通知。</td></tr>
+<tr><td>通知内容</td><td>发送给管理人员的完整消息正文</td><td>对应业务事件数据结合规则说明生成；原型为演示文本</td><td>String</td><td>保留换行；不可空；建议≤4000 字符；超长展示省略但保留全文</td><td>无</td><td>事件生成正文</td><td>是</td><td>否</td><td>详情展示全文；登录通知至少有登录用户、登录时间。金额如有，沿用业务金额精度和币种，不在本页另算。</td></tr>
+<tr><td>发送状态</td><td>通知从等待到结果的当前状态</td><td>系统发送结果；原型为本地模拟结果</td><td>String</td><td>限定枚举；4 字符；不可空</td><td>待发送 / 发送成功 / 发送失败</td><td>待发送（研发目标）</td><td>是，系统生成</td><td>否</td><td>生成后待发送；结果更新为成功或失败。现原型“已发送”对应发送成功，不代表已读。</td></tr>
+<tr><td>失败原因</td><td>本次发送未成功的原因</td><td>系统发送结果或通知资格检查结果</td><td>String</td><td>成功/待发送允许空；失败不可空；建议≤500 字符</td><td>无；未绑定、无接收人、发送失败为原因，不是新状态</td><td>空</td><td>失败时必填，系统生成</td><td>否</td><td>转为失败时填写；多人员失败需指出受影响对象，不暴露密钥等敏感信息。</td></tr>
+<tr><td>关联业务</td><td>引起通知的业务及其标识</td><td>对应业务事件产生的数据</td><td>Object / null</td><td>业务类型、业务标识、展示名称；标识为 String，长度沿用来源；允许历史记录缺失</td><td>沿用触发事件的现有业务类型，不新增业务场景</td><td>有来源则填；否则 null</td><td>事件提供时必填；历史可空</td><td>否</td><td>创建时关联真实业务；同名客户不可互相替代，不能用固定示例订单补齐。</td></tr>
+<tr><td>详情/跳转链接</td><td>查看对应 CRM 业务的入口</td><td>根据关联业务及已存在页面入口生成</td><td>String / null</td><td>允许空；建议≤2048 字符；仅使用有效 CRM 内部路径，不包含访问凭证</td><td>可跳转 / 不可跳转（由链接及权限判断）</td><td>无可定位目标时 null</td><td>否</td><td>否</td><td>有真实目标且有权限才可点击；缺失或无权限显示说明，不跳到不存在页面。</td></tr></tbody></table></div></section>
+<section><h2>5. 核心业务规则</h2>
+<ul><li>只展示通知，不改变出金审核、风险或登录业务结果。通知时间与业务发生时间不能混用。</li><li>发送记录保留当时内容和人员快照；配置修改不覆盖历史。</li><li>真实接入目标：多人通知保留逐人结果；列表全部成功才为发送成功，有任一失败且其他均结束则为发送失败，详情说明失败人员；尚有待发送人员时保持待发送，不新增“部分成功”状态。</li><li>未启用/无有效接收人不产生实际投递；现有模拟流程可生成失败演示记录。</li><li>本页不增加重试、补发或自动异常检测。</li></ul></section>
+<section><h2>6. 操作说明</h2>
+<p>“查看”打开只读详情；关闭不修改数据。分页切换可见记录。模拟发送后追加本地记录；关联业务入口仅在可定位且有权限时可用。</p></section>
+<section><h2>7. 状态说明</h2>
+<div class="table-wrap"><table class=""><thead><tr><th>状态</th><th>进入条件</th><th>变化与限制</th></tr></thead><tbody><tr><td>待发送</td><td>已生成通知，尚未取得全部接收人的发送结果</td><td>仅系统更新，等待不是成功。</td></tr>
+<tr><td>发送成功</td><td>全部接收人发送成功</td><td>不等于已读，不代表业务已处理。</td></tr>
+<tr><td>发送失败</td><td>所有接收人的结果已结束且至少一人失败，或演示发送无有效对象</td><td>必须有失败原因；本期不提供人工修改状态。</td></tr></tbody></table></div><p class="note">现原型只有“已发送 / 发送失败”，没有等待阶段、逐人结果和结构化业务链接。上述三态和关联信息为本版研发目标，未改原型数据。</p></section>
+<section><h2>8. 验收标准</h2>
+<ol><li>默认进入通知记录，字段来源、显示格式和分页总数正确。</li><li>新记录含时间、名称、内容及接收人；失败记录原因完整。</li><li>状态按等待→成功/失败更新，不能把等待或部分失败显示为成功。</li><li>详情可查看全文；无目标或无权限不提供失效跳转。</li><li>变更配置或解绑不改变历史通知快照。</li></ol></section>
+<p class="note">本轮仅维护本页 PRD，不修改原型业务功能、数据或 PRD 查看入口；文档中的研发目标不代表现有原型已实现。无 API、数据库表结构或自动检测技术方案。</p>
+</article></main></body></html>

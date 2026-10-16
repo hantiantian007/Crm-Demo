@@ -201,39 +201,59 @@
    </button>
   </div>
  </div>
- <div class="flex-1 overflow-auto border border-gray-200">
-  <div class="min-w-max">
-   <table class="w-full custom-table text-sm whitespace-nowrap">
+ <div class="lead-table-scroll flex-1 min-h-[320px] overflow-auto border border-gray-200">
+   <table class="leads-table custom-table w-full min-w-[2389px] text-[13px]">
+    <colgroup>
+     <col class="role-manager-only" style="width: 44px"/>
+     <col style="width: 88px"/>
+     <col style="width: 175px"/>
+     <col style="width: 120px"/>
+     <col style="width: 110px"/>
+     <col style="width: 125px"/>
+     <col style="width: 140px"/>
+     <col style="width: 112px"/>
+     <col style="width: 110px"/>
+     <col style="width: 112px"/>
+     <col style="width: 75px"/>
+     <col style="width: 88px"/>
+     <col style="width: 135px"/>
+     <col style="width: 90px"/>
+     <col style="width: 145px"/>
+     <col style="width: 180px"/>
+     <col style="width: 145px"/>
+     <col style="width: 145px"/>
+     <col style="width: 250px"/>
+    </colgroup>
     <thead class="bg-tableHeader sticky top-0 z-10">
      <tr>
-      <th class="w-12 text-center role-manager-only">
+      <th class="text-center role-manager-only">
        <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer" id="selectAll" type="checkbox"/>
       </th>
-      <th class="w-24">
+      <th>
        姓名
       </th>
-      <th class="w-48">
+      <th>
        邮箱
       </th>
-      <th class="w-32">
+      <th>
        联系电话
       </th>
-      <th class="w-32">
+      <th>
        微信
       </th>
-      <th class="w-32">
+      <th>
        WhatsApp
       </th>
-      <th class="w-32">
+      <th>
        其他联系方式
       </th>
-      <th class="w-32">
+      <th>
        咨询内容
       </th>
-      <th class="w-24">
+      <th>
        信息来源
       </th>
-      <th class="w-24">
+      <th>
        <span class="relative inline-flex items-center gap-1 group">
         <span>
          客户来源
@@ -245,31 +265,31 @@
         </span>
        </span>
       </th>
-      <th class="w-20">
+      <th>
        留资次数
       </th>
-      <th class="w-24">
+      <th>
        线索热度
       </th>
-      <th class="w-32">
+      <th>
        有无关联代理
       </th>
-      <th class="w-24">
+      <th>
        归属销售
       </th>
-      <th class="w-40">
+      <th>
        申请时间
       </th>
-      <th class="w-48">
+      <th>
        最新跟进内容
       </th>
-      <th class="w-40">
+      <th>
        最新跟进时间
       </th>
-      <th class="w-40">
+      <th>
        下次跟进时间
       </th>
-      <th class="w-56">
+      <th>
        操作
       </th>
      </tr>
@@ -331,7 +351,7 @@
        2025-01-01 21:22:22
       </td>
       <td>
-       这是客服自己填写
+       <span class="lead-truncated-text" title="这是客服自己填写">这是客服自己填写</span>
       </td>
       <td>
        2025-01-01 21:22:22
@@ -341,7 +361,7 @@
        </i>
        明天 10:00
       </td>
-      <td class="text-sm whitespace-nowrap">
+      <td class="lead-operation-cell">
        <button class="text-indigo-500 hover:text-indigo-700 mx-1 role-manager-only font-medium">
         <i class="fas fa-user-plus mr-1">
         </i>
@@ -428,7 +448,7 @@
       <td class="text-gray-400">
        -
       </td>
-      <td class="text-sm whitespace-nowrap">
+      <td class="lead-operation-cell">
        <button class="text-indigo-500 hover:text-indigo-700 mx-1 role-manager-only font-medium">
         <i class="fas fa-user-plus mr-1">
         </i>
@@ -502,7 +522,7 @@
        2024-12-20 14:00:00
       </td>
       <td>
-       客户已提交资料审核中
+       <span class="lead-truncated-text" title="客户已提交资料审核中">客户已提交资料审核中</span>
       </td>
       <td>
        2024-12-21 09:30:00
@@ -510,7 +530,7 @@
       <td class="text-gray-400">
        -
       </td>
-      <td class="text-sm whitespace-nowrap">
+      <td class="lead-operation-cell">
        <button class="text-indigo-500 hover:text-indigo-700 mx-1 role-manager-only font-medium">
         <i class="fas fa-user-plus mr-1">
         </i>
@@ -579,7 +599,7 @@
        2024-12-10 10:00:00
       </td>
       <td>
-       客户电话一直打不通，空号。
+       <span class="lead-truncated-text" title="客户电话一直打不通，空号。">客户电话一直打不通，空号。</span>
       </td>
       <td>
        2024-12-15 15:30:00
@@ -587,7 +607,7 @@
       <td class="text-gray-400">
        -
       </td>
-      <td class="text-sm whitespace-nowrap">
+      <td class="lead-operation-cell">
        <button class="text-indigo-500 hover:text-indigo-700 mx-1 role-manager-only font-medium">
         <i class="fas fa-user-plus mr-1">
         </i>
@@ -659,7 +679,7 @@
        2024-11-20 10:00:00
       </td>
       <td>
-       同行套话，非真实意向
+       <span class="lead-truncated-text" title="同行套话，非真实意向">同行套话，非真实意向</span>
       </td>
       <td>
        2024-11-20 10:30:00
@@ -667,7 +687,7 @@
       <td class="text-gray-400">
        -
       </td>
-      <td class="text-sm whitespace-nowrap">
+      <td class="lead-operation-cell">
        <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241120-005')">
         <i class="fas fa-file-alt mr-1">
         </i>
@@ -729,7 +749,7 @@
        2024-11-01 10:00:00
       </td>
       <td>
-       客户已成功开通代理账户并完成首笔入金。
+       <span class="lead-truncated-text" title="客户已成功开通代理账户并完成首笔入金。">客户已成功开通代理账户并完成首笔入金。</span>
       </td>
       <td>
        2024-11-05 14:20:00
@@ -737,7 +757,7 @@
       <td class="text-gray-400">
        -
       </td>
-      <td class="text-sm whitespace-nowrap">
+      <td class="lead-operation-cell">
        <button class="text-blue-500 hover:text-blue-700 mx-1 font-medium" type="button" @click="goClientDetail('88820391')">
         <i class="fas fa-user-circle mr-1">
         </i>
@@ -750,210 +770,8 @@
        </button>
       </td>
      </tr>
-     <!-- 填充空白行以模拟截图效果 -->
-     <tr>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-     </tr>
-     <tr>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-     </tr>
-     <tr>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-     </tr>
-     <tr>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-     </tr>
-     <tr>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-      <td>
-      </td>
-     </tr>
     </tbody>
    </table>
-  </div>
  </div>
  <!-- 3. 底部翻页区 -->
  <div class="flex items-center justify-end mt-4 text-sm text-gray-500">
@@ -1012,3 +830,77 @@ const goClientDetail = (id) => {
   router.push({ path: '/crm/client-detail', query: { id: String(id || '') } })
 }
 </script>
+
+<style scoped>
+.leads-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: 13px;
+}
+
+.leads-table thead th {
+  height: 48px;
+  padding: 12px 12px;
+  color: #6b7280;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: normal;
+}
+
+.leads-table thead th.text-center {
+  text-align: center;
+}
+
+.leads-table tbody td {
+  height: 56px;
+  padding: 12px;
+  color: #4b5563;
+  border-bottom: 1px solid #f1f3f5;
+  line-height: 20px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leads-table tbody tr:hover td {
+  background-color: #f9fafb;
+}
+
+.leads-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.leads-table tbody td.lead-operation-cell {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.leads-table .lead-operation-cell > button {
+  display: inline-flex;
+  align-items: center;
+  margin: 2px 8px 2px 0;
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 18px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.leads-table .lead-truncated-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  line-height: 18px;
+}
+</style>

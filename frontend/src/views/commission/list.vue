@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full bg-mainBg overflow-hidden">
+  <div class="flex h-full bg-mainBg overflow-hidden p-4">
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-1 gap-0 overflow-hidden min-h-[600px]" id="configArea">
  <aside class="w-[280px] border-r border-gray-100 flex flex-col bg-gray-50/30">
   <div class="px-4 py-3 border-b border-gray-100">

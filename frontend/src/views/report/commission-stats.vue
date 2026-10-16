@@ -170,7 +170,7 @@
  </div>
  <!-- 右侧详情与数据 -->
  <!-- 右侧详情与数据 -->
- <div class="flex-1 flex flex-col gap-4 overflow-y-auto no-scrollbar">
+ <div class="flex-1 min-w-0 flex flex-col gap-4 overflow-y-auto no-scrollbar">
   <!-- 搜索过滤卡片 -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
    <h3 class="font-bold text-gray-800 mb-5 text-[15px]">
@@ -313,11 +313,27 @@
     </button>
    </div>
    <!-- 表格区域 -->
-   <div class="overflow-x-auto flex-1 no-scrollbar">
-    <table class="w-full custom-table min-w-[1400px]">
+   <div class="commission-stats-table-wrap min-w-0 flex-1 overflow-hidden">
+    <table class="commission-stats-table w-full custom-table">
+     <colgroup>
+      <col style="width: 4%"/>
+      <col style="width: 6%"/>
+      <col style="width: 7%"/>
+      <col style="width: 10%"/>
+      <col style="width: 7%"/>
+      <col style="width: 10%"/>
+      <col style="width: 7%"/>
+      <col style="width: 9%"/>
+      <col style="width: 7%"/>
+      <col style="width: 9%"/>
+      <col style="width: 6%"/>
+      <col style="width: 5%"/>
+      <col style="width: 5%"/>
+      <col style="width: 8%"/>
+     </colgroup>
      <thead class="bg-tableHeader">
       <tr>
-       <th class="w-10">
+       <th class="commission-expand-column">
        </th>
        <th>
         编号
@@ -361,11 +377,19 @@
       </tr>
      </thead>
      <tbody>
-      <!-- Row 1 (Expanded) -->
-      <tr class="bg-gray-50/30">
-       <td class="text-red-500 cursor-pointer">
-        <i class="fa-solid fa-chevron-down text-[10px]">
-        </i>
+      <!-- Row 1 -->
+      <tr :class="{ 'commission-row-expanded': expandedRowId === '143217' }">
+       <td class="commission-expand-cell">
+        <button
+         type="button"
+         class="commission-expand-button"
+         :aria-expanded="expandedRowId === '143217'"
+         aria-controls="commission-details-143217"
+         :aria-label="expandedRowId === '143217' ? '收起记录 143217 详情' : '展开记录 143217 详情'"
+         @click="toggleExpanded('143217')"
+        >
+         <i :class="['fa-solid', expandedRowId === '143217' ? 'fa-chevron-down' : 'fa-chevron-right', 'text-[10px]']"></i>
+        </button>
        </td>
        <td class="font-medium text-gray-700 font-mono">
         143217
@@ -384,20 +408,18 @@
         4100101
        </td>
        <td>
-        <div class="text-[12px] text-gray-500 text-left">
-         test-测试-B
-         <br/>
-         3218965885@qq.com
+        <div class="commission-user-cell">
+         <span class="commission-user-name" title="test-测试-B">test-测试-B</span>
+         <span class="commission-user-email" title="3218965885@qq.com">3218965885@qq.com</span>
         </div>
        </td>
        <td class="font-medium">
         8300248
        </td>
        <td>
-        <div class="text-[12px] text-gray-500 text-left">
-         华安
-         <br/>
-         huaan@qqq.com
+        <div class="commission-user-cell">
+         <span class="commission-user-name" title="华安">华安</span>
+         <span class="commission-user-email" title="huaan@qqq.com">huaan@qqq.com</span>
         </div>
        </td>
        <td>
@@ -419,65 +441,45 @@
         5.00 $/lot
        </td>
       </tr>
-      <tr class="expanded-row">
-       <td class="border-t-0 pt-0" colspan="14">
-        <div class="flex flex-col gap-3 pl-[42px] mt-2 mb-4">
-         <div class="flex">
-          <span class="text-gray-800 font-bold w-24 shrink-0">
-           系统时间
-          </span>
-          <div class="text-gray-600 font-mono text-[13px] leading-relaxed">
-           返佣: 2026-09-07 10:47:41
-           <br/>
-           平仓: 2026-09-07 10:47:26
-          </div>
+      <tr v-show="expandedRowId === '143217'" id="commission-details-143217" class="expanded-row">
+       <td class="commission-expanded-cell" colspan="14">
+        <div class="commission-expanded-details">
+         <div class="commission-expanded-item">
+          <span class="commission-expanded-label">系统时间：</span>
+          <span class="commission-expanded-value font-mono">返佣 2026-09-07 10:47:41　平仓 2026-09-07 10:47:26</span>
          </div>
-         <div class="flex">
-          <span class="text-gray-800 font-bold w-24 shrink-0">
-           MT时间
-          </span>
-          <div class="text-gray-600 font-mono text-[13px] leading-relaxed">
-           返佣: 2026-09-07 05:47:41
-           <br/>
-           平仓: 2026-09-07 05:47:26
-          </div>
+         <div class="commission-expanded-item">
+          <span class="commission-expanded-label">MT时间：</span>
+          <span class="commission-expanded-value font-mono">返佣 2026-09-07 05:47:41　平仓 2026-09-07 05:47:26</span>
          </div>
-         <div class="flex">
-          <span class="text-gray-800 font-bold w-24 shrink-0">
-           返佣类型
-          </span>
-          <div class="text-gray-600 text-[13px] leading-relaxed">
-           内佣
-           <br/>
-           stan-代理返佣-PIB
-          </div>
+         <div class="commission-expanded-item">
+          <span class="commission-expanded-label">返佣类型：</span>
+          <span class="commission-expanded-value">内佣 / stan-代理返佣-PIB</span>
          </div>
-         <div class="flex">
-          <span class="text-gray-800 font-bold w-24 shrink-0">
-           返佣状态
-          </span>
-          <div class="text-gray-600 text-[13px] leading-relaxed">
-           已结算
-          </div>
+         <div class="commission-expanded-item">
+          <span class="commission-expanded-label">返佣状态：</span>
+          <span class="commission-expanded-value">已结算</span>
          </div>
-         <div class="flex">
-          <span class="text-gray-800 font-bold w-24 shrink-0">
-           交易编号
-          </span>
-          <div class="text-gray-600 font-mono text-[13px] leading-relaxed">
-           开仓: 1180850
-           <br/>
-           平仓: 1180852
-          </div>
+         <div class="commission-expanded-item">
+          <span class="commission-expanded-label">交易编号：</span>
+          <span class="commission-expanded-value font-mono">开仓 1180850　平仓 1180852</span>
          </div>
         </div>
        </td>
       </tr>
       <!-- Row 2 -->
-      <tr>
-       <td class="text-red-500 cursor-pointer hover:text-red-600">
-        <i class="fa-solid fa-chevron-right text-[10px]">
-        </i>
+      <tr :class="{ 'commission-row-expanded': expandedRowId === '143215' }">
+       <td class="commission-expand-cell">
+        <button
+         type="button"
+         class="commission-expand-button"
+         :aria-expanded="expandedRowId === '143215'"
+         aria-controls="commission-details-143215"
+         :aria-label="expandedRowId === '143215' ? '收起记录 143215 详情' : '展开记录 143215 详情'"
+         @click="toggleExpanded('143215')"
+        >
+         <i :class="['fa-solid', expandedRowId === '143215' ? 'fa-chevron-down' : 'fa-chevron-right', 'text-[10px]']"></i>
+        </button>
        </td>
        <td class="font-medium text-gray-700 font-mono">
         143215
@@ -496,20 +498,18 @@
         4100101
        </td>
        <td>
-        <div class="text-[12px] text-gray-500 text-left">
-         test-测试-B
-         <br/>
-         3218965885@qq.com
+        <div class="commission-user-cell">
+         <span class="commission-user-name" title="test-测试-B">test-测试-B</span>
+         <span class="commission-user-email" title="3218965885@qq.com">3218965885@qq.com</span>
         </div>
        </td>
        <td class="font-medium">
         8300248
        </td>
        <td>
-        <div class="text-[12px] text-gray-500 text-left">
-         华安
-         <br/>
-         huaan@qqq.com
+        <div class="commission-user-cell">
+         <span class="commission-user-name" title="华安">华安</span>
+         <span class="commission-user-email" title="huaan@qqq.com">huaan@qqq.com</span>
         </div>
        </td>
        <td>
@@ -531,11 +531,24 @@
         5.00 $/lot
        </td>
       </tr>
+      <tr v-show="expandedRowId === '143215'" id="commission-details-143215" class="expanded-row">
+       <td class="commission-expanded-cell" colspan="14">
+        <p class="commission-expanded-empty">当前记录暂无其他详细信息</p>
+       </td>
+      </tr>
       <!-- Row 3 -->
-      <tr>
-       <td class="text-red-500 cursor-pointer hover:text-red-600">
-        <i class="fa-solid fa-chevron-right text-[10px]">
-        </i>
+      <tr :class="{ 'commission-row-expanded': expandedRowId === '143213' }">
+       <td class="commission-expand-cell">
+        <button
+         type="button"
+         class="commission-expand-button"
+         :aria-expanded="expandedRowId === '143213'"
+         aria-controls="commission-details-143213"
+         :aria-label="expandedRowId === '143213' ? '收起记录 143213 详情' : '展开记录 143213 详情'"
+         @click="toggleExpanded('143213')"
+        >
+         <i :class="['fa-solid', expandedRowId === '143213' ? 'fa-chevron-down' : 'fa-chevron-right', 'text-[10px]']"></i>
+        </button>
        </td>
        <td class="font-medium text-gray-700 font-mono">
         143213
@@ -554,20 +567,18 @@
         4100101
        </td>
        <td>
-        <div class="text-[12px] text-gray-500 text-left">
-         test-测试-B
-         <br/>
-         3218965885@qq.com
+        <div class="commission-user-cell">
+         <span class="commission-user-name" title="test-测试-B">test-测试-B</span>
+         <span class="commission-user-email" title="3218965885@qq.com">3218965885@qq.com</span>
         </div>
        </td>
        <td class="font-medium">
         8300248
        </td>
        <td>
-        <div class="text-[12px] text-gray-500 text-left">
-         华安
-         <br/>
-         huaan@qqq.com
+        <div class="commission-user-cell">
+         <span class="commission-user-name" title="华安">华安</span>
+         <span class="commission-user-email" title="huaan@qqq.com">huaan@qqq.com</span>
         </div>
        </td>
        <td>
@@ -587,6 +598,11 @@
        </td>
        <td class="text-gray-500">
         5.00 $/lot
+       </td>
+      </tr>
+      <tr v-show="expandedRowId === '143213'" id="commission-details-143213" class="expanded-row">
+       <td class="commission-expanded-cell" colspan="14">
+        <p class="commission-expanded-empty">当前记录暂无其他详细信息</p>
        </td>
       </tr>
      </tbody>
@@ -623,4 +639,185 @@
 
 <script setup>
 import { ref } from 'vue'
+
+const expandedRowId = ref(null)
+
+function toggleExpanded(rowId) {
+  expandedRowId.value = expandedRowId.value === rowId ? null : rowId
+}
 </script>
+
+<style scoped>
+.commission-stats-table {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+}
+
+.commission-stats-table thead th {
+  height: 46px;
+  padding: 9px 6px;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.commission-stats-table tbody td {
+  height: 54px;
+  padding: 9px 6px;
+  color: #4b5563;
+  line-height: 17px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.commission-stats-table .commission-expand-column,
+.commission-stats-table .commission-expand-cell {
+  padding-right: 3px;
+  padding-left: 3px;
+  text-align: center;
+}
+
+.commission-expand-button {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  color: #d84a4a;
+  border-radius: 4px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.commission-expand-button:hover {
+  color: #c53030;
+  background-color: #fef2f2;
+}
+
+.commission-expand-button:focus-visible {
+  outline: 2px solid #d1a84f;
+  outline-offset: 1px;
+}
+
+.commission-row-expanded > td {
+  background-color: #f9fafb;
+}
+
+.commission-stats-table tbody tr:not(.expanded-row):hover td {
+  background-color: #f9fafb;
+}
+
+.commission-stats-table tbody td:nth-child(10) {
+  padding-right: 8px;
+  padding-left: 4px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.commission-stats-table tbody td:nth-child(14) {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.commission-user-cell {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  overflow: hidden;
+  line-height: 15px;
+}
+
+.commission-user-name,
+.commission-user-email {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commission-user-name {
+  color: #4b5563;
+  font-size: 12px;
+}
+
+.commission-user-email {
+  color: #6b7280;
+  font-size: 11px;
+}
+
+.commission-stats-table tbody td.commission-expanded-cell {
+  height: auto;
+  padding: 10px 12px !important;
+  white-space: normal;
+  overflow: visible;
+  background-color: #f8fafc;
+}
+
+.commission-expanded-details {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px 16px;
+}
+
+.commission-expanded-item {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  padding: 2px 0;
+}
+
+.commission-expanded-label {
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 15px;
+  white-space: nowrap;
+}
+
+.commission-expanded-value {
+  min-width: 0;
+  color: #4b5563;
+  font-size: 12px;
+  line-height: 17px;
+  overflow-wrap: anywhere;
+}
+
+.commission-expanded-empty {
+  margin: 0;
+  padding: 2px 0;
+  color: #9ca3af;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+@media (max-width: 1100px) {
+  .commission-expanded-details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .commission-expanded-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+</style>

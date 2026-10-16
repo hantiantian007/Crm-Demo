@@ -1,5 +1,5 @@
 <template>
-  <div class="kb-page flex-1 overflow-y-auto p-4 md:p-6 relative custom-scrollbar bg-gray-50 w-full text-sm">
+  <div class="kb-page history-kanban-page flex-1 p-4 md:p-4 relative bg-gray-50 w-full text-xs">
       <!-- 页面头部 -->
       <div class="kb-section mb-4 flex justify-between items-end">
         <div>
@@ -390,9 +390,9 @@
                       </td>
                       <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-2">
-                          <a class="kb-btn kb-btn-proto text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded transition-colors text-xs border border-gray-200 flex items-center gap-1.5" href="#/report/close-position" target="_blank">
+                          <span class="kb-btn kb-btn-proto text-gray-500 bg-gray-50 px-3 py-1.5 rounded text-xs border border-gray-200 flex items-center gap-1.5 opacity-60 cursor-not-allowed" aria-disabled="true" title="目标页面暂不可用">
                             <i class="fas fa-desktop"></i> 查看原型
-                          </a>
+                          </span>
                           <a class="kb-btn kb-btn-prd text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded transition-colors text-xs border border-gray-200 flex items-center gap-1.5" href="#/other/prd-report-close-position" target="_blank">
                             <i class="fas fa-file-alt"></i> PRD
                           </a>
@@ -413,9 +413,9 @@
                       </td>
                       <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-2">
-                          <a class="kb-btn kb-btn-proto text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded transition-colors text-xs border border-gray-200 flex items-center gap-1.5" href="#/report/finance-cent-account" target="_blank">
+                          <span class="kb-btn kb-btn-proto text-gray-500 bg-gray-50 px-3 py-1.5 rounded text-xs border border-gray-200 flex items-center gap-1.5 opacity-60 cursor-not-allowed" aria-disabled="true" title="目标页面暂不可用">
                             <i class="fas fa-desktop"></i> 查看原型
-                          </a>
+                          </span>
                           <a class="kb-btn kb-btn-prd text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded transition-colors text-xs border border-gray-200 flex items-center gap-1.5" href="#/other/prd-cent-account-page-finance-report" target="_blank">
                             <i class="fas fa-file-alt"></i> PRD
                           </a>
@@ -436,9 +436,9 @@
                       </td>
                       <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-2">
-                          <a class="kb-btn kb-btn-proto text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded transition-colors text-xs border border-gray-200 flex items-center gap-1.5" href="#/report/commission-cent-account" target="_blank">
+                          <span class="kb-btn kb-btn-proto text-gray-500 bg-gray-50 px-3 py-1.5 rounded text-xs border border-gray-200 flex items-center gap-1.5 opacity-60 cursor-not-allowed" aria-disabled="true" title="目标页面暂不可用">
                             <i class="fas fa-desktop"></i> 查看原型
-                          </a>
+                          </span>
                           <a class="kb-btn kb-btn-prd text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded transition-colors text-xs border border-gray-200 flex items-center gap-1.5" href="#/other/prd-cent-account-page-commission-report" target="_blank">
                             <i class="fas fa-file-alt"></i> PRD
                           </a>
@@ -479,9 +479,9 @@
                       </td>
                       <td class="px-4 py-3">
                         <div class="flex flex-wrap gap-2">
-                          <a class="kb-btn kb-btn-proto text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded transition-colors text-xs border border-gray-200 flex items-center gap-1.5" href="#/report/trade-record-cent-account" target="_blank">
+                          <span class="kb-btn kb-btn-proto text-gray-500 bg-gray-50 px-3 py-1.5 rounded text-xs border border-gray-200 flex items-center gap-1.5 opacity-60 cursor-not-allowed" aria-disabled="true" title="目标页面暂不可用">
                             <i class="fas fa-desktop"></i> 查看原型
-                          </a>
+                          </span>
                           <a class="kb-btn kb-btn-prd text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded transition-colors text-xs border border-gray-200 flex items-center gap-1.5" href="#/other/prd-cent-account-page-trade-record" target="_blank">
                             <i class="fas fa-file-alt"></i> PRD
                           </a>
@@ -661,7 +661,7 @@
       </div>
 
       <!-- 已完成需求池 (Completed) -->
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 opacity-70 accordion-item">
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 accordion-item">
 <div @click="toggleElement($event)" class="px-4 py-3 border-b border-gray-200 bg-gray-50 flex justify-between items-center cursor-pointer hover:bg-gray-100 transition-colors">
 <div class="flex items-center gap-2">
 <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
@@ -688,7 +688,7 @@
 <th class="px-5 py-4 font-medium min-w-[280px]">交付物预览</th>
 </tr>
 </thead>
-<tbody class="text-gray-600 divide-y divide-gray-100" id="completed-tbody">
+<tbody class="text-gray-600 divide-y divide-gray-100">
 <!-- 已完成: 返佣校验-佣金每日对账 -->
 <tr class="table-row-hover bg-white">
 <td class="px-5 py-4 font-medium text-gray-900 whitespace-nowrap">返佣校验</td>
@@ -961,7 +961,7 @@
 <div class="flex flex-wrap gap-2 items-center">
 <a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-leads-list.html" target="_blank">PRD</a>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/leads" target="_blank">原型</a>
-<a class="inline-flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded text-xs transition-colors" href="#/other/manual-customer-leads" target="_blank"><i class="fa-solid fa-book"></i> 操作手册</a>
+<span class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded text-xs opacity-60 cursor-not-allowed" aria-disabled="true" title="操作手册暂不可用"><i class="fa-solid fa-book"></i> 操作手册</span>
 </div>
 </div>
 </td>
@@ -982,7 +982,7 @@
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/batch-mt-password-reset" target="_blank">原型</a>
-<a class="inline-flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1.5 rounded text-xs transition-colors" href="#/other/manual-batch-password-reset" target="_blank"><i class="fa-solid fa-book"></i> 操作手册</a>
+<span class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded text-xs opacity-60 cursor-not-allowed" aria-disabled="true" title="操作手册暂不可用"><i class="fa-solid fa-book"></i> 操作手册</span>
 </div>
 </div>
 </td>
@@ -1299,9 +1299,9 @@
 <a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="prd-risk-login-alert.html" target="_blank">
                                             PRD
                                         </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/risk-login-alert" target="_blank">
+<span class="inline-flex items-center gap-1 bg-teal-50 theme-text px-3 py-1.5 rounded text-xs theme-border border opacity-60 cursor-not-allowed" aria-disabled="true" title="目标页面暂不可用">
 <i class="fas fa-laptop-code"></i> 预警列表原型
-                                        </a>
+                                        </span>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border text-blue-500 hover:text-blue-700" href="#/crm/client-detail" target="_blank">
 <i class="fas fa-laptop-code"></i> 客户详情原型
                                         </a>
@@ -1532,9 +1532,9 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/crm/prd-audit" target="_blank">
+<span class="inline-flex items-center gap-1 bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-xs border border-gray-200 opacity-60 cursor-not-allowed" aria-disabled="true" title="PRD 暂不可用">
                                             PRD
-                                        </a>
+                                        </span>
 <a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/crm/audit" target="_blank">
 <i class="fas fa-laptop-code"></i> 原型
                                         </a>
@@ -1599,12 +1599,12 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-contact" target="_blank">
+<span class="inline-flex items-center gap-1 bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-xs border border-gray-200 opacity-60 cursor-not-allowed" aria-disabled="true" title="PRD 文档暂不可用">
                                             PRD
-                                        </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/index" target="_blank">
+                                        </span>
+<span class="inline-flex items-center gap-1 bg-teal-50 theme-text px-3 py-1.5 rounded text-xs theme-border border opacity-60 cursor-not-allowed" aria-disabled="true" title="原型页面暂不可用">
 <i class="fas fa-laptop-code"></i> Group-Gw原型
-                                        </a>
+                                        </span>
 </div>
 </div>
 </td>
@@ -1650,12 +1650,12 @@
 <td class="px-5 py-4">
 <div class="flex flex-col gap-2">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-contact" target="_blank">
+<span class="inline-flex items-center gap-1 bg-gray-100 text-gray-600 px-3 py-1.5 rounded text-xs border border-gray-200 opacity-60 cursor-not-allowed" aria-disabled="true" title="PRD 文档暂不可用">
                                             PRD
-                                        </a>
-<a class="inline-flex items-center gap-1 bg-teal-50 hover:bg-teal-100 theme-text px-3 py-1.5 rounded text-xs transition-colors theme-border border" href="#/other/index" target="_blank">
+                                        </span>
+<span class="inline-flex items-center gap-1 bg-teal-50 theme-text px-3 py-1.5 rounded text-xs theme-border border opacity-60 cursor-not-allowed" aria-disabled="true" title="原型页面暂不可用">
 <i class="fas fa-laptop-code"></i> Hk-Gw原型
-                                        </a>
+                                        </span>
 </div>
 </div>
 </td>
@@ -1912,29 +1912,14 @@
 <td class="px-5 py-4 text-gray-500 whitespace-nowrap">2026-08-30 18:00</td>
 <td class="px-5 py-4">
 <div class="flex flex-wrap gap-2 items-center">
-<a class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition-colors flex items-center gap-1 border border-gray-200" href="#/other/prd-market-quotes-backend" target="_blank">
+<span class="px-3 py-1.5 text-xs font-medium text-gray-500 bg-gray-100 rounded flex items-center gap-1 border border-gray-200 opacity-60 cursor-not-allowed" aria-disabled="true" title="交付文档暂不可用">
                                         交付文档
-                                    </a>
+                                    </span>
 </div>
 </td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="px-4 py-3 border-t border-gray-200 flex items-center justify-between bg-gray-50 rounded-b-xl">
-<div class="text-xs text-gray-500" id="pagination-info">
-                    显示第 1 至 10 项结果，共 0 项
-                </div>
-<div class="flex items-center gap-2">
-<select class="border border-gray-300 rounded px-2 py-1 text-xs outline-none focus:border-teal-500 bg-white" id="items-per-page">
-<option selected="" value="10">10 条/页</option>
-<option value="20">20 条/页</option>
-<option value="50">50 条/页</option>
-</select>
-<div class="flex items-center border border-gray-300 rounded overflow-hidden" id="pagination-controls">
-
-    </div>
-  </div>
 </div>
 </div>
 </div>
@@ -1980,29 +1965,37 @@ onUnmounted(() => {
 })
 
 const toggleElement = (event) => {
-  const header = event.currentTarget;
-  const item = header.closest('.accordion-item');
-  const content = item.querySelector('.accordion-content');
-  const icon = header.querySelector('.accordion-icon');
-  
-  if (content.style.maxHeight) {
-    content.style.maxHeight = null;
-    icon.style.transform = 'rotate(0deg)';
-  } else {
-    content.style.maxHeight = content.scrollHeight + "px";
-    icon.style.transform = 'rotate(-180deg)';
+  const button = event.currentTarget
+  const content = button.nextElementSibling
+  const icon = button.querySelector('.accordion-icon')
+
+  if (content?.classList.contains('open')) {
+    content.classList.remove('open')
+    icon?.classList.remove('open')
+  } else if (content) {
+    content.classList.add('open')
+    icon?.classList.add('open')
   }
 }
 </script>
 
 <style scoped>
 .accordion-content {
-  max-height: none;
+  max-height: 0;
+  opacity: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-out;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+.accordion-content.open {
+  max-height: 5000px;
+  opacity: 1;
+  overflow: visible;
 }
 .accordion-icon {
   transition: transform 0.3s ease;
+}
+.accordion-icon.open {
+  transform: rotate(180deg);
 }
 .tag-group {
   background-color: #f3f4f6;
@@ -2014,9 +2007,37 @@ const toggleElement = (event) => {
   color: #16a34a;
   border: 1px solid #bbf7d0;
 }
-.tag-crm {
-  background-color: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #bfdbfe;
+.tag-group-only {
+  background-color: #ede9fe;
+  color: #6d28d9;
+  border: 1px solid #ddd6fe;
+}
+.tag-gw {
+  background-color: #ecfdf5;
+  color: #115e59;
+  border: 1px solid #a7f3d0;
+}
+.table-row-hover {
+  transition: all 0.2s ease-in-out;
+}
+.table-row-hover:hover {
+  background-color: #f0f9f9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(85, 185, 185, 0.1);
+}
+:global(.app-page-host:has(.history-kanban-page)) {
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb transparent;
+}
+:global(.app-page-host:has(.history-kanban-page)::-webkit-scrollbar) {
+  width: 6px;
+  height: 6px;
+}
+:global(.app-page-host:has(.history-kanban-page)::-webkit-scrollbar-thumb) {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+:global(.app-page-host:has(.history-kanban-page)::-webkit-scrollbar-track) {
+  background: transparent;
 }
 </style>
