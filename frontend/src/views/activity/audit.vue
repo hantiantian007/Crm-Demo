@@ -182,10 +182,9 @@
                       <td class="px-5 py-4 font-mono text-gray-600">{{ r.reviewedAt || '-' }}</td>
                       <td class="px-5 py-4 font-mono text-gray-600">{{ r.completedAt || '-' }}</td>
                       <td class="px-5 py-4">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 whitespace-nowrap">
                           <button class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium transition-colors" type="button" @click="openConversionDetail(r.id)">查看详情</button>
-                          <button class="h-8 px-3 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" type="button" :disabled="r.status !== '审核中'" @click="approveConversion(r.id)">审核通过</button>
-                          <button class="h-8 px-3 rounded-md bg-rose-500 hover:bg-rose-600 text-white text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" type="button" :disabled="r.status !== '审核中'" @click="openConversionReject(r.id)">驳回</button>
+                          <button v-if="r.status === '审核中'" class="h-8 px-3 rounded-md bg-primaryBtn hover:bg-primaryBtnHover text-white text-xs font-medium transition-colors" type="button" @click="openConversionReview(r.id)">审核</button>
                         </div>
                       </td>
                     </tr>
@@ -438,131 +437,83 @@
     </template>
   </el-dialog>
 
-  <el-dialog v-model="conversionDetailVisible" width="860px" :show-close="false" align-center>
-    <template #header>
-      <div class="flex items-center justify-between w-full">
-        <div class="text-sm font-bold text-gray-800">赠金转化申请详情</div>
-        <button class="text-gray-400 hover:text-gray-600" type="button" @click="conversionDetailVisible = false">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-    </template>
-    <div class="space-y-4 text-xs text-gray-700">
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <div class="text-gray-500 mb-1">申请ID</div>
-          <div class="font-mono text-gray-800">{{ conversionDetail?.id || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">状态</div>
-          <div class="text-gray-800">{{ conversionDetail?.status || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">客户</div>
-          <div class="text-gray-800">{{ conversionDetail?.customerName || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">邮箱</div>
-          <div class="text-gray-800 font-mono">{{ conversionDetail?.customerEmail || '-' }}</div>
-        </div>
-        <div class="col-span-2">
-          <div class="text-gray-500 mb-1">活动名称</div>
-          <div class="text-gray-800">{{ conversionDetail?.activityName || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">可转换金额</div>
-          <div class="text-gray-800 font-mono">{{ formatUsd4(conversionDetail?.convertibleAmount) }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">申请金额</div>
-          <div class="text-gray-800 font-mono">{{ formatUsd4(conversionDetail?.amount) }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">目标真实账户</div>
-          <div class="text-gray-800">{{ conversionDetail?.targetAccountLabel || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">MT类型</div>
-          <div class="text-gray-800">{{ detailAccount?.mtType || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">申请时间</div>
-          <div class="text-gray-800 font-mono">{{ conversionDetail?.appliedAt || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">审核时间</div>
-          <div class="text-gray-800 font-mono">{{ conversionDetail?.reviewedAt || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">审核结果</div>
-          <div class="text-gray-800">{{ conversionDetail?.reviewResult || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">驳回原因</div>
-          <div class="text-gray-800">{{ conversionDetail?.rejectReason || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">完成时间</div>
-          <div class="text-gray-800 font-mono">{{ conversionDetail?.completedAt || '-' }}</div>
-        </div>
-        <div>
-          <div class="text-gray-500 mb-1">入账结果</div>
-          <div class="text-gray-800">{{ conversionDetail?.payoutResult || '-' }}</div>
-        </div>
-      </div>
+  <el-dialog v-model="conversionDetailVisible" :title="canReviewConversion ? '赠金转化申请审核' : '赠金转化申请详情'" width="780px" align-center :close-on-click-modal="false" :close-on-press-escape="!conversionSubmitting" :show-close="!conversionSubmitting">
+    <div v-if="conversionDetail" class="conversion-review-body space-y-5 text-sm text-gray-700" :class="{ 'conversion-review-compact': canReviewConversion }">
+      <section>
+        <h3 class="mb-3 text-sm font-semibold text-gray-800">客户基本信息</h3>
+        <dl class="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+          <div><dt class="mb-1 text-xs text-gray-500">客户姓名</dt><dd>{{ conversionDetail.customerName }}</dd></div>
+          <div><dt class="mb-1 text-xs text-gray-500">客户邮箱</dt><dd class="break-all">{{ conversionDetail.customerEmail }}</dd></div>
+          <div class="sm:col-span-2"><dt class="mb-1 text-xs text-gray-500">活动名称</dt><dd>{{ conversionDetail.activityName }}</dd></div>
+          <div :class="{ 'sm:col-span-2': canReviewConversion }"><dt class="mb-1 text-xs text-gray-500">{{ canReviewConversion ? 'MT账号' : '目标真实账户' }}</dt><dd>{{ conversionDetail.targetAccountLabel }}</dd></div>
+          <div v-if="!canReviewConversion"><dt class="mb-1 text-xs text-gray-500">MT 类型</dt><dd>{{ detailAccount?.mtType || '-' }}</dd></div>
+        </dl>
+      </section>
 
-      <div class="rounded-xl border border-gray-200 p-4">
-        <div class="text-sm font-semibold text-gray-700 mb-3">信用金概览</div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div class="h-9 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center">已发放：{{ formatUsd4(detailSummary?.issuedCredit) }}</div>
-          <div class="h-9 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center">已消耗：{{ formatUsd4(detailSummary?.consumedCredit) }}</div>
-          <div class="h-9 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center">占用中：{{ formatUsd4(detailSummary?.occupiedNow) }}</div>
-          <div class="h-9 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center">可转换：{{ formatUsd4(detailSummary?.convertibleCredit) }}</div>
-          <div class="h-9 px-3 rounded-md border border-gray-200 bg-gray-50 flex items-center">已转换：{{ formatUsd4(detailSummary?.convertedCredit) }}</div>
-        </div>
-      </div>
-
-      <div class="rounded-xl border border-gray-200 p-4">
-        <div class="text-sm font-semibold text-gray-700 mb-3">审核记录</div>
-        <div v-if="(conversionDetail?.auditLogs || []).length === 0" class="text-gray-400">-</div>
-        <div v-else class="space-y-2">
-          <div v-for="(l, idx) in conversionDetail.auditLogs" :key="idx" class="flex items-start justify-between gap-3">
-            <div class="text-gray-700">{{ l.actor }} · {{ l.action }}</div>
-            <div class="text-gray-500 font-mono">{{ l.at }}</div>
+      <section class="conversion-review-funds border-y border-gray-100 bg-gray-50 px-4 py-4">
+        <h3 class="mb-3 text-sm font-semibold text-gray-800">资金信息</h3>
+        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <dt class="text-xs text-gray-500">客户当前赠金金额</dt>
+            <dd class="mt-2 text-xl font-semibold tabular-nums text-gray-800">{{ detailSummary ? formatUsd4(currentBonusAmount) : '-' }}</dd>
+            <p v-if="!canReviewConversion" class="mt-1 text-xs text-gray-500">当前活动赠金余额，包含占用及申请冻结金额</p>
           </div>
-        </div>
-      </div>
-    </div>
-    <template #footer>
-      <div class="flex items-center justify-end">
-        <button class="px-6 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-medium transition-colors" type="button" @click="conversionDetailVisible = false">
-          关闭
-        </button>
-      </div>
-    </template>
-  </el-dialog>
+          <div>
+            <dt class="text-xs text-gray-500">申请转真实资金金额</dt>
+            <dd class="mt-2 text-xl font-semibold tabular-nums text-primaryBtn">{{ formatUsd4(conversionDetail.amount) }}</dd>
+            <p class="mt-1 text-xs text-gray-500">本次申请金额，以提交时记录为准</p>
+          </div>
+        </dl>
+        <p v-if="!canReviewConversion" class="mt-3 text-xs text-gray-500">申请记录可转换金额：{{ formatUsd4(conversionDetail.convertibleAmount ?? conversionDetail.amount) }}</p>
+      </section>
 
-  <el-dialog v-model="rejectVisible" width="520px" :show-close="false" align-center>
-    <template #header>
-      <div class="flex items-center justify-between w-full">
-        <div class="text-sm font-bold text-gray-800">驳回原因</div>
-        <button class="text-gray-400 hover:text-gray-600" type="button" @click="rejectVisible = false">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-    </template>
-    <div class="space-y-2">
-      <div class="text-xs text-gray-500">请输入驳回原因</div>
-      <el-input v-model="rejectReason" type="textarea" :rows="3" placeholder="驳回原因" size="small" />
+      <section>
+        <h3 class="mb-3 text-sm font-semibold text-gray-800">申请信息</h3>
+        <dl class="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+          <div><dt class="mb-1 text-xs text-gray-500">申请ID</dt><dd class="font-mono">{{ conversionDetail.id }}</dd></div>
+          <div><dt class="mb-1 text-xs text-gray-500">当前状态</dt><dd><el-tag :type="conversionDetail.status === '审核拒绝' ? 'danger' : conversionDetail.status === '审核中' ? 'warning' : 'success'" size="small">{{ conversionDetail.status }}</el-tag></dd></div>
+          <div><dt class="mb-1 text-xs text-gray-500">申请时间</dt><dd class="tabular-nums">{{ conversionDetail.appliedAt }}</dd></div>
+          <div v-if="!canReviewConversion"><dt class="mb-1 text-xs text-gray-500">风险状态</dt><dd :class="detailSummary?.riskTag && detailSummary.riskTag !== '正常' ? 'text-red-600' : 'text-gray-700'">{{ detailSummary?.riskTag || '-' }}</dd></div>
+          <div><dt class="mb-1 text-xs text-gray-500">审核结果</dt><dd>{{ conversionDetail.reviewResult || '-' }}</dd></div>
+          <div><dt class="mb-1 text-xs text-gray-500">审核时间</dt><dd class="tabular-nums">{{ conversionDetail.reviewedAt || '-' }}</dd></div>
+          <div><dt class="mb-1 text-xs text-gray-500">完成时间</dt><dd class="tabular-nums">{{ conversionDetail.completedAt || '-' }}</dd></div>
+          <div><dt class="mb-1 text-xs text-gray-500">入账结果</dt><dd class="break-words">{{ conversionDetail.payoutResult || '-' }}</dd></div>
+          <div v-if="conversionDetail.rejectReason" class="sm:col-span-2"><dt class="mb-1 text-xs text-gray-500">驳回原因</dt><dd class="whitespace-pre-wrap break-words text-red-600">{{ conversionDetail.rejectReason }}</dd></div>
+        </dl>
+      </section>
+
+      <section v-if="!canReviewConversion" class="border-t border-gray-100 pt-4">
+        <h3 class="mb-2 text-sm font-semibold text-gray-800">信用金概览</h3>
+        <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-gray-600">
+          <span>已发放：{{ formatUsd4(detailSummary?.issuedCredit) }}</span>
+          <span>已消耗：{{ formatUsd4(detailSummary?.consumedCredit) }}</span>
+          <span>占用中：{{ formatUsd4(detailSummary?.occupiedNow) }}</span>
+          <span>可转换：{{ formatUsd4(detailSummary?.convertibleCredit) }}</span>
+          <span>已转换：{{ formatUsd4(detailSummary?.convertedCredit) }}</span>
+        </div>
+      </section>
+      <section class="border-t border-gray-100 pt-4">
+        <h3 class="mb-2 text-sm font-semibold text-gray-800">审核记录</h3>
+        <div v-if="!conversionDetail.auditLogs?.length" class="text-xs text-gray-400">暂无审核记录</div>
+        <div v-for="(log, idx) in conversionDetail.auditLogs || []" :key="idx" class="mb-2 text-xs">
+          <div class="flex flex-wrap justify-between gap-2"><span>{{ log.actor }} · {{ log.action }}</span><span class="text-gray-500">{{ log.at }}</span></div>
+          <p v-if="log.note" class="mt-1 break-words text-gray-500">{{ log.note }}</p>
+        </div>
+      </section>
+      <section v-if="canReviewConversion" class="border-t border-gray-100 pt-4">
+        <label for="conversion-reject-reason" class="mb-2 block text-sm font-medium text-gray-700">驳回原因 <span class="text-red-500">*</span><span class="ml-2 text-xs font-normal text-gray-500">仅审核拒绝时必填</span></label>
+        <el-input id="conversion-reject-reason" v-model="conversionRejectReason" type="textarea" :rows="3" :disabled="conversionSubmitting" placeholder="审核拒绝时请填写具体原因" />
+        <p v-if="!conversionRejectReason.trim()" class="mt-2 text-xs text-gray-500">填写驳回原因后才可提交审核拒绝，不影响审核通过。</p>
+      </section>
+      <p v-else class="text-xs text-gray-500">当前为只读详情，不允许在此重复审核。</p>
     </div>
     <template #footer>
-      <div class="flex items-center justify-end gap-3">
-        <button class="px-6 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-medium transition-colors" type="button" @click="rejectVisible = false">
-          取消
-        </button>
-        <button class="px-6 py-2 rounded-lg bg-rose-500 hover:bg-rose-600 text-white text-sm font-medium transition-colors" type="button" @click="confirmConversionReject">
-          确认驳回
-        </button>
+      <div class="flex w-full flex-wrap items-center justify-end gap-3">
+        <el-button :disabled="conversionSubmitting" @click="conversionDetailVisible = false">{{ canReviewConversion ? '取消' : '关闭' }}</el-button>
+        <template v-if="canReviewConversion">
+          <el-button type="primary" :loading="conversionSubmitting" @click="approveConversion">审核通过</el-button>
+          <el-button type="danger" :disabled="conversionSubmitting || !conversionRejectReason.trim()" @click="confirmConversionReject">审核拒绝</el-button>
+        </template>
       </div>
     </template>
   </el-dialog>
@@ -571,7 +522,7 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
 import DataTable from '@/components/DataTable.vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { creditConversionState, approveRequest, rejectRequest, getCreditSummary } from '@/store/creditConversionDemo'
 
 const activeTab = ref('activity')
@@ -794,7 +745,12 @@ const filteredConversionRows = computed(() => {
 })
 
 const conversionDetailVisible = ref(false)
-const conversionDetail = ref(null)
+const conversionDetailId = ref('')
+const conversionDetail = computed(() => creditConversionState.conversionRequests.find((r) => r.id === conversionDetailId.value) || null)
+const conversionReviewMode = ref(false)
+const conversionSubmitting = ref(false)
+const conversionRejectReason = ref('')
+const canReviewConversion = computed(() => conversionReviewMode.value && conversionDetail.value?.status === '审核中')
 const detailAccount = computed(() => {
   const req = conversionDetail.value
   if (!req) return null
@@ -805,41 +761,58 @@ const detailSummary = computed(() => {
   if (!req) return null
   return getCreditSummary({ customerId: req.customerId, activityId: req.activityId })
 })
+const currentBonusAmount = computed(() => {
+  const summary = detailSummary.value
+  return summary ? Math.max(0, summary.issuedCredit - summary.consumedCredit - summary.convertedCredit) : 0
+})
 
 const openConversionDetail = (id) => {
-  const req = filteredConversionRows.value.find((r) => r.id === id) || null
-  conversionDetail.value = req
+  const req = creditConversionState.conversionRequests.find((r) => r.id === id)
+  if (!req) return ElMessage.warning('申请不存在')
+  conversionDetailId.value = id
+  conversionReviewMode.value = false
+  conversionRejectReason.value = ''
   conversionDetailVisible.value = true
 }
 
-const approveConversion = (id) => {
-  const res = approveRequest({ id, auditor: '系统管理员（演示）' })
-  if (!res.ok) {
-    ElMessage.error(res.message || '操作失败')
-    return
-  }
-  ElMessage.success('已审核通过')
+const openConversionReview = (id) => {
+  openConversionDetail(id)
+  conversionReviewMode.value = conversionDetail.value?.id === id && conversionDetail.value.status === '审核中'
 }
 
-const rejectVisible = ref(false)
-const rejectReason = ref('')
-const rejectTargetId = ref('')
-
-const openConversionReject = (id) => {
-  rejectTargetId.value = id
-  rejectReason.value = ''
-  rejectVisible.value = true
+const approveConversion = async () => {
+  if (!canReviewConversion.value || conversionSubmitting.value) return
+  const id = conversionDetail.value.id
+  conversionSubmitting.value = true
+  try {
+    await ElMessageBox.confirm(`确认通过本次 ${formatUsd4(conversionDetail.value.amount)} 转真实资金申请？`, '确认审核通过', {
+      confirmButtonText: '确认通过', cancelButtonText: '取消', type: 'warning',
+      closeOnClickModal: false,
+    })
+    const res = approveRequest({ id, auditor: '系统管理员（演示）' })
+    if (!res.ok) return ElMessage.error(res.message || '操作失败')
+    conversionReviewMode.value = false
+    ElMessage.success('已审核通过并完成，列表已更新')
+  } catch (error) {
+    if (error !== 'cancel' && error !== 'close') ElMessage.error('审核未完成，请重试')
+  } finally {
+    conversionSubmitting.value = false
+  }
 }
 
 const confirmConversionReject = () => {
-  const id = String(rejectTargetId.value || '')
-  const res = rejectRequest({ id, auditor: '系统管理员（演示）', reason: rejectReason.value })
-  if (!res.ok) {
-    ElMessage.error(res.message || '操作失败')
-    return
+  if (!canReviewConversion.value || conversionSubmitting.value) return
+  const reason = conversionRejectReason.value.trim()
+  if (!reason) return ElMessage.warning('请填写驳回原因')
+  conversionSubmitting.value = true
+  try {
+    const res = rejectRequest({ id: conversionDetail.value.id, auditor: '系统管理员（演示）', reason })
+    if (!res.ok) return ElMessage.error(res.message || '操作失败')
+    conversionReviewMode.value = false
+    ElMessage.success('已审核拒绝，列表已更新')
+  } finally {
+    conversionSubmitting.value = false
   }
-  rejectVisible.value = false
-  ElMessage.success('已驳回')
 }
 
 const formatUsd4 = (val) => {
@@ -968,6 +941,29 @@ const auditTextClass = (status) => {
 </script>
 
 <style scoped>
+/* 仅收紧审核模式，查看详情保持原有布局。 */
+.conversion-review-compact > section + section {
+  margin-top: 12px;
+}
+.conversion-review-compact > section > h3 {
+  margin-bottom: 8px;
+}
+.conversion-review-compact > section > dl {
+  row-gap: 8px;
+}
+.conversion-review-compact dt {
+  margin-bottom: 2px;
+}
+.conversion-review-compact .conversion-review-funds {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.conversion-review-compact .conversion-review-funds dd {
+  margin-top: 4px;
+}
+.conversion-review-compact > section.border-t {
+  padding-top: 12px;
+}
 .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }

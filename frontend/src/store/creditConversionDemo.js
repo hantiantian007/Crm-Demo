@@ -51,7 +51,7 @@ const initState = () => ({
       consumedCredit: 0,
       occupiedCredit: 60,
       convertedCredit: 0,
-      frozenCredit: 0,
+      frozenCredit: 240,
       accountAbnormal: false,
       riskTag: '正常',
     },
@@ -218,7 +218,18 @@ const load = () => {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return initState()
     const parsed = JSON.parse(raw)
-    return { ...initState(), ...parsed }
+    const state = { ...initState(), ...parsed }
+    // 仅修复旧版默认待审核样例遗漏的申请冻结，不覆盖用户已处理或已变更的资金数据。
+    const legacyRequest = state.conversionRequests.find((r) => r.id === 'CR-10002')
+    const legacyCredit = state.customerActivityCredits.find((r) => r.customerId === 'CUST-lixue' && r.activityId === 'pioneer-one-50000')
+    if (legacyRequest?.status === '审核中' && legacyRequest.customerId === 'CUST-lixue'
+      && legacyRequest.activityId === 'pioneer-one-50000' && legacyRequest.amount === 240
+      && legacyRequest.appliedAt === '2026-10-09 09:18:40'
+      && legacyCredit?.issuedCredit === 300 && legacyCredit.consumedCredit === 0
+      && legacyCredit.occupiedCredit === 60 && legacyCredit.convertedCredit === 0 && legacyCredit.frozenCredit === 0) {
+      legacyCredit.frozenCredit = 240
+    }
+    return state
   } catch {
     return initState()
   }
@@ -352,8 +363,9 @@ export const approveRequest = ({ id, auditor }) => {
   req.status = '已完成'
   req.reviewResult = '通过'
   req.rejectReason = ''
-  req.completedAt = nowStr()
-  req.auditLogs.push({ at: nowStr(), actor: auditor || '审核员', action: '审核通过并完成', note: '一次性扣减信用金并入账真实资金' })
+  req.reviewedAt = nowStr()
+  req.completedAt = req.reviewedAt
+  req.auditLogs.push({ at: req.reviewedAt, actor: auditor || '审核员', action: '审核通过并完成', note: '一次性扣减信用金并入账真实资金' })
 
   creditConversionState.ledger.unshift({
     id: uid('LED'),
@@ -372,6 +384,8 @@ export const approveRequest = ({ id, auditor }) => {
 export const rejectRequest = ({ id, auditor, reason }) => {
   const req = creditConversionState.conversionRequests.find((r) => r.id === id) || null
   if (!req || req.status !== '审核中') return { ok: false, message: '申请不存在或状态不可审核' }
+  const rejectReason = String(reason || '').trim()
+  if (!rejectReason) return { ok: false, message: '请填写驳回原因' }
   const creditRow = getCustomerActivityCredit({ customerId: req.customerId, activityId: req.activityId })
   if (!creditRow) return { ok: false, message: '活动赠金记录不存在' }
   const amt = money4(req.amount)
@@ -379,9 +393,10 @@ export const rejectRequest = ({ id, auditor, reason }) => {
 
   req.status = '审核拒绝'
   req.reviewResult = '拒绝'
-  req.rejectReason = String(reason || '').trim() || '资料不完整'
-  req.completedAt = nowStr()
-  req.auditLogs.push({ at: nowStr(), actor: auditor || '审核员', action: '审核拒绝', note: req.rejectReason })
+  req.rejectReason = rejectReason
+  req.reviewedAt = nowStr()
+  req.completedAt = req.reviewedAt
+  req.auditLogs.push({ at: req.reviewedAt, actor: auditor || '审核员', action: '审核拒绝', note: req.rejectReason })
 
   creditConversionState.ledger.unshift({
     id: uid('LED'),
