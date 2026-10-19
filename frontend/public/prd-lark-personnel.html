@@ -1,87 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lark 人员 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}pre{background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.6}.doc-links{display:flex;flex-wrap:wrap;gap:8px 18px;padding-left:20px}.flow{padding:10px 12px;background:#fff7ed;border-left:3px solid #bd985d}</style></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lark 群组管理 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}pre{background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.6}.doc-links{display:flex;flex-wrap:wrap;gap:8px 18px;padding-left:20px}.flow{padding:10px 12px;background:#fff7ed;border-left:3px solid #bd985d}</style></head>
 <body><main class="wrap"><article class="card">
-<span class="tag">独立页面 PRD · open_id 接入说明</span><h1>Lark 人员 - PRD</h1>
-<p class="note"><strong>本项目使用国际版 Lark（Lark Suite），不是中国大陆版飞书。</strong>所有 Lark Open API 和开发文档统一使用国际版官方平台。API 域名固定为 <code>https://open.larksuite.com/</code>，禁止使用 <code>open.feishu.cn</code> 等国内飞书接口。<a href="https://open.larksuite.com/document/server-docs/im-v1/faq" target="_blank" rel="noopener noreferrer">官方域名说明</a></p>
-<section><h2>1. 页面名称</h2>
-<p>风控管理 → Lark 通知 → Lark 人员。保持独立 PRD，本页只解决“CRM 管理人员是谁、对应哪个 Lark 用户、如何获取并保存 open_id”。</p></section>
-<section><h2>2. 页面目的</h2>
-<p>维护 <strong>CRM 管理人员 ↔ Lark 用户</strong>的绑定关系。绑定完成后，通知配置才能选择该人员；后续单聊消息使用所保存的 open_id。</p></section>
-<section><h2>3. 页面功能</h2>
-<ul><li>展示人员姓名、角色、CRM 邮箱、Lark User ID、绑定状态、更新时间及操作。</li><li>新增已有管理人员；按 CRM 邮箱查询并绑定，支持重新获取、编辑和清空/解除绑定。</li><li>本次只补充 PRD，不改页面，不接真实 API；原型手动填 ID 与 ou_demo_alex、ou_demo_winnie 等值继续保留。</li></ul><h3>Lark 人员绑定说明</h3><p class="note">正式系统由 CRM 服务端通过管理人员邮箱匹配 Lark 用户，调用 Open API 获取 open_id，成功后保存为 Lark User ID。无法获取时检查邮箱、应用权限与通讯录可见范围。演示 ID 不是真实绑定，正式开发不得写死或将其自动迁移为有效绑定。</p>
-<p>官方开发文档统一列于本页底部；所有链接均直达 <code>open.larksuite.com</code>。查询、绑定和发送只使用本项目国际版 Lark 应用的凭证与用户标识。</p></section>
-<section><h2>4. 核心字段定义</h2>
-<p class="note">以下为正式绑定的字段规则。沿用 CRM 主数据长度；API 标识按官方返回值保存，不增加未经确认的固定长度限制。原型尚无邮箱自动查询与更新时间，这里不是已实现声明。</p><div class="table-wrap"><table class="fields"><thead><tr><th>字段名称</th><th>字段含义</th><th>数据来源</th><th>数据类型</th><th>字符/格式要求</th><th>状态/枚举</th><th>默认值</th><th>是否必填</th><th>是否可编辑</th><th>业务规则 / 何时变化</th></tr></thead><tbody><tr><td>CRM 管理人员</td><td>绑定关系所属的 CRM 管理账号及姓名</td><td>CRM 用户/管理员数据</td><td>String 标识 + String 姓名</td><td>沿用 CRM 的标识、姓名及长度；不可空；同名按标识区分</td><td>已有 CRM 管理人员</td><td>新增时未选择；绑定时回填</td><td>新增必选，绑定必有</td><td>新增仅选择已有人员；选中后自动带出，绑定/编辑时不可修改</td><td>不创建或改名 CRM 账号；同一管理人员不重复新增绑定行。</td></tr>
-<tr><td>角色</td><td>CRM 管理人员现有权限角色</td><td>CRM 权限数据</td><td>String</td><td>沿用 CRM 角色名称和字符限制；源数据缺失显示“—”</td><td>沿用 CRM 角色枚举；原型含风控、财务、运营、管理员、系统管理员</td><td>所选人员当前角色</td><td>来源提供，不要求人工填写</td><td>否</td><td>由 CRM 自动获取；不在绑定操作中修改权限。</td></tr>
-<tr><td>CRM 邮箱</td><td>用于匹配 Lark 用户的 CRM 管理人员邮箱</td><td>CRM 用户数据</td><td>String / null</td><td>邮箱格式；字符长度沿用 CRM；无值显示“—”</td><td>无</td><td>当前 CRM 邮箱</td><td>邮箱绑定流程必填；无邮箱可保留未绑定行</td><td>否，本页面只读</td><td>必须对应目标用户在 Lark 可匹配的邮箱；缺失/格式错误先修正 CRM 数据，不猜测账号。</td></tr>
-<tr><td>Lark User ID</td><td>当前应用中该管理人员对应的 Lark 用户标识</td><td>正式环境：Lark 用户 ID 查询 API 返回值；原型：演示数据/手动文本</td><td>String</td><td>只保存 open_id；常见形如 ou_xxx；按响应原值完整保存，不截断、不以仅有前缀判真；未绑定可空</td><td>ID 类型固定 open_id；不保存 lark_id，不混用 user_id / union_id</td><td>空</td><td>正式绑定成功须取得非空 open_id；解绑允许清空</td><td>正式环境由绑定/重新查询更新，不接受任意手输覆盖；原型保留手动演示</td><td>请求 user_id_type=open_id，读取响应 user_list 中目标邮箱项的 user_id 保存。CRM ID、邮箱、手机号不作为最终通知 ID。</td></tr>
-<tr><td>绑定状态</td><td>当前是否保存了可用绑定关系</td><td>由已保存的查询结果/解绑操作推导</td><td>Enum / String</td><td>固定 3 字符，不可空</td><td>已绑定 / 未绑定</td><td>未绑定；已有有效绑定沿用</td><td>是，系统生成</td><td>否</td><td>正式环境仅目标匹配、接口成功、open_id 非空且保存成功才已绑定；清空成功后未绑定。不是消息送达保证。</td></tr>
-<tr><td>操作</td><td>当前人员可执行的绑定入口</td><td>系统按绑定状态生成</td><td>UI 操作集合</td><td>未绑定显示绑定；已绑定显示编辑，编辑支持重新获取或清空/解除绑定</td><td>绑定 / 编辑 / 解除绑定</td><td>按当前状态</td><td>系统提供，非录入项</td><td>否</td><td>编辑不替换 CRM 人员；先查询并成功保存才替换旧 ID，取消不改变关系。</td></tr>
-<tr><td>更新时间</td><td>最近一次绑定关系成功改变的时间</td><td>系统自动生成</td><td>DateTime / null</td><td>YYYY-MM-DD HH:mm:ss，19 字符；CRM 统一时区（具体口径待确认）；历史未记录可空</td><td>无</td><td>null</td><td>有成功变更时自动记录</td><td>否</td><td>新增绑定、ID 更新、解除绑定成功时更新；失败/取消或查询未造成变更时不伪造更新时间。</td></tr></tbody></table></div></section>
-<section><h2>5. 核心业务规则</h2>
-<h3>5.1 ID 口径与绑定规则</h3><ul><li>CRM 的“Lark User ID”统一保存 Lark open_id，不保存 lark_id 作为通知接收 ID；邮箱、手机号、CRM 用户 ID、user_id、union_id 均不能替代该字段。后续一对一 Lark 消息以已保存的 open_id 作为接收用户标识。</li><li>open_id 是应用内用户标识，不能把应用 A 查询到的值直接交给应用 B 发送。查询、保存和发送须使用同一租户及同一应用上下文；更换应用需重新查询，不能直接复用旧值。<a href="https://open.larksuite.com/document/home/user-identity-introduction" target="_blank" rel="noopener noreferrer">官方用户标识说明</a></li><li>一名 CRM 管理人员在当前通知应用内只维护一条绑定。不同 CRM 账号是否允许共用同一 Lark 身份尚待确认，不在本次自行扩展关联规则。</li><li>目标用户匹配、返回成功且获得非空 open_id 后方可保存。仅 HTTP 成功、仅 code=0、仅看到 ou_ 前缀均不足以证明目标绑定成功。</li><li>解绑后取消该人员在所有通知规则中的选择；已接入的 CRM 登录通知接收人也需同步移除。历史通知保留，重新绑定不自动恢复已移除的选择。</li></ul><h3>5.2 服务端获取 tenant_access_token</h3><p>国际版 Lark 企业自建应用由 CRM 服务端读取服务端配置中的 App ID、App Secret 获取访问凭证：</p><pre><code>POST https://open.larksuite.com/open-apis/auth/v3/tenant_access_token/internal
-Content-Type: application/json; charset=utf-8
-
-{
-  "app_id": "&lt;APP_ID&gt;",
-  "app_secret": "&lt;APP_SECRET&gt;"
-}</code></pre><p>该凭证代表应用调用服务端 API，最长有效期为 2 小时；服务端以响应中的 expire（秒）管理有效期和更新，不把每次返回值都当作新的两小时凭证。App ID、App Secret 和 tenant_access_token 由服务端配置与管理，不写死在前端代码，不在页面或浏览器存储中保存凭证。<a href="https://open.larksuite.com/document/server-docs/authentication-management/access-token/tenant_access_token_internal" target="_blank" rel="noopener noreferrer">官方凭证文档</a></p><h3>5.3 优先通过 CRM 邮箱查询 open_id</h3><p>服务端读取该管理人员的 CRM 邮箱；查询参数放在 URL，凭证放在 Authorization 请求头：</p><pre><code>POST https://open.larksuite.com/open-apis/contact/v3/users/batch_get_id?user_id_type=open_id
-Authorization: Bearer &lt;tenant_access_token&gt;
-Content-Type: application/json; charset=utf-8
-
-{
-  "emails": ["winnie@example.com"]
-}</code></pre><p>接口也支持手机号查询，参数示例为 <code>{"mobiles":["13800000000"]}</code>。这仅说明接口能力；本页面仍优先使用邮箱，不新增手机号录入或未经确认的自动兜底流程。非中国大陆号码的区号格式按官方接口文档处理。<a href="https://open.larksuite.com/document/server-docs/contact-v3/user/batch_get_id" target="_blank" rel="noopener noreferrer">官方用户 ID 查询文档</a></p><h3>5.4 读取返回值并保存</h3><p>响应结构示意（ID 为占位值，不可直接用于生产）：</p><pre><code>{
-  "code": 0,
-  "msg": "success",
-  "data": {
-    "user_list": [
-      {
-        "user_id": "ou_xxxxxxxxxxxxx",
-        "email": "winnie@example.com"
-      }
-    ]
-  }
-}</code></pre><p>当请求参数为 <code>user_id_type=open_id</code> 时，返回字段名仍为 <code>user_id</code>，其值实际是 open_id。将与本次查询邮箱对应项的该值保存到“Lark User ID”；不能不核对邮箱就取第一条，也不能在返回为空时保存占位 ID。<a href="https://open.larksuite.com/document/server-docs/contact-v3/user/batch_get_id" target="_blank" rel="noopener noreferrer">官方返回 ID 类型说明</a></p><h3>5.5 应用权限及后续消息使用</h3><ul><li>申请并生效 <code>contact:user.id:readonly</code>（通过手机号或邮箱获取用户 ID），同时确认通讯录数据权限范围包含目标用户；发布/授权按企业应用要求完成。<a href="https://open.larksuite.com/document/server-docs/contact-v3/user/batch_get_id" target="_blank" rel="noopener noreferrer">官方权限排查说明</a></li><li>后续单聊发送使用应用机器人，需开启机器人能力，并开通 <code>im:message:send_as_bot</code> 等发送接口支持的适当权限；确认目标人员在应用可用范围内。查询到 ID 不等于一定能够发送消息。<a href="https://open.larksuite.com/document/server-docs/im-v1/faq" target="_blank" rel="noopener noreferrer">官方应用机器人配置说明</a>、<a href="https://open.larksuite.com/document/server-docs/im-v1/message/create" target="_blank" rel="noopener noreferrer">发送接口权限与前置条件</a></li></ul><pre><code>POST https://open.larksuite.com/open-apis/im/v1/messages?receive_id_type=open_id
-Authorization: Bearer &lt;tenant_access_token&gt;
-
-请求 Body 中：
-receive_id = 已保存的 Lark User ID（open_id）</code></pre><p>以上仅说明 ID 使用关系，不是完整发送请求；消息内容等必填参数由对应通知需求定义。本页不展开业务通知规则、模板、自动任务或重试方案。</p></section>
-<section><h2>6. 操作说明</h2>
-<p class="flow">CRM 管理人员 → 读取 CRM 邮箱 → Lark 国际版 Open API（服务端使用有效 tenant_access_token）→ 通过邮箱查询 Lark 用户 → 获取 open_id → 保存到 CRM“Lark User ID”→ 绑定状态＝已绑定</p><div class="table-wrap"><table class=""><thead><tr><th>操作/结果</th><th>页面及保存行为</th></tr></thead><tbody><tr><td>新增 / 绑定</td><td>选择已有人员；姓名、角色、邮箱自动带出且只读。点击绑定执行上述正式流程，成功后显示已绑定及返回的 open_id。重复人员提示“该人员已存在”。</td></tr>
-<tr><td>编辑 / 重新获取</td><td>仍针对同一 CRM 管理人员，按其当前 CRM 邮箱重新查询。成功保存后替换 ID，不能手输任意值覆盖正式结果；如邮箱错误，先在 CRM 原有资料中修正。</td></tr>
-<tr><td>邮箱缺失 / 格式错误</td><td>提示“请先完善 CRM 管理人员邮箱”，不调用人员查询、不生成或伪造 ID。</td></tr>
-<tr><td>无匹配用户 / 返回空 ID</td><td>提示“未找到 Lark 用户，请检查 CRM 邮箱与 Lark 账号邮箱是否一致”；本次绑定失败，首次绑定仍未绑定，不保存空结果为成功。</td></tr>
-<tr><td>权限、凭证、网络或服务异常</td><td>提示“Lark 用户查询失败，请检查邮箱或应用权限”；不把权限异常直接断定为用户不存在。</td></tr>
-<tr><td>目标无法唯一确认</td><td>提示核对邮箱和目标人员，不自动选择返回项，不保存候选 ID。</td></tr>
-<tr><td>重新获取失败 / 保存失败</td><td>保留原已保存绑定与更新时间，不用失败结果覆盖旧 ID，不显示更新成功。首次失败仍未绑定。</td></tr>
-<tr><td>清空 / 解除绑定</td><td>明确清空并成功保存后变为未绑定，同步移除后续通知对象；不删除 CRM 人员或历史通知。</td></tr>
-<tr><td>取消</td><td>放弃本次草稿/候选结果，不更新绑定或更新时间。</td></tr></tbody></table></div></section>
-<section><h2>7. 状态说明</h2>
-<div class="table-wrap"><table class=""><thead><tr><th>原状态</th><th>触发条件</th><th>结果</th></tr></thead><tbody><tr><td>未绑定</td><td>目标邮箱匹配、接口返回 open_id 且保存成功</td><td>已绑定；可被通知配置选择，记录更新时间。</td></tr>
-<tr><td>未绑定</td><td>查询无结果、失败、ID 为空或保存失败</td><td>仍未绑定；显示原因，不保存无效值。</td></tr>
-<tr><td>已绑定</td><td>重新获取到目标 open_id 并成功更新</td><td>仍已绑定；实际 ID 变化时更新更新时间，后续使用新值。</td></tr>
-<tr><td>已绑定</td><td>明确清空并成功保存</td><td>未绑定；ID 为空，通知对象同步取消。</td></tr>
-<tr><td>已绑定</td><td>查询更新失败、保存失败或取消</td><td>保留原绑定，不以瞬时失败清空既有关系。</td></tr></tbody></table></div><p class="note">查询中的等待/失败提示属于操作反馈，不新增“绑定中 / 绑定失败”持久状态。原型非空演示文本显示已绑定只用于演示，不能作为生产环境有效性依据；“已绑定”也不保证未来消息一定发送成功。</p></section>
-<section><h2>8. 验收标准</h2>
-<ol><li>CRM 管理人员、角色和邮箱均来自 CRM，只读；同一人员不能重复新增。</li><li>正式查询固定 user_id_type=open_id；准确匹配邮箱后保存响应 user_id 的实际 open_id，不混入其他 ID 或写死演示值。</li><li>首次查询失败/空结果不绑定，更新失败不覆盖旧绑定；成功变更才更新时间；解除绑定同步移除通知对象。</li><li>App ID、App Secret 等配置由服务端管理；查询及发送只调用 open.larksuite.com，使用同一国际版租户和应用，发送时 receive_id_type=open_id。</li><li>底部五个开发文档入口均指向 open.larksuite.com；不保存 lark_id 为接收 ID；ou_demo_alex、ou_demo_winnie 仅用于演示，正式环境不得使用。</li></ol></section>
-<p class="note">仅本 PRD 补充正式接入要求与官方文档。本轮不接 API、不改页面、不改其他 PRD；不包含业务通知规则、消息模板、自动通知任务、重试细节或数据库设计。</p>
-<section id="lark-official-docs"><h2>Lark 官方开发文档</h2>
-<ul><li><a href="https://open.larksuite.com/document/home/" target="_blank" rel="noopener noreferrer">Lark Developer 官方文档</a></li>
-<li><a href="https://open.larksuite.com/document/home/user-identity-introduction" target="_blank" rel="noopener noreferrer">Lark 用户身份 / User ID 说明</a></li>
-<li><a href="https://open.larksuite.com/document/server-docs/contact-v3/user/batch_get_id" target="_blank" rel="noopener noreferrer">获取用户 ID（邮箱/手机号匹配）</a></li>
-<li><a href="https://open.larksuite.com/document/server-docs/authentication-management/access-token/tenant_access_token_internal" target="_blank" rel="noopener noreferrer">获取 tenant_access_token</a></li>
-<li><a href="https://open.larksuite.com/document/server-docs/im-v1/message/create" target="_blank" rel="noopener noreferrer">发送消息 API</a></li></ul>
-<p>仅使用国际版 Lark 官方 Developer 文档，不将国内飞书文档或第三方镜像作为本项目接入规范。</p></section>
-<section id="development-notes"><h2>研发注意事项</h2>
-<ol>
-<li>本项目使用国际版 Lark（Lark Suite）。</li>
-<li>API 域名统一为 <code>https://open.larksuite.com/</code>。</li>
-<li>不得调用国内飞书 <code>open.feishu.cn</code> 接口。</li>
-<li>CRM“Lark User ID”统一保存 <code>open_id</code>，不保存 <code>lark_id</code> 作为通知接收 ID。</li>
-<li><code>App ID</code>、<code>App Secret</code> 等配置必须放在服务端，不得写死在前端；访问凭证由服务端管理。</li>
-<li>正式环境不得使用 <code>ou_demo_alex</code>、<code>ou_demo_winnie</code> 等原型演示 ID。</li>
-<li>研发以国际版 Lark 官方 Developer 文档为准；查询与发送必须使用同一应用上下文。</li>
-</ol></section>
+<span class="tag">独立页面 PRD · Lark 群消息演示</span><h1>Lark 群组管理 - PRD</h1>
+<section><h2>1. 页面名称</h2><p>风控管理 → Lark 通知 → Lark 群组。复用原 PRD 文件入口，原“Lark 人员绑定 PRD”内容整体替换为本页，不建立总 PRD。</p></section>
+<section><h2>2. 页面目的</h2><p>维护 Lark 群名称及其自定义机器人 Webhook，供业务规则和 CRM 登录通知选择。群组替代个人 ID 绑定，不再维护 CRM 管理人员与 Lark User ID 的关系。</p></section>
+<section><h2>3. 页面功能</h2><ul><li>普通表格展示群组名称、说明、脱敏 Webhook、状态、更新时间和操作。</li><li>新增、编辑、启用/停用、确认删除；仅配置演示数据，不验证 Webhook 真实有效性。</li></ul></section>
+<section><h2>4. 核心字段定义</h2><p class="note">String[] 为去重的群组标识数组，名称仅作展示；空数组为 []。DateTime 展示 YYYY-MM-DD HH:mm:ss（19字符），原型取本机时间，正式使用 CRM 统一时区。缺失值显示“—”。所有发送结果均为本地演示，不接 Lark API 或真实业务事件。</p><div class="table-wrap"><table class="fields"><thead><tr><th>字段名称</th><th>字段含义</th><th>数据来源</th><th>数据类型</th><th>字符/格式要求</th><th>状态/枚举</th><th>默认值</th><th>是否必填</th><th>是否可编辑</th><th>业务规则 / 何时变化</th></tr></thead><tbody><tr><td>群组 ID</td><td>群组配置稳定唯一标识</td><td>新增时系统生成</td><td>String</td><td>非空；示例 group-时间戳-随机值</td><td>无</td><td>系统生成</td><td>是，系统</td><td>否</td><td>通知配置保存 ID，不用名称作为关联键；删除不复用该 ID。</td></tr>
+<tr><td>群组名称</td><td>管理员辨认接收目标的名称</td><td>管理员手动填写</td><td>String</td><td>去除首尾空格，1～80字符，同名不重复</td><td>无</td><td>新增为空</td><td>是</td><td>是</td><td>改名同步展示于当前配置，历史群名称快照保留。</td></tr>
+<tr><td>群组说明</td><td>群用途与通知职责</td><td>管理员手动填写</td><td>String</td><td>去除首尾空格，0～300字符，可空</td><td>无</td><td>空字符串</td><td>否</td><td>是</td><td>只说明用途，不创建通知规则。</td></tr>
+<tr><td>Webhook 地址</td><td>目标 Lark 群自定义机器人的接收地址</td><td>管理员从对应国际版 Lark 群的自定义机器人设置中获取后填写</td><td>String</td><td>1～2048字符；HTTPS；域名 open.larksuite.com；路径 /open-apis/bot/v2/hook/…；不含账号密码、查询串或片段</td><td>非状态字段</td><td>新增为空；示例为 demo-* 无效地址</td><td>是</td><td>是，仅新增/编辑弹窗</td><td>只校验基本格式，不验证真实有效性。列表只显示固定脱敏文本，title等属性也不得泄露地址；编辑输入默认遮蔽。</td></tr>
+<tr><td>启用状态</td><td>该群是否可作为接收目标</td><td>管理员设置</td><td>Boolean</td><td>true / false，不可空</td><td>启用 / 停用</td><td>新增 true；预置状态沿用</td><td>是</td><td>是</td><td>停用不删除历史，只从当前规则/登录通知配置移除。</td></tr>
+<tr><td>更新时间</td><td>最近一次成功修改群组的时间</td><td>系统自动生成</td><td>DateTime</td><td>YYYY-MM-DD HH:mm:ss，19字符</td><td>无</td><td>新增时刻</td><td>是，系统</td><td>否</td><td>保存或启用/停用时更新；取消/校验失败不更新。</td></tr>
+<tr><td>操作</td><td>可用管理入口</td><td>系统生成</td><td>UI操作集合</td><td>新增、编辑、启用/停用、删除</td><td>按状态显示对应操作</td><td>按当前群状态</td><td>系统提供</td><td>否</td><td>停用和删除需确认；删除不可恢复，只可重新新增配置。</td></tr></tbody></table></div></section>
+<section><h2>5. 核心业务规则</h2><ul><li>仅启用群组可选择，保存时再次核对。停用或删除群组会从所有通知规则和 CRM 登录通知配置中移除；重新启用不自动恢复选择。</li><li>群组改名只更新当前配置显示，不修改历史通知的群名称快照。无有效群组允许保存，但不产生真实投递。</li><li>旧个人接收人配置无法推断对应群组，不自动转换；旧本地数据保留，新配置须重新选择群组。</li><li>群 Webhook 与个人 open_id、邮箱或手机号不是同一概念，本方案不查询或保存个人 ID。</li><li>仅使用国际版 Lark（Lark Suite），不是中国大陆版飞书；国际版接口域名为 open.larksuite.com，不得调用 open.feishu.cn。</li><li>前端样例地址没有真实投递能力，请勿将真实 Webhook 输入演示环境。正式开发时 Webhook 及其他敏感信息必须由后端安全保存，不写入前端代码、浏览器存储、通知记录或日志；前端只接收脱敏值。</li><li>本阶段不发网络请求、不获取 token、不调用 Lark API，不把格式通过当成地址有效。</li></ul></section>
+<section><h2>6. 操作说明</h2><p>新增/编辑弹窗填写名称、说明、Webhook 和开关；保存后列表更新，取消不变。重名、空名称、空/格式错误地址显示校验提示。停用/删除确认时说明影响通知规则和登录通知，确认后执行；历史通知不删除。开启/关闭都不发送消息。</p></section>
+<section><h2>7. 状态说明</h2><p>启用：可被配置选择，并不表示已验证或已发送。停用：不能被选择。删除：移除群配置及当前引用，不新增“已删除”表格状态。格式校验失败保持原数据。存储失败显示仅会话生效。</p></section>
+<section><h2>8. 验收标准</h2><ol><li>群组增改、启停、删除及取消行为正常，刷新后配置保持。</li><li>列表 Webhook 脱敏，无完整地址 tooltip；只有编辑弹窗可显式查看草稿。</li><li>启用群组可多选，停用/删除同步移除两处引用，历史记录保留。</li><li>未调用 Lark、未发送任何真实消息，不再提供个人 ID 绑定。</li><li>文档入口均为国际版 Lark，明确正式凭证后端保存。</li></ol></section>
+<section><h2>Lark 官方开发文档</h2><ul>
+<li><a href="https://open.larksuite.com/document/home/" target="_blank" rel="noopener noreferrer">Lark Developer 官方文档</a></li>
+<li><a href="https://open.larksuite.com/document/server-docs/im-v1/faq" target="_blank" rel="noopener noreferrer">消息与群组 API 常见问题</a></li>
+</ul><p class="note">以上为国际版官方入口；群自定义机器人 Webhook 与应用机器人/个人身份 API 不混用。正式接入由研发根据官方最新文档确认机器人配置和安全要求，本 PRD 不展开接口或数据库设计。</p></section>
+<p class="note">本期仅前端原型和本地演示数据；不接真实 Lark API、不发送消息、不增加业务场景。正式环境的 Webhook 和敏感信息由后端安全保存，不写入前端代码或浏览器存储。</p>
 </article></main></body></html>

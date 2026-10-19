@@ -56,10 +56,15 @@
         <el-form-item label="用户名称"><span>{{ selectedUser.name }}</span></el-form-item>
         <el-form-item label="用户邮箱"><span class="break-all">{{ selectedUser.email }}</span></el-form-item>
         <el-form-item label="登录通知"><el-switch v-model="notificationDraft" active-text="开启" inactive-text="关闭" aria-label="登录通知" /></el-form-item>
-        <el-form-item label="Lark绑定状态"><el-tag :type="larkIdDraft.trim() ? 'success' : 'info'" size="small">{{ larkIdDraft.trim() ? '已绑定' : '未绑定' }}</el-tag></el-form-item>
-        <el-form-item label="Lark ID"><el-input v-model="larkIdDraft" placeholder="请输入该用户本人的 Lark ID" aria-label="Lark ID" clearable /><p class="mt-2 text-xs text-gray-500">仅用于本地演示，不验证 ID 真实性；清空后保存为未绑定。</p></el-form-item>
-        <p class="text-sm leading-6 text-gray-600">通知对象固定为该客户本人。开启并绑定 Lark 后，未来在该客户成功登录 CRM 时通知本人，不用于 MT5 登录提醒。</p>
-        <p v-if="notificationDraft && !larkIdDraft.trim()" role="status" class="mt-3 text-xs leading-5 text-amber-700">该用户尚未绑定 Lark，开启后暂时无法接收登录通知。</p>
+        <el-form-item label="通知群组">
+          <el-select v-model="groupIdsDraft" multiple class="w-full" placeholder="请选择已启用的 Lark 群组" aria-label="通知群组">
+            <el-option v-for="group in larkGroups" :key="group.id" :label="group.enabled ? group.name : `${group.name}（已停用）`" :value="group.id" :disabled="!group.enabled" />
+          </el-select>
+          <p class="mt-2 text-xs text-gray-500">支持多选。群组在「风控管理 → Lark 通知 → Lark 群组」维护，不再绑定个人 Lark ID。</p>
+        </el-form-item>
+        <el-form-item label="配置状态"><el-tag :type="!notificationDraft ? 'info' : groupIdsDraft.length ? 'success' : 'warning'" size="small">{{ !notificationDraft ? '已关闭' : groupIdsDraft.length ? '已配置' : '待配置' }}</el-tag></el-form-item>
+        <p class="text-sm leading-6 text-gray-600">开启后，未来该用户成功登录 CRM 时通知所选 Lark 群组；不是 MT5 登录提醒。</p>
+        <p v-if="notificationDraft && !groupIdsDraft.length" role="status" class="mt-3 text-xs leading-5 text-amber-700">尚未配置已启用的通知群组，可保存为待配置；没有有效群组时不发送通知。</p>
         <p class="mt-3 text-xs leading-5 text-gray-500">未来通知内容来源于客户登录日志中的登录时间、IP、地点、客户端类型、设备信息和系统信息。本阶段仅保存配置，不接入登录事件或发送真实消息。</p>
       </el-form>
       <template #footer><div class="flex justify-end gap-2"><button type="button" class="h-9 rounded-md border border-gray-200 px-4 text-sm text-gray-700 hover:bg-gray-50" @click="settingsOpen = false">取消</button><button type="button" class="h-9 rounded-md bg-primaryBtn px-4 text-sm font-medium text-white hover:bg-primaryBtnHover" @click="saveSettings">保存</button></div></template>
@@ -79,6 +84,7 @@ import { computed, reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { openPrd } from '@/store/prd'
 import { crmUsers, crmUserTypes, emptyUserFilters, filterCrmUsers, saveUserLoginNotification } from '@/store/crmUserListDemo'
+import { larkGroups, enabledGroupIds, groupNames } from '@/store/larkNotificationDemo'
 
 const filters = reactive(emptyUserFilters())
 const appliedFilters = ref(emptyUserFilters())
@@ -91,7 +97,10 @@ const pagedUsers = computed(() => filteredUsers.value.slice((page.value - 1) * p
 const settingsOpen = ref(false)
 const selectedUser = ref(null)
 const notificationDraft = ref(false)
-const larkIdDraft = ref('')
+const groupIdsDraft = ref([])
+watch(() => larkGroups.map(group => [group.id, group.enabled]), () => {
+  groupIdsDraft.value = enabledGroupIds(groupIdsDraft.value)
+})
 const detailsOpen = ref(false)
 const detailUser = ref(null)
 const detailFields = computed(() => {
@@ -101,7 +110,7 @@ const detailFields = computed(() => {
     { label: '用户名称', value: user.name }, { label: '用户邮箱', value: user.email },
     { label: '用户类型', value: user.type }, { label: 'MT账户数量', value: user.mtAccountCount },
     { label: '登录状态', value: user.loginStatus }, { label: '登录双重验证', value: user.twoFactorEnabled ? '启用' : '禁用' },
-    { label: '登录通知', value: user.loginNotificationEnabled ? '已开启' : '未开启' }, { label: 'Lark绑定状态', value: user.larkUserId ? '已绑定' : '未绑定' },
+    { label: '登录通知', value: user.loginNotificationEnabled ? '已开启' : '未开启' }, { label: '通知群组', value: groupNames(user.notificationGroupIds) },
     { label: '最后登录时间', value: user.lastLoginAt }, { label: '最后登录IP', value: user.lastLoginIp },
     { label: '登录地点', value: user.loginLocation }, { label: '登录设备', value: user.loginDevice },
     { label: '系统信息', value: user.systemInfo }
@@ -123,12 +132,12 @@ function openDetails(user) {
 function openSettings(user) {
   selectedUser.value = user
   notificationDraft.value = user.loginNotificationEnabled
-  larkIdDraft.value = user.larkUserId
+  groupIdsDraft.value = enabledGroupIds(user.notificationGroupIds)
   settingsOpen.value = true
 }
 function saveSettings() {
   if (!selectedUser.value) return
-  const result = saveUserLoginNotification(selectedUser.value.id, notificationDraft.value, larkIdDraft.value)
+  const result = saveUserLoginNotification(selectedUser.value.id, notificationDraft.value, groupIdsDraft.value)
   if (!result.ok) return ElMessage.warning(result.error)
   settingsOpen.value = false
   if (result.persisted) ElMessage.success('登录通知配置已保存')

@@ -242,7 +242,8 @@
                     </button>
                   </div>
                 </div>
-                <div v-if="pioneerConversionScenario" class="space-y-2 text-xs">
+                <!-- 用户端暂不展示演示资金信息及申请历史；底层记录与审核状态保持不变。 -->
+                <div v-if="false" class="space-y-2 text-xs">
                   <div class="flex flex-wrap gap-x-4 gap-y-2 text-gray-600">
                     <span>演示客户：{{ pioneerConversionSummary?.customerName }}</span>
                     <span>可用赠金：<strong class="font-mono text-gray-800">{{ formatUsd4(pioneerConversionSummary?.availableCredit) }}</strong></span>
