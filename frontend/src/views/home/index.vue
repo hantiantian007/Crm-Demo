@@ -34,6 +34,8 @@
                   <el-option label="未参与" value="not_joined" />
                   <el-option label="已参与部分达标" value="joined_partial" />
                   <el-option label="已参与全部达标" value="joined_full" />
+                  <el-option label="申请被拒绝" value="application_rejected" />
+                  <el-option label="拒绝后重新申请" value="application_resubmitted" />
                 </el-select>
                 <button
                   v-if="pioneerDemoMode === 'joined_full'"
@@ -190,14 +192,15 @@
                 <div class="bg-white rounded-lg border border-gray-200 px-4 py-3 flex items-start justify-between gap-4 flex-wrap">
                   <div class="min-w-0">
                     <div v-if="pioneerApplyUiState === 'pending'" class="text-xs font-semibold text-gray-800">
-                      审核中
+                      {{ pioneerLatestRequest?.status || '审核中' }}
                       <span class="text-gray-400 font-medium">｜</span>
                       申请金额 <span class="font-mono">{{ formatUsd4(pioneerLatestRequest?.amount) }}</span>
                       <span class="text-gray-400 font-medium">｜</span>
                       申请时间 <span class="font-mono">{{ pioneerLatestRequest?.appliedAt }}</span>
+                      <span v-if="pioneerConversionScenario" class="font-medium">｜ MT账号 {{ pioneerLatestRequest?.targetAccountLabel }}</span>
                     </div>
                     <div v-else-if="pioneerApplyUiState === 'rejected'" class="text-xs font-semibold text-rose-600">
-                      申请已拒绝
+                      审核拒绝
                       <span class="text-gray-400 font-medium">｜</span>
                       驳回原因：<span class="text-gray-700 font-medium">{{ pioneerLatestRequest?.rejectReason || '-' }}</span>
                     </div>
@@ -238,6 +241,30 @@
                       申请转真实资金
                     </button>
                   </div>
+                </div>
+                <div v-if="pioneerConversionScenario" class="space-y-2 text-xs">
+                  <div class="flex flex-wrap gap-x-4 gap-y-2 text-gray-600">
+                    <span>演示客户：{{ pioneerConversionSummary?.customerName }}</span>
+                    <span>可用赠金：<strong class="font-mono text-gray-800">{{ formatUsd4(pioneerConversionSummary?.availableCredit) }}</strong></span>
+                    <span>申请冻结：<strong class="font-mono text-gray-800">{{ formatUsd4(pioneerConversionSummary?.frozenCredit) }}</strong></span>
+                  </div>
+                  <p class="text-gray-500">以下记录与后台「赠金转化申请」同步，切换场景不会删除历史或重置已完成的审核。</p>
+                  <h3 class="font-semibold text-gray-800">申请记录</h3>
+                  <ul class="divide-y divide-gray-100">
+                    <li v-for="request in pioneerScenarioRequests" :key="request.id" class="py-3 space-y-2">
+                      <div class="flex items-center justify-between gap-3 flex-wrap">
+                        <span class="font-mono text-gray-700">{{ request.id }}</span>
+                        <span :class="request.status === '审核拒绝' ? 'text-rose-600' : request.status === '已完成' ? 'text-emerald-700' : 'text-blue-600'">{{ request.status }}</span>
+                      </div>
+                      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-gray-700">
+                        <div><dt class="inline text-gray-500">申请金额：</dt><dd class="inline font-mono">{{ formatUsd4(request.amount) }}</dd></div>
+                        <div><dt class="inline text-gray-500">MT账号：</dt><dd class="inline">{{ request.targetAccountLabel }}</dd></div>
+                        <div><dt class="inline text-gray-500">申请时间：</dt><dd class="inline">{{ request.appliedAt }}</dd></div>
+                        <div><dt class="inline text-gray-500">审核时间：</dt><dd class="inline">{{ request.reviewedAt || '待审核' }}</dd></div>
+                      </dl>
+                      <p v-if="request.rejectReason" class="text-rose-600 break-words">驳回原因：{{ request.rejectReason }}</p>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
@@ -564,6 +591,13 @@ import {
   creditConversionState,
   getAccountsForSelect,
   getCreditSummary,
+  getRequestsByCustomerActivity,
+  getApplyBlockReason,
+  hasPendingRequest,
+  submitConversionRequest,
+  isPioneerConversionScenario,
+  getPioneerScenarioCustomerId,
+  ensurePioneerConversionScenario,
   sendEmailOtp,
   verifyEmailOtp,
 } from '@/store/creditConversionDemo'
@@ -664,8 +698,18 @@ const currentJoined = computed(() => isJoined(currentActivity.value?.key))
 
 const pioneerDemoMode = computed({
   get: () => getDemoMode('pioneer-one-50000'),
-  set: (v) => setDemoMode('pioneer-one-50000', v),
+  set: (v) => {
+    if (isPioneerConversionScenario(v)) {
+      const result = ensurePioneerConversionScenario(v)
+      if (!result.ok) {
+        window.alert(result.message)
+        return
+      }
+    }
+    setDemoMode('pioneer-one-50000', v)
+  },
 })
+const pioneerConversionScenario = computed(() => isPioneerConversionScenario(pioneerDemoMode.value))
 
 const uiJoined = computed(() => {
   const key = String(currentActivity.value?.key || '')
@@ -675,7 +719,7 @@ const uiJoined = computed(() => {
 
 const uiAchieved = computed(() => {
   const key = String(currentActivity.value?.key || '')
-  if (key === 'pioneer-one-50000') return pioneerDemoMode.value === 'joined_full'
+  if (key === 'pioneer-one-50000') return pioneerDemoMode.value === 'joined_full' || pioneerConversionScenario.value
   return false
 })
 
@@ -805,7 +849,7 @@ const pioneerCurrentCustomerId = computed(() => {
 const pioneerFallbackCustomerId = computed(() => {
   const key = pioneerActivityId
   const rows = Array.isArray(creditConversionState.customerActivityCredits) ? creditConversionState.customerActivityCredits : []
-  const matches = rows.filter((r) => r.activityId === key && !r.accountAbnormal)
+  const matches = rows.filter((r) => r.activityId === key && !r.accountAbnormal && !r.demoScenario)
   const noReq = (cid) => !creditConversionState.conversionRequests.some((r) => r.customerId === cid && r.activityId === key)
   const noPending = (cid) =>
     !creditConversionState.conversionRequests.some((r) => r.customerId === cid && r.activityId === key && r.status === '审核中')
@@ -813,7 +857,12 @@ const pioneerFallbackCustomerId = computed(() => {
   return String(preferred?.customerId || '')
 })
 
-const pioneerEffectiveCustomerId = computed(() => String(pioneerCurrentCustomerId.value || pioneerFallbackCustomerId.value || ''))
+const pioneerEffectiveCustomerId = computed(() => pioneerConversionScenario.value
+  ? getPioneerScenarioCustomerId(pioneerDemoMode.value)
+  : String(pioneerCurrentCustomerId.value || pioneerFallbackCustomerId.value || ''))
+const pioneerScenarioRequests = computed(() => pioneerConversionScenario.value
+  ? getRequestsByCustomerActivity({ customerId: pioneerEffectiveCustomerId.value, activityId: pioneerActivityId })
+  : [])
 
 const PIONEER_HOME_APPLY_KEY = 'crm_pioneer_home_apply_state_v1'
 
@@ -852,7 +901,8 @@ const resetPioneerHomeApplyState = () => {
 
 watch(
   () => pioneerDemoMode.value,
-  () => {
+  (mode, previousMode) => {
+    if (isPioneerConversionScenario(mode) || isPioneerConversionScenario(previousMode)) return
     resetPioneerHomeApplyState()
   }
 )
@@ -910,6 +960,11 @@ const pioneerViewCreditSummary = computed(() => {
 const pioneerApplyBlockReason = computed(() => {
   if (String(currentActivity.value?.key || '') !== pioneerActivityId) return ''
   if (!uiJoined.value) return ''
+  if (pioneerConversionScenario.value) {
+    const context = { customerId: pioneerEffectiveCustomerId.value, activityId: pioneerActivityId }
+    if (hasPendingRequest(context)) return '存在处理中申请，暂不可重复提交'
+    return getApplyBlockReason(context)
+  }
   if (pioneerDemoMode.value !== 'joined_full') return ''
   const s = pioneerViewCreditSummary.value
   if (!s) return '活动信息不存在'
@@ -924,6 +979,7 @@ const pioneerApplyBlockReason = computed(() => {
 const pioneerLatestRequest = computed(() => {
   if (String(currentActivity.value?.key || '') !== pioneerActivityId) return null
   if (!uiJoined.value) return null
+  if (pioneerConversionScenario.value) return pioneerScenarioRequests.value[0] || null
   if (pioneerDemoMode.value !== 'joined_full') return null
   return pioneerHomeApplyRequest.value || null
 })
@@ -931,9 +987,10 @@ const pioneerLatestRequest = computed(() => {
 const pioneerApplyUiState = computed(() => {
   if (String(currentActivity.value?.key || '') !== pioneerActivityId) return ''
   if (!uiJoined.value) return ''
-  if (pioneerDemoMode.value !== 'joined_full') return ''
+  if (pioneerDemoMode.value !== 'joined_full' && !pioneerConversionScenario.value) return ''
+  if (pioneerConversionScenario.value && ['审核中', '审核通过'].includes(pioneerLatestRequest.value?.status)) return 'pending'
   const req = pioneerHomeApplyRequest.value
-  if (req?.status === '审核中') return 'pending'
+  if (!pioneerConversionScenario.value && req?.status === '审核中') return 'pending'
   const latest = pioneerLatestRequest.value
   if (!latest) return ''
   if (latest.status === '审核拒绝') return 'rejected'
@@ -1009,6 +1066,19 @@ const handleSubmitPioneerApply = () => {
   const otpRes = verifyEmailOtp(pioneerApplyForm.otp)
   if (!otpRes.ok) {
     pioneerApplySubmitError.value = otpRes.message
+    return
+  }
+  if (pioneerConversionScenario.value) {
+    const result = submitConversionRequest({
+      customerId: pioneerEffectiveCustomerId.value,
+      activityId: pioneerActivityId,
+      targetAccountId: pioneerApplyForm.targetAccountId,
+    })
+    if (!result.ok) {
+      pioneerApplySubmitError.value = result.message
+      return
+    }
+    pioneerApplyDrawerOpen.value = false
     return
   }
   const now = new Date().toISOString().slice(0, 19).replace('T', ' ')
@@ -1097,12 +1167,12 @@ const currentProgresses = computed(() => {
     const netTarget = Number(p.netDeposit?.target ?? 50000)
     const lotsTarget = Number(p.tradeLots?.target ?? 500)
     const netValue =
-      mode === 'joined_partial' ? 8200 : mode === 'joined_full' ? netTarget : Number(p.netDeposit?.value ?? 0)
+      mode === 'joined_partial' ? 8200 : uiAchieved.value ? netTarget : Number(p.netDeposit?.value ?? 0)
     const lotsValue =
-      mode === 'joined_partial' ? 98.75 : mode === 'joined_full' ? lotsTarget : Number(p.tradeLots?.value ?? 0)
+      mode === 'joined_partial' ? 98.75 : uiAchieved.value ? lotsTarget : Number(p.tradeLots?.value ?? 0)
     return [
       { key: 'net-deposit', label: '活动净入金', icon: 'fa-solid fa-dollar-sign', color: 'emerald', value: netValue, target: netTarget, format: 'money' },
-      { key: 'trade-lots', label: '活动达标交易手数', icon: 'fa-solid fa-chart-line', color: mode === 'joined_full' ? 'emerald' : 'blue', value: lotsValue, target: lotsTarget, format: 'lots' },
+      { key: 'trade-lots', label: '活动达标交易手数', icon: 'fa-solid fa-chart-line', color: uiAchieved.value ? 'emerald' : 'blue', value: lotsValue, target: lotsTarget, format: 'lots' },
     ]
   }
   return [
@@ -1114,6 +1184,7 @@ const currentProgresses = computed(() => {
 const uiReleaseTierPct = computed(() => {
   if (String(currentActivity.value?.key || '') !== 'pioneer-one-50000') return 0
   if (!uiJoined.value) return 0
+  if (pioneerConversionScenario.value) return 100
   const ratio = pioneerDemoMode.value === 'joined_partial' ? 0.1 : Number(currentParticipation.value?.releaseTierPct || 0)
   return Math.round(ratio * 100)
 })
@@ -1121,6 +1192,7 @@ const uiReleaseTierPct = computed(() => {
 const uiReleasedAmount = computed(() => {
   if (String(currentActivity.value?.key || '') !== 'pioneer-one-50000') return 0
   if (!uiJoined.value) return 0
+  if (pioneerConversionScenario.value) return Number(pioneerConversionSummary.value?.issuedCredit || 0)
   if (pioneerDemoMode.value === 'joined_partial') return 0
   return Number(currentParticipation.value?.releasedAmount || 0)
 })

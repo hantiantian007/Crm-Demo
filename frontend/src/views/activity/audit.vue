@@ -482,16 +482,6 @@
         </dl>
       </section>
 
-      <section v-if="!canReviewConversion" class="border-t border-gray-100 pt-4">
-        <h3 class="mb-2 text-sm font-semibold text-gray-800">信用金概览</h3>
-        <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-gray-600">
-          <span>已发放：{{ formatUsd4(detailSummary?.issuedCredit) }}</span>
-          <span>已消耗：{{ formatUsd4(detailSummary?.consumedCredit) }}</span>
-          <span>占用中：{{ formatUsd4(detailSummary?.occupiedNow) }}</span>
-          <span>可转换：{{ formatUsd4(detailSummary?.convertibleCredit) }}</span>
-          <span>已转换：{{ formatUsd4(detailSummary?.convertedCredit) }}</span>
-        </div>
-      </section>
       <section class="border-t border-gray-100 pt-4">
         <h3 class="mb-2 text-sm font-semibold text-gray-800">审核记录</h3>
         <div v-if="!conversionDetail.auditLogs?.length" class="text-xs text-gray-400">暂无审核记录</div>

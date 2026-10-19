@@ -332,6 +332,8 @@ export const submitConversionRequest = ({ customerId, activityId, targetAccountI
     completedAt: '',
     auditLogs: [{ at: nowStr(), actor: '客户', action: '提交申请', note: '一次性转换全部可转换信用金' }],
   }
+  // 演示场景保留提交时的可转换金额快照，后续冻结/审核不改变历史展示。
+  if (s.demoScenario) req.convertibleAmount = amount
   creditConversionState.conversionRequests.unshift(req)
   creditConversionState.ledger.unshift({
     id: uid('LED'),
@@ -415,4 +417,51 @@ export const rejectRequest = ({ id, auditor, reason }) => {
 export const getLedgerRows = ({ customerId }) => {
   const list = creditConversionState.ledger.filter((r) => !customerId || r.customerId === customerId)
   return [...list].sort((a, b) => String(b.at).localeCompare(String(a.at)))
+}
+
+// 两个独立的演示客户共用正式的前端申请/审核流程，不覆盖原有客户或历史记录。
+const pioneerScenarios = {
+  application_rejected: { customerId: 'CUST-pioneer-rejected-demo', customerName: '陈大文（拒绝演示）' },
+  application_resubmitted: { customerId: 'CUST-pioneer-resubmitted-demo', customerName: '陈大文（重新申请演示）' },
+}
+
+export const isPioneerConversionScenario = (mode) => Object.hasOwn(pioneerScenarios, mode)
+export const getPioneerScenarioCustomerId = (mode) => pioneerScenarios[mode]?.customerId || ''
+
+export const ensurePioneerConversionScenario = (mode) => {
+  if (!isPioneerConversionScenario(mode)) return { ok: false, message: '演示场景不存在' }
+  const customer = pioneerScenarios[mode]
+  const context = { customerId: customer.customerId, activityId: 'pioneer-one-50000' }
+  // 返回场景时保留重新申请及后台审核的实际结果，切换不重置已产生的数据。
+  if (getCustomerActivityCredit(context)) return { ok: true }
+  const account = getAccountsForSelect()[0]
+  if (!account) return { ok: false, message: '暂无可用 MT 账户，无法展示申请场景' }
+  creditConversionState.customerActivityCredits.push({
+    ...context,
+    customerName: customer.customerName,
+    customerEmail: `${mode}@example.com`,
+    activityName: '先锋一号 50,000 USD 活动',
+    demoScenario: mode,
+    achieved: true,
+    totalDepositUsd: 50000,
+    totalLots: 500,
+    rewardAmountUsd: 5000,
+    issuedCredit: 5000,
+    consumedCredit: 500,
+    occupiedCredit: 0,
+    convertedCredit: 0,
+    frozenCredit: 0,
+    accountAbnormal: false,
+    riskTag: '正常',
+  })
+  const first = submitConversionRequest({ ...context, targetAccountId: account.id })
+  if (!first.ok) return first
+  const rejected = rejectRequest({
+    id: first.id,
+    auditor: '审核员-王浩',
+    reason: '申请材料不完整，请补充账户归属证明后重新申请。',
+  })
+  if (!rejected.ok) return rejected
+  if (mode === 'application_resubmitted') return submitConversionRequest({ ...context, targetAccountId: account.id })
+  return { ok: true }
 }

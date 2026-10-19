@@ -74,17 +74,20 @@ const resolveDefaultDemoMode = (activityKey) => {
   return calcAchieved(activityKey) ? 'joined_full' : 'joined_partial'
 }
 
+const isSupportedMode = (key, mode) => ['not_joined', 'joined_partial', 'joined_full'].includes(mode)
+  || (key === 'pioneer-one-50000' && ['application_rejected', 'application_resubmitted'].includes(mode))
+
 export const getDemoMode = (activityKey) => {
   const key = String(activityKey || '')
   const mode = String(activityDemoUiState.byKey[key] || '').trim()
-  if (mode === 'not_joined' || mode === 'joined_partial' || mode === 'joined_full') return mode
+  if (isSupportedMode(key, mode)) return mode
   return resolveDefaultDemoMode(key)
 }
 
 export const setDemoMode = (activityKey, mode) => {
   const key = String(activityKey || '')
   const v = String(mode || '').trim()
-  if (v !== 'not_joined' && v !== 'joined_partial' && v !== 'joined_full') return
+  if (!isSupportedMode(key, v)) return
   activityDemoUiState.byKey[key] = v
 }
 
