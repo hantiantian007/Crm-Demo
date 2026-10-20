@@ -204,15 +204,17 @@
             </div>
 
             <div class="mt-4 overflow-x-auto" v-if="categoryTab === 'level1'">
-              <table class="w-full text-sm text-left min-w-[980px]">
+              <table class="w-full table-fixed text-sm text-left min-w-[1100px]">
                 <thead class="bg-tableHeader text-gray-600 border-b border-gray-200">
                   <tr>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[60px] text-center"></th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[300px]">名称</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[48px] text-center"></th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[180px]">简体中文名称</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[180px]">繁体中文名称</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[200px]">英文名称</th>
                     <th class="px-4 py-4 font-medium whitespace-nowrap">备注</th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[120px] text-center">状态</th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[120px] text-center">FAQ数量</th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[180px] text-center">操作</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[96px] text-center">状态</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[96px] text-center">FAQ数量</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[140px] text-center">操作</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -228,11 +230,13 @@
                     <td class="px-4 py-3 text-center whitespace-nowrap text-gray-400">
                       <i class="fa-solid fa-grip-vertical"></i>
                     </td>
-                    <td class="px-4 py-3">
+                    <td class="px-4 py-3 [overflow-wrap:anywhere]" :title="c.name['zh-Hans']">
                       <div class="font-medium text-gray-900">{{ c.name['zh-Hans'] }}</div>
                       <div class="mt-1 text-xs text-gray-500">{{ c.id }}</div>
                     </td>
-                    <td class="px-4 py-3 text-gray-700">{{ c.remark || '-' }}</td>
+                    <td class="px-4 py-3 text-gray-700 [overflow-wrap:anywhere]" :title="c.name['zh-Hant']">{{ c.name['zh-Hant'] || '待补充' }}</td>
+                    <td class="px-4 py-3 text-gray-700 [overflow-wrap:anywhere]" :title="c.name.en">{{ c.name.en || '待补充' }}</td>
+                    <td class="px-4 py-3 text-gray-700 [overflow-wrap:anywhere]">{{ c.remark || '-' }}</td>
                     <td class="px-4 py-3 text-center whitespace-nowrap">
                       <button
                         type="button"
@@ -260,23 +264,25 @@
                     </td>
                   </tr>
                   <tr v-if="level1CategoryRows.length === 0">
-                    <td colspan="6" class="px-4 py-10 text-center text-gray-500 text-sm">暂无一级分类</td>
+                    <td colspan="8" class="px-4 py-10 text-center text-gray-500 text-sm">暂无一级分类</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <div class="mt-4 overflow-x-auto" v-else>
-              <table class="w-full text-sm text-left min-w-[980px]">
+              <table class="w-full table-fixed text-sm text-left min-w-[1260px]">
                 <thead class="bg-tableHeader text-gray-600 border-b border-gray-200">
                   <tr>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[60px] text-center"></th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[260px]">名称</th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[220px]">一级分类</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[48px] text-center"></th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[180px]">简体中文名称</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[180px]">繁体中文名称</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[200px]">英文名称</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[160px]">一级分类</th>
                     <th class="px-4 py-4 font-medium whitespace-nowrap">备注</th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[120px] text-center">状态</th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[120px] text-center">FAQ数量</th>
-                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[180px] text-center">操作</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[96px] text-center">状态</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[96px] text-center">FAQ数量</th>
+                    <th class="px-4 py-4 font-medium whitespace-nowrap w-[140px] text-center">操作</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -292,12 +298,14 @@
                     <td class="px-4 py-3 text-center whitespace-nowrap text-gray-400">
                       <i class="fa-solid fa-grip-vertical"></i>
                     </td>
-                    <td class="px-4 py-3">
+                    <td class="px-4 py-3 [overflow-wrap:anywhere]" :title="c.name['zh-Hans']">
                       <div class="font-medium text-gray-900">{{ c.name['zh-Hans'] }}</div>
                       <div class="mt-1 text-xs text-gray-500">{{ c.id }}</div>
                     </td>
-                    <td class="px-4 py-3 text-gray-700 whitespace-nowrap">{{ categoryLabelById(c.parentId) }}</td>
-                    <td class="px-4 py-3 text-gray-700">{{ c.remark || '-' }}</td>
+                    <td class="px-4 py-3 text-gray-700 [overflow-wrap:anywhere]" :title="c.name['zh-Hant']">{{ c.name['zh-Hant'] || '待补充' }}</td>
+                    <td class="px-4 py-3 text-gray-700 [overflow-wrap:anywhere]" :title="c.name.en">{{ c.name.en || '待补充' }}</td>
+                    <td class="px-4 py-3 text-gray-700 [overflow-wrap:anywhere]">{{ categoryLabelById(c.parentId) }}</td>
+                    <td class="px-4 py-3 text-gray-700 [overflow-wrap:anywhere]">{{ c.remark || '-' }}</td>
                     <td class="px-4 py-3 text-center whitespace-nowrap">
                       <button
                         type="button"
@@ -325,7 +333,7 @@
                     </td>
                   </tr>
                   <tr v-if="level2CategoryRows.length === 0">
-                    <td colspan="7" class="px-4 py-10 text-center text-gray-500 text-sm">暂无二级分类</td>
+                    <td colspan="9" class="px-4 py-10 text-center text-gray-500 text-sm">暂无二级分类</td>
                   </tr>
                 </tbody>
               </table>
@@ -1122,13 +1130,19 @@
 
   <el-dialog v-model="categoryDialog.open" :title="categoryDialog.title" width="640px">
     <el-form :model="categoryForm" label-width="108px">
-      <el-form-item label="名称" required>
-        <el-input v-model="categoryForm.name" placeholder="请输入" />
-      </el-form-item>
       <el-form-item v-if="categoryDialog.level === 'level2'" label="一级分类" required>
         <el-select v-model="categoryForm.parentId" placeholder="请选择" class="w-full">
           <el-option v-for="c in parentCategoryOptionsForLevel2" :key="c.id" :label="c.label" :value="c.id" :disabled="!!c.disabled" />
         </el-select>
+      </el-form-item>
+      <el-form-item label="简体中文名称" required>
+        <el-input v-model="categoryForm.name" placeholder="请输入" />
+      </el-form-item>
+      <el-form-item label="繁体中文名称" required>
+        <el-input v-model="categoryForm.nameHant" placeholder="请输入繁体中文名称" />
+      </el-form-item>
+      <el-form-item label="英文名称" required>
+        <el-input v-model="categoryForm.nameEn" placeholder="请输入英文名称" />
       </el-form-item>
       <el-form-item label="状态">
         <el-switch v-model="categoryForm.enabled" />
@@ -1355,8 +1369,8 @@ function makeCategory(id, nameHans, nameHant, nameEn, parentId) {
   }
 }
 
-function defaultState() {
-  const categories = [
+function demoCategories() {
+  return [
     makeCategory('CAT-1001', '出入金', '出入金', 'Funding'),
     makeCategory('CAT-1002', '佣金管理', '佣金管理', 'Commission'),
     makeCategory('CAT-1003', 'MT5账户', 'MT5賬戶', 'MT5 Account'),
@@ -1371,6 +1385,10 @@ function defaultState() {
     makeCategory('CAT-2301', '常见问题', '常見問題', 'General', 'CAT-1004'),
     makeCategory('CAT-2401', '常见问题', '常見問題', 'General', 'CAT-1005')
   ]
+}
+
+function defaultState() {
+  const categories = demoCategories()
   const publishTs = nowTs()
   function publishAllLangs(faq) {
     for (const l of ['zh-Hans', 'zh-Hant', 'en']) {
@@ -1780,6 +1798,7 @@ function defaultState() {
 
 function normalizeCategoryShape(next) {
   const cats = Array.isArray(next.categories) ? next.categories : []
+  const demoById = new Map(demoCategories().map(c => [c.id, c]))
   const byId = new Map(cats.map((c) => [c?.id, c]).filter((x) => x[0]))
   for (const c of cats) {
     if (!c || typeof c !== 'object') continue
@@ -1790,8 +1809,13 @@ function normalizeCategoryShape(next) {
     if (!c.createdAt) c.createdAt = nowTs()
     if (!c.name || typeof c.name !== 'object') c.name = { 'zh-Hans': '', 'zh-Hant': '', en: '' }
     if (typeof c.name['zh-Hans'] !== 'string') c.name['zh-Hans'] = ''
-    if (typeof c.name['zh-Hant'] !== 'string') c.name['zh-Hant'] = c.name['zh-Hans']
-    if (typeof c.name.en !== 'string') c.name.en = c.name['zh-Hans']
+    // 仅补齐名称仍匹配的内置演示分类，不覆盖已有翻译或猜测自定义分类的译名。
+    const demo = demoById.get(c.id)
+    for (const lang of ['zh-Hant', 'en']) {
+      if (typeof c.name[lang] !== 'string' || !normalizeSpace(c.name[lang])) {
+        c.name[lang] = demo?.name['zh-Hans'] === c.name['zh-Hans'] ? demo.name[lang] : ''
+      }
+    }
     if (typeof c.remark !== 'string') c.remark = ''
   }
   next.categories = cats
@@ -3143,7 +3167,7 @@ function onCategoryDrop(target) {
 }
 
 const categoryDialog = reactive({ open: false, title: '新增一级分类', mode: 'create', level: 'level1' })
-const categoryForm = reactive({ id: '', parentId: null, enabled: true, name: '', remark: '' })
+const categoryForm = reactive({ id: '', parentId: null, enabled: true, name: '', nameHant: '', nameEn: '', remark: '' })
 
 const parentCategoryOptionsForLevel2 = computed(() => {
   const enabled = level1Categories.value.filter((c) => c.enabled).map((c) => ({ id: c.id, label: c.name?.['zh-Hans'] || '-' }))
@@ -3173,6 +3197,8 @@ function openCreateCategory(level) {
   categoryForm.id = nextCategoryId()
   categoryForm.enabled = true
   categoryForm.name = ''
+  categoryForm.nameHant = ''
+  categoryForm.nameEn = ''
   categoryForm.remark = ''
   categoryForm.parentId = categoryDialog.level === 'level2' ? parentCategoryOptionsForLevel2.value[0]?.id || null : null
 }
@@ -3186,11 +3212,15 @@ function openEditCategory(level, c) {
   categoryForm.parentId = c.parentId || null
   categoryForm.enabled = !!c.enabled
   categoryForm.name = c.name?.['zh-Hans'] || ''
+  categoryForm.nameHant = c.name?.['zh-Hant'] || ''
+  categoryForm.nameEn = c.name?.en || ''
   categoryForm.remark = c.remark || ''
 }
 
 function validateCategoryForm() {
-  if (!normalizeSpace(categoryForm.name)) return '请输入名称'
+  if (!normalizeSpace(categoryForm.name)) return '简体中文名称不能为空'
+  if (!normalizeSpace(categoryForm.nameHant)) return '繁体中文名称不能为空'
+  if (!normalizeSpace(categoryForm.nameEn)) return '英文名称不能为空'
   if (categoryDialog.level === 'level2') {
     if (!categoryForm.parentId) return '请选择一级分类'
     const parent = getCategoryById(categoryForm.parentId)
@@ -3214,8 +3244,8 @@ function saveCategory() {
     remark: normalizeSpace(categoryForm.remark),
     name: {
       'zh-Hans': nameHans,
-      'zh-Hant': existed?.name?.['zh-Hant'] || nameHans,
-      en: existed?.name?.en || nameHans
+      'zh-Hant': normalizeSpace(categoryForm.nameHant),
+      en: normalizeSpace(categoryForm.nameEn)
     }
   }
   if (categoryDialog.mode === 'create') {

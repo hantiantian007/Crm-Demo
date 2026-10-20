@@ -40,19 +40,14 @@ export function maskWebhook(value) {
   return value ? 'https://open.larksuite.com/…/••••••' : '—'
 }
 const defaults = [
-  { id: 'withdrawal', name: '高风险出金 / 风险规则命中', description: '用户提交出金后，命中高风险规则或风险等级达到“高”时，通知风控负责人。', groupIds: ['group-risk', 'group-finance'] },
-  { id: 'cross-account-hedging', name: '跨账户对冲', description: '检测到多个交易账户存在明显反向交易，并满足预设对冲规则时，通知风控人员及活动风控负责人。', groupIds: [] },
-  { id: 'multi-account-association', name: '多账户关联', description: '检测到多个账户存在共用钱包、银行卡、设备、IP等明显关联关系并达到规则条件时，通知风控人员。', groupIds: [] },
-  { id: 'withdrawal-audit-timeout', name: '出金审核超时', description: '出金订单进入待审核状态后，超过设定时间仍未处理时通知审核人员；持续超时可升级通知负责人。', groupIds: [] },
-  { id: 'mt5-sync-error', name: 'MT5交易 / 平仓数据同步异常', description: 'MT5与CRM之间出现交易数据同步失败、延迟或数据不一致时，通知技术负责人。', groupIds: [] },
-  { id: 'payment-channel-error', name: '入金 / 出金支付通道异常', description: '支付通道不可用、API失败、回调异常、订单状态异常或短时间大量失败时，通知财务或技术负责人。', groupIds: [] },
-  { id: 'activity-participation', name: '活动有人参与', description: '用户首次产生符合活动规则的有效参与行为时，通知活动负责人或运营人员。', groupIds: [] },
-  { id: 'activity-qualified', name: '活动有人达标', description: '用户达到活动最终达标条件时，通知活动负责人或运营人员。', groupIds: [] },
-  { id: 'activity-suspected-hedging', name: '活动有人疑似对冲交易', description: '活动参与用户触发活动反作弊规则，被系统标记为“疑似对冲”时，通知风控及活动负责人。', groupIds: [] },
-  { id: 'high-value-activity-decline', name: '高价值客户活跃度明显下降', description: '高价值客户交易手数、交易频率或活跃度达到设定下降条件时，通知对应销售或客户负责人。', groupIds: [] }
+  { id: 'activity-suspected-hedging', name: '活动有人疑似对冲交易', description: '活动订单平仓后，不同关联账户的同品种反向订单，开仓时间差≤5分钟、有效平仓手数及持仓时长差异率均≤10%，同一活动及关联账户范围内滚动24小时首次达到2组有效匹配时通知；同一事件仅通知一次。', groupIds: [], hidden: true },
+  { id: 'activity-participation', name: '活动有人参与', description: '参与资格校验通过且有效参与记录保存成功后通知；需报名的以报名成功为准，无需报名的以首次满足活动参与条件为准，同一活动、同一客户仅通知一次。', groupIds: [] },
+  { id: 'activity-qualified', name: '活动有人达标', description: '已有效参与的客户，按活动配置及有效数据首次达到最终达标条件时通知；同一活动、同一客户的最终达标事件仅通知一次，不改变奖励状态。', groupIds: [] },
+  // 与原高风险出金场景区分，不自动继承其接收群组或启用配置。
+  { id: 'large-withdrawal', name: '大额出金', description: '出金申请成功生成编号后，本次金额≥5,000 USD，或过去24小时同客户同账户有效入金总额>0且出金金额/入金总额≥50%时通知；同一申请仅通知一次，不等同高风险判定。', groupIds: [] }
 ]
 
-export const larkNotifications = reactive(defaults.map(rule => {
+const allNotifications = reactive(defaults.map(rule => {
   const stored = saved.notifications?.[rule.id]
   return {
     ...rule,
@@ -61,17 +56,19 @@ export const larkNotifications = reactive(defaults.map(rule => {
     updatedAt: typeof stored?.updatedAt === 'string' ? stored.updatedAt : ''
   }
 }))
+// 暂缓场景保留本地配置，但不出现在配置列表或模拟发送选项中。
+export const larkNotifications = reactive(allNotifications.filter(rule => !rule.hidden))
 function persist() {
   try {
     localStorage.setItem(storageKey, JSON.stringify({
       groups: larkGroups,
-      notifications: Object.fromEntries(larkNotifications.map(n => [n.id, { groupIds: n.groupIds, enabled: n.enabled, updatedAt: n.updatedAt }]))
+      notifications: Object.fromEntries(allNotifications.map(n => [n.id, { groupIds: n.groupIds, enabled: n.enabled, updatedAt: n.updatedAt }]))
     }))
     return true
   } catch { return false }
 }
 function finishGroupChange() {
-  larkNotifications.forEach(rule => {
+  allNotifications.forEach(rule => {
     const ids = enabledGroupIds(rule.groupIds)
     if (ids.length !== rule.groupIds.length) {
       rule.groupIds = ids
@@ -143,7 +140,7 @@ const historicalExamples = {
   login: '用户 8110474 出现异常登录。\n检测到新设备及异地 IP 登录，请相关管理人员核查账号安全。',
   'high-risk': '用户 8110474 命中高风险规则。\n风险标签：疑似多账户、疑似对冲。\n请风控人员核查关联账户及交易情况。'
 }
-export const larkNotificationExamples = Object.fromEntries(defaults.map((rule) => [
+export const larkNotificationExamples = Object.fromEntries(defaults.filter(rule => !rule.hidden).map((rule) => [
   rule.id,
   `${rule.name}\n${rule.description}\n此消息仅用于手动模拟，不代表系统已执行自动检测。`
 ]))

@@ -201,7 +201,7 @@ const pagedRecords = computed(() => larkNotificationRecords.slice((recordPage.va
 const recordDialogOpen = ref(false)
 const selectedRecord = ref(null)
 const simulateDialogOpen = ref(false)
-const simulateTypeId = ref('withdrawal')
+const simulateTypeId = ref(larkNotifications.find(n => n.enabled)?.id || '')
 const simulateGroups = computed(() => enabledGroupIds(larkNotifications.find(n => n.id === simulateTypeId.value)?.groupIds))
 function viewRecord(record) { selectedRecord.value = record; recordDialogOpen.value = true }
 function openSimulateSend() {
