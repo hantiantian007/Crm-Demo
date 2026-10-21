@@ -19,6 +19,96 @@
         </div>
         <div class="p-4 flex flex-col gap-3 bg-gray-50/40">
           <div class="bg-white rounded-lg border border-gray-200 overflow-hidden accordion-item">
+          <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
+          <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-2 flex-wrap">
+          <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">系统管理</span>
+          <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">已归档</span>
+          <h3 class="text-base font-bold text-gray-800">后台操作审计记录</h3>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">用于记录后台人员查看客户详情、导出报表数据的关键操作行为，支持筛选、查看详情与导出审计数据（导出行为本身也会被记录）。</p>
+          </div>
+          <div class="flex items-center gap-3 text-gray-400">
+          <span class="text-xs bg-gray-100 px-2 py-1 rounded border border-gray-200">包含 1 个页面</span>
+          <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          </div>
+          <div class="accordion-content border-t border-gray-200">
+          <div class="overflow-x-auto no-scrollbar">
+          <table class="min-w-full text-xs text-left">
+          <thead>
+          <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+          <th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+          <th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+          <th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+          <th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+          <tr class="table-row-hover">
+          <td class="px-4 py-3 font-bold text-gray-800">后台操作审计记录</td>
+          <td class="px-4 py-3 text-gray-500">用于记录后台人员查看客户详情、导出报表数据的关键操作行为，支持筛选、查看详情与导出审计数据（导出行为本身也会被记录）。</td>
+          <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Crm-Group</span></td>
+          <td class="px-4 py-3">
+          <div class="flex flex-wrap gap-2 items-center">
+          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/system/operation-audit" target="_blank">原型</a>
+          <a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-system-operation-audit" target="_blank">
+          <i class="fas fa-file-alt"></i> PRD
+          </a>
+          </div>
+          </td>
+          </tr>
+          </tbody>
+          </table>
+          </div>
+          </div>
+          </div>
+
+          <div class="bg-white rounded-lg border border-gray-200 overflow-hidden accordion-item">
+          <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
+          <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-2 flex-wrap">
+          <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">佣金管理</span>
+          <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-200">已归档</span>
+          <h3 class="text-base font-bold text-gray-800">每日对账</h3>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">完善每日对账功能，包括对账批次、对账明细、异常记录及异常处理。</p>
+          </div>
+          <div class="flex items-center gap-3 text-gray-400">
+          <span class="text-xs bg-gray-100 px-2 py-1 rounded border border-gray-200">包含 1 个页面</span>
+          <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          </div>
+          <div class="accordion-content border-t border-gray-200">
+          <div class="overflow-x-auto no-scrollbar">
+          <table class="min-w-full text-xs text-left">
+          <thead>
+          <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+          <th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+          <th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
+          <th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+          <th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+          <tr class="table-row-hover">
+          <td class="px-4 py-3 font-bold text-gray-800">每日对账</td>
+          <td class="px-4 py-3 text-gray-500 whitespace-normal leading-5">已完成对账记录菜单归属、对账批次列表及对账详情页面；展示订单数量、返佣金额、异常笔数和金额差额；异常记录支持异常原因、处理方式、处理说明及处理状态区分（未处理红色字体、已处理蓝色字体），用于识别是否已完成人工处理。</td>
+          <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+          <td class="px-4 py-3">
+          <div class="flex flex-wrap gap-2 items-center">
+          <a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/crm/commission-audit-log" target="_blank">原型</a>
+          <a class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-xs transition-colors border border-gray-200" href="#/other/prd-reconciliation-daily-record" target="_blank"><i class="fas fa-file-alt"></i> PRD</a>
+          </div>
+          </td>
+          </tr>
+          </tbody>
+          </table>
+          </div>
+          </div>
+          </div>
+
+          <div class="bg-white rounded-lg border border-gray-200 overflow-hidden accordion-item">
             <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center">
               <div class="flex flex-col gap-1">
                 <div class="flex items-center gap-2 flex-wrap">
