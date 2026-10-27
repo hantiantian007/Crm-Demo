@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>联系我们表单及留资接入 PRD</title>
+  <style>
+    body{margin:0;background:#f9fafb;color:#374151;font:14px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+    .wrap{max-width:1200px;margin:auto;padding:24px 20px}.card{padding:24px;background:#fff;border:1px solid #e5e7eb;border-radius:10px}
+    h1{font-size:22px;color:#111827;margin:0 0 12px}h2{font-size:17px;color:#111827;margin:24px 0 8px}p{margin:8px 0}ul,ol{margin:8px 0;padding-left:22px}li{margin:5px 0}
+    .note{background:#f9fafb;border-left:3px solid #bd985d;padding:10px 14px;color:#6b7280}.table-wrap{overflow-x:auto}table{width:100%;min-width:860px;border-collapse:collapse;font-size:13px}th,td{padding:10px;border:1px solid #e5e7eb;text-align:left;vertical-align:top}th{background:#f3f4f6}code{font-size:12px;color:#7b5d2d;overflow-wrap:anywhere}
+    @media(max-width:640px){.wrap{padding:12px}.card{padding:16px}}@media print{body{background:#fff}.wrap{padding:0;max-width:none}.card{border:0;padding:0}table{min-width:0;font-size:11px}tr{break-inside:avoid}}
+  </style>
+</head>
+<body><main class="wrap"><article class="card">
+  <h1>联系我们表单及留资接入 PRD</h1>
+  <p class="note">本期仅为 CRM 前端演示：未接入真实微信公众号、微信网页授权、OpenID 或后端服务。提交仅在当前浏览器、当前站点保存，不代表真实微信用户提交，也不会跨浏览器或跨项目传输。</p>
+  <h2>1. 页面说明</h2>
+  <p><strong>页面：</strong>联系我们；菜单：其他页面 → 联系我们；路由：<code>/other/contact-us</code>。页面顶部沿用 CRM 的 PRD 查看入口。</p>
+  <p><strong>用途：</strong>演示用户填写联系方式及咨询留言，生成现有留资列表中的待分配记录，再复用分配、跟进和详情流程。</p>
+  <p><strong>结构：</strong>沿用提供的 HATC 表单参考图，保留品牌标识、浅色表单、绿色提交按钮和页脚。按姓名、手机号码及区号、微信号、邮箱、留言、提交的顺序展示；不增加上传或其他表单。</p>
+  <h2>2. 核心字段定义</h2>
+  <p>必填依据参考图：姓名、手机号、邮箱必填，留言选填；微信号按本次需求必填。必填文本去除首尾空白后校验。除已明确的留言上限外，不新增名称、微信号字符集或长度业务限制。</p>
+  <div class="table-wrap"><table><thead><tr><th>字段 / 含义</th><th>数据来源及映射</th><th>类型 / 字符格式</th><th>必填 / 默认值</th><th>编辑及业务规则</th></tr></thead><tbody>
+    <tr><td>姓名<br>提交人的姓名</td><td>用户手动输入 → 留资客户名称 <code>name</code></td><td>String；保留中文或其他文字；去首尾空白</td><td>必填，默认空</td><td>提交前可编辑；不得为空或仅空格；具体长度及特殊字符限制待确认，不自行增加。</td></tr>
+    <tr><td>手机号码及区号<br>原始联系方式</td><td>用户选择区号并填写号码 → <code>countryCode</code>、<code>phoneNumber</code>；合并到 <code>phone</code></td><td>String，不转数值；区号为“+”及数字；展示为“+区号 空格 号码”，保留号码内部空格、前导零等原始格式</td><td>均必填；默认区号 +86，号码空</td><td>提交前可编辑；区号复用现有注册资料选项 +86、+84、+852、+82、+81、+66、+65；号码不能为空。不新增某国位数或真实性校验，完整国家选项及号码格式规则待确认。</td></tr>
+    <tr><td>微信号<br>用户主动提供的联系账号</td><td>用户文本输入 → <code>wechat</code>，同时写入原始提交快照</td><td>String，普通文本，去首尾空白；不是微信 OpenID</td><td>必填，默认空</td><td>空或仅空格禁止提交；不验证微信账号真实性，不调用微信 API；长度及特定字符规则待确认。</td></tr>
+    <tr><td>电子邮箱<br>用户联系邮箱</td><td>用户手动输入 → 客户邮箱 <code>email</code></td><td>String；基本邮箱格式如 name@example.com；去首尾空白，不改变大小写</td><td>必填，默认空</td><td>提交前可编辑；检查 @、域名及空白，不验证真实存在，不增加邮箱验证邮件。</td></tr>
+    <tr><td>留言内容<br>完整咨询信息</td><td>用户手动输入 → 咨询内容 <code>inquiry</code></td><td>String；最多 500 个 Unicode 字符，按字符计数；保留换行，允许空字符串</td><td>选填，默认空</td><td>显示 0/500 实时统计；输入/粘贴超长部分截至 500，保存层再次检查上限；不会替换成咨询分类。</td></tr>
+    <tr><td>提交时间<br>本次提交成功的时间</td><td>沿用留资演示时间函数生成 → <code>createdAt</code> / 原始提交 <code>time</code></td><td>DateTime 字符串，<code>YYYY-MM-DD HH:mm:ss</code>，UTC+8</td><td>系统必有，无人工默认</td><td>不可手工修改。本期由本地演示生成；正式接入后应由后端记录。</td></tr>
+    <tr><td>留资来源<br>表单渠道</td><td>系统固定生成 → 信息来源 <code>wechat_contact</code>，客户来源显示“微信公众号-联系我们”</td><td>现有来源枚举 / String</td><td>系统必有，固定标记</td><td>不由表单用户编辑，不改变其他来源含义；查询渠道沿用“微信公众号”，演示身份另行标注。</td></tr>
+    <tr><td>处理状态<br>现有留资跟进状态</td><td>系统初始化，后续由现有留资流程更新 → <code>status</code></td><td>Enum：待分配、跟进中、退回公海、无效线索、已转化</td><td>系统必有，默认待分配 <code>unassigned</code></td><td>提交人不可设置；分配后沿用跟进中等原状态流转，未分配时归属为空。</td></tr>
+  </tbody></table></div>
+  <h2>3. 提交流程</h2>
+  <ol>
+    <li>填写表单，校验姓名、号码、微信号、邮箱非空，校验邮箱基本格式及留言长度；各字段下展示明确错误。</li>
+    <li>校验通过后调用现有 <code>leadsDemo.js</code> 的提交入口，生成唯一留资 ID，记录系统时间和原始提交快照；每次有效提交独立成条，不按姓名或邮箱自动覆盖已有记录。</li>
+    <li>写入现有本地存储成功后才提示“本地演示留资提交成功”，清空表单；提交过程中按钮不可重复点击。保存失败不清空填写内容。</li>
+    <li>到客户管理 → 留资列表，在“全部 / 待分配”及公众号来源筛选中可查到记录，按现有流程分配及跟进。</li>
+  </ol>
+  <h2>4. 留资关联及原始信息保护</h2>
+  <ul>
+    <li>列表、详情和本表单共用 <code>leadsDemo.js</code> 与 <code>crm-leads-demo-v1</code> 存储，不建立独立留资体系；同一站点刷新后仍可读取，清除浏览器存储会丢失演示操作。</li>
+    <li>姓名→客户名称；完整区号及号码→联系方式；微信号→微信字段；邮箱→客户邮箱；留言→咨询内容；提交时间→申请时间；来源→微信公众号-联系我们。</li>
+    <li>沿用现有结构，查询分类归“其他”，留资次数为 1，无跟进记录、归属或转化账户；不新增状态、审批或分配规则。</li>
+    <li>详情基础信息展示完整微信号；“留资记录 → 原始提交信息”同时提供只读原始微信号、姓名、区号、联系方式、邮箱、完整留言、来源和时间。</li>
+    <li>后续分配、跟进、基础联系方式修改不得改写原始提交快照；原始字段与当前资料分开保存。旧记录未提供微信号时标注“原记录未提供”，不伪造历史数据。</li>
+    <li>其他来源继续使用原流程；不新增“联系我们记录”菜单或另一个管理列表。正式接入需后端接收公众号提交并提供 CRM 查询，本期不实现。</li>
+  </ul>
+  <h2>5. 异常处理</h2>
+  <ul>
+    <li>必填项为空或仅空格、邮箱格式错误：显示对应字段错误，禁止创建留资；微信号不要求登录微信或授权。</li>
+    <li>留言超长：输入限制至 500 字；绕过页面提交的超长内容由共享保存入口拒绝，不截断已经保存的历史留言。</li>
+    <li>本地存储禁用、空间不足：提示提交失败并保留表单；不显示成功，不追加内存中的虚假成功记录。</li>
+    <li>已有演示数据损坏：提示读取失败，不覆盖或重置原存储；当前输入保留，修复存储问题后可重试。</li>
+  </ul>
+  <h2>6. 验收标准</h2>
+  <ol>
+    <li>菜单打开独立联系我们页，字段顺序与参考图要求一致，微信号位于手机号码之后；留言选填并计数，无上传功能。</li>
+    <li>微信号空/仅空格不能提交；姓名、手机号、邮箱必填，格式错误明确提示；500 字留言可保存，超长禁止持久化。</li>
+    <li>提交成功后同一份共享留资数据新增唯一记录，来源正确、默认待分配，完整区号/微信号/留言/时间可查，刷新保留。</li>
+    <li>分配和跟进后列表详情同步；修改当前联系方式不会改写原始提交，其他来源记录保持不变；存储失败不丢失输入、不冒充成功。</li>
+    <li>页面及文档明确为前端演示；未连接真实微信、OpenID、网页授权或后端；只新增本 PRD，沿用现有 PRD 查看交互。</li>
+  </ol>
+</article></main></body></html>

@@ -1,788 +1,200 @@
 <template>
   <div class="flex h-full bg-mainBg overflow-hidden">
-    <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto">
-      <div class="flex-1 p-6 overflow-y-auto bg-gray-50 flex flex-col">
- <!-- 客户头部信息 -->
- <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 mb-4 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 lg:gap-0 relative">
-  <div class="flex items-center space-x-4">
-   <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">
-    张
-   </div>
-   <div>
-    <h2 class="text-xl font-bold text-gray-800 flex flex-wrap items-center gap-2">
-     张三
-     <span id="demo-status-badge">
-      <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-normal border border-green-200">
-       已转化
-      </span>
-     </span>
-     <span id="demo-deposit-badge">
-      <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full font-normal border border-yellow-200">
-       已入金
-      </span>
-     </span>
-    </h2>
-    <p class="text-sm text-gray-500 mt-1">
-     线索ID: LD-20231024-001 |
-     <span id="demo-assignee-text">
-      归属销售: 李四
-     </span>
-     | 创建时间: 2023-10-24 10:00:00
-    </p>
-    <!-- 客户标签展示区 -->
-    <div class="flex flex-wrap items-center gap-2 mt-2" id="clientTagsContainer">
-     <span class="inline-flex items-center bg-red-50 text-red-600 border border-red-200 text-xs px-2 py-0.5 rounded">
-      高净值客户
-      <button class="ml-1 text-red-400 hover:text-red-600">
-       <i class="fa-solid fa-times text-[10px]">
-       </i>
-      </button>
-     </span>
-     <span class="inline-flex items-center bg-blue-50 text-blue-600 border border-blue-200 text-xs px-2 py-0.5 rounded">
-      偏好黄金
-      <button class="ml-1 text-blue-400 hover:text-blue-600">
-       <i class="fa-solid fa-times text-[10px]">
-       </i>
-      </button>
-     </span>
-     <button class="inline-flex items-center bg-gray-50 text-gray-500 border border-dashed border-gray-300 hover:border-blue-400 hover:text-blue-500 text-xs px-2 py-0.5 rounded cursor-pointer transition-colors">
-      <i class="fa-solid fa-plus mr-1">
-      </i>
-      添加标签
-     </button>
-    </div>
-   </div>
-  </div>
-  <div class="flex space-x-3 w-full lg:w-auto" id="demo-action-buttons">
-   <button class="flex-1 lg:flex-none px-3 py-2 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded hover:bg-indigo-100 transition-colors shadow-sm text-sm font-medium" title="复制带有LeadID参数的代理注册链接">
-    <i class="fa-solid fa-copy mr-1">
-    </i>
-    复制代理邀请链接
-   </button>
-   <button class="flex-1 lg:flex-none px-3 py-2 bg-teal-50 text-teal-600 border border-teal-200 rounded hover:bg-teal-100 transition-colors shadow-sm text-sm font-medium" title="复制带有LeadID参数的直客注册链接">
-    <i class="fa-solid fa-copy mr-1">
-    </i>
-    复制直客邀请链接
-   </button>
-   <button class="flex-1 lg:flex-none px-3 py-2 bg-orange-50 text-orange-600 border border-orange-200 rounded hover:bg-orange-100 transition-colors shadow-sm text-sm font-medium">
-    <i class="fa-solid fa-recycle mr-1">
-    </i>
-    退回公海
-   </button>
-  </div>
- </div>
- <div class="mb-4 flex items-center justify-between">
-  <button class="inline-flex items-center gap-2 px-3 py-2 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors" type="button" @click="goBack">
-   <i class="fa-solid fa-arrow-left text-xs">
-   </i>
-   返回
-  </button>
- </div>
- <!-- 主体内容分左右两列 -->
- <div class="flex flex-col lg:flex-row flex-1 gap-4 lg:min-h-0">
-  <!-- 左侧：基础信息表单 -->
-  <div class="w-full lg:w-1/3 bg-white rounded-lg shadow-sm border border-gray-200 p-5 lg:overflow-y-auto">
-   <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-2">
-    <h3 class="text-lg font-bold text-gray-800 border-l-4 border-primaryBtn pl-2">
-     基础信息
-    </h3>
-    <button class="text-sm text-blue-600 hover:text-blue-800">
-     <i class="fa-solid fa-edit mr-1">
-     </i>
-     保存修改
-    </button>
-   </div>
-   <form class="space-y-4">
-    <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      姓名
-      <span class="text-red-500">
-       *
-      </span>
-     </label>
-     <input class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn" type="text" value="张三"/>
-    </div>
-    <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      手机号码
-      <span class="text-red-500">
-       *
-      </span>
-     </label>
-     <input class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn" type="text" value="13800138000"/>
-    </div>
-    <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      电子邮箱
-     </label>
-     <input class="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-gray-50 text-gray-500 cursor-not-allowed" disabled="" type="email" value="zhangsan@example.com"/>
-    </div>
-    <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      所属代理
-     </label>
-     <div class="relative flex items-center">
-      <input class="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-gray-50 text-gray-600 cursor-not-allowed" disabled="" type="text" value="王大拿"/>
-      <span class="absolute right-3 text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded border border-blue-100" title="由客户手机号匹配到系统已有代理">
-       <i class="fas fa-link mr-1">
-       </i>
-       手机号关联
-      </span>
-     </div>
-    </div>
-    <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      咨询内容
-     </label>
-     <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn">
-      <option>
-       成为代理
-      </option>
-      <option>
-       活动咨询
-      </option>
-      <option>
-       开户咨询
-      </option>
-      <option selected="">
-       个人交易
-      </option>
-      <option>
-       其他
-      </option>
-     </select>
-    </div>
-    <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      信息来源
-     </label>
-     <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn">
-      <option selected="">
-       官网访问
-      </option>
-      <option>
-       社交平台
-      </option>
-      <option>
-       客户推荐
-      </option>
-      <option>
-       线上活动
-      </option>
-      <option>
-       线下金融活动
-      </option>
-      <option>
-       金融资讯网站
-      </option>
-      <option>
-       其他渠道
-      </option>
-     </select>
-    </div>
-    <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      查询渠道
-     </label>
-     <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn">
-      <option>
-       WhatsApp
-      </option>
-      <option selected="">
-       Email
-      </option>
-      <option>
-       Zendesk
-      </option>
-      <option>
-       Telegram
-      </option>
-     </select>
-    </div>
-    <div class="hidden">
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      期望服务
-     </label>
-     <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn">
-      <option>
-       自主外汇交易
-      </option>
-      <option>
-       代理加盟合作
-      </option>
-      <option>
-       保本理财产品
-      </option>
-      <option>
-       机构大宗交易
-      </option>
-      <option>
-       跟单/资管服务
-      </option>
-     </select>
-    </div>
-    <div>
-     <label class="block text-sm font-medium text-gray-700 mb-1">
-      备注说明
-     </label>
-     <textarea class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn" rows="3">客户对高杠杆外汇交易感兴趣，资金量大约在5万美金左右。</textarea>
-    </div>
-   </form>
-  </div>
-  <!-- 右侧：Tabs面板 (跟进/变更/转化) -->
-  <div class="w-full lg:w-2/3 bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col overflow-hidden min-h-[500px] lg:min-h-0">
-   <!-- Tabs 导航 -->
-   <div class="flex border-b border-gray-200 bg-gray-50 px-4 pt-2 overflow-x-auto whitespace-nowrap no-scrollbar" id="demo-tab-container">
-    <button class="px-4 py-2 text-sm font-medium text-primaryBtn border-b-2 border-primaryBtn bg-white rounded-t-lg" id="tab-followup">
-     跟进记录
-    </button>
-    <button class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent" id="tab-changelog">
-     变更记录
-    </button>
-    <button class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent" id="tab-lead-records">
-     留资记录（3）
-    </button>
-    <button class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent" id="tab-conversion">
-     转化成果
-    </button>
-   </div>
-   <!-- Tabs 内容区 -->
-   <div class="p-5 flex-1 overflow-y-auto">
-    <!-- 跟进记录 Tab -->
-    <div class="block" id="content-followup">
-     <div class="mb-4">
-      <textarea class="w-full border border-gray-300 rounded p-3 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn mb-2" placeholder="输入跟进内容..." rows="3"></textarea>
-      <div class="flex justify-between items-center">
-       <div class="flex gap-4">
-        <div class="flex flex-col gap-1">
-         <select class="border border-gray-300 rounded px-2 py-1 text-sm outline-none focus:border-primaryBtn">
-          <option>
-           更新状态：跟进中
-          </option>
-          <option>
-           更新状态：无效线索
-          </option>
-          <option>
-           更新状态：已转化
-          </option>
-         </select>
-         <span class="text-xs text-gray-400">
-          当前即使为“已转化”或“无效线索”，也支持再次修改状态
-         </span>
+    <div class="flex-1 min-w-0 bg-gray-50 p-4 overflow-y-auto custom-scrollbar">
+      <div class="p-6">
+        <div class="mb-4 flex items-center justify-between gap-3">
+          <button class="px-3 py-2 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm" @click="goBack">← 返回留资列表</button>
+          <span class="text-xs text-gray-500">本地演示数据 · 非真实公众号提交</span>
         </div>
-        <input class="border border-gray-300 rounded px-2 py-1 text-sm text-gray-600 outline-none focus:border-primaryBtn" title="下次跟进时间" type="datetime-local"/>
-       </div>
-       <button class="px-4 py-1.5 bg-primaryBtn text-white text-sm rounded hover:bg-primaryBtnHover transition-colors">
-        发布跟进
-       </button>
-      </div>
-     </div>
-     <!-- 时间轴 -->
-     <div class="relative border-l-2 border-gray-200 ml-3 mt-6 space-y-6">
-      <!-- 状态：已转化 -->
-      <div class="relative pl-6">
-       <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-white shadow">
-       </div>
-       <div class="bg-gray-50 p-3 rounded border border-gray-100">
-        <div class="flex justify-between items-start mb-1">
-         <span class="font-medium text-gray-800 text-sm">
-          李四 (销售)
-         </span>
-         <span class="text-xs text-gray-500">
-          2023-10-28 10:15:00
-         </span>
-        </div>
-        <p class="text-sm text-gray-600">
-         客户已确认开通代理账户并成功完成首笔入金，后续由客服团队接手维护。
-        </p>
-        <div class="mt-2 flex gap-2">
-         <span class="bg-green-50 text-green-600 text-xs px-2 py-0.5 rounded border border-green-100">
-          状态：已转化
-         </span>
-        </div>
-       </div>
-      </div>
-      <!-- 状态：退回公海 -->
-      <div class="relative pl-6">
-       <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-gray-500 border-4 border-white shadow">
-       </div>
-       <div class="bg-gray-50 p-3 rounded border border-gray-100">
-        <div class="flex justify-between items-start mb-1">
-         <span class="font-medium text-gray-800 text-sm">
-          王大拿 (主管)
-         </span>
-         <span class="text-xs text-gray-500">
-          2023-10-27 16:20:00
-         </span>
-        </div>
-        <p class="text-sm text-gray-600">
-         销售反馈客户近期无入金意愿，强制回收资源，释放给其他组员跟进。
-        </p>
-        <div class="mt-2 flex gap-2">
-         <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded border border-gray-300">
-          状态：退回公海
-         </span>
-        </div>
-       </div>
-      </div>
-      <!-- 状态：无效线索 -->
-      <div class="relative pl-6">
-       <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-red-500 border-4 border-white shadow">
-       </div>
-       <div class="bg-gray-50 p-3 rounded border border-gray-100">
-        <div class="flex justify-between items-start mb-1">
-         <span class="font-medium text-gray-800 text-sm">
-          李四 (销售)
-         </span>
-         <span class="text-xs text-gray-500">
-          2023-10-26 09:45:00
-         </span>
-        </div>
-        <p class="text-sm text-gray-600">
-         电话打不通，空号。加微信也提示用户不存在，申请标记为无效线索。
-        </p>
-        <div class="mt-2 flex gap-2">
-         <span class="bg-red-50 text-red-600 text-xs px-2 py-0.5 rounded border border-red-100">
-          状态：无效线索
-         </span>
-        </div>
-       </div>
-      </div>
-      <!-- 状态：跟进中 -->
-      <div class="relative pl-6">
-       <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow">
-       </div>
-       <div class="bg-gray-50 p-3 rounded border border-gray-100">
-        <div class="flex justify-between items-start mb-1">
-         <span class="font-medium text-gray-800 text-sm">
-          李四 (销售)
-         </span>
-         <span class="text-xs text-gray-500">
-          2023-10-25 14:30:00
-         </span>
-        </div>
-        <p class="text-sm text-gray-600">
-         客户已添加微信，发送了公司介绍资料。客户表示周末会详细看下。
-        </p>
-        <div class="mt-2 flex gap-2">
-         <span class="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded border border-blue-100">
-          状态：跟进中
-         </span>
-         <span class="bg-orange-50 text-orange-600 text-xs px-2 py-0.5 rounded border border-orange-100">
-          <i class="fa-regular fa-clock mr-1">
-          </i>
-          下次跟进: 2023-10-30
-         </span>
-        </div>
-       </div>
-      </div>
-      <!-- 初始分配 -->
-      <div class="relative pl-6">
-       <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-gray-300 border-4 border-white shadow">
-       </div>
-       <div class="bg-gray-50 p-3 rounded border border-gray-100">
-        <div class="flex justify-between items-start mb-1">
-         <span class="font-medium text-gray-800 text-sm">
-          系统分配
-         </span>
-         <span class="text-xs text-gray-500">
-          2023-10-24 10:05:00
-         </span>
-        </div>
-        <p class="text-sm text-gray-600">
-         线索由系统自动分配给销售
-         <span class="font-medium">
-          李四
-         </span>
-        </p>
-        <div class="mt-2 flex gap-2">
-         <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded border border-gray-300">
-          系统操作
-         </span>
-        </div>
-       </div>
-      </div>
-     </div>
-    </div>
-    <!-- 变更记录 Tab -->
-    <div class="hidden" id="content-changelog">
-     <div class="overflow-x-auto">
-      <table class="w-full text-left text-sm text-gray-600 min-w-[600px]">
-       <thead class="bg-gray-50 text-gray-700">
-        <tr>
-         <th class="px-4 py-2 font-medium border-b border-gray-200">
-          变更时间
-         </th>
-         <th class="px-4 py-2 font-medium border-b border-gray-200">
-          变更字段
-         </th>
-         <th class="px-4 py-2 font-medium border-b border-gray-200">
-          变更前内容
-         </th>
-         <th class="px-4 py-2 font-medium border-b border-gray-200">
-          变更后内容
-         </th>
-         <th class="px-4 py-2 font-medium border-b border-gray-200">
-          操作人
-         </th>
-        </tr>
-       </thead>
-       <tbody>
-        <tr class="border-b border-gray-100 hover:bg-gray-50 hidden">
-         <td class="px-4 py-3">
-          2023-10-25 10:15:00
-         </td>
-         <td class="px-4 py-3">
-          期望服务
-         </td>
-         <td class="px-4 py-3">
-          <span class="line-through text-gray-400">
-           未知
-          </span>
-         </td>
-         <td class="px-4 py-3">
-          <span class="text-green-600 bg-green-50 px-1 rounded">
-           外汇交易
-          </span>
-         </td>
-         <td class="px-4 py-3">
-          李四
-         </td>
-        </tr>
-        <tr class="border-b border-gray-100 hover:bg-gray-50">
-         <td class="px-4 py-3">
-          2023-10-25 10:15:00
-         </td>
-         <td class="px-4 py-3">
-          备注说明
-         </td>
-         <td class="px-4 py-3">
-          <span class="line-through text-gray-400">
-           无
-          </span>
-         </td>
-         <td class="px-4 py-3">
-          <span class="text-green-600 bg-green-50 px-1 rounded">
-           客户对高杠杆...
-          </span>
-         </td>
-         <td class="px-4 py-3">
-          李四
-         </td>
-        </tr>
-       </tbody>
-      </table>
-     </div>
-     <div class="mt-4 text-center text-xs text-gray-400">
-      仅显示最近 50 条变更记录
-     </div>
-    </div>
-    <!-- 留资记录 Tab -->
-    <div class="hidden" id="content-lead-records">
-     <div class="bg-blue-50 border border-blue-200 rounded p-3 mb-4 text-sm text-blue-800">
-      <i class="fa-solid fa-info-circle mr-1">
-      </i>
-      该客户使用相同邮箱提交了多次留资，已自动归纳合并。
-     </div>
-     <div class="space-y-4">
-      <!-- 最新一次留资 -->
-      <div class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm relative overflow-hidden">
-       <div class="absolute top-0 left-0 w-1 h-full bg-blue-500">
-       </div>
-       <div class="flex justify-between items-start mb-2">
-        <h4 class="font-bold text-gray-800">
-         第 3 次留资
-         <span class="ml-2 text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded">
-          最新
-         </span>
-        </h4>
-        <span class="text-xs text-gray-500">
-         2023-10-25 14:00:00
-        </span>
-       </div>
-       <div class="grid grid-cols-2 gap-y-2 text-sm">
-        <div>
-         <span class="text-gray-500">
-          联系电话：
-         </span>
-         13800138000
-        </div>
-        <div>
-         <span class="text-gray-500">
-          信息来源：
-         </span>
-         官网访问
-        </div>
-        <div>
-         <span class="text-gray-500">
-          客户来源：
-         </span>
-         官网录入
-        </div>
-        <div>
-         <span class="text-gray-500">
-          查询渠道：
-         </span>
-         Email
-        </div>
-        <div>
-         <span class="text-gray-500">
-          咨询内容：
-         </span>
-         外汇交易
-        </div>
-        <div>
-         <span class="text-gray-500">
-          线索热度：
-         </span>
-         高
-        </div>
-        <div class="col-span-2">
-         <span class="text-gray-500">
-          备注：
-         </span>
-         对高杠杆外汇交易感兴趣，资金量约5万美金。
-        </div>
-       </div>
-      </div>
-      <!-- 历史留资 2 -->
-      <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 opacity-80">
-       <div class="flex justify-between items-start mb-2">
-        <h4 class="font-bold text-gray-700">
-         第 2 次留资
-        </h4>
-        <span class="text-xs text-gray-500">
-         2023-10-10 09:30:00
-        </span>
-       </div>
-       <div class="grid grid-cols-2 gap-y-2 text-sm text-gray-600">
-        <div>
-         <span class="text-gray-400">
-          联系电话：
-         </span>
-         13800138000
-        </div>
-        <div>
-         <span class="text-gray-400">
-          信息来源：
-         </span>
-         线下金融活动
-        </div>
-        <div>
-         <span class="text-gray-400">
-          客户来源：
-         </span>
-         销售录入
-        </div>
-        <div>
-         <span class="text-gray-400">
-          查询渠道：
-         </span>
-         WhatsApp
-        </div>
-        <div>
-         <span class="text-gray-400">
-          咨询内容：
-         </span>
-         活动咨询
-        </div>
-        <div class="col-span-2">
-         <span class="text-gray-400">
-          备注：
-         </span>
-         询问广州展会的具体地址和参会福利。
-        </div>
-       </div>
-      </div>
-      <!-- 历史留资 1 -->
-      <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 opacity-80">
-       <div class="flex justify-between items-start mb-2">
-        <h4 class="font-bold text-gray-700">
-         第 1 次留资
-        </h4>
-        <span class="text-xs text-gray-500">
-         2023-09-01 16:15:00
-        </span>
-       </div>
-       <div class="grid grid-cols-2 gap-y-2 text-sm text-gray-600">
-        <div>
-         <span class="text-gray-400">
-          联系电话：
-         </span>
-         未提供
-        </div>
-        <div>
-         <span class="text-gray-400">
-          信息来源：
-         </span>
-         社交平台广告
-        </div>
-        <div>
-         <span class="text-gray-400">
-          客户来源：
-         </span>
-         注册页录入
-        </div>
-        <div>
-         <span class="text-gray-400">
-          查询渠道：
-         </span>
-         Telegram
-        </div>
-        <div>
-         <span class="text-gray-400">
-          咨询内容：
-         </span>
-         了解开户
-        </div>
-        <div class="col-span-2">
-         <span class="text-gray-400">
-          备注：
-         </span>
-         无
-        </div>
-       </div>
-      </div>
-     </div>
-    </div>
-    <!-- 转化成果 Tab -->
-    <div class="hidden" id="content-conversion">
-     <div class="bg-green-50 border border-green-200 rounded-lg p-5">
-      <div class="flex items-center gap-3 mb-4">
-       <div class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl">
-        <i class="fa-solid fa-check-circle">
-        </i>
-       </div>
-       <div>
-        <h4 class="font-bold text-green-800">
-         已成功转化为客户
-        </h4>
-        <p class="text-xs text-green-600">
-         转化耗时: 1天4小时 | 转化时间: 2023-10-25 14:00:00 |
-         <span class="font-medium bg-green-200 px-1 rounded text-green-800">
-          关联方式: 专属链接自动绑定
-         </span>
-        </p>
-       </div>
-      </div>
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4 bg-white p-4 rounded border border-green-100">
-       <div>
-        <p class="text-xs text-gray-500 mb-1">
-         关联客户账户
-        </p>
-        <div class="font-medium text-gray-800 flex items-center gap-3">
-         <button class="text-blue-600 hover:underline flex items-center gap-1" type="button" @click="goClientDetail('88820391')">
-          ID: 88820391
-          <i class="fa-solid fa-external-link-alt text-[10px]">
-          </i>
-         </button>
-         <button class="text-xs text-indigo-600 border border-indigo-200 bg-indigo-50 px-2 py-0.5 rounded hover:bg-indigo-100 transition-colors cursor-not-allowed opacity-60" type="button" disabled="">
-          修改关联
-         </button>
-        </div>
-       </div>
-       <div>
-        <p class="text-xs text-gray-500 mb-1">
-         开户状态
-        </p>
-        <p class="font-medium text-gray-800">
-         审核通过
-        </p>
-       </div>
-       <div>
-        <p class="text-xs text-gray-500 mb-1">
-         首次入金时间
-        </p>
-        <p class="font-medium text-gray-800">
-         2023-10-26 09:30:00
-        </p>
-       </div>
-       <div>
-        <p class="text-xs text-gray-500 mb-1">
-         首次入金金额
-        </p>
-        <p class="font-medium text-red-600">
-         $ 5,000.00
-        </p>
-       </div>
-       <div class="mt-2 pt-3 border-t border-gray-100 col-span-2 lg:col-span-4">
-       </div>
-       <div>
-        <p class="text-xs text-gray-500 mb-1">
-         净入金 (入-出)
-        </p>
-        <p class="font-medium text-red-600">
-         $ 12,500.00
-        </p>
-       </div>
-       <div>
-        <p class="text-xs text-gray-500 mb-1">
-         当前账户余额
-        </p>
-        <p class="font-medium text-gray-800">
-         $ 15,230.50
-        </p>
-       </div>
-       <div>
-        <p class="text-xs text-gray-500 mb-1">
-         累计交易手数
-        </p>
-        <p class="font-medium text-gray-800">
-         45.5 手
-        </p>
-       </div>
-       <div>
-        <p class="text-xs text-gray-500 mb-1">
-         累计盈亏
-        </p>
-        <p class="font-medium text-red-600">
-         +$ 2,730.50
-        </p>
-       </div>
-      </div>
-      <div class="mt-5 text-center">
-       <button class="inline-block px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors shadow-sm text-sm" type="button" @click="goClientDetail('88820391')">
-        查看完整客户画像
-       </button>
-      </div>
-     </div>
-     <!-- 手动关联区 (当未转化时显示，此处仅做UI占位演示) -->
-     <div class="mt-6 p-5 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-      <h4 class="font-medium text-gray-800 mb-2">
-       <i class="fa-solid fa-link text-gray-400 mr-2">
-       </i>
-       关联客户账户
-      </h4>
-      <p class="text-xs text-gray-500 mb-4">
-       如果客户已自行在官网注册，可在此处输入客户 CRM 账号 ID 进行绑定；如已存在绑定关系，也支持修改为新的关联账户。
-      </p>
-      <div class="flex gap-3">
-       <input class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-primaryBtn focus:ring-1 focus:ring-primaryBtn" placeholder="输入CRM客户ID (如: 88820391)" type="text"/>
-       <button class="px-4 py-2 bg-gray-800 text-white text-sm rounded hover:bg-gray-900 transition-colors">
-        保存关联
-       </button>
-      </div>
-     </div>
-    </div>
-   </div>
-  </div>
- </div>
-</div>
+        <el-alert v-if="error" :title="error" type="error" :closable="false" show-icon class="mb-4" />
+        <el-empty v-if="!lead" description="未找到该留资，请返回列表选择有效记录" />
+        <template v-else>
+          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 mb-4 flex flex-col lg:flex-row justify-between gap-4">
+            <div class="flex items-center gap-4 min-w-0">
+              <div class="w-12 h-12 shrink-0 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">{{ lead.name.slice(0, 1) }}</div>
+              <div class="min-w-0">
+                <h2 class="text-xl font-bold text-gray-800 flex flex-wrap items-center gap-2">{{ lead.name }}<el-tag size="small" :type="statusType">{{ LEAD_STATES[lead.status] }}</el-tag></h2>
+                <p class="text-sm text-gray-500 mt-1 break-words">线索 ID：{{ lead.id }} | 归属销售 / 客服：{{ staffName(lead.assigneeId) }} | 申请时间：{{ lead.createdAt }}</p>
+                <div v-if="lead.tags.length" class="flex gap-2 mt-2"><el-tag v-for="tag in lead.tags" :key="tag" size="small">{{ tag }}</el-tag></div>
+              </div>
+            </div>
+            <div class="flex gap-2 items-start flex-wrap">
+              <el-button @click="showInviteNotice">复制代理邀请链接</el-button>
+              <el-button @click="showInviteNotice">复制直客邀请链接</el-button>
+              <el-button v-if="['assigned', 'unassigned', 'public'].includes(lead.status)" @click="openAction('assign')">{{ lead.status === 'unassigned' ? '分配' : '重新分配' }}</el-button>
+              <el-button v-if="lead.status === 'assigned'" type="warning" plain @click="returnToPool">退回公海</el-button>
+            </div>
+          </div>
 
+          <div class="flex flex-col lg:flex-row gap-4 items-start">
+            <section class="w-full lg:w-1/3 bg-white rounded-lg shadow-sm border border-gray-200 p-5 min-w-0">
+              <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-2">
+                <h3 class="text-lg font-bold text-gray-800 border-l-4 border-primaryBtn pl-2">基础信息</h3>
+                <button class="text-sm text-blue-600 hover:text-blue-800" @click="saveProfile">保存修改</button>
+              </div>
+              <form class="space-y-4" @submit.prevent="saveProfile">
+                <label class="profile-field">姓名 <span class="text-red-500">*</span><input v-model="profile.name" maxlength="100" required /></label>
+                <label class="profile-field">手机号码（含国家/地区区号） <span class="text-red-500">*</span><input v-model="profile.phone" maxlength="50" required /></label>
+                <label class="profile-field">电子邮箱<input :value="lead.email" readonly class="bg-gray-50" /></label>
+                <label class="profile-field">微信号<textarea v-model="profile.wechat" rows="2" class="full-text"></textarea></label>
+                <label class="profile-field">WhatsApp<input v-model="profile.whatsapp" maxlength="100" /></label>
+                <label class="profile-field">其他联系方式<input v-model="profile.otherContact" maxlength="200" /></label>
+                <label class="profile-field">所属代理<input :value="lead.agent || '无'" readonly class="bg-gray-50" /></label>
+                <label class="profile-field">咨询内容<textarea :value="lead.inquiry" readonly rows="5" class="full-text bg-gray-50"></textarea></label>
+                <p v-if="lead.source === WECHAT_SOURCE" class="text-xs text-gray-500">以上为公众号表单留言（最多 500 字），不替换为咨询分类；查询分类暂归入“其他”。原始内容保留。</p>
+                <label class="profile-field">信息来源<input :value="LEAD_SOURCES[lead.source]" readonly class="bg-gray-50" /></label>
+                <label class="profile-field">客户来源<input :value="lead.customerSource" readonly class="bg-gray-50" /></label>
+                <label class="profile-field">查询渠道<select v-model="profile.channel"><option v-for="channel in ['WhatsApp', 'Email', 'Zendesk', 'Telegram', '微信公众号']" :key="channel">{{ channel }}</option></select></label>
+                <label class="profile-field">备注说明<textarea v-model="profile.notes" rows="3" maxlength="1000"></textarea></label>
+              </form>
+            </section>
+
+            <section class="w-full lg:w-2/3 bg-white rounded-lg shadow-sm border border-gray-200 min-w-0 overflow-hidden">
+              <div class="flex border-b border-gray-200 bg-gray-50 px-4 pt-2 overflow-x-auto whitespace-nowrap">
+                <button v-for="tab in detailTabs" :key="tab.value" class="px-4 py-2 text-sm font-medium border-b-2" :class="activeTab === tab.value ? 'text-primaryBtn border-primaryBtn bg-white rounded-t-lg' : 'text-gray-500 border-transparent'" @click="activeTab = tab.value">{{ tab.label }}</button>
+              </div>
+              <div class="p-5">
+                <div v-if="activeTab === 'followup'">
+                  <div class="flex items-center justify-between gap-3 mb-4">
+                    <p class="text-xs text-gray-500">跟进时间使用 UTC+8；列表与详情共用记录。</p>
+                    <el-button type="primary" :disabled="!canFollow" @click="openAction('follow')">新增跟进</el-button>
+                  </div>
+                  <p v-if="!canFollow" class="text-sm text-gray-500 mb-4">请先分配给销售或客服，再新增跟进。</p>
+                  <el-empty v-if="!lead.followups.length" description="暂无跟进记录" :image-size="60" />
+                  <div v-else class="relative border-l-2 border-gray-200 ml-3 mt-6 space-y-6">
+                    <div v-for="item in [...lead.followups].reverse()" :key="item.id" class="relative pl-6">
+                      <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow"></div>
+                      <div class="bg-gray-50 p-3 rounded border border-gray-100">
+                        <div class="flex justify-between gap-3 mb-1"><span class="font-medium text-gray-800 text-sm">{{ item.actor }}</span><span class="text-xs text-gray-500">{{ item.time }}</span></div>
+                        <p class="text-sm text-gray-600 full-text">{{ item.content }}</p>
+                        <div class="mt-2 flex flex-wrap gap-2 text-xs"><el-tag size="small">{{ LEAD_STATES[item.status] }}</el-tag><span v-if="item.nextFollowAt" class="text-orange-600">下次跟进：{{ item.nextFollowAt }}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div v-else-if="activeTab === 'changes'" class="overflow-x-auto">
+                  <table class="w-full text-left text-sm min-w-[600px] change-table">
+                    <thead class="bg-gray-50 text-gray-700"><tr><th>变更时间</th><th>变更字段</th><th>变更前内容</th><th>变更后内容</th><th>操作人</th></tr></thead>
+                    <tbody><tr v-for="(item, index) in [...lead.changes].reverse()" :key="index"><td>{{ item.time }}</td><td>{{ item.field }}</td><td class="full-text">{{ item.before }}</td><td class="full-text">{{ item.after }}</td><td>{{ item.actor }}</td></tr><tr v-if="!lead.changes.length"><td colspan="5" class="text-center text-gray-400">暂无变更记录</td></tr></tbody>
+                  </table>
+                </div>
+                <div v-else-if="activeTab === 'submissions'" class="space-y-4">
+                  <p class="text-xs text-gray-500">累计 {{ lead.count }} 次留资。以下展示当前演示数据中已提供的原始提交；不自动合并同名或同邮箱记录。</p>
+                  <div v-for="(item, index) in lead.submissions" :key="index" class="border border-gray-200 rounded-lg p-4 bg-white">
+                    <div class="flex justify-between gap-3 mb-3"><h4 class="font-bold text-gray-800">原始提交信息</h4><span class="text-xs text-gray-500">{{ item.time }}</span></div>
+                    <dl class="submission-grid">
+                      <div><dt>姓名</dt><dd>{{ item.name }}</dd></div><div><dt>原始联系方式</dt><dd>{{ item.phone }}</dd></div>
+                      <div><dt>国家/地区区号</dt><dd>{{ item.countryCode || '原记录未单独提供' }}</dd></div><div><dt>客户邮箱</dt><dd>{{ item.email }}</dd></div>
+                      <div class="col-span-2"><dt>原始微信号</dt><dd class="full-text">{{ item.wechat || '原记录未提供' }}</dd></div>
+                      <div><dt>信息来源</dt><dd>{{ LEAD_SOURCES[item.source] }}</dd></div><div><dt>客户来源</dt><dd>{{ item.customerSource }}</dd></div>
+                      <div class="col-span-2"><dt>完整咨询内容</dt><dd class="full-text">{{ item.inquiry }}</dd></div>
+                    </dl>
+                  </div>
+                </div>
+                <div v-else>
+                  <div v-if="lead.status === 'converted'" class="bg-green-50 border border-green-200 rounded-lg p-5">
+                    <h4 class="font-bold text-green-800 mb-3">已转化</h4>
+                    <p class="text-sm text-gray-600">最近跟进：{{ latestFollow(lead)?.time || '-' }}</p>
+                    <dl v-if="lead.clientId && lead.conversion" class="submission-grid mt-4 bg-white p-4 rounded border border-green-100">
+                      <div><dt>关联客户账户</dt><dd>{{ lead.clientId }}</dd></div>
+                      <div><dt>开户状态</dt><dd>{{ lead.conversion.accountStatus }}</dd></div>
+                      <div><dt>首次入金时间</dt><dd>{{ lead.conversion.firstDepositAt }}</dd></div>
+                      <div><dt>首次入金金额</dt><dd>$ {{ lead.conversion.firstDeposit }}</dd></div>
+                      <div><dt>净入金（入-出）</dt><dd>$ {{ lead.conversion.netDeposit }}</dd></div>
+                      <div><dt>当前账户余额</dt><dd>$ {{ lead.conversion.balance }}</dd></div>
+                      <div><dt>累计交易手数</dt><dd>{{ lead.conversion.lots }} 手</dd></div>
+                      <div><dt>累计盈亏</dt><dd>$ {{ lead.conversion.profit }}</dd></div>
+                    </dl>
+                    <el-button v-if="lead.clientId" type="success" class="mt-4" @click="goClientDetail(lead.clientId)">查看客户画像（{{ lead.clientId }}）</el-button>
+                    <p v-else class="text-sm text-gray-500 mt-3">已更新留资跟进状态，当前没有关联客户账户；不会自动开户或生成资金数据。</p>
+                  </div>
+                  <el-empty v-else description="当前尚未转化" :image-size="70" />
+                  <div class="mt-6 p-5 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                    <h4 class="font-medium text-gray-800 mb-2">关联客户账户</h4>
+                    <p class="text-xs text-gray-500 mb-3">保留原型关联入口，本次不实现真实开户或客户账户绑定；当前关联：{{ lead.clientId || '无' }}。</p>
+                    <div class="flex gap-3"><input class="flex-1 min-w-0" placeholder="输入 CRM 客户 ID" disabled /><el-button disabled>保存关联</el-button></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <LeadActionDialog v-model="actionOpen" :mode="actionMode" :ids="[lead.id]" />
+        </template>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import LeadActionDialog from '../../components/leads/LeadActionDialog.vue'
+import { leadsStore, LEADS_KEY, LEAD_STATES, LEAD_SOURCES, WECHAT_SOURCE, copyLead, staffName, latestFollow } from '../../store/leadsDemo.js'
+const route = useRoute()
 const router = useRouter()
-
-const goClientDetail = (id) => {
-  router.push({ path: '/crm/client-detail', query: { id: String(id || '') } })
+const { records, error } = leadsStore
+const lead = computed(() => records.value.find(row => row.id === route.query.id))
+const profile = reactive({})
+const profileRevision = ref(0)
+const baseline = ref('')
+const dirty = computed(() => baseline.value && JSON.stringify(profile) !== baseline.value)
+const activeTab = ref('followup')
+const detailTabs = computed(() => [{ value: 'followup', label: '跟进记录' }, { value: 'changes', label: '变更记录' }, { value: 'submissions', label: '留资记录（' + (lead.value?.count || 0) + '）' }, { value: 'conversion', label: '转化成果' }])
+const actionOpen = ref(false)
+const actionMode = ref('assign')
+const canFollow = computed(() => lead.value?.assigneeId && !['unassigned', 'public'].includes(lead.value.status))
+const statusType = computed(() => ({ assigned: 'primary', unassigned: 'warning', public: 'info', invalid: 'danger', converted: 'success' }[lead.value?.status]))
+function loadProfile() {
+  if (!lead.value) return
+  const row = lead.value
+  Object.assign(profile, Object.fromEntries(['name', 'phone', 'wechat', 'whatsapp', 'otherContact', 'notes', 'channel'].map(key => [key, row[key] || ''])))
+  profileRevision.value = row.revision
+  baseline.value = JSON.stringify(profile)
 }
-
-const goBack = () => {
-  router.back()
+watch(lead, (row, previous) => {
+  if (!row) return
+  if (row.id !== previous?.id || !dirty.value) loadProfile()
+})
+watch(() => route.query.id, () => { activeTab.value = 'followup'; actionOpen.value = false; leadsStore.refresh(); loadProfile() }, { immediate: true })
+function saveProfile() {
+  if (!lead.value) return
+  if (!dirty.value) return ElMessage.info('基础信息未修改')
+  const result = leadsStore.saveProfile(lead.value.id, copyLead(profile), profileRevision.value)
+  if (!result.ok) return ElMessage.error(result.error)
+  loadProfile()
+  ElMessage.success('基础信息已保存，原始提交信息保留')
 }
+async function confirmDiscard() {
+  if (!dirty.value) return true
+  try { await ElMessageBox.confirm('基础信息尚未保存，是否放弃修改？', '未保存的修改', { confirmButtonText: '放弃修改', cancelButtonText: '继续编辑' }); loadProfile(); return true } catch { return false }
+}
+async function openAction(mode) {
+  if (!await confirmDiscard()) return
+  actionMode.value = mode; actionOpen.value = true
+}
+async function returnToPool() {
+  if (!await confirmDiscard()) return
+  const selected = lead.value
+  try { await ElMessageBox.confirm('确认退回公海并清空归属？已有跟进记录保留。', '退回公海', { confirmButtonText: '确认', cancelButtonText: '取消' }) } catch { return }
+  const result = leadsStore.returnToPool(selected.id, selected.revision)
+  result.ok ? ElMessage.success('已退回公海') : ElMessage.error(result.error)
+}
+onBeforeRouteLeave(confirmDiscard)
+const goBack = () => router.push('/crm/leads')
+const goClientDetail = id => router.push({ path: '/crm/client-detail', query: { id } })
+const showInviteNotice = () => ElMessage.info('当前演示记录没有可用的专属邀请链接；本次不接入真实邀请或开户流程')
+function sync(event) { if (!event.key || event.key === LEADS_KEY) leadsStore.refresh() }
+onMounted(() => window.addEventListener('storage', sync))
+onUnmounted(() => window.removeEventListener('storage', sync))
 </script>
+
+<style scoped>
+.profile-field { display: block; font-size: 14px; color: #374151; }
+.profile-field input, .profile-field textarea, .profile-field select { display: block; width: 100%; margin-top: 6px; }
+.full-text { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.75; }
+.change-table th, .change-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+.submission-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; font-size: 13px; }
+.submission-grid dt { color: #6b7280; margin-bottom: 4px; }
+.submission-grid dd { overflow-wrap: anywhere; }
+</style>

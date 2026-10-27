@@ -111,6 +111,7 @@ const routes = [
   { path: '/risk/blacklist', component: () => import('@/views/risk/blacklist.vue'), meta: { title: '黑名单管理', breadcrumb: ['风控管理', '黑名单管理'] } },
   { path: '/risk/close-interval', component: () => import('@/views/risk/close-interval.vue'), meta: { title: '平仓间隔统计', breadcrumb: ['风控管理', '平仓间隔统计'] } },
   { path: '/risk/lark-notifications', component: () => import('@/views/risk/lark-notifications.vue'), meta: { title: 'Lark 通知', breadcrumb: ['风控管理', 'Lark 通知'] } },
+  { path: '/risk/hedging-records', component: () => import('@/views/risk/hedging-records.vue'), meta: { title: '对冲交易记录', breadcrumb: ['风控管理', '对冲交易记录'] } },
 
 
   // 补充遗漏的子页面
@@ -152,6 +153,7 @@ const routes = [
   { path: '/other/customer-register-profile', component: () => import('@/views/other/customer-register-profile.vue'), meta: { title: '客户注册资料', breadcrumb: ['其他页面', '客户注册资料'], prdUrl: 'prd-customer-register-profile.html', prdTitle: '客户注册资料 - PRD' } },
   { path: '/other/new-home', component: () => import('@/views/other/new-home.vue'), meta: { title: '新版首页', breadcrumb: ['其他页面', '新版首页'] } },
   { path: '/other/faq-management', component: () => import('@/views/other/faq-management.vue'), meta: { title: 'FAQ内容管理', breadcrumb: ['其他页面', 'FAQ内容管理'] } },
+  { path: '/other/contact-us', component: () => import('@/views/other/contact-us.vue'), meta: { title: '联系我们', breadcrumb: ['其他页面', '联系我们'], prdUrl: 'prd-contact-us-leads.html', prdTitle: '联系我们表单及留资接入 PRD' } },
   { path: '/product/management', component: () => import('@/views/product/management.vue'), meta: { title: '商品管理列表', breadcrumb: ['商品管理'], prdUrl: 'prd-admin-product-management.html', prdTitle: '智能交易系统 - 后台商品管理列表 - PRD' } },
   { path: '/fund/payment-management', component: () => import('@/views/fund/payment-management.vue'), meta: { title: 'HATC CRM - 支付管理', breadcrumb: ['HATC CRM - 支付管理'] } },
   { path: '/fund/payment-config-records', component: () => import('@/views/fund/payment-config-records.vue'), meta: { title: '支付配置记录', breadcrumb: ['系统管理', '支付设置', '支付配置记录'], prdUrl: 'prd-payment-management.html', prdTitle: '支付设置 - 配置记录 - PRD' } },

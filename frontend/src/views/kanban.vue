@@ -39,6 +39,44 @@
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">出入金</span>
+<h3 class="text-base font-bold text-gray-800">出金审核</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">支付失败后，增加重新选择其他通道发起支付的功能。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个任务</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">出金审核</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5">支付失败后，增加重新选择其他通道发起支付的功能。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3 text-gray-500">暂无原型、PRD</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
 <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">风控管理</span>
 <h3 class="text-base font-bold text-gray-800">Lark 通知中心</h3>
 </div>

@@ -1,0 +1,18 @@
+/* Shared by editable rich text and every article preview; never styles other pages. */
+.news-content { color: #374151; font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 15px; line-height: 1.8; overflow-wrap: anywhere; }
+.news-content p { margin: 0 0 1em; }
+.news-content h2, .news-content h3, .news-content h4 { color: #1f2937; font-weight: 600; line-height: 1.45; margin: 1.3em 0 .6em; }
+.news-content h2 { font-size: 22px; }
+.news-content h3 { font-size: 19px; }
+.news-content h4 { font-size: 16px; }
+.news-content strong { font-weight: 700; }
+.news-content em { font-style: italic; }
+.news-content ul, .news-content ol { margin: .6em 0 1em; padding-left: 1.5em; }
+.news-content ul { list-style: disc; }
+.news-content ol { list-style: decimal; }
+.news-content li { margin: .2em 0; }
+.news-content a { color: #2563eb; text-decoration: underline; overflow-wrap: anywhere; }
+.news-content blockquote { border-left: 3px solid #d1a84f; padding-left: 16px; margin: 1em 0; color: #6b7280; }
+.news-content img { display: block; max-width: 100%; width: auto; height: auto; margin: 16px auto; object-fit: contain; }
+.news-content > :first-child { margin-top: 0; }
+.news-content > :last-child { margin-bottom: 0; }

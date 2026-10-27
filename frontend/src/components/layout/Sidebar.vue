@@ -162,6 +162,7 @@
         <el-menu-item index="/risk/ip-alert">登录 IP 一致性比对</el-menu-item>
         <el-menu-item index="/risk/blacklist">黑名单管理</el-menu-item>
         <el-menu-item index="/risk/close-interval">平仓间隔统计</el-menu-item>
+        <el-menu-item index="/risk/hedging-records">对冲交易记录</el-menu-item>
         <el-menu-item index="/risk/lark-notifications">Lark 通知</el-menu-item>
       </el-sub-menu>
 
@@ -175,6 +176,7 @@
         <el-menu-item index="/other/customer-register-profile">客户注册资料</el-menu-item>
         <el-menu-item index="/other/new-home">新版首页</el-menu-item>
         <el-menu-item index="/other/faq-management">FAQ内容管理</el-menu-item>
+        <el-menu-item index="/other/contact-us">联系我们</el-menu-item>
       </el-sub-menu>
     </el-menu>
     <!-- 底部收起按钮 -->

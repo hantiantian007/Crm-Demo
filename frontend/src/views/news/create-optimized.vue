@@ -1,772 +1,161 @@
 <template>
-  <div class="flex h-full bg-mainBg overflow-hidden">
-    <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto">
-      <main class="flex-1 min-w-0 flex flex-col h-screen">
- <section class="flex-1 overflow-auto p-6">
-  <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_480px] gap-6 items-start">
-   <div class="space-y-6">
-    <div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-      <div>
-       <div class="text-lg font-bold text-gray-900">
-        1. 基础信息
-       </div>
-      </div>
-      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-brandSoft text-[#8c6b45] border border-[#eadcc4]">
-       必填
-      </span>
-     </div>
-     <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
-      <label class="block">
-       <span class="text-sm font-medium text-gray-700">
-        类型
-       </span>
-       <div class="mt-2 h-11 rounded-xl border border-gray-200 bg-gray-50 px-4 flex items-center text-sm text-gray-700">
-        集团动态
-       </div>
-      </label>
-      <label class="block">
-       <span class="text-sm font-medium text-gray-700">
-        发布时间
-       </span>
-       <div class="mt-2 h-11 rounded-xl border border-gray-200 bg-gray-50 px-4 flex items-center justify-between text-sm text-gray-700">
-        <span>
-         2026-07-10 10:00
-        </span>
-        <i class="fa-regular fa-calendar text-gray-400">
-        </i>
-       </div>
-      </label>
-      <label class="block md:col-span-2">
-       <span class="text-sm font-medium text-gray-700">
-        语言版本
-       </span>
-       <div class="mt-2 flex flex-wrap gap-3 text-sm">
-        <span class="px-3 py-2 rounded-xl bg-brandSoft border border-[#eadcc4] text-[#8c6b45] font-medium">
-         <i class="fa-solid fa-check mr-1">
-         </i>
-         简体中文
-        </span>
-        <span class="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-500">
-         繁体中文
-        </span>
-        <span class="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-500">
-         English
-        </span>
-       </div>
-      </label>
-      <label class="block">
-       <span class="text-sm font-medium text-gray-700">
-        官网排序
-       </span>
-       <div class="mt-2 h-11 rounded-xl border border-gray-200 bg-gray-50 px-4 flex items-center text-sm text-gray-700">
-        10
-       </div>
-      </label>
-      <label class="block">
-       <span class="text-sm font-medium text-gray-700">
-        发布状态
-       </span>
-       <div class="mt-2 flex items-center gap-2 flex-wrap">
-        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium" :class="previewState === 'draft' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600 hover:bg-gray-50'" data-state="draft" type="button" @click="setPreviewState('draft')">
-         草稿
-        </button>
-        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium" :class="previewState === 'scheduled' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600 hover:bg-gray-50'" data-state="scheduled" type="button" @click="setPreviewState('scheduled')">
-         待发布
-        </button>
-        <button class="preview-toggle px-3 py-2 rounded-xl border text-sm font-medium" :class="previewState === 'published' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600 hover:bg-gray-50'" data-state="published" type="button" @click="setPreviewState('published')">
-         已发布
-        </button>
-       </div>
-      </label>
-      <label class="block md:col-span-2">
-       <span class="text-sm font-medium text-gray-700">
-        简体中文标题
-       </span>
-       <div class="mt-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 leading-7">
-        光明同行，守护未来丨 HATC 华安泰昌走进辽宁省光明学校开展公益助学行动
-       </div>
-      </label>
-     </div>
+  <div class="news-editor p-4 md:p-6 bg-gray-50">
+    <div class="page-actions">
+      <h2>{{ route.query.id ? '编辑集团动态' : '新增集团动态' }}</h2>
+      <div class="flex flex-wrap gap-2"><el-button @click="back">返回列表</el-button><el-button :disabled="!article" @click="save('draft')">保存草稿</el-button><el-button :disabled="!article" @click="save(article.status)">保存并返回</el-button><el-button type="primary" :disabled="!article" @click="save('published')">发布</el-button></div>
     </div>
-    <div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-      <div>
-       <div class="text-lg font-bold text-gray-900">
-        2. 封面与摘要
-       </div>
+    <el-alert v-if="loadError" :title="loadError" type="error" show-icon :closable="false" />
+    <div v-if="article" class="editor-grid">
+      <div class="space-y-5 min-w-0">
+        <section class="section-card">
+          <h3>1. 基础信息</h3>
+          <el-form label-position="top" class="section-body basic-grid" @submit.prevent>
+            <el-form-item label="类型"><el-input model-value="集团动态" disabled /></el-form-item>
+            <el-form-item label="发布状态"><el-select v-model="article.status"><el-option v-for="(label, value) in STATUS_LABELS" :key="value" :label="label" :value="value" /></el-select></el-form-item>
+            <el-form-item label="文章标题" required class="full-width"><el-input v-model="article.title" maxlength="200" show-word-limit placeholder="请输入文章标题" /></el-form-item>
+            <el-form-item label="语言版本"><el-select v-model="article.language"><el-option v-for="value in languages" :key="value" :label="value" :value="value" /></el-select></el-form-item>
+            <el-form-item label="投放站点"><el-select v-model="article.site"><el-option v-for="value in sites" :key="value" :label="value" :value="value" /></el-select></el-form-item>
+            <el-form-item label="官网排序"><el-input-number v-model="article.sort" :min="0" :max="99999" :precision="0" /></el-form-item>
+            <el-form-item label="显示日期"><el-date-picker v-model="article.displayDate" type="date" value-format="YYYY-MM-DD" placeholder="选择日期" /></el-form-item>
+            <div class="full-width text-xs text-gray-500">首次发布时间：{{ article.publishedAt || '发布时自动记录' }} · 状态和内容在保存后生效，仅用于本地演示。</div>
+          </el-form>
+        </section>
+        <section class="section-card">
+          <h3>2. 封面与摘要</h3>
+          <el-form label-position="top" class="section-body" @submit.prevent>
+            <el-form-item label="封面图片"><NewsImageInput v-model="article.cover" label="封面图片地址" /></el-form-item>
+            <el-form-item label="文章摘要"><el-input v-model="article.summary" type="textarea" :rows="3" maxlength="1000" show-word-limit placeholder="输入文章摘要，用于官网首屏展示" /></el-form-item>
+          </el-form>
+        </section>
+        <section class="section-card">
+          <div class="section-heading"><h3>3. 正文与内容模块</h3><el-button type="primary" plain @click="isModuleModalOpen = true">新增模块</el-button></div>
+          <div class="section-body">
+            <p class="text-xs text-gray-500 mb-4">当前 {{ article.modules.length }} 个模块。编辑内容与顺序，右侧同步预览；粘贴内容自动清除字体、颜色和固定尺寸。</p>
+            <div v-for="(module, index) in article.modules" :key="module.id" class="module-editor">
+              <div class="module-heading">
+                <strong>{{ index + 1 }}. {{ MODULE_LABELS[module.type] }}模块</strong>
+                <div class="flex gap-2"><el-button size="small" :disabled="index === 0" @click="moveModule(index, -1)">上移</el-button><el-button size="small" :disabled="index === article.modules.length - 1" @click="moveModule(index, 1)">下移</el-button><el-button size="small" type="danger" plain @click="removeModule(index)">删除</el-button></div>
+              </div>
+              <div class="module-fields">
+                <template v-if="module.type === 'image' || module.type === 'image-text'">
+                  <label>图片<NewsImageInput v-model="module.image" /></label>
+                  <label>图片说明<el-input v-model="module.caption" maxlength="300" placeholder="可选，显示在图片下方" /></label>
+                </template>
+                <NewsRichText v-if="module.type === 'rich' || module.type === 'image-text'" v-model="module.html" :label="`${index + 1}. ${MODULE_LABELS[module.type]}内容`" />
+                <template v-if="module.type === 'double' || module.type === 'carousel'">
+                  <div v-for="(image, imageIndex) in module.images" :key="`${module.id}-${imageIndex}`" class="image-fields">
+                    <div class="flex items-center justify-between"><span>图片 {{ imageIndex + 1 }}</span><el-button v-if="module.type === 'carousel'" link type="danger" @click="module.images.splice(imageIndex, 1)">移除图片</el-button></div>
+                    <NewsImageInput v-model="image.src" :label="`图片 ${imageIndex + 1} 地址`" />
+                    <el-input v-model="image.caption" maxlength="300" placeholder="图片说明（可选）" :aria-label="`图片 ${imageIndex + 1} 说明`" />
+                  </div>
+                  <el-button v-if="module.type === 'carousel'" @click="module.images.push({ src: '', caption: '' })">添加轮播图片</el-button>
+                  <p class="text-xs text-gray-500">{{ module.type === 'double' ? '桌面端并排，窄屏自动纵向排列。' : '统一 16:9 图片容器，预览支持上一张 / 下一张切换。' }}</p>
+                </template>
+              </div>
+            </div>
+            <el-empty v-if="!article.modules.length" description="点击新增模块，添加正文或图片" :image-size="60" />
+          </div>
+        </section>
       </div>
-      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
-       封面 + 摘要
-      </span>
-     </div>
-     <div class="p-6 grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] gap-6">
-      <div class="rounded-2xl border border-dashed border-[#d9bf8e] bg-[#fffcf5] p-4">
-       <div class="text-sm font-semibold text-gray-800">
-        封面图
-       </div>
-       <p class="mt-1 text-xs leading-6 text-gray-500">
-        推荐尺寸：1200 x 675
-       </p>
-       <div class="mt-4 overflow-hidden rounded-xl border border-[#eadcc4]">
-        <img alt="封面图示意" class="h-40 w-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20modern%20school%20campus%20entrance%20in%20northeast%20China%2C%20community%20charity%20visit%2C%20overcast%20day%2C%20documentary%20photography%2C%20clean%20architecture%2C%20natural%20lighting&amp;image_size=landscape_16_9"/>
-       </div>
-       <button class="mt-4 w-full rounded-xl bg-[#4a90e2] text-white text-sm py-2.5 hover:opacity-90 transition-colors">
-        <i class="fa-solid fa-upload mr-1">
-        </i>
-        重新上传
-       </button>
-      </div>
-      <div class="space-y-4">
-       <label class="block">
-        <span class="text-sm font-medium text-gray-700">
-         摘要 / 导语
-        </span>
-        <div class="mt-2 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 leading-7 min-h-[132px]">
-         2026 年 7 月 10 日，HATC 华安泰昌公益团队走进辽宁省光明学校，围绕“光明同行，守护未来”主题开展公益助学活动，通过爱心物资捐赠、互动交流与校园深度走访，为在校学生送去实际帮扶与温暖关怀。
-        </div>
-       </label>
-       <div class="grid grid-cols-2 gap-3 text-sm">
-        <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3">
-         <div class="text-xs text-gray-500">
-          SEO 描述
-         </div>
-         <div class="mt-2 text-gray-700">
-          自动带入摘要
-         </div>
-        </div>
-        <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3">
-         <div class="text-xs text-gray-500">
-          分享摘要
-         </div>
-         <div class="mt-2 text-gray-700">
-          自动带入摘要
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
+      <aside class="section-card preview-panel">
+        <div class="section-heading"><h3>官网效果预览</h3><el-radio-group v-model="deviceMode" size="small"><el-radio-button label="desktop">桌面端</el-radio-button><el-radio-button label="mobile">移动端</el-radio-button></el-radio-group></div>
+        <p class="preview-note">{{ STATUS_LABELS[article.status] }} · 当前编辑内容实时预览，未保存内容不会出现在列表中。</p>
+        <NewsArticle :article="article" :mobile="deviceMode === 'mobile'" />
+      </aside>
     </div>
-    <div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-     <div class="px-6 py-4 border-b border-gray-100">
-      <div class="flex items-center justify-between gap-4 flex-wrap">
-       <div>
-        <div class="text-lg font-bold text-gray-900">
-         3. 正文编辑
-        </div>
-       </div>
-       <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-600 border border-gray-200 text-xs font-semibold">
-        正文内容
-       </span>
-      </div>
-     </div>
-     <div class="p-6">
-      <div class="rounded-t-2xl border border-gray-200 bg-gray-50 px-4 py-3 flex flex-wrap items-center gap-4 text-sm text-gray-500">
-       <span>
-        正文
-       </span>
-       <i class="fa-solid fa-bold">
-       </i>
-       <i class="fa-solid fa-italic">
-       </i>
-       <i class="fa-solid fa-list-ul">
-       </i>
-       <i class="fa-solid fa-link">
-       </i>
-       <i class="fa-regular fa-image">
-       </i>
-       <span class="ml-auto text-xs">
-        默认字号：16px
-       </span>
-      </div>
-      <div class="rounded-b-2xl border-x border-b border-gray-200 bg-white p-5 article-copy">
-       <p class="lead">
-        2026 年 7 月 10 日，HATC 华安泰昌公益团队走进辽宁省光明学校。这是一所以承担孤儿养育与教育工作的特殊学校，团队围绕“光明同行，守护未来”主题开展公益助学活动。
-       </p>
-       <p>
-        学校覆盖小学、初中、职业高中等多个学段。企业代表与学校老师代表深入交流学校现状，通过爱心物资捐赠、趣味互动交流、校园深度走访等丰富形式，为在校学生送去切实帮助与温暖关怀。
-       </p>
-       <h3>
-        正文规范建议
-       </h3>
-       <p>
-        首段只承担事件概述，不要把全部背景、人物和结果压在一个自然段内。图片尽量通过下方模块区插入，避免在正文里直接做双图拼接，导致官网详情页阅读节奏被打断。
-       </p>
-      </div>
-     </div>
-    </div>
-    <div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-      <div>
-       <div class="text-lg font-bold text-gray-900">
-        4. 内容模块
-       </div>
-       <p class="text-xs text-gray-500 mt-1">
-        支持模块新增、排序、删除与配置；当前示例已覆盖单图、双图、轮播。
-       </p>
-      </div>
-      <button class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm hover:opacity-90 transition-colors" type="button" @click="openModuleModal">
-       <i class="fa-solid fa-plus mr-1">
-       </i>
-       新增模块
-      </button>
-     </div>
-     <div class="p-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
-      <div class="module-card active rounded-2xl border p-4 transition-all">
-       <div class="flex items-center justify-between">
-        <div class="font-semibold text-gray-800">
-         单图模块（长图 1）
-        </div>
-        <span class="text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded-full">
-         推荐
-        </span>
-       </div>
-       <div class="mt-4 rounded-xl overflow-hidden border border-gray-200">
-        <img alt="单图模块长图一" class="w-full h-44 object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20school%20campus%20wide%20shot%2C%20charity%20visit%20scene%2C%20documentary%20news%20photography%2C%20natural%20light%2C%20clean%20composition&amp;image_size=landscape_16_9"/>
-       </div>
-       <div class="mt-4 text-sm text-gray-600 leading-7">
-        用两个单图模块连续插入即可实现“上下两张长图”，不需要双图并排模块。
-       </div>
-      </div>
-      <div class="module-card rounded-2xl border border-gray-200 p-4 transition-all">
-       <div class="flex items-center justify-between">
-        <div class="font-semibold text-gray-800">
-         单图模块（长图 2）
-        </div>
-        <span class="text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded-full">
-         推荐
-        </span>
-       </div>
-       <div class="mt-4 rounded-xl overflow-hidden border border-gray-200">
-        <img alt="单图模块长图二" class="w-full h-44 object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20volunteers%20visiting%20a%20school%20classroom%2C%20charity%20event%2C%20documentary%20news%20photo%2C%20natural%20light%2C%20wide%20angle&amp;image_size=landscape_16_9"/>
-       </div>
-       <div class="mt-4 text-sm text-gray-600 leading-7">
-        同样用单图模块承载，前端统一设置最大宽度与上下间距，保证移动端不拥挤。
-       </div>
-      </div>
-      <div class="module-card rounded-2xl border border-gray-200 p-4 transition-all">
-       <div class="flex items-center justify-between">
-        <div class="font-semibold text-gray-800">
-         双图模块（方图并排）
-        </div>
-        <span class="text-xs text-amber-600 bg-amber-50 border border-amber-100 px-2 py-1 rounded-full">
-         需规则
-        </span>
-       </div>
-       <div class="mt-4 grid grid-cols-2 gap-2">
-        <div class="aspect-square overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
-         <img alt="正方形图一" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20students%20smiling%20in%20a%20school%20yard%2C%20charity%20visit%2C%20documentary%20news%20photo%2C%20natural%20light&amp;image_size=square"/>
-        </div>
-        <div class="aspect-square overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
-         <img alt="正方形图二" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20volunteers%20handing%20supplies%20to%20students%2C%20charity%20activity%2C%20documentary%20news%20photo%2C%20natural%20light&amp;image_size=square"/>
-        </div>
-       </div>
-       <div class="mt-4 text-sm text-gray-600 leading-7">
-        双图并排必须定义展示比例（本例为 1:1），移动端建议自动堆叠或缩放为单列。
-       </div>
-      </div>
-      <div class="module-card rounded-2xl border border-gray-200 p-4 transition-all">
-       <div class="flex items-center justify-between">
-        <div class="font-semibold text-gray-800">
-         轮播模块（活动组图）
-        </div>
-        <span class="text-xs text-violet-600 bg-violet-50 border border-violet-100 px-2 py-1 rounded-full">
-         多图
-        </span>
-       </div>
-       <div class="mt-4 grid grid-cols-3 gap-2">
-        <div class="h-28 overflow-hidden rounded-xl border border-gray-200">
-         <img alt="轮播图一" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20group%20photo%20of%20charity%20team%20at%20school%2C%20documentary%20news%20photo%2C%20natural%20light&amp;image_size=landscape_16_9"/>
-        </div>
-        <div class="h-28 overflow-hidden rounded-xl border border-gray-200">
-         <img alt="轮播图二" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20students%20receiving%20supplies%20in%20school%20hall%2C%20documentary%20news%20photo%2C%20natural%20light&amp;image_size=landscape_16_9"/>
-        </div>
-        <div class="h-28 overflow-hidden rounded-xl border border-gray-200">
-         <img alt="轮播图三" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20school%20visit%20conversation%20between%20volunteers%20and%20teachers%2C%20documentary%20news%20photo&amp;image_size=landscape_16_9"/>
-        </div>
-       </div>
-       <div class="mt-4 text-sm text-gray-600 leading-7">
-        适合承接 3 张及以上活动现场图，前端统一按 16:9 比例轮播，移动端体验更稳定。
-       </div>
-      </div>
-     </div>
-     <div class="px-6 pb-6">
-      <div class="rounded-2xl border border-gray-200 bg-gray-50 p-5">
-       <div class="flex items-center justify-between">
-        <div>
-         <div class="text-sm font-semibold text-gray-800">
-          模块配置顺序
-         </div>
-        </div>
-        <span class="px-3 py-1 rounded-full bg-white border border-gray-200 text-xs font-semibold text-gray-600">
-         当前 {{ modules.length }} 个模块
-        </span>
-       </div>
-       <div class="mt-4 space-y-3">
-        <div v-for="(module, index) in modules" :key="module.id" class="rounded-2xl border border-gray-200 bg-white px-4 py-4 module-sequence-item">
-         <div class="flex items-center justify-between gap-4">
-          <div>
-           <div class="text-sm font-semibold text-gray-800">
-            模块 {{ pad2(index + 1) }}：{{ module.title }}
-           </div>
-           <div class="mt-1 text-sm text-gray-600">
-            {{ module.desc }}
-           </div>
-          </div>
-          <div class="flex items-center gap-2">
-           <span class="px-2.5 py-1 rounded-full text-xs font-semibold border" :class="moduleTagClass(module.tag)">
-            {{ module.tag }}
-           </span>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" type="button" :disabled="index === 0" @click="moveModule(index, -1)">
-            <i class="fa-solid fa-arrow-up">
-            </i>
-           </button>
-           <button class="w-8 h-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" type="button" :disabled="index === modules.length - 1" @click="moveModule(index, 1)">
-            <i class="fa-solid fa-arrow-down">
-            </i>
-           </button>
-           <button class="w-8 h-8 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed" type="button" :disabled="modules.length <= 1" @click="removeModule(index)">
-            <i class="fa-regular fa-trash-can">
-            </i>
-           </button>
-          </div>
-         </div>
-         <div :class="module.details.length === 3 ? 'mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm' : 'mt-4 grid grid-cols-1 md:grid-cols-4 gap-3 text-sm'">
-          <div v-for="detail in module.details" :key="detail.label" class="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3">
-           <div class="text-xs text-gray-500">
-            {{ detail.label }}
-           </div>
-           <div class="mt-2 text-gray-800 font-medium">
-            {{ detail.value }}
-           </div>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-    </div>
-   </div>
-   <aside class="xl:sticky xl:top-6 space-y-6">
-    <div class="rounded-2xl border border-gray-200 bg-white shadow-soft overflow-hidden">
-     <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-      <div>
-       <div class="text-lg font-bold text-gray-900">
-        官网效果预览
-       </div>
-       <p class="text-xs text-gray-500 mt-1">
-        右侧预览用来帮助运营提前判断官网 Web 端在桌面端与移动端的阅读感受。
-       </p>
-      </div>
-      <div class="flex items-center gap-2">
-       <button class="device-toggle px-3 py-1.5 rounded-full border text-xs font-medium" :class="deviceMode === 'desktop' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600'" data-device="desktop" type="button" @click="setDeviceMode('desktop')">
-        <i class="fa-solid fa-desktop mr-1">
-        </i>
-        桌面端
-       </button>
-       <button class="device-toggle px-3 py-1.5 rounded-full border text-xs font-medium" :class="deviceMode === 'mobile' ? 'border-brand text-[#8c6b45] bg-brandSoft' : 'border-gray-200 text-gray-600'" data-device="mobile" type="button" @click="setDeviceMode('mobile')">
-        <i class="fa-solid fa-mobile-screen-button mr-1">
-        </i>
-        移动端
-       </button>
-       <span class="px-3 py-1 rounded-full text-xs font-semibold border" :class="isPublished ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-gray-100 text-gray-600 border-gray-200'">
-        {{ previewBadgeText }}
-       </span>
-      </div>
-     </div>
-     <div class="preview-device" id="desktopPreview" v-show="deviceMode === 'desktop'">
-      <div class="px-5 py-4 bg-[#faf8f2] border-b border-[#f0eadf]">
-       <div class="text-xs text-gray-500">
-        集团动态 &gt; 动态详情
-       </div>
-       <div class="mt-3 text-[28px] leading-[1.4] font-bold text-[#1E2025]">
-        光明同行，守护未来丨 HATC 华安泰昌走进辽宁省光明学校开展公益助学行动
-       </div>
-       <div class="mt-3 text-sm text-[#929BA5]">
-        2026-07-10
-       </div>
-      </div>
-      <div class="p-5" id="publishedPreviewDesktop" v-show="isPublished">
-       <div class="rounded-2xl bg-[#f8fafc] border border-slate-200 px-4 py-4">
-        <div class="text-xs font-semibold tracking-[0.18em] text-brand">
-         ARTICLE SUMMARY
-        </div>
-        <p class="mt-3 text-sm leading-7 text-gray-700">
-         2026 年 7 月 10 日，HATC 华安泰昌公益团队走进辽宁省光明学校，通过捐赠、交流与走访等方式开展公益助学行动，向在校学生送去实际帮助与温暖关怀。
-        </p>
-       </div>
-       <div class="mt-6 article-copy">
-        <p>
-         2026 年 7 月 10 日，HATC 华安泰昌公益团队走进辽宁省光明学校。这是一所以承担孤儿养育与教育工作的特殊学校，团队围绕“光明同行，守护未来”主题开展公益助学活动。
-        </p>
-        <p>
-         学校覆盖小学、初中、职业高中等多个学段。企业代表与学校老师代表深入交流学校现状，通过爱心物资捐赠、趣味互动交流、校园深度走访等丰富形式，为在校学生送去切实帮助与温暖关怀。
-        </p>
-       </div>
-       <figure class="mt-6">
-        <div class="overflow-hidden rounded-2xl border border-gray-200">
-         <img alt="正文后长图一" class="w-full h-[250px] object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20school%20campus%20wide%20shot%2C%20charity%20visit%20scene%2C%20documentary%20news%20photography%2C%20natural%20light%2C%20clean%20composition&amp;image_size=landscape_16_9"/>
-        </div>
-        <figcaption class="mt-3 text-center text-xs text-gray-400">
-         长方形图片 01（单图模块），按规则单列展示。
-        </figcaption>
-       </figure>
-       <figure class="mt-6">
-        <div class="overflow-hidden rounded-2xl border border-gray-200">
-         <img alt="正文后长图二" class="w-full h-[250px] object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20volunteers%20visiting%20a%20school%20classroom%2C%20charity%20event%2C%20documentary%20news%20photo%2C%20natural%20light%2C%20wide%20angle&amp;image_size=landscape_16_9"/>
-        </div>
-        <figcaption class="mt-3 text-center text-xs text-gray-400">
-         长方形图片 02（单图模块），继续单列，避免并排挤压。
-        </figcaption>
-       </figure>
-       <div class="mt-6 article-copy">
-        <p>
-         接着继续正文说明（正文块）。图片与正文的间距由前端统一控制，不需要运营手工插空行。
-        </p>
-       </div>
-       <figure class="mt-6">
-        <div class="grid grid-cols-2 gap-3">
-         <div class="aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
-          <img alt="正方形并排图一" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20students%20smiling%20in%20a%20school%20yard%2C%20charity%20visit%2C%20documentary%20news%20photo%2C%20natural%20light&amp;image_size=square"/>
-         </div>
-         <div class="aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
-          <img alt="正方形并排图二" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20volunteers%20handing%20supplies%20to%20students%2C%20charity%20activity%2C%20documentary%20news%20photo%2C%20natural%20light&amp;image_size=square"/>
-         </div>
-        </div>
-        <figcaption class="mt-3 text-center text-xs text-gray-400">
-         正方形双图并排（1:1）。桌面端并排，移动端建议自动堆叠。
-        </figcaption>
-       </figure>
-       <div class="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-4">
-        <div class="text-sm font-semibold text-gray-800">
-         为什么这版会比现在更稳定
-        </div>
-        <ul class="mt-3 text-sm text-gray-600 leading-7 list-disc pl-5">
-         <li>
-          标题、时间、摘要和正文分开维护，页面层级更清晰。
-         </li>
-         <li>
-          图片通过模块区控制，不再依赖富文本随机并排。
-         </li>
-         <li>
-          官网详情页可直接按模块渲染，减少运营手工排版影响。
-         </li>
-        </ul>
-       </div>
-      </div>
-      <div class="p-5" id="emptyPreviewDesktop" v-show="!isPublished">
-       <div class="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-6 py-10 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-white border border-gray-200 mx-auto flex items-center justify-center text-gray-400">
-         <i class="fa-regular fa-eye-slash text-xl">
-         </i>
-        </div>
-        <div class="mt-4 text-base font-semibold text-gray-800">
-         该动态暂未发布
-        </div>
-        <p class="mt-2 text-sm text-gray-500 leading-7">
-         当前状态为草稿或待发布时，前台不再渲染空标题、空日期和空正文骨架，而是给出明确提示。
-        </p>
-        <div class="mt-5 inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs text-gray-500">
-         <i class="fa-solid fa-circle-info text-brand">
-         </i>
-         这正是你线上 `detail/88` 当前最需要补的空态能力
-        </div>
-       </div>
-      </div>
-     </div>
-     <div class="preview-device px-5 py-6 bg-[#f7f7f7]" id="mobilePreview" v-show="deviceMode === 'mobile'">
-      <div class="mx-auto w-[320px] rounded-[28px] border-[10px] border-[#111827] bg-white shadow-soft overflow-hidden">
-       <div class="h-6 bg-[#111827] flex items-center justify-center">
-        <div class="w-20 h-1.5 rounded-full bg-gray-500">
-        </div>
-       </div>
-       <div class="px-4 py-4 border-b border-gray-100">
-        <div class="text-[11px] text-gray-400">
-         集团动态 &gt; 动态详情
-        </div>
-        <div class="mt-3 text-[20px] leading-8 font-bold text-[#1E2025]">
-         光明同行，守护未来丨 HATC 华安泰昌走进辽宁省光明学校开展公益助学行动
-        </div>
-        <div class="mt-2 text-xs text-[#929BA5]">
-         2026-07-10
-        </div>
-       </div>
-       <div class="px-4 py-4" id="publishedPreviewMobile" v-show="isPublished">
-        <div class="rounded-2xl bg-[#f8fafc] border border-slate-200 px-4 py-4">
-         <div class="text-[11px] font-semibold tracking-[0.18em] text-brand">
-          SUMMARY
-         </div>
-         <p class="mt-2 text-[13px] leading-6 text-gray-700">
-          HATC 华安泰昌公益团队走进辽宁省光明学校，通过捐赠、交流与走访等方式开展公益助学行动。
-         </p>
-        </div>
-        <div class="mt-5 text-[14px] leading-7 text-gray-700 space-y-4">
-         <p>
-          移动端下标题换行会更多，所以摘要必须更短，正文段落必须更轻，图片要保持单列展示。
-         </p>
-         <p>
-          如果仍然依赖运营在富文本里随意并排插图，手机端会非常容易出现拥挤、错位和阅读中断。
-         </p>
-        </div>
-        <div class="mt-5 space-y-4">
-         <figure>
-          <div class="overflow-hidden rounded-2xl border border-gray-200">
-           <img alt="移动端长图一" class="w-full h-[188px] object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20school%20campus%20wide%20shot%2C%20charity%20visit%20scene%2C%20documentary%20news%20photography%2C%20natural%20light%2C%20clean%20composition&amp;image_size=portrait_16_9"/>
-          </div>
-          <figcaption class="mt-2 text-center text-[11px] text-gray-400 leading-5">
-           长方形图片 01：移动端仍然单列展示。
-          </figcaption>
-         </figure>
-         <figure>
-          <div class="overflow-hidden rounded-2xl border border-gray-200">
-           <img alt="移动端长图二" class="w-full h-[188px] object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20volunteers%20visiting%20a%20school%20classroom%2C%20charity%20event%2C%20documentary%20news%20photo%2C%20natural%20light%2C%20wide%20angle&amp;image_size=portrait_16_9"/>
-          </div>
-          <figcaption class="mt-2 text-center text-[11px] text-gray-400 leading-5">
-           长方形图片 02：继续单列，阅读节奏更稳。
-          </figcaption>
-         </figure>
-         <div class="text-[14px] leading-7 text-gray-700">
-          接着继续正文（正文块），再插入正方形双图模块。
-         </div>
-         <div class="space-y-3">
-          <div class="aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
-           <img alt="移动端正方形一" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20students%20smiling%20in%20a%20school%20yard%2C%20charity%20visit%2C%20documentary%20news%20photo%2C%20natural%20light&amp;image_size=square"/>
-          </div>
-          <div class="aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
-           <img alt="移动端正方形二" class="w-full h-full object-cover" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=realistic%20volunteers%20handing%20supplies%20to%20students%2C%20charity%20activity%2C%20documentary%20news%20photo%2C%20natural%20light&amp;image_size=square"/>
-          </div>
-         </div>
-         <div class="text-center text-[11px] text-gray-400 leading-5">
-          正方形双图模块：移动端建议自动堆叠为单列。
-         </div>
-        </div>
-       </div>
-       <div class="px-4 py-10" id="emptyPreviewMobile" v-show="!isPublished">
-        <div class="rounded-2xl border border-dashed border-gray-300 bg-gray-50 px-4 py-8 text-center">
-         <div class="w-12 h-12 rounded-2xl bg-white border border-gray-200 mx-auto flex items-center justify-center text-gray-400">
-          <i class="fa-regular fa-eye-slash">
-          </i>
-         </div>
-         <div class="mt-3 text-sm font-semibold text-gray-800">
-          该动态暂未发布
-         </div>
-         <p class="mt-2 text-xs text-gray-500 leading-6">
-          移动端同样不能出现空白详情页，必须明确告知当前内容状态。
-         </p>
-        </div>
-       </div>
-      </div>
-      <div class="mt-4 rounded-2xl border border-sky-100 bg-sky-50 px-4 py-4">
-       <div class="text-sm font-semibold text-sky-700">
-        为什么要看移动端预览
-       </div>
-       <ul class="mt-2 text-sm text-sky-700 leading-7 list-disc pl-5">
-        <li>
-         标题在窄屏下更容易出现 3 到 4 行换行。
-        </li>
-        <li>
-         摘要过长会把首屏全部占满，导致正文进入过慢。
-        </li>
-        <li>
-         双图模块在移动端往往要转成单列堆叠，而不是继续并排。
-        </li>
-       </ul>
-      </div>
-     </div>
-    </div>
-   </aside>
-   <div class="fixed inset-0 z-[90] bg-black/40 flex items-center justify-center px-4" v-show="isModuleModalOpen">
-    <div class="w-full max-w-[520px] rounded-2xl bg-white border border-gray-200 shadow-2xl overflow-hidden">
-     <div class="h-14 px-6 border-b border-gray-100 flex items-center justify-between">
-      <div class="text-base font-semibold text-gray-800">
-       新增模块
-      </div>
-      <button class="text-gray-400 hover:text-gray-600" type="button" @click="closeModuleModal">
-       <i class="fa-solid fa-xmark text-lg">
-       </i>
-      </button>
-     </div>
-     <div class="p-6 space-y-3">
-      <button class="w-full h-11 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-sm text-gray-700 flex items-center justify-between px-4" type="button" @click="addModule('single-image')">
-       <span>单图模块</span>
-       <span class="text-xs text-gray-400">single-image</span>
-      </button>
-      <button class="w-full h-11 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-sm text-gray-700 flex items-center justify-between px-4" type="button" @click="addModule('double-image')">
-       <span>双图模块</span>
-       <span class="text-xs text-gray-400">double-image</span>
-      </button>
-      <button class="w-full h-11 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-sm text-gray-700 flex items-center justify-between px-4" type="button" @click="addModule('carousel')">
-       <span>轮播模块</span>
-       <span class="text-xs text-gray-400">carousel</span>
-      </button>
-     </div>
-     <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-end">
-      <button class="h-9 px-4 rounded-xl bg-white border border-gray-200 text-gray-600 text-sm hover:bg-gray-50" type="button" @click="closeModuleModal">
-       关闭
-      </button>
-     </div>
-    </div>
-   </div>
-  </div>
- </section>
-</main>
-
-    </div>
+    <el-dialog v-model="isModuleModalOpen" title="新增内容模块" width="min(480px, 94vw)">
+      <div class="module-options"><el-button v-for="(label, type) in MODULE_LABELS" :key="type" @click="addModule(type)">{{ label }}模块</el-button></div>
+      <template #footer><el-button @click="isModuleModalOpen = false">取消</el-button></template>
+    </el-dialog>
   </div>
 </template>
-
 <script setup>
-import { computed, ref } from 'vue'
-
-const previewState = ref('published')
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import NewsArticle from '../../components/news/NewsArticle.vue'
+import NewsImageInput from '../../components/news/NewsImageInput.vue'
+import NewsRichText from '../../components/news/NewsRichText.vue'
+import { groupNewsStore, newArticle, newModule, cloneNews, MODULE_LABELS, STATUS_LABELS } from '../../store/groupNewsDemo.js'
+import { safeUrl } from '../../utils/groupNewsContent.js'
+const route = useRoute()
+const router = useRouter()
+const article = ref(null)
+const loadError = ref('')
+const baseline = ref('')
 const deviceMode = ref('desktop')
 const isModuleModalOpen = ref(false)
-
-const modules = ref([
-  {
-    id: 'm1',
-    title: '单图模块（长图 1）',
-    desc: '用于承接正文后的第一张长方形图片，按单列展示。',
-    tag: 'single-image',
-    details: [
-      { label: '展示比例', value: '原比例 / auto' },
-      { label: '图注', value: '长方形图片 01' },
-      { label: '移动端', value: '单列展示' }
-    ]
-  },
-  {
-    id: 'm2',
-    title: '单图模块（长图 2）',
-    desc: '继续承接第二张长方形图片，形成上下两张长图结构。',
-    tag: 'single-image',
-    details: [
-      { label: '展示比例', value: '原比例 / auto' },
-      { label: '图注', value: '长方形图片 02' },
-      { label: '间距策略', value: '与上下模块统一 24px' }
-    ]
-  },
-  {
-    id: 'm3',
-    title: '双图模块（方图并排）',
-    desc: '承接后续两张正方形图片，桌面端并排，移动端建议自动堆叠。',
-    tag: 'double-image',
-    details: [
-      { label: '展示比例', value: '1:1' },
-      { label: '桌面端', value: '双列并排' },
-      { label: '移动端', value: '自动堆叠' },
-      { label: '图注', value: '活动现场' }
-    ]
-  },
-  {
-    id: 'm4',
-    title: '轮播模块（活动组图）',
-    desc: '承接 3 张以上活动现场图，前端统一按轮播形式渲染，避免正文过长。',
-    tag: 'carousel',
-    details: [
-      { label: '图片数量', value: '3 张' },
-      { label: '展示比例', value: '16:9' },
-      { label: '自动播放', value: '关闭' },
-      { label: '指示点', value: '显示' }
-    ]
-  }
-])
-
-const isPublished = computed(() => previewState.value === 'published')
-const previewBadgeText = computed(() => (isPublished.value ? '已发布效果' : '未发布预览'))
-
-const pad2 = (n) => String(n).padStart(2, '0')
-
-const setPreviewState = (state) => {
-  previewState.value = state
+const languages = ['简体中文', '繁体中文', 'English']
+const sites = ['HK', 'Group', 'HK + Group']
+const dirty = computed(() => article.value && JSON.stringify(article.value) !== baseline.value)
+function load() {
+  article.value = null
+  loadError.value = ''
+  if (!groupNewsStore.refresh()) { loadError.value = groupNewsStore.error.value; return }
+  const id = route.query.id
+  const found = id ? groupNewsStore.articles.value.find(a => a.id === id) : newArticle()
+  if (!found) { loadError.value = '该动态不存在或已删除，请返回列表重新选择。'; return }
+  article.value = cloneNews(found)
+  baseline.value = JSON.stringify(article.value)
 }
-
-const setDeviceMode = (mode) => {
-  deviceMode.value = mode
-}
-
-const openModuleModal = () => {
-  isModuleModalOpen.value = true
-}
-
-const closeModuleModal = () => {
-  isModuleModalOpen.value = false
-}
-
-const moveModule = (index, delta) => {
+watch(() => route.query.id, load, { immediate: true })
+function addModule(type) { article.value.modules.push(newModule(type)); isModuleModalOpen.value = false }
+function moveModule(index, delta) {
   const nextIndex = index + delta
-  if (nextIndex < 0 || nextIndex >= modules.value.length) return
-  const list = [...modules.value]
-  const [picked] = list.splice(index, 1)
-  list.splice(nextIndex, 0, picked)
-  modules.value = list
+  if (nextIndex < 0 || nextIndex >= article.value.modules.length) return
+  const modules = [...article.value.modules]
+  const [picked] = modules.splice(index, 1)
+  modules.splice(nextIndex, 0, picked)
+  article.value.modules = modules
 }
-
-const removeModule = (index) => {
-  if (modules.value.length <= 1) return
-  modules.value = modules.value.filter((_, i) => i !== index)
+async function removeModule(index) {
+  try { await ElMessageBox.confirm('确认删除此模块及其内容？保存前仍可返回列表放弃修改。', '删除模块', { confirmButtonText: '删除', cancelButtonText: '取消', type: 'warning' }) } catch { return }
+  article.value.modules.splice(index, 1)
 }
-
-const moduleTagClass = (tag) => {
-  if (tag === 'single-image') return 'bg-emerald-50 text-emerald-700 border-emerald-100'
-  if (tag === 'double-image') return 'bg-amber-50 text-amber-700 border-amber-100'
-  if (tag === 'carousel') return 'bg-violet-50 text-violet-700 border-violet-100'
-  return 'bg-gray-50 text-gray-700 border-gray-200'
+function back() { router.push(route.query.from === '/news/list' ? '/news/list' : '/news/group') }
+function save(status) {
+  if (!article.value) return
+  const urls = [article.value.cover, ...article.value.modules.flatMap(m => [m.image, ...(m.images || []).map(i => i.src)])]
+  if (urls.some(url => url?.trim() && !safeUrl(url, true))) return ElMessage.warning('存在无效图片地址，请更正或清空后保存')
+  const result = groupNewsStore.save(article.value, status, { isNew: !route.query.id })
+  if (!result.ok) return ElMessage.error(result.error)
+  article.value = result.record
+  baseline.value = JSON.stringify(article.value)
+  ElMessage.success(status === 'published' ? '已发布并保存到本地' : '已保存到本地')
+  back()
 }
-
-const addModule = (type) => {
-  const id = `m${Date.now()}`
-  if (type === 'single-image') {
-    modules.value = [
-      ...modules.value,
-      {
-        id,
-        title: '单图模块（新增）',
-        desc: '用于承接一张图片，按单列展示。',
-        tag: 'single-image',
-        details: [
-          { label: '展示比例', value: '原比例 / auto' },
-          { label: '图注', value: '请填写' },
-          { label: '移动端', value: '单列展示' }
-        ]
-      }
-    ]
-    closeModuleModal()
-    return
-  }
-  if (type === 'double-image') {
-    modules.value = [
-      ...modules.value,
-      {
-        id,
-        title: '双图模块（新增）',
-        desc: '承接两张图片，桌面端并排，移动端建议堆叠。',
-        tag: 'double-image',
-        details: [
-          { label: '展示比例', value: '1:1' },
-          { label: '桌面端', value: '双列并排' },
-          { label: '移动端', value: '自动堆叠' },
-          { label: '图注', value: '请填写' }
-        ]
-      }
-    ]
-    closeModuleModal()
-    return
-  }
-  modules.value = [
-    ...modules.value,
-    {
-      id,
-      title: '轮播模块（新增）',
-      desc: '承接多图，前端统一轮播渲染。',
-      tag: 'carousel',
-      details: [
-        { label: '图片数量', value: '3 张' },
-        { label: '展示比例', value: '16:9' },
-        { label: '自动播放', value: '关闭' },
-        { label: '指示点', value: '显示' }
-      ]
-    }
-  ]
-  closeModuleModal()
+async function confirmLeave() {
+  if (!dirty.value) return true
+  try { await ElMessageBox.confirm('有未保存的内容，离开将放弃本次修改。是否继续？', '未保存的修改', { confirmButtonText: '放弃并离开', cancelButtonText: '继续编辑', type: 'warning' }); return true } catch { return false }
 }
+onBeforeRouteLeave(confirmLeave)
+onBeforeRouteUpdate((to, from) => to.query.id === from.query.id || confirmLeave())
+function beforeUnload(event) { if (dirty.value) { event.preventDefault(); event.returnValue = '' } }
+onMounted(() => window.addEventListener('beforeunload', beforeUnload))
+onUnmounted(() => window.removeEventListener('beforeunload', beforeUnload))
 </script>
+<style scoped>
+.page-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.page-actions h2 { font-size: 18px; font-weight: 600; }
+.editor-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.section-card { border: 1px solid #e5e7eb; border-radius: 16px; background: white; overflow: hidden; box-shadow: 0 1px 2px rgb(0 0 0 / 3%); min-width: 0; }
+.section-card > h3, .section-heading { padding: 16px 20px; border-bottom: 1px solid #f3f4f6; }
+h3 { font-size: 15px; font-weight: 600; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.section-body { padding: 20px; }
+.basic-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 18px; }
+.full-width { grid-column: 1 / -1; }
+.basic-grid :deep(.el-select), .basic-grid :deep(.el-date-editor), .basic-grid :deep(.el-input-number) { width: 100%; }
+.module-editor { border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+.module-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 12px; background: #f9fafb; }
+.module-heading strong { font-size: 13px; }
+.module-heading :deep(.el-button + .el-button), .page-actions :deep(.el-button + .el-button) { margin-left: 0; }
+.module-fields, .image-fields, .module-fields > label { display: grid; gap: 10px; min-width: 0; }
+.module-fields { padding: 14px; font-size: 13px; }
+.image-fields { padding-bottom: 12px; border-bottom: 1px solid #f3f4f6; }
+.module-options { display: grid; gap: 10px; }
+.module-options :deep(.el-button) { margin: 0; }
+.preview-note { padding: 12px 20px; color: #6b7280; font-size: 12px; background: #fafafa; }
+@media (max-width: 1100px) { .editor-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) { .basic-grid { grid-template-columns: minmax(0, 1fr); } .section-body { padding: 14px; } }
+</style>

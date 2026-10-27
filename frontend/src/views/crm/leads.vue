@@ -4,53 +4,37 @@
       <div class="flex-1 p-4 overflow-y-auto bg-white flex flex-col">
  <!-- 分配状态 Tabs -->
  <div class="flex border-b border-gray-200 mb-4 px-2 overflow-x-auto whitespace-nowrap no-scrollbar" id="leads-tabs">
-  <button class="pb-2.5 px-4 text-sm font-medium text-primaryBtn border-b-2 border-primaryBtn transition-colors" data-tab="all">
-   全部
-  </button>
-  <button class="pb-2.5 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 border-b-2 border-transparent transition-colors" data-tab="assigned">
-   跟进中
-  </button>
-  <button class="pb-2.5 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 border-b-2 border-transparent transition-colors relative role-manager-only" data-tab="unassigned">
-   待分配
-   <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">
-    1
-   </span>
-  </button>
-  <button class="pb-2.5 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 border-b-2 border-transparent transition-colors" data-tab="public">
-   退回公海
-  </button>
-  <button class="pb-2.5 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 border-b-2 border-transparent transition-colors" data-tab="invalid">
-   无效线索
-  </button>
-  <button class="pb-2.5 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 border-b-2 border-transparent transition-colors" data-tab="converted">
-   已转化
+  <button v-for="tab in tabs" :key="tab.value" class="pb-2.5 px-4 text-sm font-medium border-b-2 transition-colors" :class="activeTab === tab.value ? 'text-primaryBtn border-primaryBtn' : 'text-gray-500 border-transparent hover:text-gray-700'" @click="changeTab(tab.value)">
+    {{ tab.label }}<span v-if="tab.value === 'unassigned'" class="ml-1 bg-red-500 text-white text-xs px-1.5 rounded-full">{{ unassignedCount }}</span>
   </button>
  </div>
+ <p class="text-xs text-gray-500 mb-3">当前为本地演示数据；“微信公众号-联系我们”记录非真实公众号提交，后续由后端统一接入留资查询。</p>
+ <el-alert v-if="error" :title="error" type="error" :closable="false" show-icon class="mb-3" />
  <!-- 1. 顶部搜索过滤区 (匹配截图样式) -->
  <div class="flex flex-wrap items-center gap-4 mb-4 bg-gray-100/70 p-3 rounded">
   <div class="flex items-center gap-2">
    <span class="text-gray-700 text-sm font-medium">
     客户名称:
    </span>
-   <input class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-32 bg-white" placeholder="请输入分组名称" type="text"/>
+   <input v-model="filters.name" class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-32 bg-white" placeholder="请输入客户名称" type="text"/>
   </div>
   <div class="flex items-center gap-2">
    <span class="text-gray-700 text-sm font-medium">
     客户邮箱:
    </span>
-   <input class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-40 bg-white" placeholder="请输入客户邮箱" type="text"/>
+   <input v-model="filters.email" class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-40 bg-white" placeholder="请输入客户邮箱" type="text"/>
   </div>
   <div class="flex items-center gap-2">
    <span class="text-gray-700 text-sm font-medium">
     联系方式:
    </span>
-   <input class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-32 bg-white" placeholder="请输入账号名称" type="text"/>
+   <input v-model="filters.contact" class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-32 bg-white" placeholder="手机号 / 微信等" type="text"/>
   </div>
   <div class="flex items-center gap-2">
    <span class="text-gray-700 text-sm font-medium">
     咨询内容:
    </span>
-   <select class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-28 bg-white cursor-pointer text-gray-500">
+   <select v-model="filters.inquiry" class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-28 bg-white cursor-pointer text-gray-500">
     <option value="">
      全部
     </option>
@@ -66,13 +50,13 @@
     <option value="4">
      其他
     </option>
-   </select>
+   <option value="5">开户咨询</option><option value="6">活动咨询</option></select>
   </div>
   <div class="flex items-center gap-2">
    <span class="text-gray-700 text-sm font-medium">
     信息来源:
    </span>
-   <select class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-28 bg-white cursor-pointer text-gray-500">
+   <select v-model="filters.source" class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-28 bg-white cursor-pointer text-gray-500">
     <option value="">
      全部
     </option>
@@ -97,13 +81,13 @@
     <option value="other">
      其他渠道
     </option>
-   </select>
+   <option value="wechat_contact">微信公众号-联系我们</option></select>
   </div>
   <div class="flex items-center gap-2">
    <span class="text-gray-700 text-sm font-medium">
     线索热度:
    </span>
-   <select class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-24 bg-white cursor-pointer text-gray-500">
+   <select v-model="filters.heat" class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-24 bg-white cursor-pointer text-gray-500">
     <option value="">
      全部
     </option>
@@ -122,7 +106,7 @@
    <span class="text-gray-700 text-sm font-medium">
     归属销售:
    </span>
-   <select class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-28 bg-white cursor-pointer text-gray-500">
+   <select v-model="filters.assignee" class="px-3 py-1.5 text-sm outline-none border border-gray-200 rounded w-28 bg-white cursor-pointer text-gray-500">
     <option value="">
      全部
     </option>
@@ -135,18 +119,18 @@
     <option value="s2">
      李四
     </option>
-   </select>
+   <option value="s3">王刚（销售）</option><option value="c1">小林（客服）</option><option value="c2">小周（客服）</option></select>
   </div>
   <div class="flex items-center gap-2">
    <span class="text-gray-700 text-sm font-medium">
     跟进日期:
    </span>
    <div class="flex items-center border border-gray-200 rounded bg-white overflow-hidden focus-within:border-[#41B8AF] transition-colors">
-    <input class="px-2 py-1.5 text-sm outline-none text-gray-600 bg-transparent w-[115px] cursor-pointer" type="date"/>
+    <input v-model="filters.followStart" class="px-2 py-1.5 text-sm outline-none text-gray-600 bg-transparent w-[115px] cursor-pointer" type="date"/>
     <span class="text-gray-400 px-1">
      -
     </span>
-    <input class="px-2 py-1.5 text-sm outline-none text-gray-600 bg-transparent w-[115px] cursor-pointer" type="date"/>
+    <input v-model="filters.followEnd" class="px-2 py-1.5 text-sm outline-none text-gray-600 bg-transparent w-[115px] cursor-pointer" type="date"/>
    </div>
   </div>
   <div class="flex items-center gap-2">
@@ -154,18 +138,18 @@
     下次跟进:
    </span>
    <div class="flex items-center border border-gray-200 rounded bg-white overflow-hidden focus-within:border-[#41B8AF] transition-colors">
-    <input class="px-2 py-1.5 text-sm outline-none text-gray-600 bg-transparent w-[115px] cursor-pointer" type="date"/>
+    <input v-model="filters.nextStart" class="px-2 py-1.5 text-sm outline-none text-gray-600 bg-transparent w-[115px] cursor-pointer" type="date"/>
     <span class="text-gray-400 px-1">
      -
     </span>
-    <input class="px-2 py-1.5 text-sm outline-none text-gray-600 bg-transparent w-[115px] cursor-pointer" type="date"/>
+    <input v-model="filters.nextEnd" class="px-2 py-1.5 text-sm outline-none text-gray-600 bg-transparent w-[115px] cursor-pointer" type="date"/>
    </div>
   </div>
   <!-- 查询按钮 -->
   <div class="ml-auto">
-   <button class="bg-primaryBtn hover:bg-primaryBtnHover text-white px-6 py-1.5 rounded text-sm transition-colors shadow-sm font-medium">
+   <button @click="search" class="bg-primaryBtn hover:bg-primaryBtnHover text-white px-6 py-1.5 rounded text-sm transition-colors shadow-sm font-medium">
     查询
-   </button>
+   </button><button class="ml-2 bg-white border border-gray-300 px-4 py-1.5 rounded text-sm" @click="resetFilters">重置</button>
   </div>
  </div>
  <!-- 2. 数据表格区 -->
@@ -182,7 +166,7 @@
     </i>
     客服录入
    </button>
-   <button class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1.5 rounded text-sm transition-colors shadow-sm font-medium flex items-center gap-1.5 role-manager-only">
+   <button @click="batchAssign" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1.5 rounded text-sm transition-colors shadow-sm font-medium flex items-center gap-1.5 role-manager-only">
     <i class="fas fa-users-cog">
     </i>
     批量分配
@@ -227,7 +211,7 @@
     <thead class="bg-tableHeader sticky top-0 z-10">
      <tr>
       <th class="text-center role-manager-only">
-       <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer" id="selectAll" type="checkbox"/>
+       <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer" id="selectAll" :checked="allSelected" :disabled="!selectable.length" @change="toggleAll($event.target.checked)" type="checkbox"/>
       </th>
       <th>
        姓名
@@ -295,522 +279,49 @@
      </tr>
     </thead>
     <tbody>
-     <!-- 数据行 1 (跟进中) -->
-     <tr class="data-row-assigned">
-      <td class="text-center role-manager-only">
-       <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer row-checkbox" disabled="" title="已分配状态无法批量选择" type="checkbox"/>
-      </td>
-      <td>
-       张三
-      </td>
-      <td>
-       XXXXX@qq.com
-      </td>
-      <td>
-       15213099999
-      </td>
-      <td>
-       wx_zhangsan
-      </td>
-      <td>
-       +852 12345678
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       政策了解
-      </td>
-      <td>
-       官网访问
-      </td>
-      <td>
-       官网录入
-      </td>
-      <td>
-       <span class="text-blue-600 font-medium">
-        3 次
-       </span>
-      </td>
-      <td>
-       <span class="text-red-500 font-bold" title="高意向">
-        <i class="fas fa-fire">
-        </i>
-        高
-       </span>
-      </td>
-      <td>
-       <span class="text-green-600 font-medium">
-        有 (王代理)
-       </span>
-      </td>
-      <td class="font-medium text-gray-800">
-       李四
-      </td>
-      <td>
-       2025-01-01 21:22:22
-      </td>
-      <td>
-       <span class="lead-truncated-text" title="这是客服自己填写">这是客服自己填写</span>
-      </td>
-      <td>
-       2025-01-01 21:22:22
-      </td>
-      <td class="text-red-500 font-medium whitespace-nowrap">
-       <i class="fas fa-bell mr-1 animate-pulse">
-       </i>
-       明天 10:00
-      </td>
+     <tr v-for="row in paginated.rows" :key="row.id" :class="'data-row-' + row.status">
+      <td class="text-center role-manager-only"><input v-model="selectedIds" :value="row.id" :disabled="!['unassigned', 'public'].includes(row.status)" :title="['unassigned', 'public'].includes(row.status) ? '选择留资' : '当前状态不能批量分配'" type="checkbox" class="row-checkbox w-4 h-4 rounded" /></td>
+      <td :title="row.name">{{ row.name }}</td>
+      <td :title="row.email">{{ row.email }}</td>
+      <td :title="row.phone">{{ row.phone }}</td>
+      <td :title="row.wechat">{{ row.wechat || '-' }}</td>
+      <td :title="row.whatsapp">{{ row.whatsapp || '-' }}</td>
+      <td :title="row.otherContact">{{ row.otherContact || '-' }}</td>
+      <td><button class="lead-truncated-text text-left" :title="row.inquiry" @click="goLeadDetail(row.id)">{{ row.inquiry }}</button></td>
+      <td :title="LEAD_SOURCES[row.source]"><span class="lead-truncated-text">{{ LEAD_SOURCES[row.source] }}</span></td>
+      <td :title="row.customerSource"><span class="lead-truncated-text">{{ row.customerSource }}</span></td>
+      <td><span class="text-blue-600 font-medium">{{ row.count }} 次</span></td>
+      <td :class="heatClass(row.heat)">{{ heatLabel(row.heat) }}</td>
+      <td :class="row.agent ? 'text-green-600' : 'text-gray-400'">{{ row.agent ? '有 (' + row.agent + ')' : '无' }}</td>
+      <td>{{ staffName(row.assigneeId) }}</td>
+      <td>{{ row.createdAt }}</td>
+      <td><span class="lead-truncated-text" :title="latestFollow(row)?.content">{{ latestFollow(row)?.content || '-' }}</span></td>
+      <td>{{ latestFollow(row)?.time || '-' }}</td>
+      <td>{{ row.nextFollowAt || '-' }}</td>
       <td class="lead-operation-cell">
-       <button class="text-indigo-500 hover:text-indigo-700 mx-1 role-manager-only font-medium">
-        <i class="fas fa-user-plus mr-1">
-        </i>
-        重新分配
-       </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20250101-001')">
-        <i class="fas fa-file-alt mr-1">
-        </i>
-        详情
-       </button>
-       <button class="text-green-600 hover:text-green-800 mx-1 font-medium">
-        <i class="fas fa-edit mr-1">
-        </i>
-        跟进
-       </button>
-       <button class="text-orange-500 hover:text-orange-700 mx-1 font-medium">
-        <i class="fas fa-recycle mr-1">
-        </i>
-        退回公海
-       </button>
+       <button v-if="['assigned', 'unassigned', 'public'].includes(row.status)" class="text-indigo-500 font-medium" @click="openAction('assign', [row.id])">{{ row.status === 'unassigned' ? '分配' : '重新分配' }}</button>
+       <button v-if="['unassigned', 'public'].includes(row.status)" class="text-blue-500 font-medium" @click="openAction('assign', [row.id])">认领</button>
+       <button class="text-blue-500 font-medium" @click="goLeadDetail(row.id)">详情</button>
+       <button v-if="row.assigneeId && !['unassigned', 'public'].includes(row.status)" class="text-green-600 font-medium" @click="openAction('follow', [row.id])">跟进</button>
+       <button v-if="row.status === 'assigned'" class="text-orange-500 font-medium" @click="returnToPool(row)">退回公海</button>
+       <button v-if="row.status === 'converted' && row.clientId" class="text-blue-500 font-medium" @click="goClientDetail(row.clientId)">客户画像</button>
       </td>
      </tr>
-     <!-- 数据行 2 (待分配) -->
-     <tr class="data-row-unassigned role-manager-only">
-      <td class="text-center role-manager-only">
-       <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer row-checkbox" type="checkbox"/>
-      </td>
-      <td>
-       王五
-      </td>
-      <td>
-       wangwu@163.com
-      </td>
-      <td>
-       13800138000
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       成为代理
-      </td>
-      <td>
-       其他渠道
-      </td>
-      <td>
-       销售录入
-      </td>
-      <td>
-       <span class="text-blue-600 font-medium">
-        1 次
-       </span>
-      </td>
-      <td>
-       <span class="text-orange-400 font-bold" title="中意向">
-        <i class="fas fa-star">
-        </i>
-        中
-       </span>
-      </td>
-      <td>
-       <span class="text-gray-400">
-        无
-       </span>
-      </td>
-      <td class="text-gray-400">
-       -
-      </td>
-      <td>
-       2025-01-01 21:22:22
-      </td>
-      <td class="text-gray-400">
-       -
-      </td>
-      <td class="text-gray-400">
-       -
-      </td>
-      <td class="text-gray-400">
-       -
-      </td>
-      <td class="lead-operation-cell">
-       <button class="text-indigo-500 hover:text-indigo-700 mx-1 role-manager-only font-medium">
-        <i class="fas fa-user-plus mr-1">
-        </i>
-        分配
-       </button>
-       <button class="text-blue-500 hover:text-blue-700 mx-1 role-sales-only font-medium">
-        <i class="fas fa-hand-holding-heart mr-1">
-        </i>
-        认领
-       </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20250101-002')">
-        <i class="fas fa-file-alt mr-1">
-        </i>
-        详情
-       </button>
-      </td>
-     </tr>
-     <!-- 数据行 3 (原已分配，现合并为跟进中) -->
-     <tr class="data-row-assigned role-manager-only">
-      <td class="text-center role-manager-only">
-       <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer row-checkbox" disabled="" title="已分配状态无法批量选择" type="checkbox"/>
-      </td>
-      <td>
-       陈老板
-      </td>
-      <td>
-       chen@company.com
-      </td>
-      <td>
-       13600136000
-      </td>
-      <td>
-       chen_boss
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       开户咨询
-      </td>
-      <td>
-       客户推荐
-      </td>
-      <td>
-       注册页录入
-      </td>
-      <td>
-       <span class="text-blue-600 font-medium">
-        2 次
-       </span>
-      </td>
-      <td>
-       <span class="text-red-500 font-bold" title="高意向">
-        <i class="fas fa-fire">
-        </i>
-        高
-       </span>
-      </td>
-      <td>
-       <span class="text-green-600 font-medium">
-        有 (陈总)
-       </span>
-      </td>
-      <td class="font-medium text-gray-800">
-       王刚
-      </td>
-      <td>
-       2024-12-20 14:00:00
-      </td>
-      <td>
-       <span class="lead-truncated-text" title="客户已提交资料审核中">客户已提交资料审核中</span>
-      </td>
-      <td>
-       2024-12-21 09:30:00
-      </td>
-      <td class="text-gray-400">
-       -
-      </td>
-      <td class="lead-operation-cell">
-       <button class="text-indigo-500 hover:text-indigo-700 mx-1 role-manager-only font-medium">
-        <i class="fas fa-user-plus mr-1">
-        </i>
-        重新分配
-       </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241220-003')">
-        <i class="fas fa-file-alt mr-1">
-        </i>
-        详情
-       </button>
-      </td>
-     </tr>
-     <!-- 数据行 4 (退回公海) -->
-     <tr class="data-row-public">
-      <td class="text-center role-manager-only">
-       <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer row-checkbox" type="checkbox"/>
-      </td>
-      <td>
-       赵六
-      </td>
-      <td>
-       zhao6@qq.com
-      </td>
-      <td>
-       13900139000
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       个人交易
-      </td>
-      <td>
-       线下金融活动
-      </td>
-      <td>
-       官网录入
-      </td>
-      <td>
-       <span class="text-blue-600 font-medium">
-        2 次
-       </span>
-      </td>
-      <td>
-       <span class="text-blue-400 font-bold" title="低意向">
-        <i class="fas fa-snowflake">
-        </i>
-        低
-       </span>
-      </td>
-      <td>
-       <span class="text-gray-400">
-        无
-       </span>
-      </td>
-      <td class="text-gray-400">
-       李四
-      </td>
-      <td>
-       2024-12-10 10:00:00
-      </td>
-      <td>
-       <span class="lead-truncated-text" title="客户电话一直打不通，空号。">客户电话一直打不通，空号。</span>
-      </td>
-      <td>
-       2024-12-15 15:30:00
-      </td>
-      <td class="text-gray-400">
-       -
-      </td>
-      <td class="lead-operation-cell">
-       <button class="text-indigo-500 hover:text-indigo-700 mx-1 role-manager-only font-medium">
-        <i class="fas fa-user-plus mr-1">
-        </i>
-        重新分配
-       </button>
-       <button class="text-blue-500 hover:text-blue-700 mx-1 role-sales-only font-medium">
-        <i class="fas fa-hand-holding-heart mr-1">
-        </i>
-        认领
-       </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241210-004')">
-        <i class="fas fa-file-alt mr-1">
-        </i>
-        详情
-       </button>
-      </td>
-     </tr>
-     <!-- 数据行 5 (无效线索) -->
-     <tr class="data-row-invalid">
-      <td class="text-center role-manager-only">
-       <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer row-checkbox" disabled="" title="无效线索无法批量选择" type="checkbox"/>
-      </td>
-      <td>
-       测试客
-      </td>
-      <td>
-       test@test.com
-      </td>
-      <td>
-       13100000000
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       其他
-      </td>
-      <td>
-       其他渠道
-      </td>
-      <td>
-       销售录入
-      </td>
-      <td>
-       <span class="text-blue-600 font-medium">
-        1 次
-       </span>
-      </td>
-      <td>
-       <span class="text-gray-400 font-bold" title="未评估">
-        --
-       </span>
-      </td>
-      <td>
-       <span class="text-gray-400">
-        无
-       </span>
-      </td>
-      <td class="font-medium text-gray-800">
-       李四
-      </td>
-      <td>
-       2024-11-20 10:00:00
-      </td>
-      <td>
-       <span class="lead-truncated-text" title="同行套话，非真实意向">同行套话，非真实意向</span>
-      </td>
-      <td>
-       2024-11-20 10:30:00
-      </td>
-      <td class="text-gray-400">
-       -
-      </td>
-      <td class="lead-operation-cell">
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241120-005')">
-        <i class="fas fa-file-alt mr-1">
-        </i>
-        详情
-       </button>
-      </td>
-     </tr>
-     <!-- 数据行 6 (已转化) -->
-     <tr class="data-row-converted">
-      <td class="text-center role-manager-only">
-       <input class="w-4 h-4 rounded border-gray-300 focus:ring-indigo-500 text-indigo-600 cursor-pointer row-checkbox" disabled="" title="已转化状态无法批量选择" type="checkbox"/>
-      </td>
-      <td>
-       孙七
-      </td>
-      <td>
-       sunqi@gmail.com
-      </td>
-      <td>
-       13700137000
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       -
-      </td>
-      <td>
-       成为代理
-      </td>
-      <td>
-       社交平台
-      </td>
-      <td>
-       官网录入
-      </td>
-      <td>
-       <span class="text-blue-600 font-medium">
-        4 次
-       </span>
-      </td>
-      <td>
-       <span class="text-gray-400 font-bold" title="未评估">
-        --
-       </span>
-      </td>
-      <td>
-       <span class="text-green-600 font-medium">
-        有 (张代理)
-       </span>
-      </td>
-      <td class="font-medium text-gray-800">
-       张三
-      </td>
-      <td>
-       2024-11-01 10:00:00
-      </td>
-      <td>
-       <span class="lead-truncated-text" title="客户已成功开通代理账户并完成首笔入金。">客户已成功开通代理账户并完成首笔入金。</span>
-      </td>
-      <td>
-       2024-11-05 14:20:00
-      </td>
-      <td class="text-gray-400">
-       -
-      </td>
-      <td class="lead-operation-cell">
-       <button class="text-blue-500 hover:text-blue-700 mx-1 font-medium" type="button" @click="goClientDetail('88820391')">
-        <i class="fas fa-user-circle mr-1">
-        </i>
-        客户画像
-       </button>
-       <button class="mx-1 font-medium text-blue-500 hover:text-blue-700" type="button" @click="goLeadDetail('LD-20241101-006')">
-        <i class="fas fa-file-alt mr-1">
-        </i>
-        详情
-       </button>
-      </td>
-     </tr>
+     <tr v-if="!paginated.total"><td colspan="19" class="text-center py-8 text-gray-400">暂无符合条件的留资记录</td></tr>
     </tbody>
    </table>
  </div>
  <!-- 3. 底部翻页区 -->
- <div class="flex items-center justify-end mt-4 text-sm text-gray-500">
-  <span class="mr-4">
-   共 658 条
-  </span>
+ <div class="flex flex-wrap gap-3 items-center justify-end mt-4 text-sm text-gray-500">
+  <span>共 {{ paginated.total }} 条，第 {{ paginated.page }}/{{ paginated.totalPages }} 页</span>
+  <select v-model.number="pageSize" aria-label="每页条数" @change="page = 1"><option :value="5">5 条/页</option><option :value="10">10 条/页</option><option :value="20">20 条/页</option></select>
   <div class="flex items-center gap-1">
-   <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 text-gray-400">
-    <i class="fa-solid fa-chevron-left text-xs">
-    </i>
-   </button>
-   <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
-    50
-   </button>
-   <!-- 当前激活页 (截图为浅红色背景，文字颜色匹配) -->
-   <button class="w-8 h-8 flex items-center justify-center rounded bg-[#e8a3a3] text-white font-medium">
-    51
-   </button>
-   <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
-    52
-   </button>
-   <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
-    53
-   </button>
-   <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
-    54
-   </button>
-   <span class="px-1">
-    ...
-   </span>
-   <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
-    90
-   </button>
-   <button class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
-    <i class="fa-solid fa-chevron-right text-xs">
-    </i>
-   </button>
+   <button class="w-8 h-8 rounded hover:bg-gray-100 disabled:opacity-40" :disabled="paginated.page === 1" aria-label="上一页" @click="page--">‹</button>
+   <button v-for="number in paginated.totalPages" :key="number" class="w-8 h-8 rounded" :class="paginated.page === number ? 'bg-[#e8a3a3] text-white' : 'hover:bg-gray-100'" @click="page = number">{{ number }}</button>
+   <button class="w-8 h-8 rounded hover:bg-gray-100 disabled:opacity-40" :disabled="paginated.page === paginated.totalPages" aria-label="下一页" @click="page++">›</button>
   </div>
  </div>
+ <LeadActionDialog v-model="actionOpen" :mode="actionMode" :ids="actionIds" @saved="selectedIds = []" />
 </div>
 
     </div>
@@ -818,17 +329,54 @@
 </template>
 
 <script setup>
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import LeadActionDialog from '../../components/leads/LeadActionDialog.vue'
+import { leadsStore, LEADS_KEY, LEAD_STATES, LEAD_SOURCES, staffName, latestFollow, filterLeads, paginateLeads } from '../../store/leadsDemo.js'
 
 const router = useRouter()
-
-const goLeadDetail = (id) => {
-  router.push({ path: '/crm/leads-detail', query: { id: String(id || '') } })
+const { records, error } = leadsStore
+const defaults = () => ({ name: '', email: '', contact: '', inquiry: '', source: '', heat: '', assignee: '', followStart: '', followEnd: '', nextStart: '', nextEnd: '' })
+const filters = reactive(defaults())
+const applied = ref(defaults())
+const activeTab = ref('all')
+const tabs = [{ value: 'all', label: '全部' }, ...Object.entries(LEAD_STATES).map(([value, label]) => ({ value, label }))]
+const page = ref(1)
+const pageSize = ref(10)
+const selectedIds = ref([])
+const unassignedCount = computed(() => records.value.filter(row => row.status === 'unassigned').length)
+const filtered = computed(() => filterLeads(records.value, applied.value, activeTab.value))
+const paginated = computed(() => paginateLeads(filtered.value, page.value, pageSize.value))
+const selectable = computed(() => paginated.value.rows.filter(row => ['unassigned', 'public'].includes(row.status)))
+const allSelected = computed(() => selectable.value.length > 0 && selectable.value.every(row => selectedIds.value.includes(row.id)))
+watch([filtered, pageSize], () => { page.value = paginated.value.page; selectedIds.value = [] })
+watch(page, () => { selectedIds.value = [] })
+const actionOpen = ref(false)
+const actionMode = ref('assign')
+const actionIds = ref([])
+const heatLabel = heat => ({ hot: '高', warm: '中', cold: '低' }[heat] || '--')
+const heatClass = heat => ({ hot: 'text-red-500 font-bold', warm: 'text-orange-400 font-bold', cold: 'text-blue-400 font-bold' }[heat] || 'text-gray-400')
+function changeTab(tab) { activeTab.value = tab; page.value = 1; selectedIds.value = [] }
+function search() {
+  if ((filters.followStart && filters.followEnd && filters.followStart > filters.followEnd) || (filters.nextStart && filters.nextEnd && filters.nextStart > filters.nextEnd)) return ElMessage.warning('开始日期不能晚于结束日期')
+  if (!leadsStore.refresh()) return ElMessage.error(error.value)
+  applied.value = { ...filters }; page.value = 1; selectedIds.value = []
 }
-
-const goClientDetail = (id) => {
-  router.push({ path: '/crm/client-detail', query: { id: String(id || '') } })
+function resetFilters() { Object.assign(filters, defaults()); activeTab.value = 'all'; search() }
+function toggleAll(checked) { selectedIds.value = checked ? selectable.value.map(row => row.id) : [] }
+function openAction(mode, ids) { actionMode.value = mode; actionIds.value = [...ids]; actionOpen.value = true }
+function batchAssign() { if (!selectedIds.value.length) return ElMessage.warning('请选择待分配或公海记录'); openAction('assign', selectedIds.value) }
+async function returnToPool(row) {
+  try { await ElMessageBox.confirm('确认将该留资退回公海并清空当前归属？已有跟进记录保留。', '退回公海', { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning' }) } catch { return }
+  const result = leadsStore.returnToPool(row.id, row.revision)
+  result.ok ? ElMessage.success('已退回公海') : ElMessage.error(result.error)
 }
+const goLeadDetail = id => router.push({ path: '/crm/leads-detail', query: { id } })
+const goClientDetail = id => router.push({ path: '/crm/client-detail', query: { id } })
+function sync(event) { if (!event.key || event.key === LEADS_KEY) leadsStore.refresh() }
+onMounted(() => { leadsStore.refresh(); window.addEventListener('storage', sync) })
+onUnmounted(() => window.removeEventListener('storage', sync))
 </script>
 
 <style scoped>
