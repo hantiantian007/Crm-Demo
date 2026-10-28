@@ -133,12 +133,16 @@
           <aside class="space-y-4">
             <section class="bg-white rounded-xl border border-gray-200 p-5">
               <div class="text-sm font-semibold text-gray-700 mb-4">风险提示</div>
-              <div class="bg-red-50 border border-red-100 rounded-lg p-4 text-sm text-red-700" v-if="riskText !== '-'">
-                {{ riskText }}
+              <div class="border rounded-lg p-4 text-sm" :class="riskSummaryClass" aria-live="polite">
+                <p class="font-medium mb-3">{{ riskAssessment.title }}</p>
+                <dl class="space-y-3">
+                  <div class="flex justify-between gap-3"><dt class="text-gray-500">风险等级</dt><dd class="font-medium">{{ riskAssessment.level }}</dd></div>
+                  <div class="flex justify-between gap-3"><dt class="text-gray-500">命中风险数量</dt><dd class="font-medium">{{ riskRuleCount === null ? '—' : riskRuleCount }}</dd></div>
+                  <div><dt class="text-gray-500 mb-1">系统审核建议</dt><dd class="leading-6">{{ riskAssessment.advice }}</dd></div>
+                </dl>
               </div>
-              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-500" v-else>
-                暂未发现风险
-              </div>
+              <p class="mt-3 text-xs text-gray-500 leading-5">仅为固定演示提示，不自动拦截或改变审核流程。</p>
+              <button type="button" class="mt-4 w-full px-4 py-2 rounded-lg bg-primaryBtn text-white text-sm font-medium hover:bg-primaryBtnHover transition-colors" aria-haspopup="dialog" @click="showRiskDetails">查看风险明细</button>
             </section>
 
             <section class="bg-white rounded-xl border border-gray-200 p-5">
@@ -163,12 +167,112 @@
 </main>
 
     </div>
+    <el-dialog
+      v-model="riskDialogOpen"
+      title="出金风险明细"
+      width="92%"
+      :style="{ maxWidth: '920px' }"
+      class="withdraw-risk-dialog"
+      align-center
+      append-to-body
+      destroy-on-close
+      :close-on-press-escape="true"
+    >
+      <div ref="riskDialogContentRef" class="risk-dialog-scroll">
+        <section aria-labelledby="risk-dialog-summary-heading" class="border rounded-lg p-4 text-sm" :class="riskSummaryClass">
+          <h3 id="risk-dialog-summary-heading" class="font-semibold mb-3">风险摘要 · {{ riskAssessment.title }}</h3>
+          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="flex gap-3"><dt class="text-gray-500">风险等级</dt><dd class="font-medium">{{ riskAssessment.level }}</dd></div>
+            <div class="flex gap-3"><dt class="text-gray-500">命中风险数量</dt><dd class="font-medium">{{ riskRuleCount === null ? '—' : riskRuleCount }}</dd></div>
+            <div class="sm:col-span-2"><dt class="text-gray-500 mb-1">系统审核建议</dt><dd class="leading-6">{{ riskAssessment.advice }}</dd></div>
+          </dl>
+        </section>
+                <p class="py-3 text-xs text-gray-500 leading-5">固定前端演示数据，仅展示当前申请的风险核查交互，不代表真实风控判断。</p>
+                <h3 class="pb-3 text-sm font-semibold text-gray-700">风险命中明细</h3>
+                <template v-if="riskAssessment.status === 'hit'">
+                  <p class="pb-3 text-xs text-gray-500 break-all">当前申请：{{ detail.orderNo }} · MT账号：{{ detail.mtAccount }}</p>
+                  <div class="overflow-x-auto">
+                    <table class="withdraw-risk-table w-full text-sm">
+                      <thead class="bg-gray-50 text-gray-500">
+                        <tr>
+                          <th class="px-5 py-3 text-left font-medium w-[18%]">风险名称</th>
+                          <th class="px-5 py-3 text-left font-medium w-[10%]">风险等级</th>
+                          <th class="px-5 py-3 text-left font-medium">触发原因</th>
+                          <th class="px-5 py-3 text-left font-medium w-[22%]">发生时间</th>
+                          <th class="px-5 py-3 text-left font-medium w-[14%]">操作</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-100">
+                        <template v-for="risk in riskAssessment.records" :key="risk.id">
+                          <tr class="risk-hit-row hover:bg-gray-50/70">
+                            <td data-label="风险名称" class="px-5 py-4 text-gray-800"><span>{{ risk.name }}</span></td>
+                            <td data-label="风险等级" class="px-5 py-4"><span class="inline-flex px-2 py-0.5 rounded text-xs whitespace-nowrap" :class="riskLevelClass(risk.level)">{{ risk.level }}</span></td>
+                            <td data-label="触发原因" class="px-5 py-4 text-gray-600 leading-6 break-words"><span>{{ risk.description }}</span></td>
+                            <td data-label="发生时间" class="px-5 py-4 text-gray-500 whitespace-nowrap"><span>{{ risk.triggeredAt }}</span></td>
+                            <td data-label="操作" class="px-5 py-4 whitespace-nowrap">
+                              <button type="button" class="text-blue-600 hover:text-blue-800 text-xs" :aria-expanded="expandedRiskIds.includes(risk.id)" :aria-controls="`risk-evidence-${risk.id}`" @click="toggleRiskEvidence(risk.id)">{{ expandedRiskIds.includes(risk.id) ? '收起依据' : '查看依据' }}</button>
+                            </td>
+                          </tr>
+                          <tr v-if="expandedRiskIds.includes(risk.id)" :ref="el => setRiskEvidenceRef(risk.id, el)" :id="`risk-evidence-${risk.id}`" class="risk-evidence-row bg-gray-50/70">
+                            <td colspan="5" class="px-5 py-4">
+                              <dl v-if="risk.evidence" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-xs leading-6">
+                                <div><dt class="text-gray-500">触发规则</dt><dd class="text-gray-700 break-words">{{ risk.evidence.rule }}</dd></div>
+                                <div><dt class="text-gray-500">事件时间</dt><dd class="text-gray-700">{{ risk.triggeredAt }}</dd></div>
+                                <div class="md:col-span-2"><dt class="text-gray-500">关联账户或业务记录</dt><dd class="text-gray-700 break-all">{{ risk.relatedObjects }}</dd></div>
+                                <div class="md:col-span-2"><dt class="text-gray-500">证据说明（演示）</dt><dd class="text-gray-700 break-words">{{ risk.evidence.description }}</dd></div>
+                              </dl>
+                              <p v-else class="text-sm text-gray-500">暂无可用依据</p>
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
+                  </div>
+                </template>
+                <div v-else class="py-4 text-sm leading-6" role="status">
+                  <p class="font-medium" :class="riskAssessment.status === 'clear' ? 'text-emerald-700' : 'text-amber-700'">{{ riskAssessment.title }}</p>
+                  <p class="mt-2 text-gray-500">{{ riskAssessment.message }}</p>
+                </div>
+
+                <div class="border-t border-gray-100 pt-4 mt-4">
+                  <h3 class="text-sm font-semibold text-gray-700 mb-3">风险事件时间线</h3>
+                  <p v-if="!confirmedRiskApplication" class="text-sm text-amber-700 leading-6">风险关联不可用，无法确认事件所属申请；不展示风险事件或申请提交事件。</p>
+                  <template v-else>
+                    <p v-if="!riskAssessment.records.length" class="mb-3 text-xs text-gray-500">暂无风险事件；下方仅展示已确认的本次申请提交。</p>
+                    <p v-if="!riskEventTimeline.length" class="text-sm text-gray-500">暂无可展示的事件。</p>
+                    <ol v-else class="space-y-4">
+                      <li v-for="event in riskEventTimeline" :key="event.id" class="flex items-start gap-3">
+                        <span class="mt-1.5 w-2 h-2 rounded-full shrink-0" :class="event.level ? 'bg-amber-500' : 'bg-gray-400'" aria-hidden="true"></span>
+                        <div class="min-w-0 flex-1">
+                          <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                            <time class="text-xs text-gray-500">{{ event.time || '时间未知' }}</time>
+                            <span class="text-sm font-medium text-gray-800">{{ event.name }}</span>
+                            <span v-if="event.level" class="px-2 py-0.5 rounded text-xs" :class="riskLevelClass(event.level)">{{ event.level }}</span>
+                          </div>
+                          <p class="mt-1 text-xs text-gray-600 leading-6 break-words" :class="{ 'risk-event-summary': !expandedEventIds.includes(event.id) }">{{ event.description }}</p>
+                          <div class="mt-1 flex gap-4">
+                            <button type="button" class="text-xs text-gray-500 hover:text-gray-800" :aria-expanded="expandedEventIds.includes(event.id)" @click="toggleEventDetails(event.id)">{{ expandedEventIds.includes(event.id) ? '收起内容' : '展开内容' }}</button>
+                            <button v-if="event.hasEvidence" type="button" class="text-xs text-blue-600 hover:text-blue-800" @click="viewTimelineEvidence(event.riskId)">查看依据</button>
+                          </div>
+                        </div>
+                      </li>
+                    </ol>
+                  </template>
+                </div>
+
+      </div>
+      <template #footer>
+        <el-button @click="riskDialogOpen = false">关闭</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { riskRuleConfig } from '@/store/risk-tag-demo'
+import { confirmRiskApplication, buildRiskEventTimeline } from '@/store/withdrawRiskReviewDemo'
 
 const route = useRoute()
 
@@ -434,5 +538,201 @@ const stampText = computed(() => {
   return '已审核'
 })
 
-const riskText = computed(() => displayText(detail.value.riskText))
+// 固定合成案例：沿用客户风险标签的 name/level/description/triggeredAt/relatedObjects 字段。
+// 不复制其他客户的标签，不执行真实规则检测；按申请、MT账号和客户资料校验演示归属。
+const withdrawalRiskDemo = {
+  OUT_919847271934199098: {
+    mtAccount: '9900456',
+    customerName: 'test-沈栋晓',
+    customerEmail: '13832766457@qq.com',
+    records: [
+      {
+        id: 'demo-payee-change-9900456',
+        ruleId: 'recent-payee-change',
+        name: '近期收款账户变更',
+        level: '中',
+        description: '该演示账户在本次出金申请前 24 小时修改收款银行卡，建议核实本人操作及收款信息。',
+        triggeredAt: '2026-07-19 15:09:10',
+        relatedObjects: 'MT账号 9900456；演示变更记录 DEMO-BANK-9900456-01；申请 OUT_919847271934199098',
+        evidence: {
+          rule: `演示口径：出金前 ${riskRuleConfig.recentSecurityChange.walletOrBankWithdrawalHours} 小时内变更钱包或银行卡。`,
+          description: '合成变更时间为 2026-07-19 15:09:10，本次申请时间为 2026-07-20 15:09:10，间隔 24 小时。此记录仅用于交互演示，未读取真实银行卡变更记录。'
+        }
+      },
+      {
+        id: 'demo-login-change-9900456',
+        ruleId: 'abnormal-login',
+        name: '异常登录或设备变化',
+        level: '高',
+        description: '同一演示账户在本次申请前出现新设备登录事件，需人工核实是否本人操作。',
+        triggeredAt: '2026-07-20 14:45:00',
+        relatedObjects: 'MT账号 9900456；演示登录事件 DEMO-LOGIN-9900456-01；申请 OUT_919847271934199098',
+        evidence: {
+          rule: '演示案例：已有异常登录事件与本次出金申请关联，设备变化不直接认定违规。',
+          description: '合成事件展示设备由 Windows / Chrome 变为 Android / Chrome，事件时间早于本次申请。高等级仅为预置展示值，未执行真实登录检测或生产风险分级。'
+        }
+      }
+    ]
+  },
+  OUT_923832107870979672: {
+    mtAccount: '8100453',
+    customerName: 'test-b5',
+    customerEmail: 'b5@example.com',
+    records: []
+  }
+}
+
+const confirmedRiskApplication = computed(() => confirmRiskApplication(
+  route.query.account, detail.value, withdrawalRiskDemo[detail.value.orderNo]
+))
+const riskAssessment = computed(() => {
+  const demo = withdrawalRiskDemo[detail.value.orderNo]
+  // 原详情回退逻辑保持不变，风险展示仍拒绝错误归属。
+  if (!confirmedRiskApplication.value) {
+    return {
+      status: 'unavailable', title: '风险评估不可用', level: '待核实', records: [],
+      advice: '请审核人员核实申请、客户及 MT 账号的关联信息。',
+      message: '风险数据尚未取得或申请与客户、MT账号的关联信息不完整，无法确认当前申请的风险。未使用其他客户的风险信息，不代表低风险或无风险。'
+    }
+  }
+  const records = demo.records
+  if (!records.length) {
+    return {
+      status: 'clear', title: '未发现已知风险', level: '低', records,
+      advice: '按原有权限及流程正常审核（演示建议）。',
+      message: '当前申请的固定演示核查结果未命中已知风险，无风险命中明细可展示；该结果不代表真实安全判断。'
+    }
+  }
+  const level = ['高', '中', '低'].find(value => records.some(record => record.level === value))
+  return {
+    status: 'hit', title: '存在风险提示', level, records,
+    advice: '建议人工复核，查看触发依据后按原有权限继续审核（演示建议）。'
+  }
+})
+const riskRuleCount = computed(() => riskAssessment.value.status === 'unavailable'
+  ? null : new Set(riskAssessment.value.records.map(record => record.ruleId)).size)
+const riskSummaryClass = computed(() => ({
+  hit: 'bg-red-50 border-red-100 text-red-700',
+  clear: 'bg-gray-50 border-gray-200 text-gray-600',
+  unavailable: 'bg-amber-50 border-amber-100 text-amber-700'
+}[riskAssessment.value.status]))
+const riskLevelClass = level => ({
+  高: 'bg-red-50 text-red-700', 中: 'bg-amber-50 text-amber-700', 低: 'bg-emerald-50 text-emerald-700'
+}[level] || 'bg-gray-100 text-gray-600')
+const riskDialogOpen = ref(false)
+const riskDialogContentRef = ref(null)
+const expandedRiskIds = ref([])
+const toggleRiskEvidence = id => {
+  expandedRiskIds.value = expandedRiskIds.value.includes(id)
+    ? expandedRiskIds.value.filter(value => value !== id) : [...expandedRiskIds.value, id]
+}
+const showRiskDetails = () => {
+  expandedRiskIds.value = []
+  expandedEventIds.value = []
+  riskDialogOpen.value = true
+}
+const riskEventTimeline = computed(() => buildRiskEventTimeline(
+  confirmedRiskApplication.value, riskAssessment.value.records, detail.value.applyTime
+))
+const expandedEventIds = ref([])
+const toggleEventDetails = id => {
+  expandedEventIds.value = expandedEventIds.value.includes(id)
+    ? expandedEventIds.value.filter(value => value !== id) : [...expandedEventIds.value, id]
+}
+const riskEvidenceRefs = new Map()
+const setRiskEvidenceRef = (id, el) => {
+  if (el) riskEvidenceRefs.set(id, el)
+  else riskEvidenceRefs.delete(id)
+}
+const viewTimelineEvidence = async id => {
+  const record = riskAssessment.value.records.find(risk => risk.id === id)
+  if (!record?.evidence || !record.relatedObjects) return
+  if (!expandedRiskIds.value.includes(id)) toggleRiskEvidence(id)
+  await nextTick()
+  // 只滚动弹窗内容，不移动底层出金审核页面。
+  const container = riskDialogContentRef.value
+  const evidence = riskEvidenceRefs.get(id)
+  if (container && evidence) {
+    container.scrollTo({ top: Math.max(0, container.scrollTop + evidence.getBoundingClientRect().top - container.getBoundingClientRect().top - 12), behavior: 'smooth' })
+  }
+}
+
+watch(() => route.fullPath, () => {
+  riskDialogOpen.value = false
+  expandedRiskIds.value = []
+  expandedEventIds.value = []
+})
 </script>
+
+<style scoped>
+/* 选择器限定本弹窗；append-to-body 后仍沿用 CRM 的 Dialog 标题和底栏样式。 */
+:global(.el-dialog.withdraw-risk-dialog) {
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+  max-height: 85dvh;
+  padding: 0;
+  overflow: hidden;
+}
+:global(.withdraw-risk-dialog .el-dialog__header),
+:global(.withdraw-risk-dialog .el-dialog__footer) {
+  flex: 0 0 auto;
+}
+:global(.withdraw-risk-dialog .el-dialog__body) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.risk-dialog-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  padding: 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+}
+.risk-event-summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.withdraw-risk-table {
+  width: 100%;
+  table-layout: fixed;
+}
+.withdraw-risk-table th,
+.withdraw-risk-table td {
+  padding: 12px 10px;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 767px) {
+  .risk-dialog-scroll { padding: 16px; }
+  .withdraw-risk-table,
+  .withdraw-risk-table tbody,
+  .withdraw-risk-table tr,
+  .withdraw-risk-table td { display: block; width: 100%; }
+  .withdraw-risk-table thead { display: none; }
+  .withdraw-risk-table .risk-hit-row { padding: 10px 0; }
+  .withdraw-risk-table .risk-hit-row td {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 8px;
+    padding: 6px 0;
+    align-items: start;
+  }
+  .withdraw-risk-table .risk-hit-row td::before {
+    content: attr(data-label);
+    color: var(--crm-text-muted, #6b7280);
+    font-size: 12px;
+  }
+  .withdraw-risk-table .risk-hit-row td > * { min-width: 0; justify-self: start; }
+  .withdraw-risk-table .risk-evidence-row td { padding: 12px; }
+}
+</style>

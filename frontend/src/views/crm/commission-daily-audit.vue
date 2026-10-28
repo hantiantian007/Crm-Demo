@@ -1,1538 +1,135 @@
 <template>
-  <div class="flex h-full bg-mainBg overflow-hidden">
-    <div class="flex-1 flex flex-col min-w-0 bg-gray-50 overflow-hidden p-4 custom-scrollbar overflow-y-auto">
-      <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6 min-h-0">
- <!-- 顶部工具栏：日期 + 手动重算 -->
- <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-  <div class="flex items-center justify-between flex-wrap gap-4">
-   <div class="flex items-center gap-5 flex-wrap">
-    <div class="flex items-center gap-3">
-     <label class="text-[13px] text-gray-600 font-medium">
-      对账日期:
-     </label>
-     <input class="custom-input w-[180px]" type="date" value="2026-08-11"/>
+  <div class="h-full min-w-0 overflow-y-auto bg-gray-50 p-6 custom-scrollbar">
+    <div class="flex flex-col gap-6">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <div class="flex items-center gap-3">
+            <label class="text-[13px] text-gray-600 font-medium" for="audit-date">对账日期:</label>
+            <input id="audit-date" v-model="auditDate" class="custom-input w-[180px]" type="date" />
+          </div>
+          <span class="text-xs text-gray-500">{{ currentBatch ? `统计时间: ${auditDate} 06:05:28` : '该日期暂无演示批次' }}</span>
+        </div>
+        <p class="mt-3 text-xs leading-5 text-gray-500">固定前端演示数据，非真实 MT5 入账。金额统一为 USD 演示口径，保留美分账户小数精度，不混加 USD / USC 原始数值。</p>
+      </div>
+
+      <div class="audit-kpis">
+        <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 min-w-0">
+          <div class="flex items-center justify-between gap-3 mb-5">
+            <div class="flex items-center gap-2"><div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fas fa-receipt text-[15px]"></i></div><h3 class="font-bold text-gray-800 text-[15px]">返佣订单数对照</h3></div>
+            <span class="text-xs text-gray-500">今日平仓订单总数 {{ summary?.total ?? '—' }} 笔</span>
+          </div>
+          <div class="audit-metrics bg-gray-50 border border-gray-100 rounded-xl">
+            <div><div class="metric-label">应返佣订单数</div><strong>{{ summary?.expectedCount ?? '—' }}</strong><span class="metric-unit">笔</span></div>
+            <div><div class="metric-label">CRM返佣订单数</div><strong>{{ summary?.crmCount ?? '—' }}</strong><span class="metric-unit">笔</span></div>
+            <div title="全部应收佣代理均关联到 MT5 入账才计为一笔；金额是否一致独立核对。"><div class="metric-label">MT返佣订单数</div><strong>{{ summary?.mtCount ?? '—' }}</strong><span class="metric-unit">笔</span></div>
+          </div>
+          <div class="audit-differences">
+            <span>CRM数量差异 <b :class="differenceClass(countCrmDifference)">{{ signedCount(countCrmDifference) }} 笔</b></span>
+            <span>MT数量差异 <b :class="differenceClass(countMtDifference)">{{ signedCount(countMtDifference) }} 笔</b></span>
+          </div>
+          <div class="flex items-center gap-3 flex-wrap pt-4 border-t border-gray-100 text-xs">
+            <span class="pill pill-blue">USD {{ summary?.standardCount ?? '—' }} 笔</span><span class="pill pill-orange">USC {{ summary?.centCount ?? '—' }} 笔</span>
+            <span class="ml-auto text-gray-500">CRM返佣订单：</span><span class="pill pill-green">正常 {{ summary ? summary.expectedCount - summary.abnormalCount : '—' }} 笔</span><span class="pill pill-red">异常 {{ summary?.abnormalCount ?? '—' }} 笔</span>
+          </div>
+        </section>
+        <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 min-w-0">
+          <div class="flex items-center gap-2 mb-5"><div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fas fa-coins text-[15px]"></i></div><h3 class="font-bold text-gray-800 text-[15px]">返佣总金额对照</h3></div>
+          <div class="audit-metrics bg-gray-50 border border-gray-100 rounded-xl">
+            <div><div class="metric-label">应返佣金额</div><strong>{{ money(summary?.expectedAmount) }}</strong></div>
+            <div><div class="metric-label">CRM实际返佣金额</div><strong>{{ money(summary?.crmAmount) }}</strong></div>
+            <div><div class="metric-label">MT返佣金额</div><strong>{{ money(summary?.mtAmount) }}</strong></div>
+          </div>
+          <div class="audit-differences">
+            <span>CRM金额差异 <b :class="differenceClass(amountCrmDifference)">{{ signedMoney(amountCrmDifference) }}{{ amountCrmDifference === 0 ? '（正常）' : '' }}</b></span>
+            <span>MT金额差异 <b :class="differenceClass(amountMtDifference)">{{ signedMoney(amountMtDifference) }}{{ amountMtDifference === 0 ? '（正常）' : '' }}</b></span>
+          </div>
+          <p class="text-xs leading-5 text-gray-500 pt-4 border-t border-gray-100">金额独立核对；MT 差异不计入 CRM 异常笔数，不改变异常处理结果。</p>
+        </section>
+      </div>
+
+      <div class="reconciliation-detail-table-card bg-white rounded-xl shadow-sm border border-gray-100 min-w-0">
+        <div class="flex items-center justify-between flex-wrap gap-4 p-5 border-b border-gray-100">
+          <div class="flex items-center flex-wrap gap-3">
+            <h3 class="font-bold text-gray-800 text-[15px]">对账明细</h3>
+            <span class="pill pill-gray">共 {{ rows.length }} 条，CRM异常 {{ summary?.abnormalCount ?? 0 }} 条</span>
+            <select v-model="accountTypeFilter" class="custom-select w-[145px]" aria-label="账户类型"><option value="all">账户类型（全部）</option><option>标准账户</option><option>美分账户</option></select>
+            <select v-model="crmStatusFilter" class="custom-select w-[145px]" aria-label="对账结果"><option value="all">对账结果（全部）</option><option>异常</option><option>正常</option></select>
+            <select v-model="processingStatusFilter" class="custom-select w-[145px]" aria-label="处理状态"><option value="all">处理状态（全部）</option><option>未处理</option><option>已处理</option></select>
+          </div>
+          <div class="flex items-center flex-wrap gap-3">
+            <button class="bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 px-5 py-2 rounded text-[13px] transition-colors shadow-sm" @click="exportAudit"><i class="fas fa-download mr-2"></i>导出对账单</button>
+            <input v-model="search" class="custom-input w-[280px]" placeholder="搜索平仓单号 / 客户 / MT账号" aria-label="搜索对账明细" />
+          </div>
+        </div>
+        <div class="reconciliation-detail-table-scroll">
+          <table class="commission-detail-table custom-table w-full min-w-[2050px]">
+            <thead><tr><th>平仓单号</th><th>账户类型</th><th>客户姓名 / MT账号</th><th>交易手数</th><th title="MT人数按已关联入账的不同收款代理计数，重复流水不重复计人。">应/CRM/MT返佣人数</th><th>应/CRM返佣金额($)</th><th>MT返佣金额($)</th><th>对账结果</th><th>MT对账结果</th><th>处理状态</th><th>金额差额($)</th><th>返佣条数差</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr v-for="row in pagedRows" :key="row.id" :class="row.crmStatus === '异常' ? 'diff-row bg-orange-50/30' : ''">
+                <td class="font-mono text-gray-700">#{{ row.id }}</td><td>{{ row.accountType }}</td>
+                <td><div class="reconciliation-customer"><div class="font-medium">{{ row.customer }}</div><div class="text-xs text-gray-400">MT: {{ row.account }}</div></div></td>
+                <td><span :class="row.crmStatus === '异常' ? 'text-red-600' : 'text-gray-700'" class="font-mono font-semibold">{{ row.lots.split(' ')[0] }}</span><span class="ml-2 text-xs text-gray-500">{{ row.lots.split(' ')[1] }}</span></td>
+                <td class="font-mono">{{ row.expectedPeople }} 人 / <span :class="row.crmPeople !== row.expectedPeople ? 'text-red-600' : ''">{{ row.crmPeople }} 人</span> / <span :class="row.mtPeople === null ? 'text-gray-400' : row.mtPeople !== row.crmPeople ? 'text-red-600' : ''">{{ row.mtPeople === null ? '—' : `${row.mtPeople} 人` }}</span></td>
+                <td class="font-mono">{{ money(row.expectedAmount) }} / <span :class="row.crmDifference ? 'text-red-600' : ''">{{ money(row.crmAmount) }}</span></td>
+                <td class="font-mono" :class="differenceClass(row.mtDifference)">{{ money(row.mtAmount) }}</td>
+                <td><span :class="row.crmStatus === '正常' ? 'pill pill-green' : 'pill pill-red'">{{ row.crmStatus }}</span></td>
+                <td><span :class="mtStatusClass(row.mtStatus)">{{ row.mtStatus || '—' }}</span></td>
+                <td><span :class="getProcessingStatus(row.id, row.crmStatus) === '已处理' ? 'text-blue-600' : 'text-red-600'">{{ getProcessingStatus(row.id, row.crmStatus) }}</span></td>
+                <td class="font-mono" :class="row.crmDifference ? 'text-red-600 font-semibold' : 'text-gray-500'">{{ signedMoney(row.crmDifference) }}</td>
+                <td :class="row.crmPeople !== row.expectedPeople ? 'text-red-600 font-semibold' : 'text-gray-500'">{{ signedCount(row.crmPeople - row.expectedPeople) }} 条</td>
+                <td><div class="flex items-center gap-3"><button class="text-blue-600 hover:text-blue-800 text-xs py-1" @click="openDetail(row)">查看详情</button><button v-if="row.crmStatus === '异常'" class="text-red-600 hover:text-red-800 text-xs py-1" @click="openExceptionDrawer(row.id)">{{ getProcessingStatus(row.id, row.crmStatus) === '已处理' ? '查看处理记录' : '异常处理' }}</button></div></td>
+              </tr>
+              <tr v-if="!pagedRows.length"><td colspan="13" class="text-gray-400">{{ currentBatch ? '没有符合条件的对账明细' : '该日期暂无演示数据，请选择 2026-08-05 至 2026-08-11' }}</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="reconciliation-detail-pagination flex items-center justify-between flex-wrap gap-4 px-4 py-4 border-t border-gray-100">
+          <span class="text-xs text-gray-500">共 {{ filteredRows.length }} 条记录，当前显示 {{ pagedRows.length }} 条（异常已置顶）</span>
+          <div class="flex items-center gap-2 text-xs">
+            <button class="page-button" :disabled="page === 1" @click="page--" aria-label="上一页">‹</button>
+            <button v-for="number in pageNumbers" :key="number" class="page-button" :class="number === page ? 'page-current' : ''" @click="page = number">{{ number }}</button>
+            <span class="text-gray-500">第 {{ page }}/{{ pageCount }} 页</span>
+            <button class="page-button" :disabled="page >= pageCount" @click="page++" aria-label="下一页">›</button>
+            <select v-model.number="pageSize" class="custom-select w-[100px] ml-3" aria-label="每页条数"><option :value="20">20 条/页</option><option :value="50">50 条/页</option><option :value="100">100 条/页</option></select>
+          </div>
+        </div>
+      </div>
     </div>
-   </div>
-   <div class="flex items-center gap-3">
-    <div class="flex items-center gap-2 text-xs text-gray-500">
-     <span class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot">
-     </span>
-     <span>
-      统计时间: 2026-08-11 06:05:28
-     </span>
-    </div>
-   </div>
-  </div>
- </div>
- <!-- 两组对照 KPI（数量对不对 + 金额对不对，按 USD / USC 拆分） -->
- <div class="grid grid-cols-2 gap-6">
-  <!-- KPI 1：返佣订单数对照（简洁版） -->
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 relative">
-   <!-- 右上角：今日平仓订单总数（全局总锚点） -->
-   <div class="absolute top-5 right-5 text-right">
-    <div class="text-[11px] text-gray-400 mb-0.5">
-     今日平仓订单总数
-    </div>
-    <div class="stat-num-lg text-gray-800">
-     328
-     <span class="text-sm font-semibold text-gray-500 ml-1">
-      笔
-     </span>
-    </div>
-   </div>
-   <div class="flex items-center justify-between mb-6 pr-[180px]">
-    <div class="flex items-center gap-2">
-     <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-      <i class="fas fa-receipt text-[15px]">
-      </i>
-     </div>
-     <div>
-      <h3 class="font-bold text-gray-800 text-[15px]">
-       返佣订单数对照
-      </h3>
-     </div>
-    </div>
-   </div>
-   <!-- 优化后的核心对照：卡片式双排版 -->
-   <div class="flex items-center justify-between bg-gray-50 rounded-xl p-5 mb-5 relative border border-gray-100">
-    <div class="flex-1 text-center">
-     <div class="text-xs text-gray-500 mb-1">
-      按返佣规则判定
-     </div>
-     <div class="text-2xl font-bold text-gray-800">
-      186
-      <span class="text-sm font-normal text-gray-500 ml-0.5">
-       笔
-      </span>
-     </div>
-    </div>
-    <!-- 中间分隔线 -->
-    <div class="w-px h-12 bg-gray-200">
-    </div>
-    <!-- 中间对比浮层 -->
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-     <div class="bg-white rounded-full shadow-sm px-3 py-1.5 border border-emerald-100 flex items-center gap-1.5 z-10">
-      <i class="fa-solid fa-right-left text-emerald-500 text-xs">
-      </i>
-      <span class="text-[11px] font-bold text-emerald-600">
-       数量一致
-      </span>
-     </div>
-    </div>
-    <div class="flex-1 text-center">
-     <div class="text-xs text-gray-500 mb-1">
-      系统已计算返佣
-     </div>
-     <div class="text-2xl font-bold text-gray-800">
-      186
-      <span class="text-sm font-normal text-gray-500 ml-0.5">
-       笔
-      </span>
-     </div>
-    </div>
-   </div>
-   <!-- 底部一行 pill 细分（次要信息） -->
-   <div class="flex items-center gap-2 flex-wrap pt-4 border-t border-gray-50 text-[12px]">
-    <span class="pill pill-blue">
-     <i class="fas fa-dollar-sign mr-1" style="font-size:10px">
-     </i>
-     USD 158 笔
-    </span>
-    <span class="pill pill-orange">
-     <i class="fas fa-coins mr-1" style="font-size:10px">
-     </i>
-     USC 28 笔
-    </span>
-    <div class="flex-1">
-    </div>
-    <span class="pill pill-green">
-     <i class="fas fa-check mr-1" style="font-size:10px">
-     </i>
-     正常 179 笔
-    </span>
-    <span class="pill pill-red">
-     <i class="fas fa-exclamation mr-1" style="font-size:10px">
-     </i>
-     异常 7 笔
-    </span>
-   </div>
-  </div>
-  <!-- KPI 2：返佣总金额对照（简洁版） -->
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-   <div class="flex items-center justify-between mb-6">
-    <div class="flex items-center gap-2">
-     <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-      <i class="fas fa-coins text-[15px]">
-      </i>
-     </div>
-     <div>
-      <h3 class="font-bold text-gray-800 text-[15px]">
-       返佣总金额对照
-      </h3>
-     </div>
-    </div>
-    <i class="not-equal fa-solid fa-triangle-exclamation" title="金额有差额">
-    </i>
-   </div>
-   <!-- 优化后的核心对照：卡片式双排版 -->
-   <div class="flex items-center justify-between bg-red-50/40 rounded-xl p-5 mb-5 relative border border-red-100">
-    <div class="flex-1 text-center">
-     <div class="text-xs text-gray-500 mb-1">
-      应返佣（理论重算）
-     </div>
-     <div class="text-2xl font-bold text-gray-800">
-      $42,876.30
-     </div>
-    </div>
-    <!-- 中间分隔线 -->
-    <div class="w-px h-12 bg-red-200">
-    </div>
-    <!-- 中间对比浮层 -->
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-     <div class="bg-white rounded-lg shadow-sm px-3 py-1.5 border border-red-200 flex flex-col items-center justify-center z-10 min-w-[80px]">
-      <span class="text-[14px] font-bold text-red-600 leading-tight">
-       +$62.60
-      </span>
-      <span class="text-[10px] text-red-500 leading-tight mt-0.5">
-       金额有差额
-      </span>
-     </div>
-    </div>
-    <div class="flex-1 text-center">
-     <div class="text-xs text-gray-500 mb-1">
-      系统实返佣（佣金记录）
-     </div>
-     <div class="text-2xl font-bold text-gray-800">
-      $42,938.90
-     </div>
-    </div>
-   </div>
-   <!-- 底部一行 pill 细分（已根据要求隐藏 USD 一致 绿 / USC 差额 红） -->
-   <!--
-                    <div class="flex items-center gap-2 flex-wrap pt-4 border-t border-gray-50 text-[12px]">
-                        <span class="pill pill-blue border border-blue-100">USD  $41,617.60  <i class="fas fa-check text-emerald-500 ml-1.5" style="font-size:10px"></i>  一致</span>
-                        <span class="pill pill-orange border border-orange-100">USC  $1,258.70  vs  $1,321.30  <span class="ml-1.5 text-red-600 font-semibold">+$62.60</span></span>
-                    </div>
-                    -->
-  </div>
- </div>
- <!-- 核心对照表：对账明细（宽表横向滚动 nowrap） -->
- <div class="reconciliation-detail-table-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col overflow-visible">
-  <div class="flex items-center justify-between p-5 border-b border-gray-100">
-   <div class="flex items-center gap-3">
-    <h3 class="font-bold text-gray-800 text-[15px]">
-     对账明细
-    </h3>
-    <span class="pill pill-gray">
-     共 328 条，异常 7 条
-    </span>
-    <select class="custom-select w-[130px]">
-     <option>
-      账户类型（全部）
-     </option>
-     <option>
-      标准账户
-     </option>
-     <option>
-      美分账户
-     </option>
-    </select>
-    <select class="custom-select w-[130px]">
-     <option>
-      对账结果（全部）
-     </option>
-     <option>
-      异常
-     </option>
-     <option>
-      正常
-     </option>
-    </select>
-    <select v-model="processingStatusFilter" class="custom-select w-[130px]">
-     <option value="all">
-      处理状态（全部）
-     </option>
-     <option value="未处理">
-      未处理
-     </option>
-     <option value="已处理">
-      已处理
-     </option>
-    </select>
-   </div>
-   <div class="flex items-center gap-3">
-    <button class="bg-white hover:bg-gray-50 text-gray-600 border border-gray-200 px-5 py-2 rounded text-[13px] transition-colors shadow-sm flex items-center gap-2">
-     <i class="fas fa-download">
-     </i>
-     导出对账单
-    </button>
-    <div class="relative">
-     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-     </i>
-     <input class="custom-input pl-8 w-[280px]" placeholder="搜索平仓单号 / 客户 / MT账号" type="text"/>
-    </div>
-   </div>
-  </div>
-  <div class="reconciliation-detail-table-scroll overflow-x-auto no-scrollbar">
-   <table class="commission-detail-table custom-table w-full min-w-[1650px]">
-    <thead>
-     <tr>
-      <th>
-       平仓单号
-      </th>
-      <th>
-       账户类型
-      </th>
-      <th>
-       客户姓名 / MT账号
-      </th>
-      <th>
-       交易手数
-      </th>
-      <th>
-       应/实返佣人数
-      </th>
-      <th>
-       应/实返佣金额($)
-      </th>
-      <th>
-       对账结果
-      </th>
-      <th>
-       处理状态
-      </th>
-      <th>
-       金额差额($)
-      </th>
-      <th>
-       返佣条数差
-      </th>
-      <th>
-       操作
-      </th>
-     </tr>
-    </thead>
-    <tbody>
-     <tr v-show="matchesProcessingStatus('CL-50892', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50892
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">李强</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10028571</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.50
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 /
-       <span class="text-red-600 font-semibold">
-        3 人
-       </span>
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $14.00 /
-       <span class="text-red-600 font-semibold">
-        $72.20
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50892', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50892', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       +$58.20
-      </td>
-      <td class="font-semibold text-red-600">
-       +1 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50892')">
-         {{ getProcessingStatus('CL-50892', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50881', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50881
-      </td>
-      <td>
-       <span class="pill pill-orange">
-        美分账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">张敏</div>
-        <div class="text-xs leading-4 text-gray-400">MT: USC20234</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        2.50
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        美分手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       1 人 / 1 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $0.0035 /
-       <span class="text-red-600 font-semibold">
-        $1.4035
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50881', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50881', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       +$1.40
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50881')">
-         {{ getProcessingStatus('CL-50881', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50878', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50878
-      </td>
-      <td>
-       <span class="pill pill-orange">
-        美分账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">孙佳</div>
-        <div class="text-xs leading-4 text-gray-400">MT: USC21088</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        12.50
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        美分手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 / 2 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $0.0280 /
-       <span class="text-red-600 font-semibold">
-        $59.8280
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50878', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50878', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       +$59.80
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50878')">
-         {{ getProcessingStatus('CL-50878', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50870', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50870
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">王磊</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10029310</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.20
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 / 3 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $2.40 /
-       <span class="text-red-600 font-semibold">
-        $2.70
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50870', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50870', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       +$0.30
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50870')">
-         {{ getProcessingStatus('CL-50870', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50855', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50855
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">陈宇</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10024718</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        1.00
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 /
-       <span class="text-red-600 font-semibold">
-        2 人
-       </span>
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $15.00 /
-       <span class="text-red-600 font-semibold">
-        $10.00
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50855', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50855', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       -$5.00
-      </td>
-      <td class="font-semibold text-red-600">
-       -1 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50855')">
-         {{ getProcessingStatus('CL-50855', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50847', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50847
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">何思雨</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10023391</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.30
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 / 2 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $1.80 /
-       <span class="text-red-600 font-semibold">
-        $2.30
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50847', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50847', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       +$0.50
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50847')">
-         {{ getProcessingStatus('CL-50847', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50812', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50812
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">郑凯</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10030578</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.70
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 /
-       <span class="text-red-600 font-semibold">
-        5 人
-       </span>
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $10.50 /
-       <span class="text-red-600 font-semibold">
-        $45.50
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50812', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50812', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       +$35.00
-      </td>
-      <td class="font-semibold text-red-600">
-       +2 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50812')">
-         {{ getProcessingStatus('CL-50812', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50808', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50808
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">冯杰</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10028910</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.10
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 / 2 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $3.00 /
-       <span class="text-red-600 font-semibold">
-        $3.50
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50808', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50808', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       +$0.50
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50808')">
-         {{ getProcessingStatus('CL-50808', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50804', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50804
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">褚敏</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10022884</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        1.50
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       4 人 /
-       <span class="text-red-600 font-semibold">
-        3 人
-       </span>
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $60.00 /
-       <span class="text-red-600 font-semibold">
-        $30.00
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50804', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50804', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       -$30.00
-      </td>
-      <td class="font-semibold text-red-600">
-       -1 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50804')">
-         {{ getProcessingStatus('CL-50804', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50796', '异常')" class="diff-row">
-      <td class="font-mono text-gray-700">
-       #CL-50796
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">蒋晨</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10025040</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.60
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 /
-       <span class="text-red-600 font-semibold">
-        7 人
-       </span>
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $7.20 /
-       <span class="text-red-600 font-semibold">
-        $36.00
-       </span>
-      </td>
-      <td>
-       <span class="pill pill-red">
-        异常
-       </span>
-      </td>
-      <td>
-       <span :class="getProcessingStatus('CL-50796', '异常') === '已处理' ? 'font-medium text-blue-600' : 'font-medium text-red-600'">
-        {{ getProcessingStatus('CL-50796', '异常') }}
-       </span>
-      </td>
-      <td class="font-semibold text-red-600">
-       +$28.80
-      </td>
-      <td class="font-semibold text-red-600">
-       +4 条
-      </td>
-      <td>
-       <div class="flex items-center justify-center gap-1">
-        <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-         查看详情
-        </button>
-        <button class="text-red-600 hover:text-red-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-red-50 transition-colors" type="button" @click="openExceptionDrawer('CL-50796')">
-         {{ getProcessingStatus('CL-50796', '异常') === '已处理' ? '查看处理记录' : '异常处理' }}
-        </button>
-       </div>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50891', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50891
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">赵磊</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10027483</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        1.00
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 / 3 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $24.00 / $24.00
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50885', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50885
-      </td>
-      <td>
-       <span class="pill pill-orange">
-        美分账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">林小</div>
-        <div class="text-xs leading-4 text-gray-400">MT: USC21530</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        5.00
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        美分手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 / 2 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $0.0070 / $0.0070
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50890', '正常')">
-      <td class="font-mono text-gray-500">
-       #CL-50890
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5 text-gray-600">吴丹</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10031205</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.10
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 / 2 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $0.80 / $0.80
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <span class="text-gray-300 text-[12px]">
-        —
-       </span>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50840', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50840
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">刘洋</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10026187</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.80
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 / 2 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $14.40 / $14.40
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50836', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50836
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">张伟</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10019088</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        2.50
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 / 3 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $75.00 / $75.00
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50831', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50831
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">黄涛</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10030122</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        1.20
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       4 人 / 4 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $43.20 / $43.20
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50828', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50828
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">吴佳</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10027136</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.60
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 / 3 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $14.40 / $14.40
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50825', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50825
-      </td>
-      <td>
-       <span class="pill pill-orange">
-        美分账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">周明</div>
-        <div class="text-xs leading-4 text-gray-400">MT: USC20881</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        8.00
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        美分手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 / 2 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $0.0112 / $0.0112
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50819', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50819
-      </td>
-      <td>
-       <span class="pill pill-orange">
-        美分账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">徐磊</div>
-        <div class="text-xs leading-4 text-gray-400">MT: USC21977</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        20.00
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        美分手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 / 3 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $0.0280 / $0.0280
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50816', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50816
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">孙浩</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10024558</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.40
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       2 人 / 2 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $9.60 / $9.60
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50801', '正常')">
-      <td class="font-mono text-gray-500">
-       #CL-50801
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5 text-gray-600">韩冰</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10032016</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        0.01
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       0 人 / 0 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $0.00 / $0.00
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <span class="text-gray-300 text-[12px]">
-        —
-       </span>
-      </td>
-     </tr>
-     <tr v-show="matchesProcessingStatus('CL-50798', '正常')">
-      <td class="font-mono text-gray-700">
-       #CL-50798
-      </td>
-      <td>
-       <span class="pill pill-blue">
-        标准账户
-       </span>
-      </td>
-      <td>
-       <div class="reconciliation-customer">
-        <div class="font-medium leading-5">董雪</div>
-        <div class="text-xs leading-4 text-gray-400">MT: 10021166</div>
-       </div>
-      </td>
-      <td>
-       <span class="font-mono font-semibold text-red-600">
-        3.00
-       </span>
-       <span class="text-red-600 font-semibold ml-1">
-        标准手
-       </span>
-      </td>
-      <td class="font-mono text-gray-700">
-       3 人 / 3 人
-      </td>
-      <td class="font-mono text-right text-gray-800">
-       $108.00 / $108.00
-      </td>
-      <td>
-       <span class="pill pill-green">
-        正常
-       </span>
-      </td>
-      <td>
-       <span class="font-medium text-blue-600">
-        已处理
-       </span>
-      </td>
-      <td class="text-emerald-600 font-semibold">
-       $0.00
-      </td>
-      <td>
-       0 条
-      </td>
-      <td>
-       <button class="text-blue-600 hover:text-blue-800 text-[12px] font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors text-blue-500 hover:text-blue-700">
-        查看详情
-       </button>
-      </td>
-     </tr>
-    </tbody>
-   </table>
-  </div>
-  <div class="reconciliation-detail-pagination flex items-center justify-between p-4 border-t border-gray-100 text-xs text-gray-500">
-   <div>
-    共 328 条记录，当前显示前 20 条（异常已置顶）
-   </div>
-   <div class="flex items-center gap-2">
-    <button class="w-8 h-8 rounded border border-gray-200 hover:bg-gray-50 text-gray-500">
-     <i class="fas fa-chevron-left text-[10px]">
-     </i>
-    </button>
-    <button class="w-8 h-8 rounded bg-blue-600 text-white font-semibold">
-     1
-    </button>
-    <button class="w-8 h-8 rounded border border-gray-200 hover:bg-gray-50 text-gray-600">
-     2
-    </button>
-    <button class="w-8 h-8 rounded border border-gray-200 hover:bg-gray-50 text-gray-600">
-     3
-    </button>
-    <button class="w-8 h-8 rounded border border-gray-200 hover:bg-gray-50 text-gray-600">
-     41
-    </button>
-    <button class="w-8 h-8 rounded border border-gray-200 hover:bg-gray-50 text-gray-500">
-     <i class="fas fa-chevron-right text-[10px]">
-     </i>
-    </button>
-    <select class="custom-select w-[100px] ml-3">
-     <option>
-      20 条/页
-     </option>
-     <option>
-      50 条/页
-     </option>
-     <option>
-      100 条/页
-     </option>
-    </select>
-   </div>
-  </div>
- </div>
-</div>
+
+    <el-drawer v-model="detailOpen" title="佣金明细" size="90%">
+      <div v-if="selectedDetail" class="audit-readonly-detail">
+        <dl class="audit-detail-info">
+          <div><dt>平仓单号（CRM）</dt><dd>#{{ selectedDetail.id }}</dd></div><div><dt>MT5 平仓 Deal 编号</dt><dd>{{ selectedDetail.closeDeal }}</dd></div>
+          <div><dt>客户 / 交易 MT 账号</dt><dd>{{ selectedDetail.customer }} / {{ selectedDetail.account }}</dd></div><div><dt>对账日期 / 账户类型</dt><dd>{{ selectedDetail.date }} / {{ selectedDetail.accountType }}</dd></div>
+          <div><dt>交易手数</dt><dd>{{ selectedDetail.lots }}</dd></div><div><dt>应 / CRM返佣人数</dt><dd>{{ selectedDetail.expectedPeople }} / {{ selectedDetail.crmPeople }} 人</dd></div>
+          <div><dt>应 / CRM返佣金额</dt><dd>{{ money(selectedDetail.expectedAmount) }} / {{ money(selectedDetail.crmAmount) }}</dd></div><div><dt>CRM对账结果 / 金额差额</dt><dd>{{ selectedDetail.crmStatus }} / {{ signedMoney(selectedDetail.crmDifference) }}</dd></div>
+        </dl>
+        <h3 class="text-sm font-semibold mt-6 mb-3">CRM佣金明细（USD）</h3>
+        <div class="overflow-x-auto"><table class="audit-credit-table"><thead><tr><th>收款代理</th><th>佣金记录编号</th><th>应收佣代理</th><th>CRM记录状态</th><th>CRM返佣金额</th></tr></thead><tbody><tr v-for="recipient in selectedDetail.recipients" :key="recipient.commissionRecord"><td>{{ recipient.agent }}</td><td>{{ recipient.commissionRecord }}</td><td>{{ recipient.expected ? '是' : '否' }}</td><td>{{ recipient.crmRecorded ? '已记录' : '未记录' }}</td><td>{{ money(recipient.crmAmount) }}</td></tr><tr v-if="!selectedDetail.recipients.length"><td colspan="5">该平仓订单不涉及返佣。</td></tr></tbody></table></div>
+        <h3 class="text-sm font-semibold mt-6 mb-3">MT5佣金入账核对</h3>
+        <p class="text-xs text-gray-500 leading-5 mb-4">仅为固定演示关联结果。注释按 CM + 交易 MT 账号 + MT5 平仓 Deal 编号构造，具体拼接及匹配口径待后端确认；不使用页面平仓单号推测 Deal。重复入账按收款佣金账号及同一佣金记录对应的多笔流水确认，不以相同注释直接判定。</p>
+        <div class="overflow-x-auto"><table class="audit-credit-table min-w-[2250px]">
+          <thead><tr><th>收款代理</th><th>代理 MT5 佣金账号</th><th>交易 MT 账号</th><th>MT5 平仓 Deal 编号</th><th>CRM返佣金额</th><th>MT5实际入账金额</th><th>MT5入账注释</th><th>MT5入账流水编号</th><th>入账时间</th><th>金额差异</th><th>MT5对账结果</th></tr></thead>
+          <tbody>
+            <tr v-for="recipient in selectedDetail.recipients" :key="recipient.commissionRecord">
+              <td>{{ recipient.agent }}</td><td>{{ recipient.commissionAccount }}</td><td>{{ selectedDetail.account }}</td><td class="font-mono">{{ selectedDetail.closeDeal }}</td><td>{{ money(recipient.crmAmount) }}</td>
+              <td><div>{{ money(recipientMtAmount(recipient)) }}</div><div v-if="recipient.credits?.length > 1" class="text-xs text-gray-500">{{ recipient.credits.map(credit => money(credit.amount)).join(' + ') }}</div></td>
+              <td><div v-for="credit in recipient.credits || []" :key="credit.id" class="ledger-line font-mono">{{ credit.comment || '—' }}</div><span v-if="!recipient.credits?.length">—</span></td>
+              <td><div v-for="credit in recipient.credits || []" :key="credit.id" class="ledger-line font-mono">{{ credit.id }}</div><span v-if="!recipient.credits?.length">—</span></td>
+              <td><div v-for="credit in recipient.credits || []" :key="credit.id" class="ledger-line">{{ credit.time || '—' }}</div><span v-if="!recipient.credits?.length">—</span></td>
+              <td :class="differenceClass(recipientDifference(recipient))">{{ signedMoney(recipientDifference(recipient)) }}</td><td><span :class="mtStatusClass(recipientMtResult(recipient))">{{ recipientMtResult(recipient) }}</span><div v-if="recipient.reviewReason" class="mt-2 text-xs text-gray-500 whitespace-normal max-w-[220px]">{{ recipient.reviewReason }}</div></td>
+            </tr>
+            <tr v-if="!selectedDetail.recipients.length"><td colspan="11">—（无应收佣代理，不计入 MT返佣订单数）</td></tr>
+          </tbody>
+        </table></div>
+        <p class="mt-4 text-xs text-gray-500">MT返佣人数：{{ selectedDetail.mtPeople ?? '—' }}；MT返佣金额：{{ money(selectedDetail.mtAmount) }}；MT金额差异：{{ signedMoney(selectedDetail.mtDifference) }}。同一收款代理的多笔流水只计 1 人；各代理独立核对。</p>
+        <section v-if="exceptionRecords[selectedDetail.id]" class="mt-6 pt-4 border-t border-gray-100">
+          <h3 class="text-sm font-semibold mb-3">CRM异常处理记录</h3>
+          <dl class="audit-detail-info"><div><dt>异常原因 / 处理方式</dt><dd>{{ exceptionRecords[selectedDetail.id].reason }} / {{ exceptionRecords[selectedDetail.id].method }}</dd></div><div><dt>处理状态 / 处理人 / 处理时间</dt><dd>{{ exceptionRecords[selectedDetail.id].status }} / {{ exceptionRecords[selectedDetail.id].processor }} / {{ exceptionRecords[selectedDetail.id].processedAt }}</dd></div><div class="col-span-full"><dt>处理说明</dt><dd>{{ exceptionRecords[selectedDetail.id].note }}</dd></div></dl>
+        </section>
+      </div>
+      <template #footer><el-button @click="detailOpen = false">关闭</el-button></template>
+    </el-drawer>
 
     <el-drawer v-model="exceptionDrawerOpen" :with-header="false" size="640px">
       <div class="flex h-full min-h-0 flex-col">
@@ -1627,13 +224,13 @@
         </div>
       </div>
     </el-drawer>
-
-    </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { commissionAuditBatches, summarizeBatch, recipientMtAmount, recipientMtResult } from '@/store/commissionAuditDemo'
 import { ElMessage } from 'element-plus'
 
 const exceptionDrawerOpen = ref(false)
@@ -1660,18 +257,6 @@ const exceptionForm = reactive({
 
 const exceptionReasons = ['返佣金额不一致', '返佣人数不一致', 'MT数据异常', '数据同步异常', '其他']
 const handlingMethods = ['重新同步', '人工核对', '人工调整', '补发返佣', '其他']
-const exceptionRows = {
-  'CL-50892': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50892', accountType: '标准账户', customerName: '李强', mtAccount: '10028571', lots: '0.50 标准手', expectedPeople: '2 人', actualPeople: '3 人', expectedAmount: '$14.00', actualAmount: '$72.20', amountDifference: '+$58.20', rebateDifference: '+1 条' },
-  'CL-50881': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50881', accountType: '美分账户', customerName: '张敏', mtAccount: 'USC20234', lots: '2.50 美分手', expectedPeople: '1 人', actualPeople: '1 人', expectedAmount: '$0.0035', actualAmount: '$1.4035', amountDifference: '+$1.40', rebateDifference: '0 条' },
-  'CL-50878': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50878', accountType: '美分账户', customerName: '孙佳', mtAccount: 'USC21088', lots: '12.50 美分手', expectedPeople: '2 人', actualPeople: '2 人', expectedAmount: '$0.0280', actualAmount: '$59.8280', amountDifference: '+$59.80', rebateDifference: '0 条' },
-  'CL-50870': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50870', accountType: '标准账户', customerName: '王磊', mtAccount: '10029310', lots: '0.20 标准手', expectedPeople: '3 人', actualPeople: '3 人', expectedAmount: '$2.40', actualAmount: '$2.70', amountDifference: '+$0.30', rebateDifference: '0 条' },
-  'CL-50855': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50855', accountType: '标准账户', customerName: '陈宇', mtAccount: '10024718', lots: '1.00 标准手', expectedPeople: '3 人', actualPeople: '2 人', expectedAmount: '$15.00', actualAmount: '$10.00', amountDifference: '-$5.00', rebateDifference: '-1 条' },
-  'CL-50847': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50847', accountType: '标准账户', customerName: '何思雨', mtAccount: '10023391', lots: '0.30 标准手', expectedPeople: '2 人', actualPeople: '2 人', expectedAmount: '$1.80', actualAmount: '$2.30', amountDifference: '+$0.50', rebateDifference: '0 条' },
-  'CL-50812': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50812', accountType: '标准账户', customerName: '郑凯', mtAccount: '10030578', lots: '0.70 标准手', expectedPeople: '3 人', actualPeople: '5 人', expectedAmount: '$10.50', actualAmount: '$45.50', amountDifference: '+$35.00', rebateDifference: '+2 条' },
-  'CL-50808': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50808', accountType: '标准账户', customerName: '冯杰', mtAccount: '10028910', lots: '0.10 标准手', expectedPeople: '2 人', actualPeople: '2 人', expectedAmount: '$3.00', actualAmount: '$3.50', amountDifference: '+$0.50', rebateDifference: '0 条' },
-  'CL-50804': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50804', accountType: '标准账户', customerName: '褚敏', mtAccount: '10022884', lots: '1.50 标准手', expectedPeople: '4 人', actualPeople: '3 人', expectedAmount: '$60.00', actualAmount: '$30.00', amountDifference: '-$30.00', rebateDifference: '-1 条' },
-  'CL-50796': { reconciliationDate: '2026-08-11', closeOrderNo: '#CL-50796', accountType: '标准账户', customerName: '蒋晨', mtAccount: '10025040', lots: '0.60 标准手', expectedPeople: '3 人', actualPeople: '7 人', expectedAmount: '$7.20', actualAmount: '$36.00', amountDifference: '+$28.80', rebateDifference: '+4 条' }
-}
 
 const getProcessingStatus = (id, reconciliationResult) => {
   if (reconciliationResult === '正常') return '已处理'
@@ -1683,7 +268,7 @@ const matchesProcessingStatus = (id, reconciliationResult) => {
 }
 
 const openExceptionDrawer = (id) => {
-  const row = exceptionRows[id]
+  const row = exceptionRows.value[id]
   if (!row) return
   selectedException.value = row
   Object.assign(exceptionForm, exceptionRecords[id] || {
@@ -1730,6 +315,75 @@ const saveExceptionRecord = () => {
   Object.assign(exceptionForm, record)
   ElMessage.success('异常处理已确认')
 }
+
+const route = useRoute()
+const auditDate = ref(typeof route.query.date === 'string' ? route.query.date : '2026-08-11')
+const accountTypeFilter = ref('all')
+const crmStatusFilter = ref('all')
+const search = ref('')
+const page = ref(1)
+const pageSize = ref(20)
+const detailOpen = ref(false)
+const selectedDetail = ref(null)
+const currentBatch = computed(() => commissionAuditBatches[auditDate.value] || null)
+const rows = computed(() => currentBatch.value?.rows || [])
+const summary = computed(() => currentBatch.value ? summarizeBatch(rows.value) : null)
+const countCrmDifference = computed(() => summary.value ? summary.value.crmCount - summary.value.expectedCount : null)
+const countMtDifference = computed(() => summary.value ? summary.value.mtCount - summary.value.crmCount : null)
+const amountCrmDifference = computed(() => summary.value ? summary.value.crmAmount - summary.value.expectedAmount : null)
+const amountMtDifference = computed(() => summary.value?.mtAmount != null ? summary.value.mtAmount - summary.value.crmAmount : null)
+const hasValue = value => typeof value === 'number' && Number.isFinite(value)
+const money = value => hasValue(value) ? `$${(Math.abs(value) / 10000).toLocaleString('en-US', { minimumFractionDigits: value % 100 === 0 ? 2 : 4, maximumFractionDigits: 4 })}` : '—'
+const signedMoney = value => hasValue(value) ? `${value > 0 ? '+' : value < 0 ? '-' : ''}${money(value)}` : '—'
+const signedCount = value => hasValue(value) ? `${value > 0 ? '+' : ''}${value}` : '—'
+const differenceClass = value => !hasValue(value) ? 'text-gray-400' : value === 0 ? 'text-emerald-600' : 'text-red-600'
+const mtStatusClass = status => !status ? 'text-gray-400' : status === '正常' ? 'pill pill-green' : status === '待核实' ? 'pill pill-orange' : 'pill pill-red'
+const recipientDifference = recipient => recipientMtAmount(recipient) === null ? null : recipientMtAmount(recipient) - recipient.crmAmount
+const openDetail = row => { selectedDetail.value = row; detailOpen.value = true }
+
+const filteredRows = computed(() => {
+  const keyword = search.value.trim().toLowerCase()
+  return rows.value.filter(row =>
+    (accountTypeFilter.value === 'all' || row.accountType === accountTypeFilter.value) &&
+    (crmStatusFilter.value === 'all' || row.crmStatus === crmStatusFilter.value) &&
+    matchesProcessingStatus(row.id, row.crmStatus) &&
+    (!keyword || [row.id, row.customer, row.account].some(value => value.toLowerCase().includes(keyword)))
+  ).sort((a, b) => Number(b.crmStatus === '异常') - Number(a.crmStatus === '异常'))
+})
+const pageCount = computed(() => Math.max(1, Math.ceil(filteredRows.value.length / pageSize.value)))
+const pagedRows = computed(() => filteredRows.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value))
+const pageNumbers = computed(() => {
+  const start = Math.max(1, Math.min(page.value - 2, pageCount.value - 4))
+  return Array.from({ length: Math.min(5, pageCount.value) }, (_, index) => start + index)
+})
+watch([auditDate, accountTypeFilter, crmStatusFilter, processingStatusFilter, search, pageSize], () => { page.value = 1 })
+watch(pageCount, count => { if (page.value > count) page.value = count })
+watch(auditDate, () => { detailOpen.value = false; exceptionDrawerOpen.value = false })
+watch(() => route.query.date, date => { if (typeof date === 'string') auditDate.value = date })
+
+// 沿用原异常处理字段和保存流程，只从当前批次的同一份明细生成只读展示数据。
+const exceptionRows = computed(() => Object.fromEntries(rows.value.filter(row => row.crmStatus === '异常').map(row => [row.id, {
+  reconciliationDate: row.date, closeOrderNo: `#${row.id}`, accountType: row.accountType,
+  customerName: row.customer, mtAccount: row.account, lots: row.lots,
+  expectedPeople: `${row.expectedPeople} 人`, actualPeople: `${row.crmPeople} 人`,
+  expectedAmount: money(row.expectedAmount), actualAmount: money(row.crmAmount),
+  amountDifference: signedMoney(row.crmDifference), rebateDifference: `${signedCount(row.crmPeople - row.expectedPeople)} 条`
+}])))
+
+const exportAudit = () => {
+  if (!filteredRows.value.length) { ElMessage.warning('暂无可导出的演示明细'); return }
+  const headers = ['平仓单号', '账户类型', '客户姓名', 'MT账号', '交易手数', '应返佣人数', 'CRM返佣人数', 'MT返佣人数', '应返佣金额(USD)', 'CRM返佣金额(USD)', 'MT返佣金额(USD)', '对账结果', 'MT对账结果', '处理状态', 'CRM金额差额(USD)', '返佣条数差']
+  const content = filteredRows.value.map(row => [row.id, row.accountType, row.customer, row.account, row.lots, row.expectedPeople, row.crmPeople, row.mtPeople ?? '—', money(row.expectedAmount), money(row.crmAmount), money(row.mtAmount), row.crmStatus, row.mtStatus || '—', getProcessingStatus(row.id, row.crmStatus), signedMoney(row.crmDifference), row.crmPeople - row.expectedPeople])
+  const escape = value => `"${String(value).replaceAll('"', '""')}"`
+  const blob = new Blob(['\uFEFF' + [headers, ...content].map(row => row.map(escape).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = `对账明细-演示-${auditDate.value}.csv`
+  anchor.click()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
+  ElMessage.success('已导出当前筛选结果（演示数据）')
+}
 </script>
 
 <style scoped>
@@ -1768,6 +422,7 @@ const saveExceptionRecord = () => {
   padding: 12px 16px;
   border-bottom: 1px solid #f1f3f5;
   line-height: 20px;
+  text-align: left;
   vertical-align: middle;
   white-space: nowrap;
 }
@@ -1776,22 +431,15 @@ const saveExceptionRecord = () => {
   border-bottom: 0;
 }
 
-.commission-detail-table tbody td:nth-child(4),
-.commission-detail-table tbody td:nth-child(5),
-.commission-detail-table tbody td:nth-child(7),
-.commission-detail-table tbody td:nth-child(8),
-.commission-detail-table tbody td:nth-child(10) {
-  text-align: center;
-}
-
-.commission-detail-table tbody td:nth-child(6),
-.commission-detail-table tbody td:nth-child(9) {
-  text-align: right;
-}
-
 .commission-detail-table tbody td:last-child > .flex {
+  justify-content: flex-start;
   gap: 12px;
   min-width: 142px;
+}
+
+.commission-detail-table tbody td:last-child button {
+  padding-left: 0;
+  text-align: left;
 }
 
 .commission-detail-table tbody tr:not(.diff-row) td:nth-child(4) span {
@@ -1854,4 +502,28 @@ const saveExceptionRecord = () => {
   min-height: 64px;
   background: #fff;
 }
+
+.audit-kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.audit-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 18px 8px; }
+.audit-metrics > div { padding: 0 10px; min-width: 0; }
+.audit-metrics > div + div { border-left: 1px solid #e5e7eb; }
+.metric-label { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+.audit-metrics strong { font-size: clamp(16px, 1.4vw, 22px); font-variant-numeric: tabular-nums; color: #1f2937; overflow-wrap: anywhere; }
+.metric-unit { font-size: 12px; color: #6b7280; margin-left: 4px; }
+.audit-differences { display: flex; flex-wrap: wrap; gap: 10px 24px; padding: 16px 0; font-size: 12px; color: #6b7280; }
+.audit-differences b { margin-left: 6px; font-variant-numeric: tabular-nums; }
+.page-button { height: 32px; min-width: 32px; border: 1px solid #e5e7eb; border-radius: 4px; background: white; color: #6b7280; }
+.page-button:hover:not(:disabled) { background: #f9fafb; }
+.page-button.page-current { background: #2563eb; color: white; border-color: #2563eb; }
+.page-button:disabled { opacity: .4; cursor: not-allowed; }
+.commission-detail-table tbody tr:hover { background-color: #f9fafb; }
+.audit-detail-info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; font-size: 13px; }
+.audit-detail-info dt { color: #6b7280; font-size: 12px; margin-bottom: 5px; }
+.audit-detail-info dd { color: #374151; overflow-wrap: anywhere; }
+.audit-credit-table { width: 100%; border-collapse: collapse; font-size: 13px; color: #374151; }
+.audit-credit-table th, .audit-credit-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid #edf0f2; white-space: nowrap; vertical-align: top; font-variant-numeric: tabular-nums; }
+.audit-credit-table th { color: #6b7280; background: #fbfcfd; font-weight: 600; }
+.ledger-line { min-height: 24px; line-height: 24px; }
+@media (max-width: 1200px) { .audit-kpis { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) { .audit-metrics { grid-template-columns: minmax(0, 1fr); gap: 16px; } .audit-metrics > div + div { border-left: 0; } .audit-detail-info { grid-template-columns: minmax(0, 1fr); } }
 </style>

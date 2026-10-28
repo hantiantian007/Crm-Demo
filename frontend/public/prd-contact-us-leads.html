@@ -10,14 +10,86 @@
     .note{background:#f9fafb;border-left:3px solid #bd985d;padding:10px 14px;color:#6b7280}.table-wrap{overflow-x:auto}table{width:100%;min-width:860px;border-collapse:collapse;font-size:13px}th,td{padding:10px;border:1px solid #e5e7eb;text-align:left;vertical-align:top}th{background:#f3f4f6}code{font-size:12px;color:#7b5d2d;overflow-wrap:anywhere}
     @media(max-width:640px){.wrap{padding:12px}.card{padding:16px}}@media print{body{background:#fff}.wrap{padding:0;max-width:none}.card{border:0;padding:0}table{min-width:0;font-size:11px}tr{break-inside:avoid}}
   </style>
+<link rel="stylesheet" href="prd-flow.css">
 </head>
 <body><main class="wrap"><article class="card">
   <h1>联系我们表单及留资接入 PRD</h1>
+<!-- PRD-FLOW:contact-leads:START -->
+<section class="prd-flow" aria-labelledby="contact-leads-heading">
+<h2 id="contact-leads-heading">业务流程</h2>
+<p>本期为当前浏览器内的演示提交，未接微信公众号或后端；沿用现有留资流程，不新增分配或审批规则。 窄屏可在图内横向滚动查看。</p>
+<div class="prd-flow__viewport" tabindex="0" role="region" aria-label="联系我们表单及留资接入流程，可横向滚动">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" role="img" aria-labelledby="contact-leads-title contact-leads-desc">
+<title id="contact-leads-title">联系我们表单及留资接入流程</title><desc id="contact-leads-desc">填写表单并校验，失败不创建留资。校验成功后生成ID和原始快照，写入共享本地存储。保存失败保留输入，成功产生待分配记录并清空表单。</desc>
+<defs><marker id="contact-leads-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="flow-arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<path class="flow-edge" d="M480 72 L480 98" marker-end="url(#contact-leads-arrow)"/>
+<path class="flow-edge" d="M350 140 L282 140" marker-end="url(#contact-leads-arrow)"/>
+<text class="flow-label" x="316" y="127">不通过</text>
+<path class="flow-edge" d="M160 112 L160 44 L358 44" marker-end="url(#contact-leads-arrow)"/>
+<text class="flow-label" x="256" y="31">修改后再提交</text>
+<path class="flow-edge" d="M480 182 L480 214" marker-end="url(#contact-leads-arrow)"/>
+<text class="flow-label" x="505" y="201">通过</text>
+<path class="flow-edge" d="M480 270 L480 300" marker-end="url(#contact-leads-arrow)"/>
+<path class="flow-edge" d="M610 342 L678 342" marker-end="url(#contact-leads-arrow)"/>
+<text class="flow-label" x="644" y="329">失败</text>
+<path class="flow-edge" d="M480 384 L480 416" marker-end="url(#contact-leads-arrow)"/>
+<text class="flow-label" x="505" y="402">成功</text>
+<path class="flow-edge" d="M480 472 L480 498" marker-end="url(#contact-leads-arrow)"/>
+<g class="flow-node flow-normal">
+<rect x="358" y="16" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="34.0">填写联系我们表单</tspan>
+<tspan x="480" y="54.0">含必填微信号及选填留言</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,98 610,140 480,182 350,140"/>
+<text>
+<tspan x="480" y="130.0">必填、格式及</tspan>
+<tspan x="480" y="150.0">500 字上限通过？</tspan>
+</text></g>
+<g class="flow-node flow-error">
+<rect x="38" y="112" width="244" height="56" rx="7"/>
+<text>
+<tspan x="160" y="130.0">提示对应字段错误</tspan>
+<tspan x="160" y="150.0">不创建留资</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="214" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="232.0">生成留资 ID 与原始快照</tspan>
+<tspan x="480" y="252.0">来源：微信公众号-联系我们</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,300 610,342 480,384 350,342"/>
+<text>
+<tspan x="480" y="332.0">共享本地存储</tspan>
+<tspan x="480" y="352.0">是否保存成功？</tspan>
+</text></g>
+<g class="flow-node flow-error">
+<rect x="678" y="314" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="332.0">保存失败，保留填写内容</tspan>
+<tspan x="800" y="352.0">不提示成功、不覆盖原数据</tspan>
+</text></g>
+<g class="flow-node flow-success">
+<rect x="358" y="416" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="434.0">生成待分配留资记录</tspan>
+<tspan x="480" y="454.0">与现有列表及详情共用数据</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="498" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="516.0">提示本地演示提交成功</tspan>
+<tspan x="480" y="536.0">清空表单，可查询与跟进</tspan>
+</text></g>
+</svg></div></section>
+<!-- PRD-FLOW:contact-leads:END -->
+
   <p class="note">本期仅为 CRM 前端演示：未接入真实微信公众号、微信网页授权、OpenID 或后端服务。提交仅在当前浏览器、当前站点保存，不代表真实微信用户提交，也不会跨浏览器或跨项目传输。</p>
-  <h2>1. 页面说明</h2>
-  <p><strong>页面：</strong>联系我们；菜单：其他页面 → 联系我们；路由：<code>/other/contact-us</code>。页面顶部沿用 CRM 的 PRD 查看入口。</p>
+  <h2>1. 本次新增范围</h2>
   <p><strong>用途：</strong>演示用户填写联系方式及咨询留言，生成现有留资列表中的待分配记录，再复用分配、跟进和详情流程。</p>
-  <p><strong>结构：</strong>沿用提供的 HATC 表单参考图，保留品牌标识、浅色表单、绿色提交按钮和页脚。按姓名、手机号码及区号、微信号、邮箱、留言、提交的顺序展示；不增加上传或其他表单。</p>
+  <p><strong>表单新增与接入：</strong>在手机号之后增加必填微信号；姓名、手机号码及区号、邮箱、选填留言沿用参考表单规则。以下字段定义用于接入现有留资数据，不新增上传字段。</p>
   <h2>2. 核心字段定义</h2>
   <p>必填依据参考图：姓名、手机号、邮箱必填，留言选填；微信号按本次需求必填。必填文本去除首尾空白后校验。除已明确的留言上限外，不新增名称、微信号字符集或长度业务限制。</p>
   <div class="table-wrap"><table><thead><tr><th>字段 / 含义</th><th>数据来源及映射</th><th>类型 / 字符格式</th><th>必填 / 默认值</th><th>编辑及业务规则</th></tr></thead><tbody>
@@ -35,7 +107,7 @@
     <li>填写表单，校验姓名、号码、微信号、邮箱非空，校验邮箱基本格式及留言长度；各字段下展示明确错误。</li>
     <li>校验通过后调用现有 <code>leadsDemo.js</code> 的提交入口，生成唯一留资 ID，记录系统时间和原始提交快照；每次有效提交独立成条，不按姓名或邮箱自动覆盖已有记录。</li>
     <li>写入现有本地存储成功后才提示“本地演示留资提交成功”，清空表单；提交过程中按钮不可重复点击。保存失败不清空填写内容。</li>
-    <li>到客户管理 → 留资列表，在“全部 / 待分配”及公众号来源筛选中可查到记录，按现有流程分配及跟进。</li>
+    <li>新记录进入共享留资数据后，可按待分配状态及公众号来源查询；后续处理复用现有流程。</li>
   </ol>
   <h2>4. 留资关联及原始信息保护</h2>
   <ul>
@@ -44,7 +116,7 @@
     <li>沿用现有结构，查询分类归“其他”，留资次数为 1，无跟进记录、归属或转化账户；不新增状态、审批或分配规则。</li>
     <li>详情基础信息展示完整微信号；“留资记录 → 原始提交信息”同时提供只读原始微信号、姓名、区号、联系方式、邮箱、完整留言、来源和时间。</li>
     <li>后续分配、跟进、基础联系方式修改不得改写原始提交快照；原始字段与当前资料分开保存。旧记录未提供微信号时标注“原记录未提供”，不伪造历史数据。</li>
-    <li>其他来源继续使用原流程；不新增“联系我们记录”菜单或另一个管理列表。正式接入需后端接收公众号提交并提供 CRM 查询，本期不实现。</li>
+    <li>其他来源沿用原流程；正式接入依赖后端接收与查询能力，本期不实现。</li>
   </ul>
   <h2>5. 异常处理</h2>
   <ul>
@@ -55,10 +127,10 @@
   </ul>
   <h2>6. 验收标准</h2>
   <ol>
-    <li>菜单打开独立联系我们页，字段顺序与参考图要求一致，微信号位于手机号码之后；留言选填并计数，无上传功能。</li>
+    <li>新增微信号位于手机号码之后；留言选填并计数，无上传功能。</li>
     <li>微信号空/仅空格不能提交；姓名、手机号、邮箱必填，格式错误明确提示；500 字留言可保存，超长禁止持久化。</li>
     <li>提交成功后同一份共享留资数据新增唯一记录，来源正确、默认待分配，完整区号/微信号/留言/时间可查，刷新保留。</li>
     <li>分配和跟进后列表详情同步；修改当前联系方式不会改写原始提交，其他来源记录保持不变；存储失败不丢失输入、不冒充成功。</li>
-    <li>页面及文档明确为前端演示；未连接真实微信、OpenID、网页授权或后端；只新增本 PRD，沿用现有 PRD 查看交互。</li>
+    <li>页面及文档明确为前端演示；未连接真实微信、OpenID、网页授权或后端。</li>
   </ol>
 </article></main></body></html>

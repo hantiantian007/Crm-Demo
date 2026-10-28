@@ -1,0 +1,29 @@
+/* PRD 流程图编写规范（后续新增文档复用）
+ * 仅适用于本次新增/修改需求涉及的业务、操作、审批或状态流转。
+ * 放在标题区之后、具体需求正文之前；无流程的字段展示/简单配置不强行补图。
+ * 使用静态 SVG 节点和有向箭头；判断节点标出分支条件，覆盖正文已有成功/失败/异常路径。
+ * 未确认节点标注“待确认”；演示流程与后续正式开发流程明确区分，不能暗示已真实接入。
+ * 图下保留新增字段、来源、计算、异常和验收；不添加“页面与入口”，不重复原页面功能。
+ * 不改历史版本；使用相对路径 prd-flow.css，不依赖远程图表库或脚本。
+ * 结构：section.prd-flow > h2 + p + div.prd-flow__viewport > svg。
+ * SVG 设置 viewBox、role=img、title/desc；节点与箭头使用本文类名，连接线端点贴合节点边界。
+ * 图太宽时在独立容器内横向滚动，禁止压缩文字；章号、原文锚点与 PRD 入口不受影响。
+ */
+.prd-flow{margin:20px 0 24px;padding:16px;border:1px solid #e5e7eb;border-radius:10px;background:#f9fafb;color:#374151;break-inside:avoid}
+.prd-flow h2{margin:0 0 6px;font-size:16px;line-height:1.5;color:#111827;border:0;padding:0}
+.prd-flow p{margin:0 0 10px;font-size:13px;line-height:1.7;color:#6b7280}
+.prd-flow__viewport{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;border-radius:6px}
+.prd-flow__viewport:focus-visible{outline:2px solid #bd985d;outline-offset:3px}
+.prd-flow svg{display:block;width:960px;max-width:none;height:auto;margin:0 auto;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.prd-flow .flow-node rect{fill:#fff;stroke:#d1d5db;stroke-width:1.3}
+.prd-flow .flow-node text{fill:#374151;text-anchor:middle;dominant-baseline:middle}
+.prd-flow .flow-node tspan:first-child{font-weight:600}
+.prd-flow .flow-decision polygon{fill:#fffbeb;stroke:#bd985d;stroke-width:1.4}
+.prd-flow .flow-success rect{fill:#f0fdf4;stroke:#86b99a}
+.prd-flow .flow-error rect{fill:#fff5f5;stroke:#e7a4a4}
+.prd-flow .flow-pending rect{fill:#fffaf0;stroke:#d6b679}
+.prd-flow .flow-edge{fill:none;stroke:#927344;stroke-width:1.5;stroke-linejoin:round}
+.prd-flow .flow-arrowhead{fill:#927344}
+.prd-flow .flow-label{fill:#6b7280;font-size:12px;text-anchor:middle;paint-order:stroke;stroke:#f9fafb;stroke-width:5px;stroke-linejoin:round}
+@media(max-width:640px){.prd-flow{padding:12px;margin:16px 0}.prd-flow h2{font-size:15px}}
+@media print{.prd-flow{background:#fff;padding:10px}.prd-flow__viewport{overflow:visible}.prd-flow svg{width:100%;max-width:960px}}

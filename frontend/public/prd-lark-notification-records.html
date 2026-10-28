@@ -1,22 +1,91 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>通知记录 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>通知记录 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style><link rel="stylesheet" href="prd-flow.css">
+</head>
 <body><main class="wrap"><article class="card">
 <span class="tag">独立页面 PRD · Lark 群消息演示</span><h1>通知记录 - PRD</h1>
-<section><h2>1. 页面名称</h2><p>风控管理 → Lark 通知 → 通知记录（默认 Tab）。保留通知记录、通知配置、Lark 群组三个 Tab，本 PRD 仅描述通知记录。</p></section>
-<section><h2>2. 页面目的</h2><p>查看什么时候、因为什么业务、向哪些 Lark 群组通知及结果。</p></section>
-<section><h2>3. 页面功能</h2><ul><li>列表展示通知时间、通知类型、内容、接收群组、发送状态、失败原因及查看入口。</li><li>分页及只读详情；保留手动模拟发送，仅使用现有 10 条规则，不新增场景。</li></ul></section>
-<section><h2>4. 核心字段定义</h2><p class="note">String[] 为去重的群组标识数组，名称仅作展示；空数组为 []。DateTime 展示 YYYY-MM-DD HH:mm:ss（19字符），原型取本机时间，正式使用 CRM 统一时区。缺失值显示“—”。所有发送结果均为本地演示，不接 Lark API 或真实业务事件。</p><div class="table-wrap"><table class="fields"><thead><tr><th>字段名称</th><th>字段含义</th><th>数据来源</th><th>数据类型</th><th>字符/格式要求</th><th>状态/枚举</th><th>默认值</th><th>是否必填</th><th>是否可编辑</th><th>业务规则 / 何时变化</th></tr></thead><tbody><tr><td>通知时间</td><td>本次记录生成时间</td><td>系统生成；原型为手动模拟时刻</td><td>DateTime</td><td>19字符，不可空</td><td>无</td><td>生成时刻</td><td>是</td><td>否</td><td>创建后固定，不随配置或群组变更改写。</td></tr>
-<tr><td>通知类型 / 名称</td><td>对应规则或历史业务名称</td><td>通知配置；历史名称快照</td><td>String</td><td>非空；沿用现有名称，建议≤100字符</td><td>现有10条规则及旧记录名称</td><td>来源快照</td><td>是</td><td>否</td><td>旧出金、异常登录、高风险样例名称不变，不据此新增规则。</td></tr>
+<!-- PRD-FLOW:lark-records:START -->
+<section class="prd-flow" aria-labelledby="lark-records-heading">
+<h2 id="lark-records-heading">业务流程</h2>
+<p>本图仅为现有本地模拟流程：“已发送”不代表真实送达，失败记录也只是演示结果；不包含真实业务事件或网络请求。 窄屏可在图内横向滚动查看。</p>
+<div class="prd-flow__viewport" tabindex="0" role="region" aria-label="Lark本地模拟通知记录流程，可横向滚动">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 578" role="img" aria-labelledby="lark-records-title lark-records-desc">
+<title id="lark-records-title">Lark本地模拟通知记录流程</title><desc id="lark-records-desc">手动选择规则，停用则不允许模拟且不新增记录。启用但无群组生成演示失败记录；有有效群组生成演示成功记录。新增记录后回第一页，可查看完整只读详情，不发生网络投递。</desc>
+<defs><marker id="lark-records-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="flow-arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<path class="flow-edge" d="M480 72 L480 98" marker-end="url(#lark-records-arrow)"/>
+<path class="flow-edge" d="M350 140 L282 140" marker-end="url(#lark-records-arrow)"/>
+<text class="flow-label" x="316" y="127">否</text>
+<path class="flow-edge" d="M480 182 L480 204" marker-end="url(#lark-records-arrow)"/>
+<text class="flow-label" x="503" y="198">是</text>
+<path class="flow-edge" d="M610 246 L678 246" marker-end="url(#lark-records-arrow)"/>
+<text class="flow-label" x="644" y="233">否</text>
+<path class="flow-edge" d="M480 288 L480 322" marker-end="url(#lark-records-arrow)"/>
+<text class="flow-label" x="503" y="308">是</text>
+<path class="flow-edge" d="M480 378 L480 422" marker-end="url(#lark-records-arrow)"/>
+<path class="flow-edge" d="M800 274 L800 450 L602 450" marker-end="url(#lark-records-arrow)"/>
+<path class="flow-edge" d="M480 478 L480 504" marker-end="url(#lark-records-arrow)"/>
+<g class="flow-node flow-normal">
+<rect x="358" y="16" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="44.0">手动选择通知规则</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,98 610,140 480,182 350,140"/>
+<text>
+<tspan x="480" y="140.0">规则是否启用？</tspan>
+</text></g>
+<g class="flow-node flow-pending">
+<rect x="38" y="112" width="244" height="56" rx="7"/>
+<text>
+<tspan x="160" y="130.0">禁止模拟</tspan>
+<tspan x="160" y="150.0">不新增记录</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,204 610,246 480,288 350,246"/>
+<text>
+<tspan x="480" y="236.0">是否存在</tspan>
+<tspan x="480" y="256.0">有效启用群组？</tspan>
+</text></g>
+<g class="flow-node flow-error">
+<rect x="678" y="218" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="236.0">生成演示失败记录</tspan>
+<tspan x="800" y="256.0">记录“无有效群组”原因</tspan>
+</text></g>
+<g class="flow-node flow-success">
+<rect x="358" y="322" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="340.0">生成演示成功记录</tspan>
+<tspan x="480" y="360.0">保存群组名称及正文快照</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="422" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="440.0">新增记录，回到第一页</tspan>
+<tspan x="480" y="460.0">展示通知内容及演示结果</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="504" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="522.0">查看完整只读详情</tspan>
+<tspan x="480" y="542.0">不修改、不重发历史记录</tspan>
+</text></g>
+</svg></div></section>
+<!-- PRD-FLOW:lark-records:END -->
+
+<section><h2>1. 本次调整目的</h2><p>查看什么时候、因为什么业务、向哪些 Lark 群组通知及结果。</p></section>
+<section><h2>2. 新增/调整内容</h2><ul><li>列表展示通知时间、通知类型、内容、接收群组、发送状态、失败原因及查看入口。</li><li>分页及只读详情；保留手动模拟发送，仅使用通知配置提供的当前规则，本页不另行定义场景。</li></ul></section>
+<section><h2>3. 核心字段定义</h2><p class="note">String[] 为去重的群组标识数组，名称仅作展示；空数组为 []。DateTime 展示 YYYY-MM-DD HH:mm:ss（19字符），原型取本机时间，正式使用 CRM 统一时区。缺失值显示“—”。所有发送结果均为本地演示，不接 Lark API 或真实业务事件。</p><div class="table-wrap"><table class="fields"><thead><tr><th>字段名称</th><th>字段含义</th><th>数据来源</th><th>数据类型</th><th>字符/格式要求</th><th>状态/枚举</th><th>默认值</th><th>是否必填</th><th>是否可编辑</th><th>业务规则 / 何时变化</th></tr></thead><tbody><tr><td>通知时间</td><td>本次记录生成时间</td><td>系统生成；原型为手动模拟时刻</td><td>DateTime</td><td>19字符，不可空</td><td>无</td><td>生成时刻</td><td>是</td><td>否</td><td>创建后固定，不随配置或群组变更改写。</td></tr>
+<tr><td>通知类型 / 名称</td><td>对应规则或历史业务名称</td><td>通知配置；历史名称快照</td><td>String</td><td>非空；沿用现有名称，建议≤100字符</td><td>通知配置中的当前规则及历史名称快照</td><td>来源快照</td><td>是</td><td>否</td><td>旧出金、异常登录、高风险样例名称不变，不据此新增规则。</td></tr>
 <tr><td>通知内容</td><td>完整消息正文</td><td>业务事件数据；原型为既有演示文本</td><td>String</td><td>非空；保留换行；建议≤4000字符</td><td>无</td><td>事件正文</td><td>是</td><td>否</td><td>表格省略、详情全文；保留现有演示记录内容。</td></tr>
 <tr><td>接收群组 / 通知群组</td><td>当次选择的启用群组</td><td>规则的群组配置；登录通知使用该用户的群组配置</td><td>String[] 名称快照</td><td>支持多个群；空数组表示无有效目标</td><td>无</td><td>生成时的群名称快照</td><td>有效发送至少1群；失败记录可空</td><td>否</td><td>改名、停用或删除群组不修改历史。旧单聊记录群组为空并提示“旧记录未配置群组”，不把人员姓名伪装成群名。</td></tr>
 <tr><td>发送状态</td><td>模拟投递结果</td><td>前端演示流程</td><td>String</td><td>固定枚举，不可空</td><td>已发送 / 发送失败</td><td>生成后按结果确定</td><td>是</td><td>否</td><td>已发送只代表模拟成功，不代表真实送达或已读；无群组模拟为失败。</td></tr>
 <tr><td>失败原因</td><td>本次未成功的说明</td><td>演示资格检查或预置演示数据</td><td>String</td><td>失败必有；成功为空；建议≤500字符</td><td>无</td><td>空字符串</td><td>失败时必填</td><td>否</td><td>详情和列表可查看；不包含 Webhook 或凭证。</td></tr>
 <tr><td>查看详情</td><td>只读展示完整记录</td><td>当前行记录</td><td>UI操作</td><td>打开现有弹窗</td><td>查看 / 关闭</td><td>查看</td><td>系统提供</td><td>否</td><td>不修改或重发历史，不新增页面。</td></tr></tbody></table></div></section>
-<section><h2>5. 核心业务规则</h2><ul><li>默认进入通知记录；保留原记录编号、时间、类型、正文及结果。新记录接收对象为群组快照，旧单聊记录明确标识为历史迁移记录。</li><li>模拟按钮只生成本地结果；规则停用时禁止模拟且不新增记录；启用但无有效群组时记录演示失败。</li><li>本页不增加真实发送、自动重试、检测规则、模板或新场景；Webhook 不出现在记录及失败原因中。</li></ul></section>
-<section><h2>6. 操作说明</h2><p>查看打开详情，关闭不改变记录。模拟发送选择启用规则，读取其当前有效群组，生成新记录后回到第一页。分页仅改变展示。</p></section>
-<section><h2>7. 状态说明</h2><p>已发送＝演示成功；发送失败＝演示失败。旧单聊记录的“群组未配置”为迁移说明，不是新增发送状态。</p></section>
-<section><h2>8. 验收标准</h2><ol><li>默认 Tab 为通知记录，分页和完整详情可用。</li><li>旧记录的时间、内容和结果保留；旧人员不作为群组显示。</li><li>模拟成功/失败均有明确演示说明，停用规则不能模拟。</li><li>群组改名、删除后历史快照不变；不执行网络发送。</li></ol></section>
+<section><h2>4. 核心业务规则</h2><ul><li>默认进入通知记录；保留原记录编号、时间、类型、正文及结果。新记录接收对象为群组快照，旧单聊记录明确标识为历史迁移记录。</li><li>模拟按钮只生成本地结果；规则停用时禁止模拟且不新增记录；启用但无有效群组时记录演示失败。</li><li>本页不增加真实发送、自动重试、检测规则、模板或新场景；Webhook 不出现在记录及失败原因中。</li></ul></section>
+<section><h2>5. 操作说明</h2><p>查看打开详情，关闭不改变记录。模拟发送选择启用规则，读取其当前有效群组，生成新记录后回到第一页。分页仅改变展示。</p></section>
+<section><h2>6. 状态说明</h2><p>已发送＝演示成功；发送失败＝演示失败。旧单聊记录的“群组未配置”为迁移说明，不是新增发送状态。</p></section>
+<section><h2>7. 验收标准</h2><ol><li>默认 Tab 为通知记录，分页和完整详情可用。</li><li>旧记录的时间、内容和结果保留；旧人员不作为群组显示。</li><li>模拟成功/失败均有明确演示说明，停用规则不能模拟。</li><li>群组改名、删除后历史快照不变；不执行网络发送。</li></ol></section>
 
 <p class="note">本期仅前端原型和本地演示数据；不接真实 Lark API、不发送消息、不增加业务场景。正式环境的 Webhook 和敏感信息由后端安全保存，不写入前端代码或浏览器存储。</p>
 </article></main></body></html>

@@ -49,7 +49,7 @@
    </div>
   </div>
   <div class="reconciliation-list-table-scroll overflow-x-auto no-scrollbar">
-   <table class="commission-list-table custom-table w-full min-w-[880px]">
+   <table class="commission-list-table custom-table w-full min-w-[1020px]">
     <thead class="bg-tableHeader sticky top-0">
      <tr>
       <th>
@@ -62,7 +62,10 @@
        应返佣金额
       </th>
       <th>
-       实际返佣金额
+       CRM实际返佣金额
+      </th>
+      <th>
+       MT返佣金额
       </th>
       <th>
        对账状态
@@ -92,6 +95,9 @@
       </td>
       <td class="font-mono font-semibold">
        $42,938.90
+      </td>
+      <td class="font-mono" :class="mtAmountClass(mtCommissionAmounts['2026-08-11'], 42938.90)">
+       {{ formatMtAmount(mtCommissionAmounts['2026-08-11']) }}
       </td>
       <td>
        <span class="pill pill-red">
@@ -126,6 +132,9 @@
       <td class="font-mono font-semibold">
        $51,370.40
       </td>
+      <td class="font-mono" :class="mtAmountClass(mtCommissionAmounts['2026-08-10'], 51370.40)">
+       {{ formatMtAmount(mtCommissionAmounts['2026-08-10']) }}
+      </td>
       <td>
        <span class="pill pill-red">
         异常
@@ -158,6 +167,9 @@
       </td>
       <td class="font-mono">
        $58,394.10
+      </td>
+      <td class="font-mono" :class="mtAmountClass(mtCommissionAmounts['2026-08-09'], 58394.10)">
+       {{ formatMtAmount(mtCommissionAmounts['2026-08-09']) }}
       </td>
       <td>
        <span class="pill pill-green">
@@ -192,6 +204,9 @@
       <td class="font-mono">
        $34,620.00
       </td>
+      <td class="font-mono" :class="mtAmountClass(mtCommissionAmounts['2026-08-08'], 34620.00)">
+       {{ formatMtAmount(mtCommissionAmounts['2026-08-08']) }}
+      </td>
       <td>
        <span class="pill pill-green">
         正常
@@ -224,6 +239,9 @@
       </td>
       <td class="font-mono">
        $40,088.25
+      </td>
+      <td class="font-mono" :class="mtAmountClass(mtCommissionAmounts['2026-08-07'], 40088.25)">
+       {{ formatMtAmount(mtCommissionAmounts['2026-08-07']) }}
       </td>
       <td>
        <span class="pill pill-green">
@@ -258,6 +276,9 @@
       <td class="font-mono">
        $46,133.50
       </td>
+      <td class="font-mono" :class="mtAmountClass(mtCommissionAmounts['2026-08-06'], 46133.50)">
+       {{ formatMtAmount(mtCommissionAmounts['2026-08-06']) }}
+      </td>
       <td>
        <span class="pill pill-green">
         正常
@@ -290,6 +311,9 @@
       </td>
       <td class="font-mono">
        $41,285.80
+      </td>
+      <td class="font-mono" :class="mtAmountClass(mtCommissionAmounts['2026-08-05'], 41285.80)">
+       {{ formatMtAmount(mtCommissionAmounts['2026-08-05']) }}
       </td>
       <td>
        <span class="pill pill-green">
@@ -362,6 +386,23 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 
+// 固定前端演示金额，不代表真实 MT5 入账；按批次日期取值，不随渲染或刷新随机变化。
+// 未配置的批次继续显示“—”，不以 CRM 金额推定 MT 入账结果。
+const mtCommissionAmounts = ref({
+  '2026-08-11': 42920.90,
+  '2026-08-10': 51390.40,
+  '2026-08-09': 58394.10,
+  '2026-08-08': 34620.00,
+  '2026-08-07': 40080.25,
+  '2026-08-06': 46133.50,
+  '2026-08-05': 41285.80
+})
+const amountFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 })
+const hasMtAmount = value => typeof value === 'number' && Number.isFinite(value)
+const formatMtAmount = value => hasMtAmount(value) ? amountFormatter.format(value) : '—'
+const mtAmountClass = (value, crmAmount) => !hasMtAmount(value) ? 'text-gray-400' : value === crmAmount ? 'text-emerald-600' : 'text-red-600'
+
+
 const filters = ref({
   start: '2026-07-13',
   end: '2026-08-11',
@@ -425,13 +466,14 @@ const handleReset = () => {
 .commission-list-table tbody td:nth-child(2),
 .commission-list-table tbody td:nth-child(3),
 .commission-list-table tbody td:nth-child(4),
-.commission-list-table tbody td:nth-child(6),
-.commission-list-table tbody td:nth-child(7) {
+.commission-list-table tbody td:nth-child(5),
+.commission-list-table tbody td:nth-child(7),
+.commission-list-table tbody td:nth-child(8) {
   text-align: right;
 }
 
-.commission-list-table tbody td:nth-child(5),
-.commission-list-table tbody td:nth-child(8) {
+.commission-list-table tbody td:nth-child(6),
+.commission-list-table tbody td:nth-child(9) {
   text-align: center;
 }
 

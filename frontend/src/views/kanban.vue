@@ -246,13 +246,13 @@
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">其他页面</span>
-<h3 class="text-base font-bold text-gray-800">FAQ内容管理</h3>
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">客户管理 / 推荐管理</span>
+<h3 class="text-base font-bold text-gray-800">推荐码自定义及区分代理与直客推荐码</h3>
 </div>
-<p class="text-xs text-gray-500 mt-1">FAQ 内容管理与前台体验（官网/CRM 预览、热门问题、反馈；数据概览已隐藏）。</p>
+<p class="text-xs text-gray-500 mt-1">支持推荐码自定义，并能够区分代理推荐码与直客推荐码，便于后续识别不同类型推荐来源及客户归属。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个页面</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个任务</span>
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
@@ -262,24 +262,17 @@
 <thead>
 <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
 <th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
 <th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
 <th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-gray-100">
 <tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">FAQ内容管理</td>
-<td class="px-4 py-3 text-gray-500">支持 FAQ 管理、三语言内容维护、整体发布状态、官网/CRM 预览阅读体验（数据概览已隐藏）。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/other/faq-management" target="_blank">原型</a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openFaqManagementPrd">
-<i class="fas fa-file-alt"></i> PRD
-</button>
-</div>
-</td>
+<td class="px-4 py-3 font-bold text-gray-800">推荐码自定义及区分代理与直客推荐码</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5">支持推荐码自定义，并能够区分代理推荐码与直客推荐码，便于后续识别不同类型推荐来源及客户归属。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3 text-gray-500">暂无原型、PRD</td>
 </tr>
 </tbody>
 </table>
@@ -292,13 +285,13 @@
 <div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-3">
-<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">活动管理</span>
-<h3 class="text-base font-bold text-gray-800">先锋一号 50,000 USD 活动盈利释放管理</h3>
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">客户管理</span>
+<h3 class="text-base font-bold text-gray-800">公众号留资页面及留资信息增加</h3>
 </div>
-<p class="text-xs text-gray-500 mt-1">复用现有活动参加与活动审核流程：客户提交参加申请（模拟账户账号+截图），后台资格审核通过后从通过时间开始累计净入金，逐档触发盈利释放；Lot 按累计目标计算不清零。</p>
+<p class="text-xs text-gray-500 mt-1">建设微信公众号「联系我们」留资页面，支持用户填写姓名、手机号、微信号、电子邮箱及留言内容，提交后将相关信息接入 CRM 现有留资列表，供管理人员查询、分配和跟进。</p>
 </div>
 <div class="flex items-center gap-3 text-gray-400">
-<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 3 个任务</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个任务</span>
 <i class="fas fa-chevron-down accordion-icon"></i>
 </div>
 </div>
@@ -308,50 +301,124 @@
 <thead>
 <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
 <th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
-<th class="px-4 py-2 font-medium min-w-[260px]">概述</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
 <th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
 <th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-gray-100">
 <tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">客户参加弹窗（沿用现有参加方式）</td>
-<td class="px-4 py-3 text-gray-500">字段：HATC参与MT账号、模拟账户账号、模拟账户截图、活动条款确认；提交参加活动申请。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/home?join=pioneer-one-50000" target="_blank">原型</a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPioneerOnePrd">
-<i class="fas fa-file-alt"></i> PRD
-</button>
-</div>
-</td>
+<td class="px-4 py-3 font-bold text-gray-800">公众号留资页面及留资信息增加</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5">建设微信公众号「联系我们」留资页面，支持用户填写姓名、手机号、微信号、电子邮箱及留言内容，提交后将相关信息接入 CRM 现有留资列表，供管理人员查询、分配和跟进。</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/other/contact-us" target="_blank">联系我们原型</a>
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/crm/leads" target="_blank">留资列表原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openContactUsLeadsPrd"><i class="fas fa-file-alt"></i> PRD</button>
+</div></td>
 </tr>
-<tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">先锋一号 50,000 USD 活动详情</td>
-<td class="px-4 py-3 text-gray-500">活动详情页原型入口（复用现有“先锋体验活动详情”结构）。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/activity/pioneer-one-50000-detail" target="_blank">原型</a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPioneerOnePrd">
-<i class="fas fa-file-alt"></i> PRD
-</button>
+</tbody>
+</table>
 </div>
-</td>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">佣金管理</span>
+<h3 class="text-base font-bold text-gray-800">MT5佣金入账对账</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">在现有「佣金管理 → 对账记录」功能基础上，增加 CRM 与 MT5 佣金账户的对账能力。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个任务</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
 </tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
 <tr class="table-row-hover">
-<td class="px-4 py-3 font-bold text-gray-800">先锋一号 50,000 USD 活动审核</td>
-<td class="px-4 py-3 text-gray-500">活动管理 &gt; 活动审核：支持筛选申请活动=先锋一号 50,000 USD 活动。</td>
-<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">Group(含HK)</span></td>
-<td class="px-4 py-3">
-<div class="flex flex-wrap gap-2 items-center">
-<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/activity/audit" target="_blank">原型</a>
-<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openPioneerOneAuditPrd">
-<i class="fas fa-file-alt"></i> PRD
-</button>
-</div>
+<td class="px-4 py-3 font-bold text-gray-800">MT5佣金入账对账</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5">
+<p>在现有「佣金管理 → 对账记录」功能基础上，增加 CRM 与 MT5 佣金账户的对账能力。</p>
+<ul class="list-disc pl-4 space-y-1 mt-2">
+<li>对账记录列表增加 MT返佣金额。</li>
+<li>对账详情增加应返佣、CRM返佣、MT返佣的数量对照。</li>
+<li>增加应返佣金额、CRM实际返佣金额、MT实际入账金额对照。</li>
+<li>对账明细增加 MT返佣人数、MT返佣金额及 MT对账结果。</li>
+<li>根据 <code>CM + MT账号 + 平仓交易编号</code> 注释，结合实际收款代理佣金账号关联 MT5 入账流水。</li>
+<li>支持发现漏入账、少入账、多入账、重复入账等差异。</li>
+</ul>
 </td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/crm/commission-audit-log" target="_blank">对账记录原型</a>
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/crm/commission-daily-audit" target="_blank">对账详情原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openMt5CommissionReconciliationPrd"><i class="fas fa-file-alt"></i> PRD</button>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden accordion-item">
+<div @click="toggleElement($event)" class="px-4 py-3 cursor-pointer hover:bg-orange-50/50 transition-colors flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs font-bold">出金管理 / 风控管理</span>
+<h3 class="text-base font-bold text-gray-800">出金风险提示</h3>
+</div>
+<p class="text-xs text-gray-500 mt-1">在现有出金审核详情页面增加风险提示能力，展示客户近期安全信息变更、关联账户风险、异常登录等情况，帮助审核人员识别异常出金并进行人工复核。</p>
+</div>
+<div class="flex items-center gap-3 text-gray-400">
+<span class="text-xs bg-gray-100 px-2 py-1 rounded">包含 1 个任务</span>
+<i class="fas fa-chevron-down accordion-icon"></i>
+</div>
+</div>
+<div class="accordion-content border-t border-gray-100">
+<div class="overflow-x-auto no-scrollbar">
+<table class="min-w-full text-xs text-left">
+<thead>
+<tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[220px]">页面/任务名称</th>
+<th class="px-4 py-2 font-medium min-w-[320px]">概述</th>
+<th class="px-4 py-2 font-medium whitespace-nowrap w-[150px]">所属客户端</th>
+<th class="px-4 py-2 font-medium min-w-[280px]">交付物导航 (直达链接)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100">
+<tr class="table-row-hover">
+<td class="px-4 py-3 font-bold text-gray-800">出金风险提示</td>
+<td class="px-4 py-3 text-gray-500 whitespace-normal leading-5">
+<p>在现有出金审核详情页面增加风险提示能力，展示客户近期安全信息变更、关联账户风险、异常登录等情况，帮助审核人员识别异常出金并进行人工复核。</p>
+<ul class="list-disc pl-4 space-y-1 mt-2">
+<li>出金申请与客户、MT 账号正确关联。</li>
+<li>增加风险等级、命中规则数量及审核建议。</li>
+<li>展示近期收款账户变更、身份信息变更、关联账户风险、异常登录及设备变化等风险。</li>
+<li>增加风险命中明细及风险事件时间线。</li>
+<li>支持记录风险核查说明及处理结果。</li>
+<li>保留现有出金审核流程，不自动冻结或拒绝出金。</li>
+</ul>
+</td>
+<td class="px-4 py-3"><span class="inline-block px-2 py-0.5 text-[11px] rounded tag-group w-max">CRM</span></td>
+<td class="px-4 py-3"><div class="flex flex-wrap gap-2 items-center">
+<a class="text-blue-600 hover:text-blue-800 hover:underline text-xs font-medium transition-colors" href="#/crm/withdraw-audit-detail?account=8110474" target="_blank" rel="noopener noreferrer">查看原型</a>
+<button type="button" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded text-xs transition-colors font-medium" @click="openWithdrawSecurityRiskPrd"><i class="fas fa-file-alt"></i> 查看 PRD</button>
+</div></td>
 </tr>
 </tbody>
 </table>
@@ -1165,6 +1232,10 @@
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import { openPrd } from '@/store/prd'
 
+const openContactUsLeadsPrd = () => openPrd('prd-contact-us-leads.html', '联系我们表单及留资接入 PRD')
+const openMt5CommissionReconciliationPrd = () => openPrd('prd-mt5-commission-reconciliation.html', 'MT5佣金入账对账需求 PRD')
+const openWithdrawSecurityRiskPrd = () => openPrd('prd-withdraw-security-risk-assessment.html', '出金安全联动与风险评估 PRD')
+
 const showActivityParticipationAnalysis = false
 const showMyBankcardKanban = false
 const showMyBankcardChild = false
@@ -1177,18 +1248,15 @@ const pendingCount = ref(0)
 const openPcardJoinPrd = () => openPrd('prd-home-pcard-activity-join.html', 'PCard 活动参与 - PRD')
 const openReportActivityJoinPrd = () => openPrd('prd-report-activity-join.html', '活动参与报表 - PRD')
 const openAgentHomePrd = () => openPrd('prd-agent-home.html', '代理首页 - PRD')
-const openPioneerOnePrd = () => openPrd('prd-activity-pioneer-one-50000-release.html', '先锋一号 50,000 USD 活动详情与盈利释放 - PRD')
 const openLarkCenterPrd = () => openPrd('prd-lark-notification-records.html', 'Lark 通知 PRD')
 const openLarkRulesPrd = () => openPrd('prd-lark-notification-config.html', '通知配置 PRD')
 const openLarkGroupsPrd = () => openPrd('prd-lark-personnel.html', 'Lark 群组管理 PRD')
 const openCrmLoginNotificationPrd = () => openPrd('prd-crm-login-notification.html', 'CRM 登录通知配置 PRD')
-const openPioneerOneAuditPrd = () => openPrd('prd-activity-audit.html', '活动管理 - 活动审核（含先锋一号 50,000 USD 活动）- PRD')
 const openPaymentConfigRecordsPrd = () => openPrd('prd-payment-management.html', '支付设置 - 配置记录 - PRD')
 const openWithdrawConfigRecordsPrd = () => openPrd('prd-withdraw-settings.html', '提现设置 - 配置记录 - PRD')
 const openSalesDifferentialTierRebatePrd = () => openPrd('prd-sales-differential-tier-rebate.html', '销售差异化阶梯返佣配置 - PRD')
 const openSalesTradingRewardReportPrd = () => openPrd('prd-sales-trading-reward-report.html', '销售交易奖励报表 - PRD')
 const openCustomerRegisterProfilePrd = () => openPrd('prd-customer-register-profile.html', '客户注册资料 - PRD')
-const openFaqManagementPrd = () => openPrd('prd-faq-management.html', 'FAQ内容管理 - PRD')
 const openPasswordSecurityPrd = () => openPrd('prd-crm-password-security-force-reset.html', 'CRM 密码安全与风险触发强制重置 - PRD')
 const openBankcardAddPrd = () => openPrd('prd-bankcard-add.html', '新增银行卡 - PRD')
 

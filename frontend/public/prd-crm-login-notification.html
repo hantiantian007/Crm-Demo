@@ -1,11 +1,87 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CRM 登录通知配置 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style></head>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CRM 登录通知配置 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style><link rel="stylesheet" href="prd-flow.css">
+</head>
 <body><main class="wrap"><article class="card">
 <span class="tag">独立页面 PRD · Lark 群消息演示</span><h1>CRM 登录通知配置 - PRD</h1>
-<section><h2>1. 页面名称</h2><p>系统管理 → 系统设置 → 用户管理 → 登录通知设置弹窗。与 CRM 用户列表 PRD 独立维护。</p></section>
-<section><h2>2. 页面目的</h2><p>为指定 CRM 用户设置成功登录后接收提醒的 Lark 群组。本期仅展示配置和演示状态，不接登录事件。</p></section>
-<section><h2>3. 页面功能</h2><ul><li>用户名称、邮箱只读；可开启/关闭并多选启用群组。</li><li>显示配置状态；支持保存、取消。</li><li>未来成功登录 CRM 后发送群消息，不涉及 MT5 登录、不要求个人绑定。</li></ul></section>
-<section><h2>4. 核心字段定义</h2><p class="note">String[] 为去重的群组标识数组，名称仅作展示；空数组为 []。DateTime 展示 YYYY-MM-DD HH:mm:ss（19字符），原型取本机时间，正式使用 CRM 统一时区。缺失值显示“—”。所有发送结果均为本地演示，不接 Lark API 或真实业务事件。</p><div class="table-wrap"><table class="fields"><thead><tr><th>字段名称</th><th>字段含义</th><th>数据来源</th><th>数据类型</th><th>字符/格式要求</th><th>状态/枚举</th><th>默认值</th><th>是否必填</th><th>是否可编辑</th><th>业务规则 / 何时变化</th></tr></thead><tbody><tr><td>CRM 用户 ID</td><td>配置所属的 CRM 账号唯一标识</td><td>现有 CRM 用户数据</td><td>String</td><td>不可空，沿用原值，不转成数字；非 MT5 账号</td><td>无</td><td>所选用户 ID</td><td>是，系统</td><td>否</td><td>按 ID 保存，不能按姓名或邮箱猜测用户。</td></tr>
+<!-- PRD-FLOW:crm-login:START -->
+<section class="prd-flow" aria-labelledby="crm-login-heading">
+<h2 id="crm-login-heading">业务流程</h2>
+<p>后续业务约定：仅监控 CRM 成功登录，不涉及 MT5 登录。当前原型只保存配置，不接登录事件或真实 Lark API。 窄屏可在图内横向滚动查看。</p>
+<div class="prd-flow__viewport" tabindex="0" role="region" aria-label="CRM登录群通知触发流程，可横向滚动">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 616" role="img" aria-labelledby="crm-login-title crm-login-desc">
+<title id="crm-login-title">CRM登录群通知触发流程</title><desc id="crm-login-desc">被配置用户成功登录CRM后检查开关与有效启用群组。关闭或无群组不发送，满足条件向所选群发送本次登录信息，失败不影响CRM登录。此为后续业务约定，原型不接登录事件。</desc>
+<defs><marker id="crm-login-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="flow-arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<path class="flow-edge" d="M480 72 L480 98" marker-end="url(#crm-login-arrow)"/>
+<path class="flow-edge" d="M350 140 L282 140" marker-end="url(#crm-login-arrow)"/>
+<text class="flow-label" x="316" y="127">否</text>
+<path class="flow-edge" d="M480 182 L480 208" marker-end="url(#crm-login-arrow)"/>
+<text class="flow-label" x="503" y="198">是</text>
+<path class="flow-edge" d="M610 250 L678 250" marker-end="url(#crm-login-arrow)"/>
+<text class="flow-label" x="644" y="237">否</text>
+<path class="flow-edge" d="M480 292 L480 332" marker-end="url(#crm-login-arrow)"/>
+<text class="flow-label" x="503" y="315">是</text>
+<path class="flow-edge" d="M480 388 L480 418" marker-end="url(#crm-login-arrow)"/>
+<path class="flow-edge" d="M610 460 L678 460" marker-end="url(#crm-login-arrow)"/>
+<text class="flow-label" x="644" y="447">失败</text>
+<path class="flow-edge" d="M480 502 L480 542" marker-end="url(#crm-login-arrow)"/>
+<text class="flow-label" x="505" y="526">成功</text>
+<g class="flow-node flow-normal">
+<rect x="358" y="16" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="44.0">指定 CRM 用户成功登录</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,98 610,140 480,182 350,140"/>
+<text>
+<tspan x="480" y="130.0">该用户登录通知</tspan>
+<tspan x="480" y="150.0">是否开启？</tspan>
+</text></g>
+<g class="flow-node flow-pending">
+<rect x="38" y="112" width="244" height="56" rx="7"/>
+<text>
+<tspan x="160" y="130.0">不发送</tspan>
+<tspan x="160" y="150.0">不影响正常登录</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,208 610,250 480,292 350,250"/>
+<text>
+<tspan x="480" y="240.0">是否已配置</tspan>
+<tspan x="480" y="260.0">有效启用群组？</tspan>
+</text></g>
+<g class="flow-node flow-pending">
+<rect x="678" y="222" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="240.0">不发送</tspan>
+<tspan x="800" y="260.0">配置状态为待配置</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="332" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="350.0">向所配置群发送登录提醒</tspan>
+<tspan x="480" y="370.0">使用本次登录人员及时间</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,418 610,460 480,502 350,460"/>
+<text>
+<tspan x="480" y="460.0">发送结果</tspan>
+</text></g>
+<g class="flow-node flow-error">
+<rect x="678" y="432" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="450.0">消息发送失败</tspan>
+<tspan x="800" y="470.0">不影响 CRM 登录结果</tspan>
+</text></g>
+<g class="flow-node flow-success">
+<rect x="358" y="542" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="570.0">完成群通知</tspan>
+</text></g>
+</svg></div></section>
+<!-- PRD-FLOW:crm-login:END -->
+
+<section><h2>1. 本次调整目的</h2><p>为指定 CRM 用户设置成功登录后接收提醒的 Lark 群组。本期仅展示配置和演示状态，不接登录事件。</p></section>
+<section><h2>2. 新增/调整内容</h2><ul><li>用户名称、邮箱只读；可开启/关闭并多选启用群组。</li><li>显示配置状态；支持保存、取消。</li><li>未来成功登录 CRM 后发送群消息，不涉及 MT5 登录、不要求个人绑定。</li></ul></section>
+<section><h2>3. 核心字段定义</h2><p class="note">String[] 为去重的群组标识数组，名称仅作展示；空数组为 []。DateTime 展示 YYYY-MM-DD HH:mm:ss（19字符），原型取本机时间，正式使用 CRM 统一时区。缺失值显示“—”。所有发送结果均为本地演示，不接 Lark API 或真实业务事件。</p><div class="table-wrap"><table class="fields"><thead><tr><th>字段名称</th><th>字段含义</th><th>数据来源</th><th>数据类型</th><th>字符/格式要求</th><th>状态/枚举</th><th>默认值</th><th>是否必填</th><th>是否可编辑</th><th>业务规则 / 何时变化</th></tr></thead><tbody><tr><td>CRM 用户 ID</td><td>配置所属的 CRM 账号唯一标识</td><td>现有 CRM 用户数据</td><td>String</td><td>不可空，沿用原值，不转成数字；非 MT5 账号</td><td>无</td><td>所选用户 ID</td><td>是，系统</td><td>否</td><td>按 ID 保存，不能按姓名或邮箱猜测用户。</td></tr>
 <tr><td>用户名称</td><td>所选 CRM 用户姓名</td><td>现有 CRM 用户数据</td><td>String</td><td>非空；长度沿用主数据</td><td>无</td><td>所选用户名称</td><td>是，来源</td><td>否</td><td>不在登录通知配置中编辑。</td></tr>
 <tr><td>用户邮箱 / 账号</td><td>帮助辨认被配置用户</td><td>CRM 用户数据</td><td>String</td><td>邮箱格式/账号格式沿用原数据</td><td>无</td><td>所选用户原值</td><td>来源提供</td><td>否</td><td>不用于匹配 Lark 用户，不要求邮箱与群组关联。</td></tr>
 <tr><td>CRM 登录通知</td><td>是否关注该用户成功登录</td><td>该用户的通知配置</td><td>Boolean</td><td>true / false，不可空</td><td>开启 / 关闭；列表已开启 / 未开启</td><td>未配置 false；已有演示/保存值保留</td><td>是</td><td>是，通过设置</td><td>关闭不通知，但不禁用用户登录；只在保存后生效。</td></tr>
@@ -14,10 +90,10 @@
 <tr><td>最近登录时间</td><td>该用户最近一次 CRM 成功登录时间</td><td>CRM 登录日志；原型为现有用户演示数据</td><td>DateTime / 空</td><td>19字符；无记录可空</td><td>无</td><td>原数据</td><td>否</td><td>否</td><td>保存通知配置不能改写登录时间。</td></tr>
 <tr><td>通知内容：登录人员</td><td>未来此次成功登录的用户身份</td><td>该次 CRM 成功登录事件关联的用户数据</td><td>String 姓名及ID</td><td>非空；沿用 CRM 字符长度</td><td>无</td><td>事件用户</td><td>未来消息必有</td><td>否</td><td>必须为被配置用户，不填群管理员当作登录者。</td></tr>
 <tr><td>通知内容：登录时间/IP/设备</td><td>未来消息使用的此次登录信息</td><td>本次 CRM 登录日志/事件快照</td><td>DateTime + String</td><td>时间19字符；IP/地点/客户端/设备/系统沿用日志，有则展示</td><td>无</td><td>事件原值</td><td>登录时间必有，其余有则展示</td><td>否</td><td>不修改日志页面；不能使用下一次登录覆盖本次通知内容。</td></tr></tbody></table></div></section>
-<section><h2>5. 核心业务规则</h2><ul><li>仅启用群组可选择，保存时再次核对。停用或删除群组会从所有通知规则和 CRM 登录通知配置中移除；重新启用不自动恢复选择。</li><li>群组改名只更新当前配置显示，不修改历史通知的群名称快照。无有效群组允许保存，但不产生真实投递。</li><li>旧个人接收人配置无法推断对应群组，不自动转换；旧本地数据保留，新配置须重新选择群组。</li><li>未来：指定 CRM 用户成功登录 → 检查开启 → 检查已配置启用群组 → 通过对应群机器人发送群消息；本期不接入该事件。</li><li>关闭或无有效群组时不发送。关闭可以保留已选启用群组；成功登录本身不直接认定为异常。</li><li>至少包含登录人员、登录时间，有现有日志信息时附带 IP、地点、客户端/设备/系统。消息失败不能影响 CRM 登录结果。</li><li>不新增自动重试、频控、模板或真实发送；不改变现有10条业务规则。</li></ul></section>
-<section><h2>6. 操作说明</h2><p>打开回填当前用户和已保存配置。只能选择启用群组；开启但无群组允许保存为待配置并显示提醒。取消丢弃草稿，保存后更新该用户且本地持久化；存储失败提示仅会话生效。</p></section>
-<section><h2>7. 状态说明</h2><p>已关闭＝开关关闭；待配置＝开启但有效群组为空；已配置＝开启且至少1个启用群组。群停用/删除后立即重新判断；再次启用群组需人工重新选择。</p></section>
-<section><h2>8. 验收标准</h2><ol><li>配置归属于正确 CRM 用户，不修改该用户身份或登录数据。</li><li>支持多群选择、开关、保存和取消，刷新保持。</li><li>无群组时给出待配置提示；不回退为个人通知。</li><li>群停用/删除同步移除，历史记录保留。</li><li>没有真实登录事件或消息请求；只提供前端演示。</li></ol></section>
+<section><h2>4. 核心业务规则</h2><ul><li>仅启用群组可选择，保存时再次核对。停用或删除群组会从所有通知规则和 CRM 登录通知配置中移除；重新启用不自动恢复选择。</li><li>群组改名只更新当前配置显示，不修改历史通知的群名称快照。无有效群组允许保存，但不产生真实投递。</li><li>旧个人接收人配置无法推断对应群组，不自动转换；旧本地数据保留，新配置须重新选择群组。</li><li>未来：指定 CRM 用户成功登录 → 检查开启 → 检查已配置启用群组 → 通过对应群机器人发送群消息；本期不接入该事件。</li><li>关闭或无有效群组时不发送。关闭可以保留已选启用群组；成功登录本身不直接认定为异常。</li><li>至少包含登录人员、登录时间，有现有日志信息时附带 IP、地点、客户端/设备/系统。消息失败不能影响 CRM 登录结果。</li><li>不新增自动重试、频控、模板或真实发送；其他业务通知规则由通知配置 PRD 定义，本页不重复展开。</li></ul></section>
+<section><h2>5. 操作说明</h2><p>打开回填当前用户和已保存配置。只能选择启用群组；开启但无群组允许保存为待配置并显示提醒。取消丢弃草稿，保存后更新该用户且本地持久化；存储失败提示仅会话生效。</p></section>
+<section><h2>6. 状态说明</h2><p>已关闭＝开关关闭；待配置＝开启但有效群组为空；已配置＝开启且至少1个启用群组。群停用/删除后立即重新判断；再次启用群组需人工重新选择。</p></section>
+<section><h2>7. 验收标准</h2><ol><li>配置归属于正确 CRM 用户，不修改该用户身份或登录数据。</li><li>支持多群选择、开关、保存和取消，刷新保持。</li><li>无群组时给出待配置提示；不回退为个人通知。</li><li>群停用/删除同步移除，历史记录保留。</li><li>没有真实登录事件或消息请求；只提供前端演示。</li></ol></section>
 
 <p class="note">本期仅前端原型和本地演示数据；不接真实 Lark API、不发送消息、不增加业务场景。正式环境的 Webhook 和敏感信息由后端安全保存，不写入前端代码或浏览器存储。</p>
 </article></main></body></html>

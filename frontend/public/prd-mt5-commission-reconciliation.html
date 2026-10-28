@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MT5佣金入账对账需求 PRD</title>
+<style>
+    body{margin:0;background:#f9fafb;color:#374151;font:14px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+    .wrap{max-width:1200px;margin:auto;padding:24px 20px}.card{padding:24px;background:#fff;border:1px solid #e5e7eb;border-radius:10px}
+    h1{font-size:22px;color:#111827;margin:0 0 12px}h2{font-size:17px;color:#111827;margin:24px 0 8px}p{margin:8px 0}ul,ol{margin:8px 0;padding-left:22px}li{margin:5px 0}
+    .note{background:#f9fafb;border-left:3px solid #bd985d;padding:10px 14px;color:#6b7280}.table-wrap{overflow-x:auto}table{width:100%;min-width:860px;border-collapse:collapse;font-size:13px}th,td{padding:10px;border:1px solid #e5e7eb;text-align:left;vertical-align:top}th{background:#f3f4f6}code{font-size:12px;color:#7b5d2d;overflow-wrap:anywhere}
+    @media(max-width:640px){.wrap{padding:12px}.card{padding:16px}}@media print{body{background:#fff}.wrap{padding:0;max-width:none}.card{border:0;padding:0}table{min-width:0;font-size:11px}tr{break-inside:avoid}}
+  
+h3{font-size:15px;margin:18px 0 8px;color:#111827}
+</style>
+<link rel="stylesheet" href="prd-flow.css">
+</head>
+<body><main class="wrap"><article class="card">
+
+<h1>MT5佣金入账对账需求 PRD</h1>
+<!-- PRD-FLOW:mt-reconciliation:START -->
+<section class="prd-flow" aria-labelledby="mt-reconciliation-heading">
+<h2 id="mt-reconciliation-heading">业务流程</h2>
+<p>仅解释新增 MT5 核对能力；当前为固定数据原型，真实流水读取与失败处理属于后续接入。具体匹配、跨日及缺失值规则见正文。 窄屏可在图内横向滚动查看。</p>
+<div class="prd-flow__viewport" tabindex="0" role="region" aria-label="MT5佣金入账对账流程，可横向滚动">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 646" role="img" aria-labelledby="mt-reconciliation-title mt-reconciliation-desc">
+<title id="mt-reconciliation-title">MT5佣金入账对账流程</title><desc id="mt-reconciliation-desc">CRM返佣记录读取MT5流水。获取失败为对账失败，尚未获取为待核实。通过注释及实际收款账号关联后核对数量和金额，一致正常、差异产生MT异常、关联不明待核实。</desc>
+<defs><marker id="mt-reconciliation-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="flow-arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<path class="flow-edge" d="M480 72 L480 98" marker-end="url(#mt-reconciliation-arrow)"/>
+<path class="flow-edge" d="M480 154 L480 178" marker-end="url(#mt-reconciliation-arrow)"/>
+<path class="flow-edge" d="M350 220 L282 220" marker-end="url(#mt-reconciliation-arrow)"/>
+<text class="flow-label" x="316" y="207">未取得</text>
+<path class="flow-edge" d="M610 220 L678 220" marker-end="url(#mt-reconciliation-arrow)"/>
+<text class="flow-label" x="644" y="207">失败</text>
+<path class="flow-edge" d="M480 262 L480 288" marker-end="url(#mt-reconciliation-arrow)"/>
+<text class="flow-label" x="537" y="278">取得完整数据</text>
+<path class="flow-edge" d="M480 344 L480 370" marker-end="url(#mt-reconciliation-arrow)"/>
+<path class="flow-edge" d="M480 426 L480 450" marker-end="url(#mt-reconciliation-arrow)"/>
+<path class="flow-edge" d="M350 492 L160 492 L160 574" marker-end="url(#mt-reconciliation-arrow)"/>
+<text class="flow-label" x="250" y="479">无法确认</text>
+<path class="flow-edge" d="M480 534 L480 574" marker-end="url(#mt-reconciliation-arrow)"/>
+<text class="flow-label" x="507" y="556">一致</text>
+<path class="flow-edge" d="M610 492 L800 492 L800 574" marker-end="url(#mt-reconciliation-arrow)"/>
+<text class="flow-label" x="710" y="479">存在差异</text>
+<g class="flow-node flow-normal">
+<rect x="358" y="16" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="44.0">CRM 佣金发放记录</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="98" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="126.0">读取 MT5 佣金账户入账流水</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,178 610,220 480,262 350,220"/>
+<text>
+<tspan x="480" y="210.0">MT5 数据</tspan>
+<tspan x="480" y="230.0">是否可核对？</tspan>
+</text></g>
+<g class="flow-node flow-pending">
+<rect x="38" y="192" width="244" height="56" rx="7"/>
+<text>
+<tspan x="160" y="210.0">待核实</tspan>
+<tspan x="160" y="230.0">尚未取得 / 尚未核对</tspan>
+</text></g>
+<g class="flow-node flow-error">
+<rect x="678" y="192" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="210.0">对账失败</tspan>
+<tspan x="800" y="230.0">获取失败 / 超时 / 数据不完整</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="288" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="306.0">根据佣金注释关联记录</tspan>
+<tspan x="480" y="326.0">结合收款佣金账号与 Deal 编号</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="370" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="388.0">核对返佣订单数量与金额</tspan>
+<tspan x="480" y="408.0">全部应收佣代理逐笔核对</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,450 610,492 480,534 350,492"/>
+<text>
+<tspan x="480" y="482.0">判断关联及</tspan>
+<tspan x="480" y="502.0">数量 / 金额结果</tspan>
+</text></g>
+<g class="flow-node flow-pending">
+<rect x="38" y="574" width="244" height="56" rx="7"/>
+<text>
+<tspan x="160" y="592.0">待核实</tspan>
+<tspan x="160" y="612.0">关联歧义 / 跨日到账待确认</tspan>
+</text></g>
+<g class="flow-node flow-success">
+<rect x="358" y="574" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="602.0">对账正常</tspan>
+</text></g>
+<g class="flow-node flow-error">
+<rect x="678" y="574" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="592.0">生成 MT5 对账异常</tspan>
+<tspan x="800" y="612.0">不覆盖 CRM 原有异常统计</tspan>
+</text></g>
+</svg></div></section>
+<!-- PRD-FLOW:mt-reconciliation:END -->
+
+<p>业务模块：佣金管理 / 对账记录　版本：V1.0　更新日期：2026-10-27</p>
+<p class="note">本文按批次列表、详情统计/明细、代理入账核对分别描述新增 MT5 对账需求。当前原型使用固定前端演示数据，未连接真实 MT5；文中正式匹配、跨日查询及获取失败处理不代表已完成真实接入。</p>
+
+<h2>1. 本次新增范围与依赖</h2>
+<p>新增 MT5 入账核对，确认每笔平仓订单涉及的各级代理佣金是否准确到账。依赖现有 CRM 返佣记录、应收佣代理关系和统一金额口径，不重新定义 CRM 佣金计算与发放流程。</p>
+<ul>
+<li>对照三方订单数量：应返佣、CRM 已记录返佣、MT5 已完成入账关联。</li>
+<li>对照三方金额：应返佣金额、CRM 实际返佣金额、MT5 实际入账金额。</li>
+<li>仅查询、展示及记录核查结果；不改变返佣规则、CRM 原有异常统计和审核流程，不提供自动补发、自动冲正或其他 MT5 资金修改操作。</li>
+</ul>
+
+<h2>2. 对账批次列表</h2>
+<p>本页仅调整 CRM 金额名称并新增 MT 金额；详情核对同一批次。</p>
+<div class="table-wrap"><table><thead><tr><th>字段 / 变更</th><th>含义及数据来源</th><th>格式 / 空值 / 展示规则</th></tr></thead><tbody>
+<tr><td>CRM实际返佣金额</td><td>原“实际返佣金额”改名；来自 CRM 已记录的返佣明细汇总。</td><td>Decimal，沿用统一金额口径与展示精度；不改变原始记录。</td></tr>
+<tr><td>MT返佣金额</td><td>新增于 CRM 金额右侧；汇总与本批次 CRM 平仓订单及收款代理佣金记录相关联的 MT5 实际入账金额。</td><td>Decimal，可缺失；示例 <code>$42,920.90</code>。与 CRM 相等显示绿色、有差异显示红色；未取得数据或不能完整确认汇总时显示灰色“—”，不得用 CRM 金额补齐或默认 0。</td></tr>
+<tr><td>对账状态 / 异常笔数 / 金额差额</td><td>沿用 CRM 内部对账结果及原汇总。</td><td>保持原业务含义和计算方向，不把 MT5 异常数量、MT5 金额差异合并进这些字段。</td></tr>
+
+</tbody></table></div>
+
+<h2>3. 对账详情：统计及明细</h2>
+<h3>3.1 返佣订单数对照</h3>
+<div class="table-wrap"><table><thead><tr><th>字段</th><th>数据来源 / 统计口径</th><th>类型 / 计算规则</th></tr></thead><tbody>
+<tr><td>应返佣订单数</td><td>现有返佣规则判定符合条件的平仓订单。</td><td>Integer，单位“笔”；同一平仓订单去重计 1，不按代理人数计数。</td></tr>
+<tr><td>CRM返佣订单数</td><td>现有 CRM 返佣记录关联的符合条件平仓订单。</td><td>Integer，单位“笔”；一笔订单多级返佣仍计 1；沿用原 CRM 口径。</td></tr>
+<tr><td>MT返佣订单数</td><td>本批次平仓订单、全部应收佣代理清单及其 MT5 入账关联结果。</td><td>Integer；只有所有应收佣代理均匹配入账才计 1；并非 MT5 流水笔数。金额不一致仍可计为已关联，金额对账独立判断。无应收佣代理的订单不纳入此数量。</td></tr>
+<tr><td>CRM数量差异</td><td>上述数量计算。</td><td><code>CRM返佣订单数 − 应返佣订单数</code>。</td></tr>
+<tr><td>MT数量差异</td><td>上述数量计算。</td><td><code>MT返佣订单数 − CRM返佣订单数</code>。</td></tr>
+</tbody></table></div>
+<p>依赖原有标准账户（USD）、美分账户（USC）与 CRM 异常统计口径，MT 异常不计入 CRM 异常。数量差异为 0 显示正常，非零显示红色及正负号；来源未完整取得的数量不得冒充已确认的 0。多个代理或重复资金流水不重复增加平仓订单数。</p>
+<h3>3.2 返佣总金额对照</h3>
+<ul>
+<li><strong>应返佣金额：</strong>来源为现有返佣规则产生的理论应返佣金额，不由 MT5 对账模块另算返佣。</li>
+<li><strong>CRM实际返佣金额：</strong>来源为本批次 CRM 实际返佣记录。</li>
+<li><strong>MT返佣金额：</strong>来源为与本批次订单及代理记录关联的实际 MT5 入账；同一条真实流水不因重复拉取而重复汇总，已确认的多笔实际重复入账仍须如实计入金额并标记异常。</li>
+<li><code>CRM金额差异 = CRM实际返佣金额 − 应返佣金额</code>；<code>MT金额差异 = MT返佣金额 − CRM实际返佣金额</code>。0 为正常，非零显示红色、正负号；任一必要金额未知时差异显示“—”。</li>
+<li>数量和金额均按完整批次汇总，不因明细筛选或分页变化而改变；批次列表、详情卡片、全量明细及代理入账记录必须可逐级核对。</li>
+</ul>
+<p class="note">金额以同一币种及同一精度口径比较。USD 与 USC 原始数值不得直接相加。沿用项目已确认的统一口径；原型为已统一到 USD 的演示金额，不代表真实换汇。保留来源精度，不以展示后四舍五入的字符串判断差异；真实汇率、时间基准、舍入及容差未明确前列为待核实，不能在本模块自行设定。</p>
+<h3>3.3 对账明细字段</h3>
+<p>仅新增或调整下表字段；新增 MT金额紧跟应/CRM金额列，MT对账结果与 CRM 对账结果分列。表头、数据、状态及操作保持左对齐；宽表可横向滚动，不隐藏操作。</p>
+<div class="table-wrap"><table><thead><tr><th>字段</th><th>来源及含义</th><th>格式 / 规则</th></tr></thead><tbody>
+<tr><td>应/CRM/MT返佣人数</td><td>依次为应收佣代理数、CRM记录代理数、实际匹配到 MT5 入账的不同收款代理数。</td><td>三个 Integer，例如 <code>2 人 / 3 人 / 3 人</code>；代理身份来自 CRM，不按姓名或流水数量去重。同一代理重复流水仅计 1 人；无来源数据的项显示“—”。</td></tr>
+<tr><td>应/CRM返佣金额($)</td><td>原“应/实返佣金额”明确为理论应返佣 / CRM 实际金额。</td><td>Decimal，使用统一 USD 口径并保留现有精度，CRM差异突出显示。</td></tr>
+<tr><td>MT返佣金额($)</td><td>该订单所有关联收款代理的实际 MT5 入账金额。</td><td>Decimal，可缺失；紧跟应/CRM金额列；与代理明细汇总一致，未取得或不完整时不填 0。</td></tr>
+<tr><td>MT对账结果</td><td>独立于 CRM 对账结果，根据代理入账关联、数据完整性、金额及重复核对产生。</td><td>Enum：正常、少入账、多入账、漏入账、重复入账、待核实、对账失败；定义见第 6 节。</td></tr>
+</tbody></table></div>
+
+<h2>4. 查看详情：MT5佣金入账核对</h2>
+<p>在现有佣金明细下方展示该区域，一笔平仓交易的各级收款代理分别展示；多笔流水可逐条查看，保留代理汇总，避免同一 CRM 金额重复计入。所有信息只读，不开放资金操作。</p>
+<div class="table-wrap"><table><thead><tr><th>字段</th><th>数据来源 / 含义</th><th>类型、格式及缺失规则</th></tr></thead><tbody>
+<tr><td>收款代理</td><td>CRM 佣金记录及应收佣代理关系；实际领取该笔佣金的代理。</td><td>String，展示姓名；关联使用稳定代理标识，不用同名推断同一人。</td></tr>
+<tr><td>收款代理 MT5 佣金账号</td><td>CRM 发放目标及 MT5 流水实际收款账户，二者核对。</td><td>String，完整账号，不截断、不转浮点数；缺失无法可靠匹配，待核实。</td></tr>
+<tr><td>交易 MT 账号</td><td>平仓交易归属账户；与注释解析结果比对。</td><td>String，完整保留；区别于收款佣金账号。</td></tr>
+<tr><td>平仓交易编号</td><td>MT5 真实平仓 Deal 编号及 CRM 已有交易关联。</td><td>String 保存大整数标识，避免数值精度丢失；不得使用页面“平仓单号”或猜测的 Order 编号代替。</td></tr>
+<tr><td>CRM返佣金额</td><td>该订单、该代理的 CRM 返佣记录。</td><td>Decimal；以统一币种比较，保留来源精度；缺失不补 0。</td></tr>
+<tr><td>MT5实际入账金额</td><td>实际关联的收款佣金账户入账流水；多笔须可查逐笔及汇总。</td><td>Decimal，可缺失；真实已取得的 0 与未取得数据分开。</td></tr>
+<tr><td>MT5入账注释</td><td>MT5 原始资金流水注释。</td><td>String，原文保留；包含 <code>CM + MT账号 + 平仓交易编号</code>，解析规则待接口确认。缺失或歧义不猜测关联。</td></tr>
+<tr><td>MT5入账流水编号</td><td>MT5 资金流水标识，用于追踪实际入账。</td><td>String，完整保留大整数；不能把重复抓取同一流水算成新入账。</td></tr>
+<tr><td>MT5入账时间</td><td>MT5 流水记录的真实入账时间。</td><td>DateTime，展示 <code>YYYY-MM-DD HH:mm:ss</code>；保留来源时区依据，不能用客户端当前时间补齐；缺失显示“—”。</td></tr>
+<tr><td>金额差异</td><td>同一代理、同一订单的已确认关联金额。</td><td><code>MT5实际入账金额 − CRM返佣金额</code>；未知时“—”，已知时显示带正负号的 Decimal。</td></tr>
+<tr><td>MT5对账结果</td><td>该收款代理的 MT5 核对结论。</td><td>上述七种枚举；关联或必需字段不能确认时不显示“正常”。</td></tr>
+</tbody></table></div>
+
+<h2>5. MT5入账匹配与跨日规则</h2>
+<ol>
+<li><strong>建立核对基准：</strong>读取符合本批次范围的平仓订单、正确 MT5 平仓 Deal 编号、应收佣代理清单及各代理 CRM 佣金记录，保留现有客户/账户授权范围。</li>
+<li><strong>识别与解析：</strong>通过 MT5 注释识别佣金入账，按已确认的 <code>CM + MT账号 + 平仓交易编号</code> 组成提取交易 MT 账号和 Deal 编号。真实分隔符、长度边界、入账交易类型和接口字段尚需核实；未确定前不得凭拼接数字猜测拆分。</li>
+<li><strong>代理关联：</strong>同时结合实际收款代理 MT5 佣金账号关联对应 CRM 佣金记录。多级代理可收到相同注释，但收款账号及佣金记录不同，属于各自合法入账，不得直接判重复。</li>
+<li><strong>金额核对：</strong>对各代理已关联的实际 MT5 入账金额与 CRM 发放金额分别比较，再按订单及批次汇总；确认全部应收佣代理均关联后才增加 MT返佣订单数，金额异常不改变“已关联”的数量事实。</li>
+<li><strong>重复区分：</strong>同一真实流水重复拉取不属于重复入账。不同实际流水是否重复，须结合收款佣金账号、同一佣金义务/记录及实际入账情况确认；合法拆分入账与重复发放的识别边界未明确时置“待核实”，不得仅凭注释或多条流水自动认定。</li>
+<li><strong>跨日关联：</strong>CRM 发放与 MT5 入账跨日时，按关联订单及佣金记录追踪，不限定只查同日流水，不把次日到账直接判为漏入账。按既有批次归属汇总关联入账，不按 MT5 入账日另重复计入一批；跨日查询窗口、延迟容忍期和批次更新策略待核实，未完成确认前显示“待核实”。</li>
+<li><strong>失败处理：</strong>MT5 获取失败、超时或分页数据未完整取得时，明确标记受影响核对“对账失败”，保留失败原因；金额和差异不可填 0 或用 CRM 值推算。其他已取得的代理明细可以保留，但不得把部分合计冒充完整批次金额。</li>
+</ol>
+
+<h2>6. MT状态、缺失值及异常处理</h2>
+<div class="table-wrap"><table><thead><tr><th>MT对账结果</th><th>判断含义</th><th>展示 / 边界</th></tr></thead><tbody>
+<tr><td>正常</td><td>所需数据完整、应收代理入账关联完成、金额按统一口径一致且未确认重复。</td><td>正常状态样式；不能因差异无法计算而显示正常。</td></tr>
+<tr><td>少入账</td><td>已关联到实际入账，但已确认金额少于对应 CRM 返佣金额。</td><td>红色；差异为负，与完全没有匹配入账的漏入账区分。</td></tr>
+<tr><td>多入账</td><td>已关联实际金额大于对应 CRM 返佣金额，且非已确认重复入账结论。</td><td>红色；差异为正，保留对应流水供核查。</td></tr>
+<tr><td>漏入账</td><td>完整有效数据、跨日及延迟因素已核实后，确认应收佣代理没有对应入账。</td><td>红色；不得由接口失败、尚未查询或不完整结果推断。</td></tr>
+<tr><td>重复入账</td><td>同一收款代理佣金账号、同一佣金义务存在多笔已确认重复的实际入账。</td><td>红色；保留所有实际流水及金额，不因展示去重而隐去真实重复资金。</td></tr>
+<tr><td>待核实</td><td>尚未核对、关联歧义、必要字段不齐、跨日到账待确认或重复性质未明确。</td><td>提示状态；已确认金额可保留，无法确认的值显示“—”；不据此自动认定资金异常。</td></tr>
+<tr><td>对账失败</td><td>数据获取或核对过程失败，不能得出有效结论。</td><td>明确失败并记录原因；不等同漏入账，不能把未知金额视为零。</td></tr>
+</tbody></table></div>
+<p>同一订单可包含不同代理结果，必须在详情保留逐代理事实。列表单一结果的优先级/多异常汇总方式待研发与产品核实，不允许用汇总“正常”掩盖失败或异常代理。</p>
+<div class="table-wrap"><table><thead><tr><th>数据情形</th><th>数值处理</th><th>与状态的关系</th></tr></thead><tbody>
+<tr><td>无 MT5 数据 / 尚未查询</td><td>缺失值，显示“—”；金额差异不计算，不用 CRM 金额或 0 补齐。</td><td>尚未核对为待核实；若已明确获取失败则为对账失败。</td></tr>
+<tr><td>取得有效入账记录，金额确实为 0</td><td>显示实际 0（如 $0.00），正常参与算术比较。</td><td>匹配数量按入账关联判断，金额结果按与 CRM 差额判断，不仅凭 0 判漏入账。</td></tr>
+<tr><td>完整查询并核实确无应收代理入账</td><td>确认无入账与未知分开；可明确表示该代理已确认入账总额为 0，流水编号/时间仍为“—”。</td><td>应收佣代理按漏入账处理，不计为已匹配人次。</td></tr>
+<tr><td>不涉及返佣的平仓订单</td><td>无应收佣代理，MT字段可显示“—”（不适用）。</td><td>不计入 MT返佣订单数，不因为不适用自动增加 MT 异常。</td></tr>
+</tbody></table></div>
+<p><strong>人工处理：</strong>复用现有异常处理记录，不扩展原表单。CRM 对账结果与 MT5 对账结果独立，处理状态也独立；人工标记“已处理”不代表佣金已到 MT5，不清零差异、不覆盖原异常笔数或实际流水。不新建异常处理模块，本次不增加 MT 专属补发或冲正入口。</p>
+
+<h2>7. 演示案例与验收标准</h2>
+<p>以下为 <strong>2026-08-11 固定演示案例</strong>，不代表真实业务数据或 MT5 查询结果：</p>
+<div class="table-wrap"><table><thead><tr><th>指标</th><th>示例值</th><th>校验</th></tr></thead><tbody>
+<tr><td>应 / CRM / MT返佣订单数</td><td>186 / 186 / 185 笔</td><td>CRM数量差异 0 笔；MT数量差异 -1 笔。保留标准账户158笔、美分账户28笔的原型统计。</td></tr>
+<tr><td>应 / CRM / MT返佣金额</td><td>42,876.30 / 42,938.90 / 42,920.90 USD</td><td>CRM金额差异 +62.60 USD；MT金额差异 -18.00 USD。</td></tr>
+</tbody></table></div>
+<ol>
+<li>不同日期列表与详情的 MT金额一致；完整明细、代理入账汇总与顶部金额一致，切换日期/分页/筛选不混用批次。</li>
+<li>三个订单数和数量差异正确；同一订单全部应收佣代理已关联才计 MT订单数；缺少任一代理则不计，多条重复流水不增加订单数或代理人数。</li>
+<li>三项金额及两项差异按算术关系计算，负差异保留负号；USD/USC 使用已确认统一口径，保留必要小数精度，不用显示舍入值掩盖差异。</li>
+<li>每笔订单的 MT人数、金额与详情逐代理/逐流水一致；CRM平仓单号与 MT5 Deal 编号分开，收款佣金账号与交易账号分开。</li>
+<li>多级代理相同注释不误判重复；同一流水重复读取不重复累计；同一佣金义务真实重复入账保留证据并正确汇总。</li>
+<li>CRM与MT结果分列且全部左对齐，保留横向滚动和操作；原有查询、导出、分页、CRM异常处理及记录不受影响。</li>
+<li>跨日入账按关联记录核对，不直接判漏入账；无数据、尚未核对、真实0、已确认无入账和获取失败可以区分，失败状态及原因明确。</li>
+<li>七种 MT状态均有明确验收用例。人工已处理不改变实际入账事实和 CRM异常统计；全流程不执行资金修改操作。</li>
+</ol>
+
+<h2>8. 待核实项与原型边界</h2>
+<ul>
+<li><strong>注释及交易标识：</strong>是否含分隔符、账号/Deal 边界、实际注释样例、MT5入账交易类型、接口字段及与 CRM 的 Deal 映射；多 MT服务下的账号/流水唯一范围需确认。</li>
+<li><strong>来源完整性：</strong>真实数据源、分页/完整性判定、可查询范围、失败原因字段及超时标准；无记录与来源失败不能共用空列表语义。</li>
+<li><strong>金额：</strong>原币种、精度、USD/USC转换方式、公司汇率及其时间点、舍入/容差规则，不自行假设固定换算或允许误差。</li>
+<li><strong>跨日与重复：</strong>延迟容忍期、跨日追踪窗口、批次归属/更新时点、合法分拆与重复入账识别、混合异常的列表状态优先级。</li>
+<li><strong>当前原型：</strong>仅固定演示数据和人工记录；已有六种 MT状态，本 PRD 新明确的“对账失败”及真实失败链路仍需后续开发验收，本次不修改代码实现该状态。现有列表“查看详情”未传批次日期，原型需在详情选择日期；正式联动应确保进入所选批次，本次仅记录差异，不改业务跳转。</li>
+<li>本文仅定义新增 MT核对层。涉及待核实项须确认后进入真实只读对接，不能把演示标识、金额或拼接方式作为已验证的生产契约。</li>
+</ul>
+
+</article></main></body></html>

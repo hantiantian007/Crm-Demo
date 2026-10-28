@@ -30,184 +30,32 @@
     </div>
 
     <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-sm text-yellow-900">
-      本 PRD 按“出金详情”现有页面模块描述字段、来源与口径；重点强调“出金类型/是否计入真实出金”为历史快照字段，不回溯读取当前配置。
+      本次仅定义出金详情新增的“出金类型 / 是否计入真实出金”历史快照展示。不重复定义原有客户资料、资金、入金记录、支付记录、风险提示与审核流程。
     </div>
-
-    <div class="module-title">1. 出金基本信息</div>
-    <table>
-      <thead>
-        <tr>
-          <th width="30%">字段</th>
-          <th>说明</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="font-medium">MT账号</td><td>展示本次出金申请关联的 MT 账号；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">MT类型</td><td>标准账户/美分账户；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">账户名称</td><td>展示客户账户名称；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">客户邮箱</td><td>展示客户邮箱；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">MT分组</td><td>展示 MT 分组信息；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">出金类型</td><td>展示本次出金保存的<span class="highlight">类型名称快照</span>；类型后续改名/停用不影响历史详情；旧记录无类型展示“-”。</td></tr>
-        <tr><td class="font-medium">是否计入真实出金</td><td>展示本次出金保存的<span class="highlight">统计属性快照</span>（是/否）；后续配置修改不影响历史详情；旧记录无该字段展示“-”。</td></tr>
-        <tr><td class="font-medium">支付方式</td><td>展示本次出金的支付方式；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">上级信息</td><td>展示客户上级信息；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">手机号</td><td>展示客户手机号；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">证件姓名</td><td>展示证件姓名；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">证件号码</td><td>展示证件号码；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">银行名称</td><td>展示收款银行名称；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">银行账号</td><td>展示收款银行账号；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">申请时间</td><td>展示出金申请发起时间；无数据展示“-”。</td></tr>
-        <tr><td class="font-medium">处理时间</td><td>展示出金处理完成/更新的时间；无数据展示“-”。</td></tr>
-      </tbody>
-    </table>
-
-    <div class="bg-gray-50 border border-gray-200 rounded p-4 text-sm text-gray-700">
-      <div class="font-medium text-gray-800">来源说明</div>
-      <div class="mt-2">1）客户、MT账户与出金申请字段来自客户资料、MT账户信息与出金申请记录。</div>
-      <div>2）出金类型及统计属性来自本次出金保存的<span class="highlight">历史快照</span>（不读取“出入金类型设置”的最新值）。</div>
-    </div>
-
-    <div class="module-title">2. 资金信息</div>
-    <table>
-      <thead>
-        <tr>
-          <th width="30%">字段</th>
-          <th>口径/说明</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="font-medium">出金金额及币种</td><td>客户本次申请扣除的账户金额（含币种）。</td></tr>
-        <tr><td class="font-medium">到账金额及币种</td><td>支付币种下预计或实际到账金额（含币种）。</td></tr>
-        <tr><td class="font-medium">汇率</td><td>本次出金订单使用的换算汇率。</td></tr>
-        <tr><td class="font-medium">出金手续费及币种</td><td>本次出金手续费（含币种）。</td></tr>
-        <tr><td class="font-medium">账户余额</td><td>提交出金申请时的账户快照余额（非实时）。</td></tr>
-        <tr><td class="font-medium">账户净值</td><td>提交出金申请时的账户快照净值（非实时）。</td></tr>
-        <tr><td class="font-medium">可用保证金</td><td>提交出金申请时的账户快照可用保证金（非实时）。</td></tr>
-      </tbody>
-    </table>
-
-    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-sm text-yellow-900">
-      标准账户与美分账户需明确区分 USD 与 USC；不使用当前实时账户数据覆盖申请时快照。
-    </div>
-
-    <div class="module-title">3. 入金记录</div>
-    <table>
-      <thead>
-        <tr>
-          <th width="30%">字段</th>
-          <th>说明</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="font-medium">订单号</td><td>入金订单号。</td></tr>
-        <tr><td class="font-medium">MT账号</td><td>入金关联 MT 账号。</td></tr>
-        <tr><td class="font-medium">MT类型</td><td>标准账户/美分账户。</td></tr>
-        <tr><td class="font-medium">金额</td><td>入金金额（含币种）。</td></tr>
-        <tr><td class="font-medium">支付方式</td><td>入金支付方式。</td></tr>
-        <tr><td class="font-medium">审核状态</td><td>入金审核状态。</td></tr>
-        <tr><td class="font-medium">支付状态</td><td>入金支付状态。</td></tr>
-        <tr><td class="font-medium">申请时间</td><td>入金申请时间。</td></tr>
-        <tr><td class="font-medium">处理时间</td><td>入金处理时间。</td></tr>
-      </tbody>
-    </table>
-
-    <table>
-      <tbody>
-        <tr><td class="font-medium" width="30%">规则</td><td>
-          <div>1）数据来源为该客户关联 MT 账户的入金订单。</div>
-          <div>2）默认按申请时间倒序。</div>
-          <div>3）分页展示。</div>
-          <div>4）点击记录可进入对应入金详情。</div>
-          <div>5）无记录显示“暂无入金记录”。</div>
-        </td></tr>
-      </tbody>
-    </table>
-
-    <div class="module-title">4. 支付信息</div>
-    <table>
-      <thead>
-        <tr>
-          <th width="30%">字段</th>
-          <th>说明</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="font-medium">支付方式</td><td>本次出金的支付方式。</td></tr>
-        <tr><td class="font-medium">支付编号</td><td>支付处理编号/单号。</td></tr>
-        <tr><td class="font-medium">支付时间</td><td>支付发生时间。</td></tr>
-        <tr><td class="font-medium">支付状态</td><td>支付状态。</td></tr>
-        <tr><td class="font-medium">实际支付金额</td><td>实际支付金额（含币种）。</td></tr>
-        <tr><td class="font-medium">应支付金额</td><td>应支付金额（含币种）。</td></tr>
-        <tr><td class="font-medium">操作人</td><td>支付操作人。</td></tr>
-        <tr><td class="font-medium">原因</td><td>异常原因/备注；无数据“-”。</td></tr>
-        <tr><td class="font-medium">操作</td><td>页面只读；无操作时显示“-”。</td></tr>
-      </tbody>
-    </table>
-
-    <table>
-      <tbody>
-        <tr><td class="font-medium" width="30%">规则</td><td>
-          <div>1）数据来源为当前出金订单的支付处理记录。</div>
-          <div>2）一次出金存在多次支付尝试时全部保留。</div>
-          <div>3）默认按支付时间倒序。</div>
-        </td></tr>
-      </tbody>
-    </table>
-
-    <div class="module-title">5. 风险提示</div>
-    <table>
-      <tbody>
-        <tr><td class="font-medium" width="30%">示例</td><td>
-          <div>平台异常名单</div>
-          <div>大额出金</div>
-          <div>入金后快速出金</div>
-          <div>同IP或同设备多账号</div>
-          <div>注册地区与登录地区不一致</div>
-        </td></tr>
-        <tr><td class="font-medium">规则</td><td>
-          <div>1）高风险使用红色；中风险使用橙色。</div>
-          <div>2）无有效风险时显示“暂未发现风险”。</div>
-          <div>3）风险提示不等于自动拒绝，需要结合审核流程处理。</div>
-        </td></tr>
-      </tbody>
-    </table>
-
-    <div class="module-title">6. 审核详情</div>
-    <table>
-      <tbody>
-        <tr><td class="font-medium" width="30%">时间线节点</td><td>
-          <div>发起申请</div>
-          <div>客服审核</div>
-          <div>风控审核</div>
-          <div>财务审核</div>
-          <div>支付处理</div>
-          <div>完成、拒绝或取消</div>
-        </td></tr>
-        <tr><td class="font-medium">节点字段</td><td>
-          <div>节点名称、状态、操作时间、操作人、审核意见。</div>
-          <div>会签过程中显示“会签审核中”。</div>
-        </td></tr>
-      </tbody>
-    </table>
-
-    <div class="module-title">7. 状态口径</div>
-    <table>
-      <tbody>
-        <tr><td class="font-medium" width="30%">审核状态</td><td>待审核、审核中、会签审核中、已通过、已拒绝、已取消。</td></tr>
-        <tr><td class="font-medium">支付状态</td><td>待支付、支付中、支付成功、支付失败、支付取消、已退款。</td></tr>
-      </tbody>
-    </table>
-
-    <div class="module-title">8. 页面入口与返回</div>
-    <table>
-      <tbody>
-        <tr><td class="font-medium" width="30%">页面入口</td><td>
-          <div>1）从待审核出金与出金记录的“详情”进入。</div>
-          <div>2）通过出金记录ID查询详情。</div>
-        </td></tr>
-        <tr><td class="font-medium">返回</td><td>返回时优先回到来源列表，并保留来源列表的筛选条件与页码。</td></tr>
-      </tbody>
-    </table>
+    <div class="module-title">1. 新增字段及来源</div>
+    <table><thead><tr><th>字段</th><th>数据来源 / 格式</th><th>展示规则</th></tr></thead><tbody>
+      <tr><td class="font-medium">出金类型</td><td>本次出金记录保存的类型名称快照；文本。</td><td>只读显示历史类型名称；后续改名或停用不影响已保存详情。旧记录缺失显示“-”。</td></tr>
+      <tr><td class="font-medium">是否计入真实出金</td><td>本次出金记录保存的统计属性快照；是 / 否，可缺失。</td><td>只读显示历史统计属性；后续配置修改不回溯历史。旧记录缺失显示“-”，不默认归为“否”。</td></tr>
+    </tbody></table>
+    <div class="module-title">2. 快照读取规则</div>
+    <ul class="list-disc pl-5 text-sm space-y-2">
+      <li>使用当前出金记录 ID 对应的类型和统计属性快照；不得读取“出入金类型设置”的最新值替代历史值。</li>
+      <li>新增字段不改变出金金额、审核或支付状态，也不触发资金操作。</li>
+      <li>依赖现有申请快照：不使用实时账户数据覆盖申请时数据，USD 与 USC 继续按原币种口径区分。</li>
+    </ul>
+    <div class="module-title">3. 异常及兼容</div>
+    <ul class="list-disc pl-5 text-sm space-y-2">
+      <li>类型名称或统计属性分别处理缺失，不根据其他字段猜测或补齐。</li>
+      <li>原类型改名、停用或统计属性调整后，仍显示该申请保存时的快照。</li>
+      <li>旧记录缺失不影响详情的其他信息及原有审核流程。</li>
+    </ul>
+    <div class="module-title">4. 验收标准</div>
+    <ol class="list-decimal pl-5 text-sm space-y-2">
+      <li>两个新增字段均取自对应出金记录的快照，页面只读。</li>
+      <li>配置改名、停用或调整统计属性后，历史详情不变。</li>
+      <li>旧记录缺失显示“-”，真实“否”与缺失可区分。</li>
+      <li>查看新增字段不会改变原金额、审核结果及支付状态。</li>
+    </ol>
   </div>
 </body>
 </html>

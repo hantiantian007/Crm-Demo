@@ -1,13 +1,111 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>通知配置 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style></head>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>通知配置 - PRD</title><style>body{margin:0;background:#f9fafb;color:#374151;font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1520px;margin:auto;padding:24px 20px}.card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;color:#111827;margin:8px 0 12px}h2{font-size:16px;margin:20px 0 8px}h3{font-size:14px;margin:16px 0 6px}p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:4px 0}.tag{font-size:12px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;color:#9a3412}.note{font-size:13px;color:#6b7280;background:#f9fafb;padding:10px 12px;border-left:3px solid #bd985d}.table-wrap{max-width:100%;overflow-x:auto;margin:10px 0}table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6}th,td{padding:8px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f3f4f6;font-weight:600}.fields{min-width:1420px;table-layout:fixed}.fields th:nth-child(1){width:7%}.fields th:nth-child(2){width:9%}.fields th:nth-child(3){width:12%}.fields th:nth-child(4){width:7%}.fields th:nth-child(5){width:16%}.fields th:nth-child(6){width:10%}.fields th:nth-child(7){width:7%}.fields th:nth-child(8){width:8%}.fields th:nth-child(9){width:8%}.fields th:nth-child(10){width:16%}code{font-size:12px;color:#7b5d2d}a{color:#946d31}@media(max-width:640px){.wrap{padding:12px}.card{padding:14px}}@page{size:A3 landscape;margin:12mm}@media print{body{background:white}.wrap{padding:0;max-width:none}.card{padding:0;border:0}.table-wrap{overflow:visible}.fields{min-width:0}table{font-size:10px}tr{break-inside:avoid}h2,h3{break-after:avoid}}</style><link rel="stylesheet" href="prd-flow.css">
+</head>
 <body><main class="wrap"><article class="card">
 <span class="tag">独立页面 PRD · 三个场景 · Lark 群消息演示</span><h1>通知配置 - PRD</h1>
-<section><h2>1. 页面名称与目的</h2>
-<p>风控管理 → Lark 通知 → 通知配置。仅为本期三个场景配置 Lark 接收群组及启用状态，本文不合并通知记录、群组管理或 CRM 用户列表 PRD。</p>
+<!-- PRD-FLOW:lark-rules:START -->
+<section class="prd-flow" aria-labelledby="lark-rules-heading">
+<h2 id="lark-rules-heading">业务流程</h2>
+<p>后续正式开发约定，当前仅配置与本地演示，不执行自动触发、真实发送或自动重试。各场景的触发条件、公式和去重键仍以正文为准。 窄屏可在图内横向滚动查看。</p>
+<div class="prd-flow__viewport" tabindex="0" role="region" aria-label="Lark三个业务场景群通知流程，可横向滚动">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 680" role="img" aria-labelledby="lark-rules-title lark-rules-desc">
+<title id="lark-rules-title">Lark三个业务场景群通知流程</title><desc id="lark-rules-desc">有效参与、首次达标或大额出金命中，由业务模块确认事件并按场景去重。重复事件复用任务；规则停用或无启用群不发送。有目标群后生成消息并逐群记录成功或失败，重试复用原任务且不回滚业务。</desc>
+<defs><marker id="lark-rules-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="flow-arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs>
+<path class="flow-edge" d="M160 72 L160 90 L480 90 L480 104" marker-end="url(#lark-rules-arrow)"/>
+<path class="flow-edge" d="M480 72 L480 104" marker-end="url(#lark-rules-arrow)"/>
+<path class="flow-edge" d="M800 72 L800 90 L480 90 L480 104" marker-end="url(#lark-rules-arrow)"/>
+<path class="flow-edge" d="M480 160 L480 184" marker-end="url(#lark-rules-arrow)"/>
+<path class="flow-edge" d="M350 226 L282 226" marker-end="url(#lark-rules-arrow)"/>
+<text class="flow-label" x="316" y="213">是</text>
+<path class="flow-edge" d="M480 268 L480 288" marker-end="url(#lark-rules-arrow)"/>
+<text class="flow-label" x="503" y="282">否</text>
+<path class="flow-edge" d="M610 330 L678 330" marker-end="url(#lark-rules-arrow)"/>
+<text class="flow-label" x="644" y="317">否</text>
+<path class="flow-edge" d="M480 372 L480 406" marker-end="url(#lark-rules-arrow)"/>
+<text class="flow-label" x="503" y="392">是</text>
+<path class="flow-edge" d="M480 462 L480 486" marker-end="url(#lark-rules-arrow)"/>
+<path class="flow-edge" d="M350 528 L160 528 L160 608" marker-end="url(#lark-rules-arrow)"/>
+<text class="flow-label" x="248" y="515">成功</text>
+<path class="flow-edge" d="M610 528 L800 528 L800 608" marker-end="url(#lark-rules-arrow)"/>
+<text class="flow-label" x="710" y="515">失败</text>
+<g class="flow-node flow-normal">
+<rect x="38" y="16" width="244" height="56" rx="7"/>
+<text>
+<tspan x="160" y="44.0">有效参与记录保存成功</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="16" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="44.0">首次达到活动最终条件</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="678" y="16" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="44.0">有效出金申请命中金额门槛</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="104" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="122.0">业务模块确认事件</tspan>
+<tspan x="480" y="142.0">使用场景对应业务去重键</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,184 610,226 480,268 350,226"/>
+<text>
+<tspan x="480" y="216.0">同一事件 / 类型</tspan>
+<tspan x="480" y="236.0">已创建通知？</tspan>
+</text></g>
+<g class="flow-node flow-pending">
+<rect x="38" y="198" width="244" height="56" rx="7"/>
+<text>
+<tspan x="160" y="216.0">复用原通知任务</tspan>
+<tspan x="160" y="236.0">不重复创建首次通知</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,288 610,330 480,372 350,330"/>
+<text>
+<tspan x="480" y="320.0">规则启用且</tspan>
+<tspan x="480" y="340.0">存在启用接收群？</tspan>
+</text></g>
+<g class="flow-node flow-pending">
+<rect x="678" y="302" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="320.0">不发送</tspan>
+<tspan x="800" y="340.0">不回退为个人单聊</tspan>
+</text></g>
+<g class="flow-node flow-normal">
+<rect x="358" y="406" width="244" height="56" rx="7"/>
+<text>
+<tspan x="480" y="424.0">生成消息并向目标群投递</tspan>
+<tspan x="480" y="444.0">各群分别记录发送结果</tspan>
+</text></g>
+<g class="flow-node flow-normal flow-decision">
+<polygon points="480,486 610,528 480,570 350,528"/>
+<text>
+<tspan x="480" y="518.0">该群发送</tspan>
+<tspan x="480" y="538.0">是否成功？</tspan>
+</text></g>
+<g class="flow-node flow-success">
+<rect x="38" y="608" width="244" height="56" rx="7"/>
+<text>
+<tspan x="160" y="626.0">记录该群发送成功</tspan>
+<tspan x="160" y="646.0">保留内容及群名称快照</tspan>
+</text></g>
+<g class="flow-node flow-error">
+<rect x="678" y="608" width="244" height="56" rx="7"/>
+<text>
+<tspan x="800" y="626.0">记录失败状态及原因</tspan>
+<tspan x="800" y="646.0">后续重试复用原任务</tspan>
+</text></g>
+</svg></div></section>
+<!-- PRD-FLOW:lark-rules:END -->
+
+<section><h2>1. 本次调整范围</h2>
+<p>仅为本期三个场景配置 Lark 接收群组及启用状态，本文不合并通知记录、群组管理或 CRM 用户列表 PRD。</p>
 <p class="note">本期交付：调整前端规则列表及本 PRD，不实现以下业务检测、自动触发、持久化去重、重试或真实发送。第4～6节是后续正式开发的业务约定，不能将手动演示结果视为已实现这些能力。</p></section>
 
-<section><h2>2. 页面功能与规则列表</h2>
-<p>继续使用“通知名称 / 通知说明 / 通知群组 / 状态 / 设置”列表和原设置弹窗。默认进入通知记录 Tab；群组管理和历史通知不改。通知配置只显示以下三项，按表中顺序排列；实际通知对象均为本条规则配置的启用群组。</p>
+<section><h2>2. 本期通知规则</h2>
+<p>本次将通知配置调整为以下三项，按表中顺序排列；沿用群组设置，通知对象为本条规则配置的启用群组。</p>
 <div class="table-wrap"><table><thead><tr><th>顺序 / 场景标识</th><th>通知名称</th><th>通知说明（与原型一致）</th></tr></thead><tbody>
 <tr><td>1 / activity-participation</td><td>活动有人参与</td><td>参与资格校验通过且有效参与记录保存成功后通知；需报名的以报名成功为准，无需报名的以首次满足活动参与条件为准，同一活动、同一客户仅通知一次。</td></tr>
 <tr><td>2 / activity-qualified</td><td>活动有人达标</td><td>已有效参与的客户，按活动配置及有效数据首次达到最终达标条件时通知；同一活动、同一客户的最终达标事件仅通知一次，不改变奖励状态。</td></tr>
