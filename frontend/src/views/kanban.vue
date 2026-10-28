@@ -1234,7 +1234,7 @@ import { openPrd } from '@/store/prd'
 
 const openContactUsLeadsPrd = () => openPrd('prd-contact-us-leads.html', '联系我们表单及留资接入 PRD')
 const openMt5CommissionReconciliationPrd = () => openPrd('prd-mt5-commission-reconciliation.html', 'MT5佣金入账对账需求 PRD')
-const openWithdrawSecurityRiskPrd = () => openPrd('prd-withdraw-security-risk-assessment.html', '出金安全联动与风险评估 PRD')
+const openWithdrawSecurityRiskPrd = () => openPrd('prd-withdraw-detail.html', '出金风险提示 - PRD')
 
 const showActivityParticipationAnalysis = false
 const showMyBankcardKanban = false

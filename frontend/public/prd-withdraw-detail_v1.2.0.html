@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>出金风险提示 V1.2.0 - PRD</title><style>
+    body{margin:0;background:#f9fafb;color:#374151;font:14px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+    .wrap{max-width:1200px;margin:auto;padding:24px 20px}.card{padding:24px;background:#fff;border:1px solid #e5e7eb;border-radius:10px}
+    h1{font-size:22px;color:#111827;margin:0 0 12px}h2{font-size:17px;color:#111827;margin:24px 0 8px}p{margin:8px 0}ul,ol{margin:8px 0;padding-left:22px}li{margin:5px 0}
+    .note{background:#f9fafb;border-left:3px solid #bd985d;padding:10px 14px;color:#6b7280}.table-wrap{overflow-x:auto}table{width:100%;min-width:860px;border-collapse:collapse;font-size:13px}th,td{padding:10px;border:1px solid #e5e7eb;text-align:left;vertical-align:top}th{background:#f3f4f6}code{font-size:12px;color:#7b5d2d;overflow-wrap:anywhere}
+    @media(max-width:640px){.wrap{padding:12px}.card{padding:16px}}@media print{body{background:#fff}.wrap{padding:0;max-width:none}.card{border:0;padding:0}table{min-width:0;font-size:11px}tr{break-inside:avoid}}
+  
+h3{font-size:15px;margin:18px 0 8px;color:#111827}
+</style><link rel="stylesheet" href="prd-flow.css"></head>
+<body><main class="wrap"><article class="card"><h1>出金风险提示 - PRD</h1><p>版本：V1.2.0 · 更新日期：2026-10-28 · 本期增量需求</p>
+<section class="prd-flow" aria-labelledby="flow-heading"><h2 id="flow-heading">业务流程</h2><div class="prd-flow__viewport" tabindex="0" role="region" aria-label="出金风险提示流程，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1120" role="img" aria-labelledby="flow-title flow-desc"><title id="flow-title">出金风险提示与分级流程</title><desc id="flow-desc">读取当前申请风险数据，不可靠则待核实；可靠时识别有效风险并按类别去重，无命中为低风险；至少两类且包含收款账户变更或高风险关联账户为高风险，其余有效命中为中风险。展示等级和数量，打开弹窗查看依据及时间线，关闭后回到原审核流程。</desc><defs><marker id="risk-v120-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="flow-arrowhead" d="M0 0 L8 4 L0 8 Z"/></marker></defs><g class="flow-node flow-normal"><rect x="320" y="16" width="320" height="48" rx="7"/><text><tspan x="480" y="40">打开出金审核详情</tspan></text></g><path class="flow-edge" d="M480 64 V88" marker-end="url(#risk-v120-arrow)"/><g class="flow-node flow-normal"><rect x="280" y="88" width="400" height="48" rx="7"/><text><tspan x="480" y="112">读取当前申请关联的风险数据</tspan></text></g><path class="flow-edge" d="M480 136 V160" marker-end="url(#risk-v120-arrow)"/><g class="flow-node flow-decision"><polygon points="480,160 650,208 480,256 310,208"/><text><tspan x="480" y="208">风险数据是否完整可靠？</tspan></text></g><path class="flow-edge" d="M650 208 H810 V268" marker-end="url(#risk-v120-arrow)"/><text class="flow-label" x="750" y="196">否</text><g class="flow-node flow-error"><rect x="690" y="268" width="240" height="68" rx="7"/><text><tspan x="810" y="292">待核实 · 风险评估不可用</tspan><tspan x="810" y="312">命中数量“—”</tspan></text></g><path class="flow-edge" d="M480 256 V286" marker-end="url(#risk-v120-arrow)"/><text class="flow-label" x="510" y="277">是</text><g class="flow-node flow-normal"><rect x="300" y="286" width="360" height="48" rx="7"/><text><tspan x="480" y="310">识别有效风险 → 按风险类别去重</tspan></text></g><path class="flow-edge" d="M480 334 V364" marker-end="url(#risk-v120-arrow)"/><g class="flow-node flow-decision"><polygon points="480,364 650,412 480,460 310,412"/><text><tspan x="480" y="412">有效风险类别数 N = 0？</tspan></text></g><path class="flow-edge" d="M310 412 H150 V472" marker-end="url(#risk-v120-arrow)"/><text class="flow-label" x="220" y="400">是</text><g class="flow-node flow-success"><rect x="30" y="472" width="240" height="68" rx="7"/><text><tspan x="150" y="496">低风险 · 命中数量 0</tspan><tspan x="150" y="516">未发现已知风险</tspan></text></g><path class="flow-edge" d="M480 460 V490" marker-end="url(#risk-v120-arrow)"/><text class="flow-label" x="510" y="481">否</text><g class="flow-node flow-decision"><polygon points="480,490 650,538 480,586 310,538"/><text><tspan x="480" y="528">N ≥ 2 且包含收款账户变更</tspan><tspan x="480" y="548">或高风险关联账户？</tspan></text></g><path class="flow-edge" d="M480 586 V630" marker-end="url(#risk-v120-arrow)"/><text class="flow-label" x="510" y="613">是</text><g class="flow-node flow-error"><rect x="350" y="630" width="260" height="60" rx="7"/><text><tspan x="480" y="660">高风险 · 命中数量 N</tspan></text></g><path class="flow-edge" d="M650 538 H780 V630" marker-end="url(#risk-v120-arrow)"/><text class="flow-label" x="710" y="526">否</text><g class="flow-node flow-pending"><rect x="660" y="630" width="240" height="60" rx="7"/><text><tspan x="780" y="660">中风险 · 命中数量 N</tspan></text></g><path class="flow-edge" d="M150 540 V738 H480 V780" marker-end="url(#risk-v120-arrow)"/><path class="flow-edge" d="M480 690 V780" marker-end="url(#risk-v120-arrow)"/><path class="flow-edge" d="M780 690 V738 H480" marker-end="url(#risk-v120-arrow)"/><path class="flow-edge" d="M930 302 H948 V738 H780" marker-end="url(#risk-v120-arrow)"/><g class="flow-node flow-normal"><rect x="300" y="780" width="360" height="48" rx="7"/><text><tspan x="480" y="804">点击“查看风险明细” → 打开弹窗</tspan></text></g><path class="flow-edge" d="M480 828 V864" marker-end="url(#risk-v120-arrow)"/><g class="flow-node flow-normal"><rect x="250" y="864" width="460" height="68" rx="7"/><text><tspan x="480" y="888">查看风险命中、依据及风险事件时间线</tspan><tspan x="480" y="908">未命中 / 不可用时展示对应状态，不编造事件</tspan></text></g><path class="flow-edge" d="M480 932 V968" marker-end="url(#risk-v120-arrow)"/><g class="flow-node flow-normal"><rect x="280" y="968" width="400" height="68" rx="7"/><text><tspan x="480" y="992">关闭弹窗，返回原有出金审核流程</tspan><tspan x="480" y="1012">不自动拒绝、冻结或放行出金</tspan></text></g></svg></div></section>
+
+<p class="note">本版本仅记录出金风险提示的展示及交互增量，补充产品层面的风险等级判定规则，不改变原有出金审核或资金处理规则；本次不开发真实后端风险计算，不调整现有演示风险等级计算。当前为前端演示，不代表已接入真实风险服务。</p>
+<h2>1. 右侧风险提示卡片</h2>
+<ul><li>保留风险等级、命中风险数量及“查看风险明细”按钮，摘要与弹窗来自同一份当前申请风险数据。</li><li>移除辅助文案“仅为固定演示提示，不自动拦截或改变审核流程。”并收紧卡片内部间距；不改变审核逻辑。</li><li>风险明细不再独立占用左侧区域，不使用自动滚动定位；左侧资金信息下方继续展示入金记录。</li></ul>
+<h2>2. 新增及调整字段定义</h2>
+<div class="table-wrap"><table><thead><tr><th>字段</th><th>数据来源及格式</th><th>展示与变化规则</th></tr></thead><tbody>
+<tr><td>风险数据状态</td><td>当前申请风险数据读取及关联校验结果；枚举：风险命中 / 未命中风险 / 风险评估不可用。</td><td>只读；申请身份无法确认或数据无法取得时为不可用，不使用其他客户的默认资料。</td></tr>
+<tr><td>风险等级</td><td>同一份风险评估数据；高 / 中 / 低 / 待核实。</td><td>只读；不可用显示待核实，不默认低风险；按本版本“风险等级判定规则”定义评估口径。</td></tr>
+<tr><td>命中风险数量</td><td>当前申请有效风险按类别去重后的数量，Integer ≥ 0；仅四类基础风险参与计数。</td><td>未命中为 0，不可用为“—”；不能与明细分别写死。</td></tr>
+<tr><td>风险名称 / 风险等级 / 触发原因</td><td>当前申请关联的风险命中记录；String / 风险等级枚举 / String。</td><td>只读；仅展示本次申请相关风险，不复制客户全部风险标签。</td></tr>
+<tr><td>发生时间</td><td>关联安全事件的原始时间，YYYY-MM-DD HH:mm:ss。</td><td>与评估时间区分；缺失显示“—”，不能补造时间。</td></tr>
+<tr><td>触发依据</td><td>当前风险记录中的触发规则、事件时间、关联账户或业务记录及证据说明。</td><td>只读、支持展开收起；无可靠证据显示“暂无可用依据”。</td></tr>
+<tr><td>风险时间线节点</td><td>同一组风险记录，以及身份明确的当前出金申请事件；包含事件时间、名称、简要说明、关联风险等级（如适用）。</td><td>按实际发生时间排序；有可靠关联记录时提供查看依据，不伪造风险事件。</td></tr>
+</tbody></table></div>
+<h2>3. 风险等级判定规则</h2>
+<h3>3.1 风险等级定义</h3>
+<div class="table-wrap"><table><thead><tr><th>等级</th><th>判断标准</th></tr></thead><tbody>
+<tr><td>低风险</td><td>风险数据完整可靠，未命中任何有效风险规则。</td></tr>
+<tr><td>中风险</td><td>命中至少一类有效风险，但不满足高风险组合条件。</td></tr>
+<tr><td>高风险</td><td>同时命中至少两类相互独立的有效风险，且至少包含“近期收款账户变更”或“高风险关联账户”。</td></tr>
+<tr><td>待核实</td><td>风险数据缺失、申请/客户关联不明确或读取失败，无法可靠完成评估；优先于其他等级，不以部分命中或空列表认定低风险。</td></tr>
+</tbody></table></div>
+<h3>3.2 基础风险规则</h3>
+<div class="table-wrap"><table><thead><tr><th>风险类型</th><th>触发条件与数据来源</th><th>单独命中</th></tr></thead><tbody>
+<tr><td>近期收款账户变更</td><td>出金申请前 48 小时内修改钱包或银行卡；读取对应客户的收款账户变更记录，以申请时间为参照。</td><td>中风险</td></tr>
+<tr><td>近期身份信息变更</td><td>出金申请前 24 小时内修改手机号、邮箱或密码；读取对应客户安全信息变更记录，不展示密码或验证码。</td><td>中风险</td></tr>
+<tr><td>高风险关联账户</td><td>已有有效关联依据，且关联账户已命中风险；读取已有账户关联及有效风险事件。</td><td>中风险</td></tr>
+<tr><td>异常登录或设备变化</td><td>存在与本次出金相关的异常登录安全事件；读取已关联的登录/设备安全事件，不把任意设备变化直接认定为风险。</td><td>中风险</td></tr>
+</tbody></table></div>
+<p>48 小时和 24 小时沿用建议窗口，正式生产阈值仍需业务确认；时间边界、业务时区及有效关联口径沿用已确认规则，未确认项不得自行补造。</p>
+<h3>3.3 组合计算与去重</h3>
+<p>先验证数据可靠性，再识别有效命中并按上述四类风险去重。设 S 为有效风险类别集合，N = S 的类别数：</p>
+<ul><li>数据不可靠 → 待核实，命中总数显示“—”，不得自动视为无风险。</li><li>数据可靠且 N = 0 → 低风险。</li><li>数据可靠且 N ≥ 2，且 S 包含“近期收款账户变更”或“高风险关联账户” → 高风险。</li><li>数据可靠且 N ≥ 1，但不满足上述高风险组合 → 中风险。</li><li>同一类别重复事件不增加独立类别数；“多项风险同时命中”是组合判定条件，不作为第五类独立风险计数。</li><li>不能仅凭出金金额较大判定高风险。等级仅用于提示和查看依据，不自动拒绝、冻结或放行出金。</li></ul>
+<h3>3.4 判定示例</h3>
+<div class="table-wrap"><table><thead><tr><th>条件</th><th>结果</th></tr></thead><tbody>
+<tr><td>仅修改收款银行卡（含同类多次修改）</td><td>中风险</td></tr>
+<tr><td>修改收款银行卡 + 异常登录</td><td>高风险</td></tr>
+<tr><td>高风险关联账户 + 近期修改邮箱</td><td>高风险</td></tr>
+<tr><td>仅异常登录</td><td>中风险</td></tr>
+<tr><td>身份信息变更 + 异常登录</td><td>中风险</td></tr>
+<tr><td>数据完整且无有效命中</td><td>低风险</td></tr>
+<tr><td>数据无法可靠获取</td><td>待核实</td></tr>
+</tbody></table></div>
+
+<h2>4. 三种风险数据状态及边界</h2>
+<div class="table-wrap"><table><thead><tr><th>状态</th><th>右侧摘要</th><th>弹窗表现</th></tr></thead><tbody>
+<tr><td>风险命中</td><td>展示对应等级、命中数量。</td><td>展示同一申请命中记录、可用依据及按时间排序的关联事件。</td></tr>
+<tr><td>未命中风险</td><td>显示“未发现已知风险”，命中数量为 0。</td><td>展示未命中说明及已确认的申请事件，不为展示效果编造风险。</td></tr>
+<tr><td>风险评估不可用</td><td>显示“风险评估不可用”，等级待核实，数量“—”。</td><td>说明数据尚未取得或申请关联不完整；不展示其他客户风险，不自动判为无风险。</td></tr>
+</tbody></table></div>
+<p>保留固定演示场景：9900456 为命中；8100453 为未命中及已确认申请事件；8110474 为风险关联不可用。风险展示仅在客户、MT账号和当前申请关联明确时使用对应数据。本次不修复或重构原账户路由逻辑，也不通过默认客户补齐风险数据。</p>
+<h2>5. 验收标准</h2>
+<ol><li>等级判定覆盖上述七个示例；同类重复命中不升级，多项命中不重复计数，金额较大不单独判高风险；不可用始终待核实。本次验证 PRD 规则完整性，不代表真实计算已接入。</li><li>右侧摘要展示等级、命中数量，指定辅助文案已移除，按钮保留。</li><li>点击“查看风险明细”打开当前页面弹窗，路由不变；关闭后可再次打开。</li><li>弹窗摘要与右侧卡片、命中明细一致，不串用其他申请的数据。</li><li>风险依据支持逐条展开/收起；缺失时明确显示“暂无可用依据”。</li><li>风险时间线按实际事件时间排序，与明细共用数据，不与审核时间线混合。</li><li>命中、未命中、不可用三种场景均可展示，不可用不显示无风险或默认低风险。</li><li>关闭弹窗后原有出金审核功能不受影响；不发生自动资金或审核操作。</li></ol>
+</article></main></body></html>

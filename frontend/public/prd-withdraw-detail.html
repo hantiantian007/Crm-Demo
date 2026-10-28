@@ -4,58 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>出金详情 - PRD</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
-    th, td { border: 1px solid #e5e7eb; padding: 12px 16px; text-align: left; font-size: 14px; vertical-align: top; }
-    th { background: #f9fafb; color: #374151; font-weight: 600; }
-    td { color: #4b5563; line-height: 1.75; }
-    .highlight { color: #C19B5E; font-weight: 600; }
-    .module-title { border-left: 4px solid #C19B5E; padding-left: 12px; margin: 28px 0 16px; font-size: 18px; font-weight: 700; color: #1f2937; }
+    html, body { height: 100%; margin: 0; padding: 0; background: #ffffff; }
+    #prdFrame { width: 100%; height: 100%; border: 0; display: block; }
   </style>
 </head>
-<body class="bg-gray-50 p-8 font-sans">
-  <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-8">
-    <div class="flex justify-between items-start gap-4 border-b pb-4 mb-6 flex-wrap">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-800">出金详情 - 需求说明书（PRD）</h1>
-        <div class="mt-2 text-sm text-gray-500 space-x-4">
-          <span>版本：<span class="highlight">V1.0.0</span></span>
-          <span>更新时间：<span class="highlight">2026-09-23</span></span>
-        </div>
-      </div>
-      <div class="flex gap-2 flex-wrap">
-        <a href="#/crm/withdraw-audit-detail" class="px-4 py-2 rounded bg-[#C19B5E] text-white text-sm">页面原型</a>
-      </div>
-    </div>
-
-    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-sm text-yellow-900">
-      本次仅定义出金详情新增的“出金类型 / 是否计入真实出金”历史快照展示。不重复定义原有客户资料、资金、入金记录、支付记录、风险提示与审核流程。
-    </div>
-    <div class="module-title">1. 新增字段及来源</div>
-    <table><thead><tr><th>字段</th><th>数据来源 / 格式</th><th>展示规则</th></tr></thead><tbody>
-      <tr><td class="font-medium">出金类型</td><td>本次出金记录保存的类型名称快照；文本。</td><td>只读显示历史类型名称；后续改名或停用不影响已保存详情。旧记录缺失显示“-”。</td></tr>
-      <tr><td class="font-medium">是否计入真实出金</td><td>本次出金记录保存的统计属性快照；是 / 否，可缺失。</td><td>只读显示历史统计属性；后续配置修改不回溯历史。旧记录缺失显示“-”，不默认归为“否”。</td></tr>
-    </tbody></table>
-    <div class="module-title">2. 快照读取规则</div>
-    <ul class="list-disc pl-5 text-sm space-y-2">
-      <li>使用当前出金记录 ID 对应的类型和统计属性快照；不得读取“出入金类型设置”的最新值替代历史值。</li>
-      <li>新增字段不改变出金金额、审核或支付状态，也不触发资金操作。</li>
-      <li>依赖现有申请快照：不使用实时账户数据覆盖申请时数据，USD 与 USC 继续按原币种口径区分。</li>
-    </ul>
-    <div class="module-title">3. 异常及兼容</div>
-    <ul class="list-disc pl-5 text-sm space-y-2">
-      <li>类型名称或统计属性分别处理缺失，不根据其他字段猜测或补齐。</li>
-      <li>原类型改名、停用或统计属性调整后，仍显示该申请保存时的快照。</li>
-      <li>旧记录缺失不影响详情的其他信息及原有审核流程。</li>
-    </ul>
-    <div class="module-title">4. 验收标准</div>
-    <ol class="list-decimal pl-5 text-sm space-y-2">
-      <li>两个新增字段均取自对应出金记录的快照，页面只读。</li>
-      <li>配置改名、停用或调整统计属性后，历史详情不变。</li>
-      <li>旧记录缺失显示“-”，真实“否”与缺失可区分。</li>
-      <li>查看新增字段不会改变原金额、审核结果及支付状态。</li>
-    </ol>
-  </div>
+<body>
+  <iframe id="prdFrame" title="出金详情版本 PRD"></iframe>
+  <script>
+    // V1.1.0 按确认的当前入口原文归档；保留原文内的历史版本标注。
+    window.__PRD_VERSION_CONFIGS__ = [{"version":"V1.2.0","file":"prd-withdraw-detail_v1.2.0.html","isCurrent":true},{"version":"V1.1.0","file":"prd-withdraw-detail_v1.1.0.html","isCurrent":false}]
+  </script>
+  <script src="prd-version-tabs.js"></script>
 </body>
 </html>

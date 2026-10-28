@@ -453,6 +453,7 @@ const handleReset = () => {
 .commission-list-table tbody td {
   height: 58px;
   padding: 12px 16px;
+  text-align: left;
   border-bottom: 1px solid #f1f3f5;
   line-height: 20px;
   vertical-align: middle;
@@ -463,22 +464,13 @@ const handleReset = () => {
   border-bottom: 0;
 }
 
-.commission-list-table tbody td:nth-child(2),
-.commission-list-table tbody td:nth-child(3),
-.commission-list-table tbody td:nth-child(4),
-.commission-list-table tbody td:nth-child(5),
-.commission-list-table tbody td:nth-child(7),
-.commission-list-table tbody td:nth-child(8) {
-  text-align: right;
-}
-
-.commission-list-table tbody td:nth-child(6),
-.commission-list-table tbody td:nth-child(9) {
-  text-align: center;
-}
-
 .commission-list-table tbody td:last-child > .flex {
   min-width: 100px;
+  justify-content: flex-start;
+}
+
+.commission-list-table tbody td:last-child a {
+  padding-inline: 0;
 }
 
 .reconciliation-list-pagination {
