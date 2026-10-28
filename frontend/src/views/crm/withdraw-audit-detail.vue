@@ -217,7 +217,7 @@
 
                 <div class="border-t border-gray-100 pt-4 mt-4">
                   <h3 class="text-sm font-semibold text-gray-700 mb-3">风险事件时间线</h3>
-                  <p v-if="!confirmedRiskApplication" class="text-sm text-amber-700 leading-6">风险关联不可用，无法确认事件所属申请；不展示风险事件或申请提交事件。</p>
+                  <p v-if="riskAssessment.status === 'unavailable'" class="text-sm text-amber-700 leading-6">风险数据不可用或无法确认事件所属申请；不展示风险事件或申请提交事件。</p>
                   <template v-else>
                     <p v-if="!riskAssessment.records.length" class="mb-3 text-xs text-gray-500">暂无风险事件；下方仅展示已确认的本次申请提交。</p>
                     <p v-if="!riskEventTimeline.length" class="text-sm text-gray-500">暂无可展示的事件。</p>
@@ -249,7 +249,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { riskRuleConfig } from '@/store/risk-tag-demo'
-import { confirmRiskApplication, buildRiskEventTimeline } from '@/store/withdrawRiskReviewDemo'
+import { confirmRiskApplication, buildRiskEventTimeline, assessWithdrawalRisk } from '@/store/withdrawRiskReviewDemo'
 
 const route = useRoute()
 
@@ -519,6 +519,7 @@ const stampText = computed(() => {
 // 不复制其他客户的标签，不执行真实规则检测；按申请、MT账号和客户资料校验演示归属。
 const withdrawalRiskDemo = {
   OUT_919847271934199098: {
+    dataAvailable: true,
     mtAccount: '9900456',
     customerName: 'test-沈栋晓',
     customerEmail: '13832766457@qq.com',
@@ -540,18 +541,19 @@ const withdrawalRiskDemo = {
         id: 'demo-login-change-9900456',
         ruleId: 'abnormal-login',
         name: '异常登录或设备变化',
-        level: '高',
+        level: '中',
         description: '同一演示账户在本次申请前出现新设备登录事件。',
         triggeredAt: '2026-07-20 14:45:00',
         relatedObjects: 'MT账号 9900456；演示登录事件 DEMO-LOGIN-9900456-01；申请 OUT_919847271934199098',
         evidence: {
           rule: '演示案例：已有异常登录事件与本次出金申请关联，设备变化不直接认定违规。',
-          description: '合成事件展示设备由 Windows / Chrome 变为 Android / Chrome，事件时间早于本次申请。高等级仅为预置展示值，未执行真实登录检测或生产风险分级。'
+          description: '合成事件展示设备由 Windows / Chrome 变为 Android / Chrome，事件时间早于本次申请。单项命中为中风险，整体等级按有效风险类别组合判定；未执行真实登录检测。'
         }
       }
     ]
   },
   OUT_923832107870979672: {
+    dataAvailable: true,
     mtAccount: '8100453',
     customerName: 'test-b5',
     customerEmail: 'b5@example.com',
@@ -564,30 +566,22 @@ const confirmedRiskApplication = computed(() => confirmRiskApplication(
 ))
 const riskAssessment = computed(() => {
   const demo = withdrawalRiskDemo[detail.value.orderNo]
-  // 原详情回退逻辑保持不变，风险展示仍拒绝错误归属。
-  if (!confirmedRiskApplication.value) {
-    return {
-      status: 'unavailable', title: '风险评估不可用', level: '待核实', records: [],
-      advice: '请审核人员核实申请、客户及 MT 账号的关联信息。',
+  // 归属不明确、数据缺失或来源不可用时拒绝生成正常结论。
+  const result = assessWithdrawalRisk(confirmedRiskApplication.value, demo?.records, demo?.dataAvailable)
+  const presentation = {
+    unavailable: {
+      title: '风险评估不可用',
       message: '风险数据尚未取得或申请与客户、MT账号的关联信息不完整，无法确认当前申请的风险。未使用其他客户的风险信息，不代表低风险或无风险。'
-    }
-  }
-  const records = demo.records
-  if (!records.length) {
-    return {
-      status: 'clear', title: '未发现已知风险', level: '低', records,
-      advice: '按原有权限及流程正常审核（演示建议）。',
+    },
+    clear: {
+      title: '未发现已知风险',
       message: '当前申请的固定演示核查结果未命中已知风险，无风险命中明细可展示；该结果不代表真实安全判断。'
-    }
+    },
+    hit: { title: '存在风险提示', message: '' }
   }
-  const level = ['高', '中', '低'].find(value => records.some(record => record.level === value))
-  return {
-    status: 'hit', title: '存在风险提示', level, records,
-    advice: '建议人工复核，查看触发依据后按原有权限继续审核（演示建议）。'
-  }
+  return { ...result, ...presentation[result.status] }
 })
-const riskRuleCount = computed(() => riskAssessment.value.status === 'unavailable'
-  ? null : new Set(riskAssessment.value.records.map(record => record.ruleId)).size)
+const riskRuleCount = computed(() => riskAssessment.value.count)
 const riskSummaryClass = computed(() => ({
   hit: 'bg-red-50 border-red-100 text-red-700',
   clear: 'bg-gray-50 border-gray-200 text-gray-600',
@@ -600,7 +594,7 @@ const riskDialogOpen = ref(false)
 const showRiskDetails = () => {
   riskDialogOpen.value = true
 }
-const riskEventTimeline = computed(() => buildRiskEventTimeline(
+const riskEventTimeline = computed(() => riskAssessment.value.status === 'unavailable' ? [] : buildRiskEventTimeline(
   confirmedRiskApplication.value, riskAssessment.value.records, detail.value.applyTime
 ))
 watch(() => route.fullPath, () => {

@@ -23,3 +23,22 @@ export function buildRiskEventTimeline(scope, riskRecords, applicationTime) {
   // 已有演示事件统一 YYYY-MM-DD HH:mm:ss，可按字符串排序，不改写为客户端时间。
   return events.sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')) || a.id.localeCompare(b.id))
 }
+
+// 本期仅对已确认的合成命中记录分级，不检测真实安全事件，也不使用单项预置最高等级。
+const withdrawalRiskCategories = new Set(['recent-payee-change', 'recent-identity-change', 'abnormal-login'])
+export function assessWithdrawalRisk(scope, records, dataAvailable = false) {
+  if (!scope || dataAvailable !== true || !Array.isArray(records) ||
+      records.some(record => !record || !nonempty(record.ruleId))) {
+    return { status: 'unavailable', level: '待核实', count: null, records: [] }
+  }
+  // 其他模块的风险类型不进入本期明细、时间线或分级；同类事件保留，但只计一类。
+  const effectiveRecords = records.filter(record => withdrawalRiskCategories.has(record.ruleId))
+  const categories = new Set(effectiveRecords.map(record => record.ruleId))
+  const count = categories.size
+  return {
+    status: count ? 'hit' : 'clear',
+    level: count === 0 ? '低' : categories.has('recent-payee-change') && count >= 2 ? '高' : '中',
+    count,
+    records: effectiveRecords.map(record => ({ ...record, level: '中' }))
+  }
+}
